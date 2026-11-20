@@ -37,7 +37,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Choose an axis to compare its available values with the same content and model. Other settings remain unchanged while comparing.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ## Content and presentation
 

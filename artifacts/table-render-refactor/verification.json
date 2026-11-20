@@ -1,0 +1,56 @@
+{
+  "scope": "Phase 2 shared rendering, private feature controllers, opt-in Core and filter/sort entries",
+  "releaseComparison": {
+    "before": "matched-before",
+    "after": "final-after",
+    "sameContext": true,
+    "runtimeAndSsr": "passed",
+    "declarations": "passed; unique object property order normalized, all signatures preserved",
+    "fullJsGzipDelta": 812,
+    "legacyCss": "unchanged"
+  },
+  "tests": {
+    "tableFull": {
+      "passed": 374,
+      "failed": 0,
+      "report": "table-tests.json"
+    },
+    "coreAndFeaturesAfterFinalAutoWidthChange": 9,
+    "contractAndOriginalAlgorithm": 15,
+    "resolver": 25,
+    "lint": "passed; full source plus final affected-source rerun",
+    "typecheck": "passed; includes public API project",
+    "publishedConsumerTypes": "passed",
+    "sourceVueCompatibility": "passed",
+    "runtimeDependencies": "passed"
+  },
+  "browser": {
+    "report": "browser-qa.json",
+    "space": 90,
+    "closed": true,
+    "engine": "ego-lite Chromium",
+    "passed": [
+      "grouped sticky header geometry",
+      "left/right frozen geometry after horizontal scrolling",
+      "RTL End/Home with overflow",
+      "responsive containment",
+      "dynamic row replacement",
+      "SSR hydration without warnings"
+    ],
+    "limits": [
+      "not a three-engine suite",
+      "not physical mobile acceptance"
+    ]
+  },
+  "notRun": [
+    "full pnpm quality",
+    "three-engine production suite",
+    "native browser/device acceptance"
+  ],
+  "concurrentChanges": "Unrelated Form and Table fixes preserved. matched-before was rebuilt using the exact final-after isolated non-Table source context; the static gate intentionally rejects later source-context changes.",
+  "additionalGlobalChecks": {
+    "styleVars": "failed outside Table: field-decorator variant-outline-border-color-hover differs from theme contract",
+    "publicDocs": "failed outside Table: filter-form above-table/inside-card demos missing group configuration",
+    "tableDocsOnly": "passed for zh/en: normalization, demo groups and public-document policy"
+  }
+}

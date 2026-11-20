@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("splitButtonAsyncActionInline");
+const inlineCopy = {
+  published: "发布成功"
+};
 
 import { ref } from "vue";
 import { Message } from "@cedar-design/ui-vue";
@@ -13,7 +14,7 @@ const publish = async () => {
   try {
     await new Promise<void>((resolve) => setTimeout(resolve, 800));
     completed.value += 1;
-    Message.info(inlineCopy.value.published);
+    Message.info(inlineCopy.published);
   } finally {
     publishing.value = false;
   }

@@ -33,7 +33,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Compare segment sizes and color overrides separately from orientation, circular layouts, overflow and keyboard interaction.
 
-<demo src="./__demos__/appearance-comparison.vue"></demo>
+<demo src="./__demos__/appearance-comparison.en-US.vue"></demo>
 
 ## Layout and arrangement
 

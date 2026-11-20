@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale(
-  "infiniteScrollSchedulerLifecycleInline",
-);
 
 import { ref } from "vue";
 import type { InfiniteScrollStatus } from "@cedar-design/ui-vue";
@@ -19,15 +15,11 @@ const load = () => {
 </script>
 <template>
   <div>
-    <c-button @click="alternate = !alternate">{{
-      inlineCopy.switchTarget
-    }}</c-button>
-    <c-button @click="active = !active">{{ inlineCopy.activate }}</c-button>
-    <c-button @click="status = 'idle'">{{
-      inlineCopy.newStatusCycle
-    }}</c-button>
+    <c-button @click="alternate = !alternate">切换目标</c-button>
+    <c-button @click="active = !active">停用与激活</c-button>
+    <c-button @click="status = 'idle'">新状态循环</c-button>
     <p>
-      {{ inlineCopy.loads }} {{ loads }}{{ inlineCopy.oldChecksMustNotReplay }}
+      加载次数: {{ loads }}旧检查不能重放。
     </p>
     <div ref="first" style="height: 100px; overflow: auto">
       <div style="height: 300px">Target A</div>
@@ -43,7 +35,7 @@ const load = () => {
         :immediate="false"
         @load="load"
       >
-        <div>{{ inlineCopy.detector }}</div>
+        <div>触底检测</div>
       </c-infinite-scroll>
     </KeepAlive>
   </div>

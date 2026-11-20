@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("carouselIndicatorComparison");
+const demoCopy = {
+  "indicator-type": "指示器样式",
+  "indicator-position": "指示器位置",
+  slide: "幻灯片"
+};
 import { ref } from "vue";
 const current = ref(1);
 const groups = [
@@ -28,7 +31,7 @@ const slides = [
 </script>
 <template>
   <div class="indicator-comparison">
-    <p role="status">{{ demoCopy.slide }}: {{ current }}</p>
+    <p role="status">幻灯片: {{ current }}</p>
     <section
       v-for="group in groups"
       :key="group.name"

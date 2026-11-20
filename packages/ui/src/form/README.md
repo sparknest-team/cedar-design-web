@@ -15,9 +15,11 @@ permalink: /components/form/
 
 在 Vue 3.2.47 的 SSR 场景中，如果多个异步表单项在服务端和客户端的完成顺序相反，后续单独更新某一项时，自动错误描述可能重复 ID 或指向其他字段。仅为 Input 设置稳定 `id` 不能避免此问题；Vue 3.5.45 的同场景对照正常。
 
-在 Shadow DOM 中使用延迟编辑 Slider 时，若弹层传送到 `body`，浏览器可能无法通过 ID 将弹层内控件与 Shadow DOM 中的提示或错误关联。可设置 `:popup-container="false"`，或将 `popup-container` 设为同一 ShadowRoot 内的元素，使弹层与提示留在同一根节点；仍需为控件提供清晰名称。容器元素需要由应用提供，并考虑样式、定位和裁剪。
+在 Shadow DOM 中使用延迟编辑 Slider 时，即使将弹层传送到 `body`，滑块和数字输入也能关联当前表单校验错误，或显式错误状态下的纯文本 `help`。若使用 `#help` 插槽或原 ShadowRoot 内的业务提示，可设置 `:popup-container="false"`，或将同一根内的元素传给 `popup-container`。
 
 嵌套的 `no-style` 字段进入 `read-pretty` 展示后，该字段的校验反馈会隐藏。此时用 `setFields` 更新它的错误，父项的错误描述只保留其他可编辑字段仍需展示的错误。
+
+用 `KeepAlive` 缓存嵌套的 `no-style` 字段时，字段停用期间父项会撤下它的错误说明。重新激活后，父项会展示该字段当前的错误，包括停用期间通过 `setFields` 更新的消息。
 
 FormItem 中只有一个延迟编辑的 Input 时，可见标签在关闭状态下关联触发按钮，打开后关联原生输入框。加入第二个输入框时，请分别提供字段名称，FormItem 标签用于命名整组。
 
@@ -32,6 +34,26 @@ FormItem 中只有一个延迟编辑的 Input 时，可见标签在关闭状态�
 ### 动态切换无样式
 
 `no-style` 在组件生命周期内保持不变时，字段可以正常编辑和校验。当前动态切换某个 FormItem 的 `no-style` 会重新挂载其后代字段，可能丢失焦点、未提交的内部草稿和校验状态，并改变后代字段的重置基准。需要保留这些状态时，请保持该属性稳定，在字段外部调整布局；切换前也可以先提交或保存草稿。
+
+单字段只需保留重置初值时，可将 `field` 与 `:no-style` 放在同一个 FormItem 上。这样切换布局后，`resetFields()` 仍使用该字段挂载时的值。
+
+用 `v-model` 将输入绑定到表单模型，可以在节点重建后显示已经写入模型的值。切换时浏览器仍可能触发 `change` 和失焦事件，字段的校验规则会按配置执行。需要保留输入焦点和选区时，使用下方的稳定布局写法。
+
+在已绑定 `model` 的 Form 中，编辑时可用 `compact` 联动外层 FormItem 的 `layout` 与 `hide-label`。内层字段保持挂载，隐藏外层标签时，输入框仍需有可访问名称。
+
+```vue
+<template>
+  <c-form-item
+    label="账户"
+    :layout="compact ? 'vertical' : 'horizontal'"
+    :hide-label="compact"
+  >
+    <c-form-item field="account" no-style>
+      <c-input v-model="model.account" aria-label="账户" />
+    </c-form-item>
+  </c-form-item>
+</template>
+```
 
 ### 同一标签下的多个控件
 
@@ -116,7 +138,7 @@ import type { FormProps } from "@cedar-design/ui-vue";
 
 ### 局部表单分区
 
-仅将现场处置 SOP、安全须知和处置要点放入分区，底部结束线区分后续未分组字段。 在表单上方切换分隔线、仅标题、边框卡片三种风格，已填内容保持不变；也可切换标题标记和底部结束线。卡片以外框表示范围，不重复显示结束线。CSection 自动适配父 Form 的布局。组内字段直接从父 Form 获取标签宽度、禁用状态和校验规则；布局通过 Form / FormItem 的既有属性设置。请提供 title 或 title 插槽。当前不提供折叠与分区级布局覆盖。
+仅将现场处置 SOP、安全须知和处置要点放入分区，页面使用 Divider 分隔后续字段。切换标题线、仅标题、描边分区三种风格或切换标题标记时，已填内容会保留。CSection 自动适配父 Form 的布局。组内字段直接从父 Form 获取标签宽度、禁用状态和校验规则；布局通过 Form / FormItem 的既有属性设置。请提供 title 或 title 插槽。当前不提供折叠与分区级布局覆盖。
 
 <demo src="./__demos__/section.vue"></demo>
 

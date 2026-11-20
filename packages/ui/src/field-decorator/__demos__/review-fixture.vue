@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("fieldDecoratorReviewFixtureInline");
 
 import { ref } from "vue";
 import FieldDecorator from "../index";
@@ -10,7 +8,7 @@ const value = ref("可编辑的审查内容");
   <c-input
     v-model="value"
     aria-label="字段内容"
-    :placeholder="inlineCopy.editFieldContent"
+    placeholder="编辑装饰器内容"
   />
   <FieldDecorator
     :value="value"

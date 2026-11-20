@@ -11,7 +11,7 @@ test.each(['prop', 'slot'] as const)('explicit error help (%s) describes the fie
   const showHelp = ref(true)
   const Fixture = defineComponent({
     setup: () => () => h(Form, { ref: form, editMode: 'direct', model: { name: '' } }, () =>
-      h(FormItem, { field: 'name', validateStatus: status.value, help: mode === 'prop' && showHelp.value ? 'Server error' : undefined }, {
+      h(FormItem, { field: 'name', extra: 'Persistent guidance', validateStatus: status.value, help: mode === 'prop' && showHelp.value ? 'Server error' : undefined }, {
         default: () => h(Input, { 'aria-describedby': 'external' }),
         ...(mode === 'slot' && showHelp.value ? { help: () => h('strong', 'Server error') } : {}),
       })),
@@ -23,6 +23,7 @@ test.each(['prop', 'slot'] as const)('explicit error help (%s) describes the fie
   const input = container.querySelector('input')!
   const errorId = input.getAttribute('aria-describedby')?.split(/\s+/).find((id) => id !== 'external')
   expect(errorId).toBeTruthy()
+  expect(Array.from(container.querySelectorAll('[id]')).filter((el) => el.id === errorId)).toHaveLength(1)
   expect(document.getElementById(errorId!)?.textContent).toContain('Server error')
   const warnings: string[] = []
   const app = createSSRApp(Fixture)
@@ -40,6 +41,7 @@ test.each(['prop', 'slot'] as const)('explicit error help (%s) describes the fie
     expect(currentId).not.toBe(errorId)
     form.value.clearValidate()
     await nextTick()
+    expect(Array.from(container.querySelectorAll('[id]')).filter((el) => el.id === errorId)).toHaveLength(1)
     expect(input.getAttribute('aria-describedby')?.split(/\s+/)).toContain(errorId)
     status.value = 'success'
     await nextTick()

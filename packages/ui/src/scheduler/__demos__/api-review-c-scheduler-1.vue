@@ -200,7 +200,7 @@
           v-if="__apiReview.slotEnabled['resource-header'] !== false"
           #resource-header="{ date: day }"
         >
-          {{ formatDemoDate(day, { weekday: "short" }) }}
+          {{ day.toLocaleDateString(getLocale(), { weekday: "short" }) }}
           {{ day.getDate() }}
         </template>
         <template
@@ -497,11 +497,7 @@
   </DemoApiReviewPanel>
 </template>
 <script setup lang="ts">
-import {
-  formatDemoTime,
-  formatDemoDateTime,
-  formatDemoDate,
-} from "../../__demos__/locale";
+import { getLocale } from "@cedar-design/ui-vue";
 import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPanel.vue";
 import {
   defineReviewConfig,
@@ -1101,13 +1097,13 @@ async function goToday() {
 const time = (value: SchedulerEvent["start"]) =>
   value == null
     ? ""
-    : formatDemoTime(new Date(value), {
+    : new Date(value).toLocaleTimeString(getLocale(), {
         hour: "2-digit",
         minute: "2-digit",
         hour12: false,
       });
 const format = (value: string) =>
-  formatDemoDateTime(new Date(value), {
+  new Date(value).toLocaleString(getLocale(), {
     month: "numeric",
     day: "numeric",
     hour: "2-digit",

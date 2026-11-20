@@ -1,0 +1,98 @@
+<script setup>
+import { reactive as __demoReactive } from "vue";
+
+const __demoAppearance = __demoReactive({ variant: "line", size: "md" });
+
+import { computed as demoComputed, ref as demoRef } from "vue";
+const demoCompareFields = [
+  {
+    name: "variant",
+    values: ["line", "card", "outline", "plain", "capsule", "enclosed"],
+  },
+  { name: "size", values: ["xs", "sm", "md", "lg", "xl"] },
+];
+const demoCompareAxis = demoRef("variant");
+const demoComparedOptions = demoComputed(
+  () =>
+    demoCompareFields.find((field) => field.name === demoCompareAxis.value)
+      ?.values ?? [],
+);
+</script>
+<template>
+  <c-space direction="column" :size="16">
+    <c-form layout="vertical">
+      <c-form-item layout="vertical" size="sm" label="variant">
+        <c-select
+          v-model="__demoAppearance['variant']"
+          :clearable="false"
+          :options="[
+            { label: 'line', value: 'line' },
+            { label: 'card', value: 'card' },
+            { label: 'outline', value: 'outline' },
+            { label: 'plain', value: 'plain' },
+            { label: 'capsule', value: 'capsule' },
+            { label: 'enclosed', value: 'enclosed' },
+          ]"
+          aria-label="variant"
+        />
+      </c-form-item>
+      <c-form-item layout="vertical" size="sm" label="size">
+        <c-radio-group
+          v-model="__demoAppearance['size']"
+          aria-label="size"
+          :options="[
+            { label: 'xs', value: 'xs' },
+            { label: 'sm', value: 'sm' },
+            { label: 'md', value: 'md' },
+            { label: 'lg', value: 'lg' },
+            { label: 'xl', value: 'xl' },
+          ]"
+          variant="button"
+          size="sm"
+        />
+      </c-form-item>
+    </c-form>
+    <p class="demo-config-comparison-hint">Compare one dimension while keeping the other settings and content identical. Input specimens share the same value.</p>
+    <c-radio-group
+      v-model="demoCompareAxis"
+      aria-label="Compare configuration"
+      :options="
+        demoCompareFields.map((field) => ({
+          label: field.name,
+          value: field.name,
+        }))
+      "
+    />
+    <div class="demo-config-comparison">
+      <section v-for="sample in demoComparedOptions" :key="String(sample)">
+        <p>
+          <code>{{ demoCompareAxis }}={{ sample }}</code>
+        </p>
+        <c-tabs
+          default-value="overview"
+          v-bind="{ ...__demoAppearance, [demoCompareAxis]: sample }"
+        >
+          <c-tab-pane name="overview" title="概览">概览内容</c-tab-pane>
+          <c-tab-pane name="details" title="详情">详情内容</c-tab-pane>
+          <c-tab-pane name="settings" title="设置">设置内容</c-tab-pane>
+        </c-tabs>
+      </section>
+    </div>
+  </c-space>
+</template>
+
+<style scoped>
+.demo-config-comparison {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 20px;
+  min-width: 0;
+  max-width: 100%;
+}
+.demo-config-comparison > section {
+  min-width: 0;
+}
+.demo-config-comparison p {
+  margin: 0 0 8px;
+}
+</style>

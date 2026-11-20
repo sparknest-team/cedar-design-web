@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("skeletonContentComparison");
 import { ref } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -18,7 +16,7 @@ const scene1 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="title-and-rows"
     >
-      <h4>{{ demoCopy.titleAndRows }}</h4>
+      <h4>标题与段落</h4>
       <c-skeleton
         title
         :rows="3"
@@ -33,7 +31,7 @@ const scene1 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="avatar-and-card"
     >
-      <h4>{{ demoCopy.avatarAndCard }}</h4>
+      <h4>头像与卡片</h4>
       <c-skeleton title avatar card :rows="3">加载的数据</c-skeleton>
     </section>
   </div>

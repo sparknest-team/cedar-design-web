@@ -4,7 +4,12 @@ import { BaseType, ClassName, Data } from '../_utils/types'
 import { TriggerProps } from '../trigger'
 
 /** Table derives total from its data unless an explicit remote total is supplied. */
-export type TablePaginationConfig = Omit<PaginationProps, 'total'> & { total?: number; container?: string | HTMLElement }
+export type TablePaginationConfig = Omit<PaginationProps, 'total'> & {
+  total?: number
+  container?: string | HTMLElement
+  /** Logical alignment of the pagination bar within the table. */
+  align?: 'start' | 'end'
+}
 
 /** Business pagination content inside the table-managed footer. */
 export interface TablePaginationScope {
@@ -14,9 +19,6 @@ export interface TablePaginationScope {
   onChange: (page: number) => void
   onPageSizeChange: (pageSize: number) => void
 }
-
-export const TABLE_PAGE_POSITION = ['tl', 'top', 'tr', 'bl', 'bottom', 'br'] as const
-export type TablePagePosition = (typeof TABLE_PAGE_POSITION)[number]
 
 export interface TableData {
   /**
@@ -476,7 +478,6 @@ export interface TableProps {
   rowSelection?: TableRowSelection
   expandable?: TableExpandable
   pagination?: boolean | Data
-  pagePosition?: string
 }
 
 export type Sorter = { field: string; direction: 'ascend' | 'descend' }

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("mentionAtomicMentionInline");
 
 import { reactive, ref } from "vue";
 
@@ -19,26 +17,24 @@ const fallbackOption = (value: string | number | boolean) => ({
 
 <template>
   <c-space direction="column" style="width: 100%" :size="12">
-    <p>{{ inlineCopy.typeToSelectAPerson }}</p>
+    <p>输入 @ 选择人员；在提及旁按 Backspace 可整体删除。</p>
     <c-mention
       v-model="content"
       atomic
       type="textarea"
       :options="people"
       :fallback-option="fallbackOption"
-      :aria-label="inlineCopy.atomicMentions"
+      aria-label="原子提及"
     />
-    <c-button @click="names['shuai.meng'] = '孟帅（已更新）'">{{
-      inlineCopy.updateMockName
-    }}</c-button>
+    <c-button @click="names['shuai.meng'] = '孟帅（已更新）'">模拟更新姓名</c-button>
     <pre>{{ content }}</pre>
-    <p>{{ inlineCopy.withoutOptionsTypeXiaomingAnd }}</p>
+    <p>无候选项时输入 @xiaoming 并按回车，通过 fallback 解析姓名。</p>
     <c-mention
       v-model="fallbackContent"
       atomic
       :options="[]"
       :fallback-option="fallbackOption"
-      :aria-label="inlineCopy.fallbackOnly"
+      aria-label="仅回退"
     />
     <pre>{{ fallbackContent }}</pre>
   </c-space>

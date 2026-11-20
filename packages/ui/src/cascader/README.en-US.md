@@ -49,7 +49,7 @@ Inherits source dir. Child columns, expansion icons and separators follow readin
 
 Choose an axis to compare its available values with the same content and model. Other settings remain unchanged while comparing.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ### Control Sizes
 
@@ -58,7 +58,7 @@ Choose an axis to compare its available values with the same content and model. 
 - `options`: Options for cascader
 - `placeholder`: Placeholder
 
-<demo src="../field-decorator/__demos__/control-sizes.vue"></demo>
+<demo src="../field-decorator/__demos__/control-sizes.en-US.vue"></demo>
 
 ## Selection modes and paths
 
@@ -237,7 +237,7 @@ With open-trigger-target="icon", use the input area to edit or copy and the suff
 - `placeholder`: Placeholder
 - `load-more`: Data lazy loading function, open the lazy loading function when it is passed in
 
-<demo src="./__demos__/load-more.vue"></demo>
+<demo src="./__demos__/load-more.en-US.vue"></demo>
 
 ### Async Devices
 

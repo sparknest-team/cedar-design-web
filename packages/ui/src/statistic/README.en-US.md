@@ -47,7 +47,7 @@ Preview configuration: `title="Revenue"`, `:value="9280"`, `prefix="$"`, `show-g
 
 Preview configuration: `title="Growth Rate"`, `:value="50.52"`, `:precision="2"`, `:value-from="0"`.
 
-<demo src="./__demos__/animation.vue"></demo>
+<demo src="./__demos__/animation.en-US.vue"></demo>
 
 ### Statistic
 

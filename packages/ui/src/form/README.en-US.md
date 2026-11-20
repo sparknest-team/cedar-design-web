@@ -16,9 +16,11 @@ When `validate-status="error"` has no automatic validation error, the field asso
 
 In SSR with Vue 3.2.47, if multiple asynchronous form items resolve in opposite orders on the server and client, updating one item can duplicate generated description IDs or associate it with another field’s error. Giving the Input a stable `id` alone does not prevent this; the same scenario passed with Vue 3.5.45.
 
-For a deferred Slider inside Shadow DOM, a popup teleported to `body` may not resolve ID references to hints or errors inside the shadow root. Set `:popup-container="false"`, or pass an element within the same ShadowRoot as `popup-container`, to keep the popup and hints in the same root. Provide clear control names, and account for the container’s styling, positioning, and clipping.
+For a deferred Slider inside Shadow DOM, the editor associates its slider and number input with the current form validation error or plain `help` text in an explicit error state, even when the popup is teleported to `body`. To reference a `#help` slot or application hints inside the shadow root, set `:popup-container="false"` or pass a container in that same root.
 
 A nested `no-style` field in `read-pretty` mode hides its validation feedback. Calling `setFields` for that field keeps the message out of the parent’s error description. Editable siblings continue to report their own errors.
+
+When `KeepAlive` deactivates a nested `no-style` field, the parent removes that field’s error from its description. Reactivating the field restores its current error, including updates made with `setFields` while it was inactive.
 
 For a single deferred Input, the visible FormItem label targets the trigger while closed and the native input while editing. When adding a second input, give each field its own accessible name. The FormItem label names their group.
 
@@ -31,6 +33,26 @@ Start with the basic example, then compare related settings before moving to con
 ### Switching no-style dynamically
 
 Fields can be edited and validated when `no-style` stays unchanged for the lifetime of a FormItem. Currently, changing it dynamically remounts descendant fields, which can lose focus, uncommitted internal drafts and validation state, and can change their reset baseline. To preserve these states, keep the property stable and adjust the layout outside the field; you can also commit or save drafts before switching.
+
+For a single field, place `field` and `:no-style` on the same FormItem to preserve its reset baseline. After the switch, `resetFields()` restores the value captured when that FormItem mounted.
+
+Bind the input to the form model with `v-model` to display its last published value after the input is remounted. Switching can trigger native change and blur events, so the field’s configured validation triggers still apply. Use the stable layout below when focus and the selection must survive the switch.
+
+Inside a Form bound to `model`, use `compact` to switch the outer FormItem’s `layout` and `hide-label`. Keep the inner field mounted and give its input an accessible name that also works when the outer label is hidden.
+
+```vue
+<template>
+  <c-form-item
+    label="Account"
+    :layout="compact ? 'vertical' : 'horizontal'"
+    :hide-label="compact"
+  >
+    <c-form-item field="account" no-style>
+      <c-input v-model="model.account" aria-label="Account" />
+    </c-form-item>
+  </c-form-item>
+</template>
+```
 
 ### Multiple controls under one label
 
@@ -101,7 +123,7 @@ import type { FormProps } from "@cedar-design/ui-vue";
 
 Combine `layout`, `content-align` with `direct / click / dblclick` editing and the independent `readPretty` boolean to compare label, value and wrapped-text alignment. Notes can override the form layout, and values survive every switch. Click or double-click a value to edit in a popover; readPretty displays saved text.
 
-<demo src="./__demos__/layout.vue"></demo>
+<demo src="./__demos__/layout.en-US.vue"></demo>
 
 ### Decoration
 
@@ -118,21 +140,21 @@ Preview configuration: `type="text"`, `placeholder="请输入"`.
 
 ### Partial form section
 
-Group only the onsite SOP, safety notice and key points. The end divider separates the following ungrouped fields. Switch between line, plain and card above the form; your entries are preserved. Toggle the title marker and end divider to compare boundaries. Card uses its outer border instead of a separate end divider.  Section adapts its layout to the parent Form. Fields receive label sizing, disabled state and validation directly from Form; use Form/FormItem layout props to configure them. Supply a title or title slot. Folding and local layout overrides are not supported.
+Group only the onsite SOP, safety notice and key points. The page uses Divider to separate subsequent fields. Switching between heading-line, plain and outline or toggling the title marker preserves your entries. Section adapts its layout to the parent Form. Fields receive label sizing, disabled state and validation directly from Form; use Form/FormItem layout props to configure them. Supply a title or title slot. Folding and local layout overrides are not supported.
 
-<demo src="./__demos__/section.vue"></demo>
+<demo src="./__demos__/section.en-US.vue"></demo>
 
 ### Section header actions
 
 The extra slot places actions at the right of the title. Use template fills the three onsite fields; Clear resets them. Edit the outside skill level, then use either action to verify that it stays unchanged.
 
-<demo src="./__demos__/section-actions.vue"></demo>
+<demo src="./__demos__/section-actions.en-US.vue"></demo>
 
 ### Label width strategies
 
 Enter values, then switch between measured labels, responsive columns and fixed widths: all three strategies retain the same form model. Edit the longest label or hide the contact field to observe remeasurement. Below 576px, the responsive strategy stacks labels above controls; fixed widths use 6rem with an 8rem contact-field override.
 
-<demo src="./__demos__/label-width-comparison.vue"></demo>
+<demo src="./__demos__/label-width-comparison.en-US.vue"></demo>
 
 ## Fields and data model
 
@@ -304,7 +326,7 @@ Preview configuration: `default-value="2026-10-20 09:30:00"`, `show-time`, `:dis
 
 ### Confirmation event source
 
-<demo src="./__demos__/change-source.vue"></demo>
+<demo src="./__demos__/change-source.en-US.vue"></demo>
 
 ## Dynamic and async fields
 
@@ -367,7 +389,7 @@ Preview configuration: `default-value="2026-10-20 09:30:00"`, `show-time`, `:dis
 
 A native submission owns the reactive model and validation definitions it starts with. Changing model fields (including other fields and change-then-restore), replacing model/rules, changing FormItem rules/required/field, or adding/removing registered fields invalidates a waiting submission. Its eventual success or error does not emit submit, submit-success or submit-failed and does not trigger automatic error scrolling. Submit again to validate the latest inputs. This is logical invalidation, not request cancellation or automatic resubmission, and does not change imperative validation return contracts. Completed submission history is retained. Use reactive state so Vue can observe input changes. Ordinary event listener Promises are not collected.
 
-<demo src="./__demos__/submit-inputs.vue"></demo>
+<demo src="./__demos__/submit-inputs.en-US.vue"></demo>
 
 ### Dynamic field identity and reset
 
@@ -375,7 +397,7 @@ A reused FormItem automatically unregisters the old field and registers the new 
 
 An existing model object with a missing property captures undefined. Model/rule replacement does not rebase an already-captured initial value. For async initial data, bind the field or render the item when that data is ready. Recreating the item starts fresh initial baselines.
 
-<demo src="./__demos__/field-identity.vue"></demo>
+<demo src="./__demos__/field-identity.en-US.vue"></demo>
 
 ### Five density levels and item spacing
 

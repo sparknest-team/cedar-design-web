@@ -30,7 +30,7 @@ The same scenarios, parameters and interactions as Cedar. Only component prefixe
 
 Scroll each bordered area separately to compare top/bottom affixing and offsets within an explicit scroll container.
 
-<demo src="./__demos__/offset-container-comparison.vue"></demo>
+<demo src="./__demos__/offset-container-comparison.en-US.vue"></demo>
 
 ## Interaction and control
 

@@ -1,6 +1,7 @@
 <script setup>
-import { useDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useDemoLocale("carouselInteractiveContentInline");
+const inlineCopy = {
+  slide: "幻灯片"
+};
 import { ref } from "vue";
 
 const current = ref(1);
@@ -9,10 +10,10 @@ const changes = ref(0);
 
 <template>
   <p>
-    {{ inlineCopy.hint }}
+    拖动背景切换，输入框保留原生编辑。
   </p>
   <p role="status">
-    {{ inlineCopy.current }}: {{ current }} · {{ inlineCopy.changes }}:
+    当前页: {{ current }} · 切换次数:
     {{ changes }}
   </p>
   <c-carousel
@@ -27,10 +28,10 @@ const changes = ref(0);
     <c-carousel-item v-for="item in 3" :key="item">
       <div class="carousel-demo-panel">
         <label
-          >{{ inlineCopy.slide }} {{ item }}
+          >幻灯片 {{ item }}
           <c-input
             :aria-label="inlineCopy.slide + item"
-            :placeholder="inlineCopy.placeholder"
+            placeholder="在此输入"
         /></label>
       </div>
     </c-carousel-item>

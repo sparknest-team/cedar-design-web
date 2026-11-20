@@ -1,0 +1,63 @@
+{
+  "originalManifestSha256": "84724c45a19959961623f5da4a893d3bd0c1826ac92e9f275702cba253a170a1",
+  "contextSha256": "b4f55c3d2bddc6a4d27a3aa6075e87973a305dc746e0a3bb096782758aa22c3c",
+  "comparison": "passed",
+  "summaryAndVirtualSsrCasesPerFormat": 13,
+  "bundles": {
+    "full": {
+      "before": 122264,
+      "after": 123476,
+      "css": 30943
+    },
+    "basicProps": {
+      "before": 122264,
+      "after": 123476,
+      "css": 30943
+    },
+    "frozenProps": {
+      "before": 122274,
+      "after": 123487,
+      "css": 30943
+    },
+    "summaryProps": {
+      "before": 122259,
+      "after": 123473,
+      "css": 30943
+    },
+    "virtualProps": {
+      "before": 122284,
+      "after": 123496,
+      "css": 30943
+    },
+    "core": {
+      "before": 13462,
+      "after": 13462,
+      "css": 5681
+    },
+    "coreFrozen": {
+      "before": 13506,
+      "after": 13506,
+      "css": 5681
+    },
+    "coreFilterState": {
+      "before": 14059,
+      "after": 14059,
+      "css": 5681
+    },
+    "coreLocalFilter": {
+      "before": 14187,
+      "after": 14187,
+      "css": 5681
+    },
+    "coreSortState": {
+      "before": 14076,
+      "after": 14076,
+      "css": 5681
+    },
+    "coreLocalSort": {
+      "before": 14273,
+      "after": 14273,
+      "css": 5681
+    }
+  }
+}

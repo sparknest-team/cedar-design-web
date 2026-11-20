@@ -40,7 +40,7 @@ Start with the basic example, then compare related settings before moving to con
 
 - `status`: Selects the semantic state.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ## Layout and arrangement
 

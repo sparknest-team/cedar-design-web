@@ -37,7 +37,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Compare node sizes, full-row blocks and connecting lines separately from selection, dragging and asynchronous nodes.
 
-<demo src="./__demos__/appearance-comparison.vue"></demo>
+<demo src="./__demos__/appearance-comparison.en-US.vue"></demo>
 
 ## Node selection and state
 

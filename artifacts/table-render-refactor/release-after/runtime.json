@@ -1,0 +1,680 @@
+{
+  "esm": {
+    "exports": [
+      "DEFAULT_EXTRA_COLUMN_WIDTH",
+      "TABLE_EXTRA_COLUMN_KEY",
+      "Table",
+      "TableColumn",
+      "Tbody",
+      "Td",
+      "Th",
+      "Thead",
+      "Tr",
+      "_TableColumnComponent",
+      "_TableComponent",
+      "_TbodyComponent",
+      "_TdComponent",
+      "_ThComponent",
+      "_TheadComponent",
+      "_TrComponent",
+      "default",
+      "defineTableConfig",
+      "getExtraColumnWidth",
+      "resolveExtraColumnConfig",
+      "tableProps"
+    ],
+    "name": "CTable",
+    "props": {
+      "columns": {
+        "types": [
+          "Array"
+        ],
+        "default": []
+      },
+      "data": {
+        "types": [
+          "Array"
+        ],
+        "default": []
+      },
+      "bordered": {
+        "types": [
+          "Boolean",
+          "Object"
+        ],
+        "default": true
+      },
+      "hoverable": {
+        "types": [
+          "Boolean"
+        ],
+        "default": true
+      },
+      "stripe": {
+        "types": [
+          "Boolean"
+        ],
+        "default": false
+      },
+      "size": {
+        "types": [
+          "String"
+        ],
+        "default": "md"
+      },
+      "tableLayout": {
+        "types": [
+          "String"
+        ],
+        "default": "fixed"
+      },
+      "loading": {
+        "types": [
+          "Boolean",
+          "Object"
+        ],
+        "default": false
+      },
+      "rowSelection": {
+        "types": [
+          "Object"
+        ]
+      },
+      "expandable": {
+        "types": [
+          "Object"
+        ]
+      },
+      "height": {
+        "types": [
+          "Number",
+          "String"
+        ]
+      },
+      "maxHeight": {
+        "types": [
+          "Number",
+          "String"
+        ]
+      },
+      "fit": {
+        "types": [
+          "Boolean"
+        ],
+        "default": true
+      },
+      "pagination": {
+        "types": [
+          "Boolean",
+          "Object"
+        ],
+        "default": true
+      },
+      "pagePosition": {
+        "types": [
+          "String"
+        ],
+        "default": "br"
+      },
+      "indentSize": {
+        "types": [
+          "Number"
+        ],
+        "default": 16
+      },
+      "rowKey": {
+        "types": [
+          "String"
+        ],
+        "default": "key"
+      },
+      "showHeader": {
+        "types": [
+          "Boolean"
+        ],
+        "default": true
+      },
+      "virtualListProps": {
+        "types": [
+          "Object"
+        ]
+      },
+      "spanMethod": {
+        "types": [
+          "Function"
+        ]
+      },
+      "spanAll": {
+        "types": [
+          "Boolean"
+        ],
+        "default": false
+      },
+      "components": {
+        "types": [
+          "Object"
+        ]
+      },
+      "loadMore": {
+        "types": [
+          "Function"
+        ]
+      },
+      "filterIconAlignLeft": {
+        "types": [
+          "Boolean"
+        ],
+        "default": false
+      },
+      "hideExpandButtonOnEmpty": {
+        "types": [
+          "Boolean"
+        ],
+        "default": false
+      },
+      "rowClass": {
+        "types": [
+          "String",
+          "Array",
+          "Object",
+          "Function"
+        ]
+      },
+      "draggable": {
+        "types": [
+          "Object"
+        ]
+      },
+      "rowNumber": {
+        "types": [
+          "Boolean",
+          "Object"
+        ]
+      },
+      "columnResizable": {
+        "types": [
+          "Boolean"
+        ]
+      },
+      "summary": {
+        "types": [
+          "Boolean",
+          "Function"
+        ]
+      },
+      "summaryText": {
+        "types": [
+          "String"
+        ],
+        "default": "Summary"
+      },
+      "summarySpanMethod": {
+        "types": [
+          "Function"
+        ]
+      },
+      "selectedKeys": {
+        "types": [
+          "Array"
+        ]
+      },
+      "defaultSelectedKeys": {
+        "types": [
+          "Array"
+        ]
+      },
+      "expandedKeys": {
+        "types": [
+          "Array"
+        ]
+      },
+      "defaultExpandedKeys": {
+        "types": [
+          "Array"
+        ]
+      },
+      "defaultExpandAllRows": {
+        "types": [
+          "Boolean"
+        ],
+        "default": false
+      },
+      "stickyHeader": {
+        "types": [
+          "Boolean",
+          "Number"
+        ],
+        "default": false
+      },
+      "stickyPagination": {
+        "types": [
+          "Boolean",
+          "Number"
+        ],
+        "default": false
+      },
+      "scrollbar": {
+        "types": [
+          "Object",
+          "Boolean"
+        ],
+        "default": true
+      },
+      "showEmptyTree": {
+        "types": [
+          "Boolean"
+        ],
+        "default": false
+      },
+      "extraColumn": {
+        "types": [
+          "Boolean",
+          "Object"
+        ],
+        "default": false
+      }
+    },
+    "emits": [
+      "cell-click",
+      "cell-contextmenu",
+      "cell-dblclick",
+      "cell-mouse-enter",
+      "cell-mouse-leave",
+      "change",
+      "column-resize",
+      "expand",
+      "expanded-change",
+      "filter-change",
+      "header-click",
+      "page-change",
+      "page-size-change",
+      "row-click",
+      "row-contextmenu",
+      "row-dblclick",
+      "select",
+      "select-all",
+      "selection-change",
+      "sorter-change",
+      "update:columns",
+      "update:expandedKeys",
+      "update:selectedKeys"
+    ],
+    "methods": {
+      "selectAll": 1,
+      "select": 2,
+      "expandAll": 1,
+      "expand": 2,
+      "resetFilters": 1,
+      "clearFilters": 1,
+      "resetSorters": 0,
+      "clearSorters": 0
+    },
+    "subcomponents": [
+      {
+        "name": "Thead",
+        "componentName": "CThead"
+      },
+      {
+        "name": "Tbody",
+        "componentName": "CTbody"
+      },
+      {
+        "name": "Tr",
+        "componentName": "CTr"
+      },
+      {
+        "name": "Th",
+        "componentName": "CTh"
+      },
+      {
+        "name": "Td",
+        "componentName": "CTd"
+      },
+      {
+        "name": "Column",
+        "componentName": "CTableColumn"
+      }
+    ],
+    "hasInstall": true,
+    "html": "<div class=\"c-table c-table-size-md c-table-border c-table-hover c-table-layout-fixed\" style=\"\"><!----><div class=\"c-loading\"><!----><div class=\"c-loading__content\"><!--[--><!----><!--[--><div class=\"c-table-container c-table-has-fixed-col-left c-table-has-fixed-col-right\"><div class=\"c-scrollbar c-scrollbar-type-embed\" style=\"height:100%;\"><!--[--><div class=\"c-scrollbar-container c-table-content\"><!--[--><!--[--><table class=\"c-table-element\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:228px;\"><colgroup><!--[--><col class=\"\" width=\"120\"><col class=\"\" width=\"80\"><col class=\"\" width=\"28\"><!--]--></colgroup><thead><!--[--><tr class=\"c-table-tr\"><th class=\"c-table-th c-table-col-fixed-left c-table-col-fixed-left-last\" style=\"left:0px;\"><span class=\"c-table-cell c-table-cell-align-center\"><span class=\"c-table-th-main\"><span class=\"c-table-th-title\">Group</span><!----><!----></span><!----></span><!----><!----></th><th class=\"c-table-th\" style=\"\" rowspan=\"2\" data-column-key=\"score\"><span class=\"c-table-cell c-table-cell-align-start\"><span class=\"c-table-th-main\"><span class=\"c-table-th-title\">Score</span><!----><!----></span><!----></span><!----><!----></th><th class=\"c-table-th c-table-col-fixed-right c-table-col-fixed-right-first c-table-extra-column-cell c-table-extra-column-cell\" style=\"right:0px;\" rowspan=\"2\" data-column-key=\"__cedar_table_extra__\"><span class=\"c-table-cell c-table-cell-align-center\"></span><!----><!----></th></tr><tr class=\"c-table-tr\"><!----><th class=\"c-table-th c-table-col-fixed-left c-table-col-fixed-left-last\" style=\"left:0px;\" data-column-key=\"name\"><span class=\"c-table-cell c-table-cell-align-start\"><span class=\"c-table-th-main\"><span class=\"c-table-th-title\">Name</span><!----><!----></span><!----></span><!----><!----></th></tr><!--]--></thead><tbody><!--[--><!--[--><tr class=\"c-table-tr\"><td class=\"c-table-td c-table-col-fixed-left c-table-col-fixed-left-last\" style=\"left:0px;\" data-column-key=\"name\"><span class=\"c-table-cell c-table-cell-align-start\" style=\"\"><!----><!----><span class=\"c-table-td-content\">Alpha</span></span></td><td class=\"c-table-td\" style=\"\" data-column-key=\"score\"><span class=\"c-table-cell c-table-cell-align-start\" style=\"\"><!----><!----><span class=\"c-table-td-content\">2</span></span></td><td class=\"c-table-td c-table-col-fixed-right c-table-col-fixed-right-first c-table-extra-column-cell\" style=\"right:0px;\" data-column-key=\"__cedar_table_extra__\"><span class=\"c-table-cell c-table-cell-align-center\" style=\"\"><!----><!----><span class=\"c-table-td-content\"><!----></span></span></td></tr><!----><!--]--><!--]--></tbody><!----></table><!--]--><!--]--></div><!--]--><!----><!----></div></div><!----><!--]--><!----><!--]--><!----></div><!----></div></div>"
+  },
+  "cjs": {
+    "exports": [
+      "DEFAULT_EXTRA_COLUMN_WIDTH",
+      "TABLE_EXTRA_COLUMN_KEY",
+      "Table",
+      "TableColumn",
+      "Tbody",
+      "Td",
+      "Th",
+      "Thead",
+      "Tr",
+      "_TableColumnComponent",
+      "_TableComponent",
+      "_TbodyComponent",
+      "_TdComponent",
+      "_ThComponent",
+      "_TheadComponent",
+      "_TrComponent",
+      "default",
+      "defineTableConfig",
+      "getExtraColumnWidth",
+      "resolveExtraColumnConfig",
+      "tableProps"
+    ],
+    "name": "CTable",
+    "props": {
+      "columns": {
+        "types": [
+          "Array"
+        ],
+        "default": []
+      },
+      "data": {
+        "types": [
+          "Array"
+        ],
+        "default": []
+      },
+      "bordered": {
+        "types": [
+          "Boolean",
+          "Object"
+        ],
+        "default": true
+      },
+      "hoverable": {
+        "types": [
+          "Boolean"
+        ],
+        "default": true
+      },
+      "stripe": {
+        "types": [
+          "Boolean"
+        ],
+        "default": false
+      },
+      "size": {
+        "types": [
+          "String"
+        ],
+        "default": "md"
+      },
+      "tableLayout": {
+        "types": [
+          "String"
+        ],
+        "default": "fixed"
+      },
+      "loading": {
+        "types": [
+          "Boolean",
+          "Object"
+        ],
+        "default": false
+      },
+      "rowSelection": {
+        "types": [
+          "Object"
+        ]
+      },
+      "expandable": {
+        "types": [
+          "Object"
+        ]
+      },
+      "height": {
+        "types": [
+          "Number",
+          "String"
+        ]
+      },
+      "maxHeight": {
+        "types": [
+          "Number",
+          "String"
+        ]
+      },
+      "fit": {
+        "types": [
+          "Boolean"
+        ],
+        "default": true
+      },
+      "pagination": {
+        "types": [
+          "Boolean",
+          "Object"
+        ],
+        "default": true
+      },
+      "pagePosition": {
+        "types": [
+          "String"
+        ],
+        "default": "br"
+      },
+      "indentSize": {
+        "types": [
+          "Number"
+        ],
+        "default": 16
+      },
+      "rowKey": {
+        "types": [
+          "String"
+        ],
+        "default": "key"
+      },
+      "showHeader": {
+        "types": [
+          "Boolean"
+        ],
+        "default": true
+      },
+      "virtualListProps": {
+        "types": [
+          "Object"
+        ]
+      },
+      "spanMethod": {
+        "types": [
+          "Function"
+        ]
+      },
+      "spanAll": {
+        "types": [
+          "Boolean"
+        ],
+        "default": false
+      },
+      "components": {
+        "types": [
+          "Object"
+        ]
+      },
+      "loadMore": {
+        "types": [
+          "Function"
+        ]
+      },
+      "filterIconAlignLeft": {
+        "types": [
+          "Boolean"
+        ],
+        "default": false
+      },
+      "hideExpandButtonOnEmpty": {
+        "types": [
+          "Boolean"
+        ],
+        "default": false
+      },
+      "rowClass": {
+        "types": [
+          "String",
+          "Array",
+          "Object",
+          "Function"
+        ]
+      },
+      "draggable": {
+        "types": [
+          "Object"
+        ]
+      },
+      "rowNumber": {
+        "types": [
+          "Boolean",
+          "Object"
+        ]
+      },
+      "columnResizable": {
+        "types": [
+          "Boolean"
+        ]
+      },
+      "summary": {
+        "types": [
+          "Boolean",
+          "Function"
+        ]
+      },
+      "summaryText": {
+        "types": [
+          "String"
+        ],
+        "default": "Summary"
+      },
+      "summarySpanMethod": {
+        "types": [
+          "Function"
+        ]
+      },
+      "selectedKeys": {
+        "types": [
+          "Array"
+        ]
+      },
+      "defaultSelectedKeys": {
+        "types": [
+          "Array"
+        ]
+      },
+      "expandedKeys": {
+        "types": [
+          "Array"
+        ]
+      },
+      "defaultExpandedKeys": {
+        "types": [
+          "Array"
+        ]
+      },
+      "defaultExpandAllRows": {
+        "types": [
+          "Boolean"
+        ],
+        "default": false
+      },
+      "stickyHeader": {
+        "types": [
+          "Boolean",
+          "Number"
+        ],
+        "default": false
+      },
+      "stickyPagination": {
+        "types": [
+          "Boolean",
+          "Number"
+        ],
+        "default": false
+      },
+      "scrollbar": {
+        "types": [
+          "Object",
+          "Boolean"
+        ],
+        "default": true
+      },
+      "showEmptyTree": {
+        "types": [
+          "Boolean"
+        ],
+        "default": false
+      },
+      "extraColumn": {
+        "types": [
+          "Boolean",
+          "Object"
+        ],
+        "default": false
+      }
+    },
+    "emits": [
+      "cell-click",
+      "cell-contextmenu",
+      "cell-dblclick",
+      "cell-mouse-enter",
+      "cell-mouse-leave",
+      "change",
+      "column-resize",
+      "expand",
+      "expanded-change",
+      "filter-change",
+      "header-click",
+      "page-change",
+      "page-size-change",
+      "row-click",
+      "row-contextmenu",
+      "row-dblclick",
+      "select",
+      "select-all",
+      "selection-change",
+      "sorter-change",
+      "update:columns",
+      "update:expandedKeys",
+      "update:selectedKeys"
+    ],
+    "methods": {
+      "selectAll": 1,
+      "select": 2,
+      "expandAll": 1,
+      "expand": 2,
+      "resetFilters": 1,
+      "clearFilters": 1,
+      "resetSorters": 0,
+      "clearSorters": 0
+    },
+    "subcomponents": [
+      {
+        "name": "Thead",
+        "componentName": "CThead"
+      },
+      {
+        "name": "Tbody",
+        "componentName": "CTbody"
+      },
+      {
+        "name": "Tr",
+        "componentName": "CTr"
+      },
+      {
+        "name": "Th",
+        "componentName": "CTh"
+      },
+      {
+        "name": "Td",
+        "componentName": "CTd"
+      },
+      {
+        "name": "Column",
+        "componentName": "CTableColumn"
+      }
+    ],
+    "hasInstall": true,
+    "html": "<div class=\"c-table c-table-size-md c-table-border c-table-hover c-table-layout-fixed\" style=\"\"><!----><div class=\"c-loading\"><!----><div class=\"c-loading__content\"><!--[--><!----><!--[--><div class=\"c-table-container c-table-has-fixed-col-left c-table-has-fixed-col-right\"><div class=\"c-scrollbar c-scrollbar-type-embed\" style=\"height:100%;\"><!--[--><div class=\"c-scrollbar-container c-table-content\"><!--[--><!--[--><table class=\"c-table-element\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:228px;\"><colgroup><!--[--><col class=\"\" width=\"120\"><col class=\"\" width=\"80\"><col class=\"\" width=\"28\"><!--]--></colgroup><thead><!--[--><tr class=\"c-table-tr\"><th class=\"c-table-th c-table-col-fixed-left c-table-col-fixed-left-last\" style=\"left:0px;\"><span class=\"c-table-cell c-table-cell-align-center\"><span class=\"c-table-th-main\"><span class=\"c-table-th-title\">Group</span><!----><!----></span><!----></span><!----><!----></th><th class=\"c-table-th\" style=\"\" rowspan=\"2\" data-column-key=\"score\"><span class=\"c-table-cell c-table-cell-align-start\"><span class=\"c-table-th-main\"><span class=\"c-table-th-title\">Score</span><!----><!----></span><!----></span><!----><!----></th><th class=\"c-table-th c-table-col-fixed-right c-table-col-fixed-right-first c-table-extra-column-cell c-table-extra-column-cell\" style=\"right:0px;\" rowspan=\"2\" data-column-key=\"__cedar_table_extra__\"><span class=\"c-table-cell c-table-cell-align-center\"></span><!----><!----></th></tr><tr class=\"c-table-tr\"><!----><th class=\"c-table-th c-table-col-fixed-left c-table-col-fixed-left-last\" style=\"left:0px;\" data-column-key=\"name\"><span class=\"c-table-cell c-table-cell-align-start\"><span class=\"c-table-th-main\"><span class=\"c-table-th-title\">Name</span><!----><!----></span><!----></span><!----><!----></th></tr><!--]--></thead><tbody><!--[--><!--[--><tr class=\"c-table-tr\"><td class=\"c-table-td c-table-col-fixed-left c-table-col-fixed-left-last\" style=\"left:0px;\" data-column-key=\"name\"><span class=\"c-table-cell c-table-cell-align-start\" style=\"\"><!----><!----><span class=\"c-table-td-content\">Alpha</span></span></td><td class=\"c-table-td\" style=\"\" data-column-key=\"score\"><span class=\"c-table-cell c-table-cell-align-start\" style=\"\"><!----><!----><span class=\"c-table-td-content\">2</span></span></td><td class=\"c-table-td c-table-col-fixed-right c-table-col-fixed-right-first c-table-extra-column-cell\" style=\"right:0px;\" data-column-key=\"__cedar_table_extra__\"><span class=\"c-table-cell c-table-cell-align-center\" style=\"\"><!----><!----><span class=\"c-table-td-content\"><!----></span></span></td></tr><!----><!--]--><!--]--></tbody><!----></table><!--]--><!--]--></div><!--]--><!----><!----></div></div><!----><!--]--><!----><!--]--><!----></div><!----></div></div>"
+  }
+}

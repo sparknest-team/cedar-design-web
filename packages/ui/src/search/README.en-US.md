@@ -57,7 +57,7 @@ Enter a keyword and press Enter. The first example has one input and one submitt
 
 | Configuration | Purpose | Related examples |
 | ----------------- | ------------------------------------------------- | -------------- |
-| `edit-mode` | Search editing mode: direct searches in place; popup opens the search editor in a popup | History presentation and slots |
+| `edit-mode` | Keyword editing mode, inherited from FormItem/Form when omitted | History presentation and slots |
 | `recent-searches` | Controlled search history | History presentation and slots |
 | `label` | Label contents; the outer label associates with the keyword input | History presentation and slots |
 | `placeholder` | Placeholder | History presentation and slots |
@@ -105,15 +105,15 @@ Enter a keyword and press Enter. The first example has one input and one submitt
 
 `loading-mode="line"` uses FieldDecorator's shared loading line; default mode retains the component's existing indicator. Loading does not imply disabled or readonly.
 
-### Native form and popup ownership
+### Native forms and search history
 
 The active keyword input exclusively owns its configured id. References and cached closed editors use distinct internal ids and leave the accessibility/Tab order. Visible labels associate with their input; ariaLabel takes precedence over label text. Field selectors describe field choice, while keyword inputs have their own accessible name.
 
-The reference supplies one native FormData name/value. Popup edits immediately update the same model without duplicating name submission. To use native required and other HTML constraints inside the popup, give the form an id and explicitly associate inputAttrs.form. Closing releases editor constraint ownership so cached inputs cannot block later submission.
+Use inputAttrs.name to include the keyword in native form submission.
 
-Popup input immediately updates v-model. cancel ends the history interface; business code cancels its own requests. A nonempty recent-searches list is required to open history. Switching to reading releases history state. Business state controls loading: editing stays available and repeat searches are blocked. Ordinary search/change listener Promises do not control waiting.
+Direct mode updates the keyword immediately and supports inline history. Click and double-click editors update the keyword on confirmation. cancel ends the history interface; business code cancels its own requests. A nonempty recent-searches list is required to open history. Switching to reading releases history state. Business state controls loading: editing stays available and repeat searches are blocked. Ordinary search/change listener Promises do not control waiting.
 
-<demo src="./__demos__/native-form.vue"></demo>
+<demo src="./__demos__/native-form.en-US.vue"></demo>
 
 ## API
 
@@ -141,7 +141,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 | `select-style` | Field selector style | _StyleValue_ | `-` |
 | `recent-searches` | Controlled search history | _string[]_ | `[]` |
 | `max-search-history-count` | Maximum items in the next history list | _number_ | `5` |
-| `edit-mode` | Search editing mode: direct searches in place; popup opens the search editor in a popup | `'direct' \| 'popup'` | `'direct'` |
+| `edit-mode` | Keyword editing mode, inherited from FormItem/Form when omitted | `'direct' \| 'click' \| 'dblclick'` | `'direct'` |
 | `search-button` | Whether to show the shared search button | _boolean_ | `false` |
 | `button-text` | Shared search button text | _string_ | `-` |
 | `button-props` | Shared search button props | _ButtonProps_ | `-` |
@@ -245,7 +245,7 @@ Editing emits `input → update:modelValue`; changed commits emit `change`. Clea
 
 ### Platform differences
 
-Both platforms default to edit-mode=direct. Cedar defaults to shape=square, while Maple defaults to shape=round. Cedar retains an outer InputGroup; Maple uses a mobile search-bar layout and touch spacing. Input supports five sizes, and Search CSS variables control the outer density.
+Standalone searches default to direct editing. Cedar also supports click and double-click keyword editing. Maple supports fullscreen search. Cedar defaults to shape=square, while Maple defaults to shape=round. Cedar retains an outer InputGroup; Maple uses a mobile search-bar layout and touch spacing. Input supports five sizes, and Search CSS variables control the outer density.
 
 ### Public types
 

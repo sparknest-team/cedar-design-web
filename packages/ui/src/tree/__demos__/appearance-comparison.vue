@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("treeAppearanceComparison");
 import { ref } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -151,7 +149,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="size"
     >
-      <h4>{{ demoCopy.size }}</h4>
+      <h4>不同尺寸</h4>
       <div style="margin-bottom: 20px">
         <c-radio-group v-model="scene1.size" type="button">
           <c-radio value="xs">xs</c-radio>
@@ -174,7 +172,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="block-node"
     >
-      <h4>{{ demoCopy.blockNode }}</h4>
+      <h4>节点占一行</h4>
       <c-tree block-node :data="scene2.treeData" />
     </section>
 
@@ -182,7 +180,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--3"
       data-comparison-scene="show-line"
     >
-      <h4>{{ demoCopy.showLine }}</h4>
+      <h4>显示连接线</h4>
       <div>
         <c-typography-text>showLine</c-typography-text>
         <c-switch v-model="scene3.showLine" style="margin-left: 12px" />

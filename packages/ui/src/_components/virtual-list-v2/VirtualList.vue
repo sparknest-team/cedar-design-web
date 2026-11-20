@@ -2,7 +2,7 @@
   <Component :is="mergedComponent.container" ref="containerRef" :class="prefixCls" :style="style" @scroll="onScroll">
     <Component
       :is="mergedComponent.list"
-      v-bind="listAttrs"
+      v-bind="{ ...listAttrs, ...range?.listAttrs }"
       :style="
         virtualEnabled && paddingPosition === 'list'
           ? {
@@ -12,7 +12,7 @@
           : {}
       "
     >
-      <slot name="list-prefix" />
+      <slot name="list-prefix" :range="range" />
       <Component
         :is="mergedComponent.content"
         ref="contentRef"
@@ -34,7 +34,7 @@
           :set-item-size="setItemSize"
           :can-measure-zero="canMeasureZero"
         >
-          <slot name="item" :item="item" :index="virtualEnabled ? start + index : index" />
+          <slot name="item" :range="range" :item="item" :index="virtualEnabled ? start + index : index" />
         </VirtualListItem>
       </Component>
     </Component>
@@ -44,9 +44,9 @@
 <script lang="ts">
 import { useDirection, inlineScrollLeft, setInlineScrollLeft } from '../../_utils/direction'
 import { createNamespace } from '../../_utils/global-config'
-import { computed, defineComponent, nextTick, provide, ref, toRefs, PropType, watch, onMounted, onActivated, onDeactivated, onBeforeUnmount } from 'vue'
+import { computed, defineComponent, nextTick, provide, ref, toRefs, PropType, watch, onServerPrefetch, onMounted, onActivated, onDeactivated, onBeforeUnmount } from 'vue'
 import { useSize } from './hooks/use-size'
-import VirtualListItem, { measurementVersionKey } from './virtual-list-item'
+import VirtualListItem, { fragmentRowsKey, measurementVersionKey } from './virtual-list-item'
 import { getPrefixCls } from '../../_utils/global-config'
 import { ScrollOptions } from './interface'
 import { isNumber, isObject } from '../../_utils/is'
@@ -89,6 +89,8 @@ export default defineComponent({
       type: [String, Object],
       default: 'div',
     },
+    // Resolve table semantics and item content together, once for this window.
+    prepareRange: Function as PropType<(items: any[]) => { listAttrs?: Record<string, unknown> }>,
     listAttrs: {
       type: Object,
     },
@@ -132,6 +134,8 @@ export default defineComponent({
     const scrollOffset = ref(0)
     const measurementVersion = ref(0)
     provide(measurementVersionKey, measurementVersion)
+    const fragmentRows = new Map<string | number, Set<Element>>()
+    provide(fragmentRowsKey, fragmentRows)
     let viewportHidden = false
     let viewportObserver: ResizeObserver | undefined
     const updateViewport = () => {
@@ -261,11 +265,19 @@ export default defineComponent({
       return data.value.slice(start.value, end.value)
     })
 
+    // SSR can reevaluate computed values between item slots as child instances
+    // are created. Share the same window snapshot throughout this server render.
+    let serverRange: { listAttrs?: Record<string, unknown> } | undefined
+    if (props.prepareRange) {
+      onServerPrefetch(() => { serverRange = props.prepareRange?.(currentList.value) })
+    }
+    const range = computed(() => serverRange ?? props.prepareRange?.(currentList.value))
+
     const onScroll = (ev: Event) => {
       if (!available()) return
       const element = containerRef.value!
       readingOffset = inlineScrollLeft(element)
-      const { scrollTop, scrollHeight, offsetHeight } = ev.target as HTMLElement
+      const { scrollTop, scrollHeight, clientHeight } = ev.target as HTMLElement
       // Our own scroll event can render additional measured rows. Keep its
       // alignment transaction; a different native position cancels it.
       const correction = commandedScroll?.top === scrollTop ? commandedScroll.correct : undefined
@@ -282,7 +294,7 @@ export default defineComponent({
       }
       emit('scroll', ev)
       if (!isCurrent(request, element)) return
-      const bottom = Math.floor(scrollHeight - (scrollTop + offsetHeight))
+      const bottom = Math.floor(scrollHeight - (scrollTop + clientHeight))
       if (bottom <= 0) {
         emit('reach-bottom', ev)
       }
@@ -306,8 +318,11 @@ export default defineComponent({
       if (!Number.isInteger(index) || index < 0 || index >= dataKeys.value.length) return
       const align = options.align ?? 'top'
       const bounds = () => {
-        const rows = Array.from(element.querySelectorAll<HTMLElement>(`[data-virtual-list-index="${index}"]`))
-        const rects = rows.filter(row => row.closest(`.${prefixCls}`) === element)
+        const fragment = fragmentRows.get(dataKeys.value[index])
+        const rows = fragment ? Array.from(fragment) :
+          Array.from(element.querySelectorAll<HTMLElement>(`[data-virtual-list-index="${index}"]`))
+            .filter(row => row.closest(`.${prefixCls}`) === element)
+        const rects = rows
           .map(row => row.getBoundingClientRect()).filter(rect => rect.height)
         if (rects.length) {
           const origin = element.getBoundingClientRect().top + element.clientTop
@@ -353,6 +368,7 @@ export default defineComponent({
       contentRef,
       frontPadding,
       currentList,
+      range,
       behindPadding,
       onScroll,
       setItemSize,

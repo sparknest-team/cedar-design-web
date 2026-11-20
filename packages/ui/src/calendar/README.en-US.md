@@ -23,7 +23,7 @@ When the timestamp of controlled `model-value` changes, the view moves to that d
 
 ### Basic usage
 
-<demo src="./__demos__/basic.vue"></demo>
+<demo src="./__demos__/basic.en-US.vue"></demo>
 
 ## Views and date presentation
 
@@ -56,7 +56,7 @@ Preview configuration: `:day-start-of-week="mondayFirst ? 1 : 0"`, `:is-week="sh
 
 ### Controlled
 
-<demo src="./__demos__/controlled.vue"></demo>
+<demo src="./__demos__/controlled.en-US.vue"></demo>
 
 ### Custom Cell
 

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
 import { ref } from "vue";
 
-const copy = useDemoLocale("defaultValue");
+const copy = {
+  none: "（尚未触发）"
+};
 const seed = ref("A: initial text");
 const instanceKey = ref(0);
 const lastUpdate = ref<string | null>(null);
@@ -22,19 +23,19 @@ function remount() {
 <template>
   <div>
     <p>
-      {{ copy.uncontrolledHint }}
+      1. 非受控：defaultValue 提供初始文字。输入后由组件自己保存新值，下方的默认值变量不会随之变化。
     </p>
     <c-input
       :key="instanceKey"
       :default-value="seed"
-      :aria-label="copy.uncontrolledInput"
+      aria-label="非受控输入框"
       @update:model-value="record"
     />
     <p>
       defaultValue = <code>{{ seed }}</code>
     </p>
     <p role="status">
-      update:modelValue × {{ updateCount }}; {{ copy.lastUpdate }} =
+      update:modelValue × {{ updateCount }}; 最近一次用户更新 =
       <code>{{
         lastUpdate === null ? copy.none : JSON.stringify(lastUpdate)
       }}</code>
@@ -44,32 +45,30 @@ function remount() {
         @click="
           seed = seed.startsWith('A:') ? 'B: new default' : 'A: initial text'
         "
-        >{{ copy.changeDefault }}</c-button
+        >仅修改 defaultValue</c-button
       >
-      <c-button @click="remount">{{ copy.remount }}</c-button>
+      <c-button @click="remount">重新挂载输入框</c-button>
     </c-space>
     <p>
-      {{ copy.uncontrolledSteps }}
+      操作顺序：先输入，再修改 defaultValue，当前文字不会被覆盖；点击重新挂载后，才读取最新的默认值。初始化不会触发 update:modelValue。
     </p>
     <p>
-      {{ copy.controlledHint }}
+      2. 受控：v-model 是数据来源。这里初始值为空字符串，仍优先于 defaultValue，不会自动填入默认文字。
     </p>
     <c-input
       v-model="controlled"
       default-value="This default is ignored"
-      :aria-label="copy.controlledInput"
+      aria-label="受控输入框"
     />
     <p role="status">
       v-model = <code>{{ JSON.stringify(controlled) }}</code>
     </p>
     <c-space wrap>
-      <c-button @click="controlled = 'Parent supplied text'">{{
-        copy.updateParent
-      }}</c-button>
-      <c-button @click="controlled = ''">{{ copy.clearParent }}</c-button>
+      <c-button @click="controlled = 'Parent supplied text'">从父级设置值</c-button>
+      <c-button @click="controlled = ''">清空父级值</c-button>
     </c-space>
     <p>
-      {{ copy.formHint }}
+      表单需要初始值时，请初始化父级绑定字段。defaultValue 不会把初始值写入父级表单。
     </p>
   </div>
 </template>

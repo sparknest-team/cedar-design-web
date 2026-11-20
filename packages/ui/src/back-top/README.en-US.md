@@ -77,7 +77,7 @@ The examples use isolated local containers. Omit `target-container` to listen to
 <!-- demo-config-notes:end -->
 
 
-<demo src="./__demos__/scheduler-lifecycle.vue"></demo>
+<demo src="./__demos__/scheduler-lifecycle.en-US.vue"></demo>
 
 ## Usage notes
 

@@ -21,7 +21,7 @@ Preview configuration: `default-value="overview"`, `name="overview"`, `title="æ¦
 
 Preview configuration: `layout="vertical"`, `:clearable="false"`, `options`, `aria-label="variant"`.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ## Appearance and direction
 

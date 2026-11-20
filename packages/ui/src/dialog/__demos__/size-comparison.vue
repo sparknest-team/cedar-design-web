@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("dialogSizeComparison");
 import { ref } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -74,7 +72,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="width"
     >
-      <h4>{{ demoCopy.width }}</h4>
+      <h4>对话框宽度</h4>
       <c-space>
         <c-button @click="scene1.handleClickSmall">Small Dialog</c-button>
         <c-button @click="scene1.handleClickMedium">Medium Dialog</c-button>
@@ -121,7 +119,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="fullscreen"
     >
-      <h4>{{ demoCopy.fullscreen }}</h4>
+      <h4>全屏</h4>
       <c-button @click="scene2.handleClick">Open Dialog</c-button>
       <c-dialog
         v-model:open="scene2.show"

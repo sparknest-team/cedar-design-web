@@ -53,7 +53,7 @@ export function useModalFocus(root: () => HTMLElement | undefined, active: () =>
     const target = root()
     if (!mounted || suspended || !active() || !target || !isTop()) return
     element = target
-    if (!target.contains(target.ownerDocument.activeElement)) target.focus({ preventScroll: true })
+    if (!target.contains((target.getRootNode() as Document | ShadowRoot).activeElement)) target.focus({ preventScroll: true })
   }
   function focusAfterEnter() {
     const doc = root()?.ownerDocument

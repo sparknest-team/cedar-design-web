@@ -1,0 +1,20 @@
+{
+  "esm": {
+    "exports": [
+      "TableCore",
+      "_TableCoreComponent",
+      "default",
+      "tableCoreProps"
+    ],
+    "html": "<div class=\"c-table-core c-table-core-size-md c-table-core-bordered c-table-core-hover c-table-core-sticky\" style=\"\"><div class=\"c-table-core-viewport\" role=\"region\" aria-label=\"Table\" tabindex=\"0\" style=\"\"><table class=\"c-table-core-table\" style=\"table-layout:fixed;width:100px;\"><colgroup><!--[--><col width=\"100\"><!--]--></colgroup><thead><!--[--><tr><!--[--><th id=\"c-table-core-header-table-core-baseline-0-0-0\" class=\"c-table-core-th c-table-core-col-fixed-left c-table-core-col-fixed-left-last\" style=\"left:0px;top:0px;\" scope=\"col\" data-column-key=\"name\"><span class=\"c-table-core-cell c-table-core-cell-align-start\"><span class=\"c-table-core-th-main\"><span class=\"c-table-core-th-title\">Name</span><!----><!----></span><!----></span></th><!--]--></tr><!--]--></thead><tbody><!--[--><tr class=\"c-table-core-tr\"><!--[--><td class=\"c-table-core-td c-table-core-col-fixed-left c-table-core-col-fixed-left-last\" style=\"left:0px;\" headers=\"c-table-core-header-table-core-baseline-0-0-0\" data-column-key=\"name\"><span class=\"c-table-core-cell c-table-core-cell-align-start\" style=\"\"><!----><!----><span class=\"c-table-core-td-content\">Core Alpha</span></span></td><!--]--></tr><!--]--></tbody></table></div><!----></div>"
+  },
+  "cjs": {
+    "exports": [
+      "TableCore",
+      "_TableCoreComponent",
+      "default",
+      "tableCoreProps"
+    ],
+    "html": "<div class=\"c-table-core c-table-core-size-md c-table-core-bordered c-table-core-hover c-table-core-sticky\" style=\"\"><div class=\"c-table-core-viewport\" role=\"region\" aria-label=\"Table\" tabindex=\"0\" style=\"\"><table class=\"c-table-core-table\" style=\"table-layout:fixed;width:100px;\"><colgroup><!--[--><col width=\"100\"><!--]--></colgroup><thead><!--[--><tr><!--[--><th id=\"c-table-core-header-table-core-baseline-0-0-0\" class=\"c-table-core-th c-table-core-col-fixed-left c-table-core-col-fixed-left-last\" style=\"left:0px;top:0px;\" scope=\"col\" data-column-key=\"name\"><span class=\"c-table-core-cell c-table-core-cell-align-start\"><span class=\"c-table-core-th-main\"><span class=\"c-table-core-th-title\">Name</span><!----><!----></span><!----></span></th><!--]--></tr><!--]--></thead><tbody><!--[--><tr class=\"c-table-core-tr\"><!--[--><td class=\"c-table-core-td c-table-core-col-fixed-left c-table-core-col-fixed-left-last\" style=\"left:0px;\" headers=\"c-table-core-header-table-core-baseline-0-0-0\" data-column-key=\"name\"><span class=\"c-table-core-cell c-table-core-cell-align-start\" style=\"\"><!----><!----><span class=\"c-table-core-td-content\">Core Alpha</span></span></td><!--]--></tr><!--]--></tbody></table></div><!----></div>"
+  }
+}

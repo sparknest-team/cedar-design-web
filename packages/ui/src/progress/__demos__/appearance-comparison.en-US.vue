@@ -1,0 +1,90 @@
+<script setup lang="ts">
+import { proxyRefs as demoProxyRefs } from "vue";
+
+const scene1 = demoProxyRefs(
+  (() => {
+    const sizes = ["xs", "sm", "md", "lg", "xl"] as const;
+    return { sizes };
+  })(),
+);
+
+const scene2 = demoProxyRefs(
+  (() => {
+    const statuses = [
+      "default",
+      "primary",
+      "secondary",
+      "tertiary",
+      "info",
+      "success",
+      "warning",
+      "danger",
+    ] as const;
+    return { statuses };
+  })(),
+);
+</script>
+
+<template>
+  <div class="demo-comparison">
+    <section
+      class="demo-comparison-case demo-comparison-case--1"
+      data-comparison-scene="size"
+    >
+      <h4>size</h4>
+      <c-space direction="column" size="16px">
+        <c-space
+          v-for="size in scene1.sizes"
+          :key="size"
+          wrap
+          size="16px"
+          align="center"
+        >
+          <span>{{ size }}</span
+          ><c-progress :size="size" :percent="42" /><c-progress
+            mode="circle"
+            :size="size"
+            :percent="42"
+          />
+        </c-space>
+        <c-progress :size="10" :percent="12.5" />
+        <c-progress size="0.75rem" :stroke-width="6" :percent="60" />
+        <c-progress mode="circle" size="6rem" :percent="75" />
+      </c-space>
+    </section>
+
+    <section
+      class="demo-comparison-case demo-comparison-case--2"
+      data-comparison-scene="status"
+    >
+      <h4>status</h4>
+      <c-space direction="column" size="16px">
+        <c-progress
+          v-for="status in scene2.statuses"
+          :key="status"
+          :status="status"
+          :percent="60"
+          ><template #text>{{ status }}</template></c-progress
+        >
+        <c-progress :percent="100" />
+      </c-space>
+    </section>
+  </div>
+</template>
+
+<style scoped lang="less">
+.demo-comparison {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+  max-width: 100%;
+}
+.demo-comparison-case {
+  min-width: 0;
+  max-width: 100%;
+}
+.demo-comparison-case > h4 {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+</style>

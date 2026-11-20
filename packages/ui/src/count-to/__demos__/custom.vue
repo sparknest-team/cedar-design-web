@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { formatDemoNumber } from "../../__demos__/locale";
+import { getLocale } from "@cedar-design/ui-vue";
 </script>
 <template>
   <c-count-to :to="123456">
     <template #default="{ value }">
-      {{ formatDemoNumber(value) }}
+      {{ value.toLocaleString(getLocale()) }}
     </template>
   </c-count-to>
 </template>

@@ -1,0 +1,266 @@
+{
+  "initial": {
+    "viewport": {
+      "left": 17,
+      "right": 375,
+      "top": 127.375,
+      "width": 358,
+      "height": 240
+    },
+    "scrollWidth": 680,
+    "rows": 18,
+    "headers": [
+      {
+        "left": 17,
+        "right": 697,
+        "top": 127.375,
+        "width": 680,
+        "height": 35.5
+      },
+      {
+        "left": 17,
+        "right": 697,
+        "top": 162.875,
+        "width": 680,
+        "height": 35.5
+      }
+    ],
+    "cells": [
+      {
+        "key": "name",
+        "left": 17,
+        "right": 137,
+        "top": 198.375,
+        "width": 120,
+        "height": 35.5
+      },
+      {
+        "key": "a",
+        "left": 137,
+        "right": 377,
+        "top": 198.375,
+        "width": 240,
+        "height": 35.5
+      },
+      {
+        "key": "b",
+        "left": 377,
+        "right": 577,
+        "top": 198.375,
+        "width": 200,
+        "height": 35.5
+      },
+      {
+        "key": "c",
+        "left": 240,
+        "right": 360,
+        "top": 198.375,
+        "width": 120,
+        "height": 35.5
+      }
+    ],
+    "hydrated": "HydratedHydration row",
+    "warnings": []
+  },
+  "scrolled": {
+    "viewport": {
+      "left": 17,
+      "right": 375,
+      "top": 127.375,
+      "width": 358,
+      "height": 240
+    },
+    "scrollLeft": 200,
+    "scrollTop": 100,
+    "headers": [
+      {
+        "text": "Identity",
+        "left": 17,
+        "right": 137,
+        "top": 127.375,
+        "width": 120,
+        "height": 35.5
+      },
+      {
+        "text": "Values",
+        "left": -63,
+        "right": 377,
+        "top": 127.375,
+        "width": 440,
+        "height": 35.5
+      },
+      {
+        "text": "End",
+        "left": 240,
+        "right": 360,
+        "top": 127.375,
+        "width": 120,
+        "height": 71
+      },
+      {
+        "text": "Name",
+        "left": 17,
+        "right": 137,
+        "top": 162.875,
+        "width": 120,
+        "height": 35.5
+      },
+      {
+        "text": "A",
+        "left": -63,
+        "right": 177,
+        "top": 162.875,
+        "width": 240,
+        "height": 35.5
+      },
+      {
+        "text": "B",
+        "left": 177,
+        "right": 377,
+        "top": 162.875,
+        "width": 200,
+        "height": 35.5
+      }
+    ],
+    "cells": [
+      {
+        "key": "name",
+        "left": 17,
+        "right": 137,
+        "top": 98.375,
+        "width": 120,
+        "height": 35.5
+      },
+      {
+        "key": "a",
+        "left": -63,
+        "right": 177,
+        "top": 98.375,
+        "width": 240,
+        "height": 35.5
+      },
+      {
+        "key": "b",
+        "left": 177,
+        "right": 377,
+        "top": 98.375,
+        "width": 200,
+        "height": 35.5
+      },
+      {
+        "key": "c",
+        "left": 240,
+        "right": 360,
+        "top": 98.375,
+        "width": 120,
+        "height": 35.5
+      }
+    ]
+  },
+  "auto": {
+    "mode": "auto",
+    "width": 343,
+    "scrollWidth": 343,
+    "cells": [
+      {
+        "key": "name",
+        "width": 89.578125,
+        "left": "0px",
+        "right": ""
+      },
+      {
+        "key": "a",
+        "width": 108.9453125,
+        "left": "",
+        "right": ""
+      },
+      {
+        "key": "b",
+        "width": 75.5859375,
+        "left": "",
+        "right": ""
+      },
+      {
+        "key": "c",
+        "width": 68.890625,
+        "left": "",
+        "right": "0px"
+      }
+    ]
+  },
+  "rtl": {
+    "dir": "rtl",
+    "scrollLeft": 0,
+    "viewportLeft": 17,
+    "viewportRight": 375,
+    "clientWidth": 343,
+    "cells": [
+      {
+        "key": "c",
+        "left": 306.125,
+        "right": 375
+      },
+      {
+        "key": "a",
+        "left": 197.1796875,
+        "right": 306.125
+      },
+      {
+        "key": "b",
+        "left": 121.59375,
+        "right": 197.1796875
+      },
+      {
+        "key": "name",
+        "left": 32,
+        "right": 121.59375
+      }
+    ]
+  },
+  "expanded": {
+    "width": 883,
+    "tableWidth": 883
+  },
+  "responsive": {
+    "viewport": 390,
+    "core": 358,
+    "bodyWidth": 358
+  },
+  "changed": {
+    "rows": 1,
+    "text": "NewReplacement7Changed",
+    "warnings": []
+  },
+  "engine": "ego-lite Chromium; responsive emulation is not physical-device acceptance",
+  "rtlOverflow": {
+    "scrollLeft": -322,
+    "scrollWidth": 680,
+    "clientWidth": 358,
+    "left": 17,
+    "right": 375,
+    "cells": [
+      {
+        "key": "c",
+        "left": 255,
+        "right": 375
+      },
+      {
+        "key": "a",
+        "left": 337,
+        "right": 577
+      },
+      {
+        "key": "b",
+        "left": 137,
+        "right": 337
+      },
+      {
+        "key": "name",
+        "left": 17,
+        "right": 137
+      }
+    ]
+  },
+  "rtlHome": 0,
+  "assertions": "passed: frozen horizontal geometry, grouped sticky offsets, hydration without warnings, RTL End/Home, responsive containment, dynamic data"
+}

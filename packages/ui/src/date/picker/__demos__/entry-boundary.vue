@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("dateEntryBoundaryInline");
 
 import { ref } from "vue";
 import type { DateSelection } from "@cedar-design/ui-vue";
@@ -32,7 +30,7 @@ const week = ref<0 | 1 | 6>(1);
       />
     </div>
     <div>
-      <p>{{ inlineCopy.popupContainer }}</p>
+      <p>纯面板：直接嵌入页面，不使用 open</p>
       <c-date-picker
         :min="limited ? '2025-02-01' : undefined"
         :max="limited ? '2025-02-28' : undefined"

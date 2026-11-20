@@ -1,7 +1,6 @@
 import { flushPromises, mount } from '@vue/test-utils'
 import { afterEach, expect, test } from 'vitest'
 import Search from '..'
-import HistoryContent from '../HistoryContent.vue'
 
 const owners: ReturnType<typeof mount>[] = []
 const nodes: HTMLElement[] = []
@@ -18,7 +17,6 @@ async function fixture(extra: Record<string, unknown> = {}) {
   const owner = mount(Search, {
     attachTo: form,
     props: {
-      editMode: 'popup',
       recentSearches: ['candidate'],
       defaultValue: 'initial',
       label: 'Keywords',
@@ -31,40 +29,23 @@ async function fixture(extra: Record<string, unknown> = {}) {
   const reference = owner.get('input#query-control')
   await reference.trigger('focus')
   await flushPromises()
-  const history = owner.getComponent(HistoryContent)
-  const input = history.get('input#query-control')
-  return { owner, form, reference, history, input }
+  return { owner, form, input: reference }
 }
-test('popup has one public native id, one successful form field and a hidden reference', async () => {
-  const { owner, form, reference, input } = await fixture()
+test('inline history retains one successful native keyword control', async () => {
+  const { owner, form, input } = await fixture()
   expect(document.querySelectorAll('#query-control')).toHaveLength(1)
-  expect(input.attributes('id')).toBe('query-control')
-  expect(reference.attributes('id')).not.toBe('query-control')
-  expect(reference.attributes('aria-hidden')).toBe('true')
-  expect(reference.attributes('tabindex')).toBe('-1')
   expect(new form.ownerDocument.defaultView!.FormData(form).getAll('q')).toEqual(['initial'])
   await input.setValue('accepted')
   expect(new form.ownerDocument.defaultView!.FormData(form).getAll('q')).toEqual(['accepted'])
   expect(owner.emitted('update:modelValue')?.at(-1)?.[0]).toBe('accepted')
 })
 test('explicit native form validation belongs to the active editor', async () => {
-  const { form, input, reference } = await fixture({ defaultValue: '' })
+  const { form, input } = await fixture({ defaultValue: '' })
   const invalid: EventTarget[] = []
   expect((input.element as HTMLInputElement).form).toBe(form)
-  for (const node of [reference.element, input.element])
-    node.addEventListener('invalid', (event) => invalid.push(event.target!))
+  input.element.addEventListener('invalid', (event) => invalid.push(event.target!))
   expect(form.checkValidity()).toBe(false)
   expect(invalid).toEqual([input.element])
-})
-test('closing a cached editor restores reference identity without duplicate ids or names', async () => {
-  const { owner, form, reference } = await fixture()
-  const state = (owner.vm as any).$.setupState.state
-  state.handlePopupVisibleChange(false)
-  state.handleHistoryPopupClosed()
-  await flushPromises()
-  expect(reference.attributes('id')).toBe('query-control')
-  expect(document.querySelectorAll('#query-control')).toHaveLength(1)
-  expect(new form.ownerDocument.defaultView!.FormData(form).getAll('q')).toEqual(['initial'])
 })
 for (const loadingMode of ['default', 'line'] as const) {
   test(`manual ${loadingMode} loading announces busy without locking direct editing`, async () => {
@@ -96,7 +77,7 @@ test('the visible direct label is associated with the actual keyword input', () 
   const input = owner.get('input').element as HTMLInputElement
   expect(Array.from(input.labels ?? []).some((label) => label.textContent?.includes('Keywords'))).toBe(true)
 })
-test('popup labels and metadata identify the active keyword input', async () => {
+test('keyword labels and metadata identify the active keyword input', async () => {
   const { input } = await fixture()
   expect(
     Array.from((input.element as HTMLInputElement).labels ?? []).some((label) =>
@@ -113,47 +94,28 @@ test('explicit keyword aria-label takes priority when a field selector is shown'
   })
   expect(input.attributes('aria-label')).toBe('Product query')
 })
-test('a replaced native id is reflected in both live and cached ownership', async () => {
-  const { owner, reference, input } = await fixture()
-  await owner.setProps({ inputAttrs: { id: 'replacement-query', name: 'q', form: 'search-native-form' } })
-  await flushPromises()
-  expect(document.querySelectorAll('#replacement-query')).toHaveLength(1)
+test('a replaced native id follows the keyword input', async () => {
+  const { owner, input } = await fixture()
+  await owner.setProps({ inputAttrs: { id: 'replacement-query' } })
   expect(input.attributes('id')).toBe('replacement-query')
-  const state = (owner.vm as any).$.setupState.state
-  state.handlePopupVisibleChange(false)
-  state.handleHistoryPopupClosed()
-  await flushPromises()
-  expect(reference.attributes('id')).toBe('replacement-query')
-  expect(document.querySelectorAll('#replacement-query')).toHaveLength(1)
+  expect(document.querySelectorAll('#query-control')).toHaveLength(0)
 })
-
-test('read presentation releases history ownership without reopening a stale editor', async () => {
+test('reading mode releases inline history', async () => {
   const { owner } = await fixture()
   await owner.setProps({ readPretty: true })
-  await flushPromises()
-  const state = (owner.vm as any).$.setupState.state
-  expect(state.historyPopupVisible).toBe(false)
-  expect(state.historyPopupClosing).toBe(false)
+  expect(owner.find('input').exists()).toBe(false)
   await owner.setProps({ readPretty: false })
-  await flushPromises()
-  expect(state.historyPopupVisible).toBe(false)
+  expect((owner.vm as any).$.setupState.state.historyMenuVisible).toBe(false)
 })
-
-test('a closing or cached editor cannot retain native constraint validation ownership', async () => {
-  const { owner, form, reference, input } = await fixture({ defaultValue: '' })
-  const invalid: EventTarget[] = []
-  for (const node of [reference.element, input.element])
-    node.addEventListener('invalid', (event) => invalid.push(event.target!))
-  const state = (owner.vm as any).$.setupState.state
-  state.handlePopupVisibleChange(false)
-  await flushPromises()
-  expect((input.element as HTMLInputElement).form).toBe(null)
-  expect((reference.element as HTMLInputElement).readOnly).toBe(false)
-  expect(form.checkValidity()).toBe(false)
-  expect(invalid).toEqual([reference.element])
-})
-
 test('named and default Search entries are the same public component', async () => {
   const entry = await import('..')
   expect(entry.Search).toBe(entry.default)
+})
+
+test('keyword input preserves explicit false native busy metadata', async () => {
+  const { owner, input } = await fixture({ inputAttrs: { id: 'query-control', 'aria-busy': false } })
+  for (const loading of [false, true, false]) {
+    await owner.setProps({ loading })
+    expect(input.attributes('aria-busy')).toBe(String(loading))
+  }
 })

@@ -6,18 +6,21 @@ import { isInteractiveAriaRole } from '../_utils/aria-role'
 // Inspect rendered descendants so custom components and local slot updates work too.
 const interactive = 'button,input:not([type="hidden"]),textarea,select,a[href],summary'
 
-export function useUploadTrigger() {
+export function useUploadTrigger(initialInteractive = false) {
   const triggerRef = ref<HTMLElement>()
-  const hasInteractiveTrigger = ref(false)
+  const hasInteractiveTrigger = ref(initialInteractive)
   const consumed = new WeakSet<Event>()
   let currentClick: Event | undefined
   let clearClick: ReturnType<typeof setTimeout> | undefined
   let observer: MutationObserver | undefined
+  let releaseEnvironment: (() => void) | undefined
   let active = true
   let epoch = 0
   function disconnect() {
     observer?.disconnect()
     observer = undefined
+    releaseEnvironment?.()
+    releaseEnvironment = undefined
   }
   function connect() {
     disconnect()
@@ -41,7 +44,18 @@ export function useUploadTrigger() {
       })
     }
     update()
-    const Observer = root.ownerDocument.defaultView?.MutationObserver
+    const view = root.ownerDocument.defaultView
+    if (view) {
+      const preferences = ['(prefers-reduced-motion: reduce)', '(prefers-color-scheme: dark)', '(forced-colors: active)']
+        .map(query => view.matchMedia?.(query))
+      for (const preference of preferences) preference?.addEventListener?.('change', update)
+      view.addEventListener('resize', update)
+      releaseEnvironment = () => {
+        for (const preference of preferences) preference?.removeEventListener?.('change', update)
+        view.removeEventListener('resize', update)
+      }
+    }
+    const Observer = view?.MutationObserver
     if (Observer) {
       const path: Node[] = [root]
       let ancestor: Node | null = root.parentNode
@@ -49,7 +63,12 @@ export function useUploadTrigger() {
         path.push(ancestor)
         ancestor = ancestor.parentNode ?? (isShadowRoot(ancestor) ? ancestor.host : null)
       }
+      const waitingForConnection = !root.isConnected
       observer = new Observer((records) => {
+        if (waitingForConnection && root.isConnected) {
+          connect()
+          return
+        }
         const moved = records.some((record) => record.type === 'childList' &&
           Array.from(record.removedNodes).some((removed) => path.some((node) => removed === node || removed.contains(node))))
         if (moved) {
@@ -62,6 +81,8 @@ export function useUploadTrigger() {
         childList: true, subtree: true, attributes: true,
         attributeFilter: ['role', 'tabindex', 'href', 'type', 'contenteditable', 'hidden', 'inert', 'class', 'style'],
       })
+      // While detached the next parent is unknown. Stop watching document-wide on reconnection.
+      if (waitingForConnection) observer.observe(root.ownerDocument, { childList: true, subtree: true })
       // Follow inherited visibility and rebind if an observed ancestor moves.
       for (const node of path.slice(1)) {
         if (node.nodeType === 1) observer.observe(node, { childList: true, attributes: true, attributeFilter: ['class', 'style'] })

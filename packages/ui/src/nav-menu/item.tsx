@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, inject, mergeProps, nextTick, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from 'vue'
+import { computed, defineComponent, h, inject, mergeProps, nextTick, onActivated, onBeforeUnmount, onBeforeUpdate, onDeactivated, ref, watch } from 'vue'
 import { useId } from '../_utils/vue-compat'
 import { createNamespace } from '../_utils/global-config'
 import Trigger from '../trigger'
@@ -29,7 +29,11 @@ export default defineComponent({
     const panel = ref<HTMLElement>()
     const reference = ref<HTMLElement>()
     const suspendedState = ref(false), rendered = ref(false)
-    const hasPopup = () => !!slots.content || props.options.length > 0
+    const hasContentSlot = ref(Boolean(slots.content))
+    onBeforeUpdate(() => {
+      hasContentSlot.value = Boolean(slots.content)
+    })
+    const hasPopup = () => hasContentSlot.value || props.options.length > 0
     const value = computed(() => props.modelValue !== undefined ? props.modelValue : localValue.value)
     const disabled = computed(() => props.disabled || !!parent?.props.disabled)
     const open = computed(() => !suspendedState.value && !disabled.value && hasPopup() && (props.open ?? localOpen.value))

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("textareaAutoSizeInline");
+const inlineCopy = {
+  firstLine: "第一行"
+};
 
 import { ref } from "vue";
 
-const content = ref(inlineCopy.value.firstLine);
+const content = ref(inlineCopy.firstLine);
 const boundedContent = ref("第一行 / First line\n第二行 / Second line");
 const maxRows = ref(5);
 function fill() {
@@ -14,19 +15,19 @@ function fill() {
 <template>
   <c-space direction="column" size="lg" fill>
     <c-textarea
-      :default-value="inlineCopy.nativeThreeRows"
+      default-value="原生三行"
       :rows="3"
       aria-label="Native rows"
     />
     <c-textarea
       v-model="content"
       auto-size
-      :placeholder="inlineCopy.growWithContent"
+      placeholder="随内容增高"
     />
     <c-space wrap>
-      <c-button @click="fill">{{ inlineCopy.fillSixLines }}</c-button>
+      <c-button @click="fill">填入六行</c-button>
       <c-button @click="maxRows = maxRows === 5 ? 2 : 5"
-        >{{ inlineCopy.toggleRowLimit }} {{ maxRows }}</c-button
+        >切换行数上限 {{ maxRows }}</c-button
       >
     </c-space>
     <template v-for="box in ['border-box', 'content-box']" :key="box">

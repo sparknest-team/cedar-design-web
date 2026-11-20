@@ -1,15 +1,10 @@
-<script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("rateValueRulesComparison");
-</script>
-
 <template>
   <div class="demo-comparison">
     <section
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="clear"
     >
-      <h4>{{ demoCopy.clear }}</h4>
+      <h4>支持清除</h4>
       <c-rate :default-value="3" clearable />
     </section>
 
@@ -17,7 +12,7 @@ const demoCopy = useDemoLocale("rateValueRulesComparison");
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="count"
     >
-      <h4>{{ demoCopy.count }}</h4>
+      <h4>任意长度的评分</h4>
       <c-rate :count="10" />
     </section>
   </div>

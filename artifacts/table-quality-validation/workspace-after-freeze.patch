@@ -1,0 +1,1032 @@
+--- frozen/packages/ui/src/_components/field-presentation/with-field-presentation.ts
++++ workspace/packages/ui/src/_components/field-presentation/with-field-presentation.ts
+@@ -73,6 +73,10 @@
+   changeArgs?: (value: any, props: Record<string, any>, event?: Event) => unknown[]
+   inlineProps?: (props: Record<string, any>) => Record<string, any>
+ }
++function enumerableFieldKeys(value: object) {
++  return Reflect.ownKeys(value).filter((key) => Object.prototype.propertyIsEnumerable.call(value, key))
++}
++
+ /** Keep class instances (File, Blob, option identities) intact; isolate mutable value records. */
+ function cloneValue(value: any, seen = new WeakMap<object, any>()): any {
+   if (value instanceof Date) {
+@@ -90,7 +94,7 @@
+   }
+   const result: any = Array.isArray(value) ? new Array(value.length) : Object.create(Object.getPrototypeOf(value))
+   seen.set(value, result)
+-  for (const key of Object.keys(value)) {
++  for (const key of enumerableFieldKeys(value)) {
+     const cloned = cloneValue(value[key], seen)
+     if (key === '__proto__') {
+       Object.defineProperty(result, key, { value: cloned, enumerable: true, configurable: true, writable: true })
+@@ -126,10 +130,10 @@
+   }
+   seen.set(left, right)
+   reverse.set(right, left)
+-  const keys = Object.keys(left)
++  const keys = enumerableFieldKeys(left)
+   const result = (
+-    keys.length === Object.keys(right).length &&
+-    keys.every((key) => Object.prototype.hasOwnProperty.call(right, key) && sameFieldValue(left[key], right[key], seen, reverse))
++    keys.length === enumerableFieldKeys(right).length &&
++    keys.every((key) => Object.prototype.propertyIsEnumerable.call(right, key) && sameFieldValue(left[key], right[key], seen, reverse))
+   )
+   seen.delete(left)
+   reverse.delete(right)
+--- frozen/packages/ui/src/_components/virtual-list-v2/VirtualList.vue
++++ workspace/packages/ui/src/_components/virtual-list-v2/VirtualList.vue
+@@ -46,7 +46,7 @@
+ import { createNamespace } from '../../_utils/global-config'
+ import { computed, defineComponent, nextTick, provide, ref, toRefs, PropType, watch, onServerPrefetch, onMounted, onActivated, onDeactivated, onBeforeUnmount } from 'vue'
+ import { useSize } from './hooks/use-size'
+-import VirtualListItem, { measurementVersionKey } from './virtual-list-item'
++import VirtualListItem, { fragmentRowsKey, measurementVersionKey } from './virtual-list-item'
+ import { getPrefixCls } from '../../_utils/global-config'
+ import { ScrollOptions } from './interface'
+ import { isNumber, isObject } from '../../_utils/is'
+@@ -134,6 +134,8 @@
+     const scrollOffset = ref(0)
+     const measurementVersion = ref(0)
+     provide(measurementVersionKey, measurementVersion)
++    const fragmentRows = new Map<string | number, Set<Element>>()
++    provide(fragmentRowsKey, fragmentRows)
+     let viewportHidden = false
+     let viewportObserver: ResizeObserver | undefined
+     const updateViewport = () => {
+@@ -316,8 +318,11 @@
+       if (!Number.isInteger(index) || index < 0 || index >= dataKeys.value.length) return
+       const align = options.align ?? 'top'
+       const bounds = () => {
+-        const rows = Array.from(element.querySelectorAll<HTMLElement>(`[data-virtual-list-index="${index}"]`))
+-        const rects = rows.filter(row => row.closest(`.${prefixCls}`) === element)
++        const fragment = fragmentRows.get(dataKeys.value[index])
++        const rows = fragment ? Array.from(fragment) :
++          Array.from(element.querySelectorAll<HTMLElement>(`[data-virtual-list-index="${index}"]`))
++            .filter(row => row.closest(`.${prefixCls}`) === element)
++        const rects = rows
+           .map(row => row.getBoundingClientRect()).filter(rect => rect.height)
+         if (rects.length) {
+           const origin = element.getBoundingClientRect().top + element.clientTop
+--- frozen/packages/ui/src/_components/virtual-list-v2/virtual-list-item.tsx
++++ workspace/packages/ui/src/_components/virtual-list-v2/virtual-list-item.tsx
+@@ -17,6 +17,75 @@
+ 
+ export const measurementVersionKey: InjectionKey<Ref<number>> = Symbol('virtual-list-measurement-version')
+ 
++export const fragmentRowsKey: InjectionKey<Map<string | number, Set<Element>>> = Symbol('virtual-list-fragment-rows')
++
++type FragmentChangeListener = (structureChanged: boolean, styledRoots: ReadonlySet<Node>, themeChanged: boolean) => void
++
++// Share one observer per container and route changes to the affected row roots.
++const fragmentParents = new WeakMap<Node, { observer: MutationObserver; listeners: Set<FragmentChangeListener> }>()
++
++function observeFragmentParent(parent: Node, listener: FragmentChangeListener) {
++  let entry = fragmentParents.get(parent)
++  if (!entry) {
++    const Observer = parent.ownerDocument?.defaultView?.MutationObserver
++    if (!Observer) return
++    const listeners = new Set<FragmentChangeListener>()
++    const ancestors = new Set<Node>()
++    let waitingForConnection = false
++    const observer = new Observer(records => {
++      let structureChanged = false
++      let pathChanged = waitingForConnection && parent.isConnected
++      let themeChanged = false
++      const styledRoots = new Set<Node>()
++      for (const record of records) {
++        if (record.type === 'childList') {
++          if (record.target === parent) structureChanged = true
++          else if (ancestors.has(record.target) && Array.from(record.removedNodes).some(node => ancestors.has(node))) {
++            pathChanged = true
++          }
++        } else if (record.target.parentNode === parent) {
++          styledRoots.add(record.target)
++        } else if (record.attributeName === 'class' && ancestors.has(record.target)) {
++          themeChanged = true
++        }
++      }
++      if (pathChanged) observePath()
++      if (structureChanged || styledRoots.size || themeChanged || pathChanged) {
++        for (const notify of listeners) notify(structureChanged, styledRoots, themeChanged || pathChanged)
++      }
++    })
++    function observePath() {
++      if (ancestors.size) observer.disconnect()
++      ancestors.clear()
++      let node: Node | null = parent
++      while (node) {
++        ancestors.add(node)
++        observer.observe(node, node === parent
++          ? { childList: true, subtree: true, attributeFilter: ['class', 'style'] }
++          : { childList: true, attributeFilter: ['class'] })
++        node = node.parentNode ?? (node.nodeType === 11 ? (node as ShadowRoot).host ?? null : null)
++      }
++      // Inserting a previously detached tree does not mutate any of its own ancestors.
++      waitingForConnection = !parent.isConnected
++      if (waitingForConnection && parent.ownerDocument) {
++        observer.observe(parent.ownerDocument, { childList: true, subtree: true })
++      }
++    }
++    observePath()
++    entry = { observer, listeners }
++    fragmentParents.set(parent, entry)
++  }
++  const { observer, listeners } = entry
++  listeners.add(listener)
++  return () => {
++    listeners.delete(listener)
++    if (!listeners.size) {
++      observer.disconnect()
++      fragmentParents.delete(parent)
++    }
++  }
++}
++
+ const { name } = createNamespace('virtual-list-item')
+ 
+ export default defineComponent({
+@@ -34,53 +103,120 @@
+     },
+   },
+   setup(props, { slots }) {
+-    const key = getCurrentInstance()?.vnode.key as string | number
++    const item = getCurrentInstance()!
++    const key = item.vnode.key as string | number
+     const elements = new Map<number, HTMLElement>()
++    const componentRefs = new Map<number, { $el: unknown }>()
+     const refCallbacks = new Map<number, (value: object | null) => void>()
+     let observer: ResizeObserver | undefined
+ 
++    const bindElement = (index: number, value: unknown) => {
++      const element = value && typeof value === 'object' && 'nodeType' in value && value.nodeType === 1
++        ? value as HTMLElement
++        : undefined
++      if (element) elements.set(index, element)
++      else elements.delete(index)
++    }
++
+     const refFor = (index: number) => {
+-      if (!refCallbacks.has(index)) refCallbacks.set(index, (value) => {
+-        const element = value && '$el' in value ? value.$el : value
+-        const previous = elements.get(index)
+-        if (previous && previous !== element) observer?.unobserve(previous)
+-        if (element && typeof element === 'object' && 'nodeType' in element && element.nodeType === 1) {
+-          elements.set(index, element as HTMLElement)
+-          observer?.observe(element as HTMLElement)
+-        } else elements.delete(index)
++      if (!refCallbacks.has(index)) {
++        refCallbacks.set(index, (value) => {
++          if (value && '$el' in value) {
++            componentRefs.set(index, value)
++            bindElement(index, value.$el)
++          } else {
++            componentRefs.delete(index)
++            bindElement(index, value)
++          }
++        })
++      }
++      return refCallbacks.get(index)!
++    }
++
++    const fragmentRows = inject(fragmentRowsKey, undefined)
++    let observed = new Set<Element>()
++    let fragmentParent: Node | null = null
++    let stopObservingParent: (() => void) | undefined
++    let previousContent: Node[] | undefined
++
++    const readFragmentContent = (): Node[] | undefined => {
++      const { el, anchor } = item.subTree
++      if (!el?.parentNode || !anchor || el.parentNode !== anchor.parentNode) return
++      const content: Node[] = []
++      let node = el.nextSibling
++      for (; node && node !== anchor; node = node.nextSibling) {
++        if (node.nodeType === 1 || (node.nodeType === 3 && node.nodeValue)) content.push(node)
++      }
++      if (node === anchor) return content
++    }
++
++    const onFragmentChange: FragmentChangeListener = (structureChanged, styledRoots, themeChanged) => {
++      if (previousContent && previousContent.length > 1 && (themeChanged || previousContent.some(node => styledRoots.has(node)))) {
++        measureAndObserve()
++        return
++      }
++      if (!structureChanged) return
++      const content = readFragmentContent()
++      if (fragmentParent !== item.subTree.el?.parentNode || content?.length !== previousContent?.length ||
++        content?.some((node, index) => node !== previousContent?.[index])) {
++        measureAndObserve()
++      }
++    }
++
++    const measureAndObserve = () => {
++      // Descendants can change their roots without rendering the virtual item again.
++      let hasFragmentRoot = false
++      componentRefs.forEach((instance, index) => {
++        bindElement(index, instance.$el)
++        if (!elements.has(index)) hasFragmentRoot = true
+       })
+-      return refCallbacks.get(index)!
+-    }
+-
+-    const setItemSize = () => {
+-
+-      const rects = Array.from(elements.values(), (element) => ({ element, rect: element.getBoundingClientRect() }))
++      const roots = new Set<Element>(elements.values())
++      const multipleRoots = hasFragmentRoot || roots.size > 1
++      let content = multipleRoots || !roots.size ? readFragmentContent() : undefined
++      for (const node of content ?? []) {
++        if (node.nodeType === 1) roots.add(node as Element)
++      }
++      if (hasFragmentRoot) fragmentRows?.set(key, roots)
++      else fragmentRows?.delete(key)
++      if (!observer) {
++        const Observer = roots.values().next().value?.ownerDocument.defaultView?.ResizeObserver
++        if (Observer) observer = new Observer(measureAndObserve)
++      }
++      if (observer) {
++        for (const element of observed) if (!roots.has(element)) observer.unobserve(element)
++        for (const element of roots) if (!observed.has(element)) observer.observe(element)
++        observed = roots
++      }
++      const rects = Array.from(roots, (element) => ({ element, rect: element.getBoundingClientRect() }))
+         .filter(({ element, rect }) => rect.width !== 0 || rect.height !== 0 || element.getClientRects().length > 0)
+         .map(({ rect }) => rect)
+       const height = rects.length ? Math.max(...rects.map(rect => rect.bottom)) - Math.min(...rects.map(rect => rect.top)) : 0
++      // A single fallback can be replaced without a size notification when
++      // its height is zero or the browser has no ResizeObserver.
++      const watchReplacement = componentRefs.size > 0 && (!observer || height === 0)
++      if (watchReplacement && !content) content = readFragmentContent()
++      const parent = content && (multipleRoots || watchReplacement) ? item.subTree.el?.parentNode ?? null : null
++      if (parent !== fragmentParent) {
++        stopObservingParent?.()
++        fragmentParent = parent
++        stopObservingParent = parent ? observeFragmentParent(parent, onFragmentChange) : undefined
++      }
++      previousContent = content
+       if (height) {
+         props.setItemSize(key, height)
+-      } else if (elements.size > 0 && props.canMeasureZero?.()) {
++      } else if ((roots.size > 0 || (content?.length === 0 && props.hasItemSize(key))) && props.canMeasureZero?.()) {
+         props.setItemSize(key, 0, true)
+       }
+     }
+ 
+-    const measureAndObserve = () => {
+-      if (!observer) {
+-        const Observer = elements.values().next().value?.ownerDocument.defaultView?.ResizeObserver
+-        if (Observer) {
+-          observer = new Observer(setItemSize)
+-          elements.forEach(element => observer?.observe(element))
+-        }
+-      }
+-      setItemSize()
+-    }
+     const measurementVersion = inject(measurementVersionKey, undefined)
+     if (measurementVersion) watch(measurementVersion, measureAndObserve, { flush: 'post' })
+     onMounted(measureAndObserve)
+     onUpdated(measureAndObserve)
+     onBeforeUnmount(() => {
+-      setItemSize()
++      measureAndObserve()
++      fragmentRows?.delete(key)
++      stopObservingParent?.()
+       observer?.disconnect()
+     })
+ 
+@@ -104,8 +240,8 @@
+             ...attrs,
+             onVnodeUpdated(current: VNode) {
+               const root = current.el?.nodeType === 1 ? current.el : undefined
+-              if (root === elements.get(position)) return
+-              bind(root ?? null)
++              if (root && root === elements.get(position)) return
++              bindElement(position, root)
+               measureAndObserve()
+             },
+           }, true)
+--- frozen/packages/ui/src/filter-form/style/index.less
++++ workspace/packages/ui/src/filter-form/style/index.less
+@@ -2,10 +2,9 @@
+ 
+ .c-filter-form {
+   box-sizing: border-box;
+-  padding: var(--c-filter-form-padding);
+-  border: var(--c-filter-form-border-width) solid var(--c-filter-form-border-color);
+-  border-radius: var(~'--c-filter-form-border-radius');
+-  background-color: var(~'--c-filter-form-background-color');
++  margin: 0;
++  padding: 0;
++  border: 0;
+ 
+   .c-form-item {
+     margin-bottom: var(~'--c-filter-form-item-margin-bottom');
+--- frozen/packages/ui/src/filter-form/style/token.less
++++ workspace/packages/ui/src/filter-form/style/token.less
+@@ -2,11 +2,6 @@
+ @import '../../style/theme/index.less';
+ 
+ :root {
+-  --c-filter-form-border-radius: 0px;
+-  --c-filter-form-background-color: transparent;
+-  --c-filter-form-padding: 0px;
+-  --c-filter-form-border-color: var(--c-sys-color-border-subtle);
+-  --c-filter-form-border-width: 0px;
+   --c-filter-form-action-offset: calc(1em * var(--c-form-line-height) + var(--c-form-vertical-label-margin-bottom));
+   --c-filter-form-item-margin-bottom: 0px;
+   --c-filter-form-actions-gap: var(--c-sys-space-5);
+--- frozen/packages/ui/src/form/FormItem.vue
++++ workspace/packages/ui/src/form/FormItem.vue
+@@ -89,8 +89,10 @@
+   defineComponent,
+   inject,
+   nextTick,
++  onActivated,
+   onBeforeUnmount,
+   onBeforeUpdate,
++  onDeactivated,
+   onMounted,
+   provide,
+   reactive,
+@@ -292,7 +294,13 @@
+     );
+ 
+     const formItemCtx = inject(formItemInjectionKey, undefined);
+-    const delegatesFeedback = computed(() => props.noStyle && !presentationState.readPretty.value);
++    const feedbackActive = ref(true);
++    if (formItemCtx) {
++      onActivated(() => { feedbackActive.value = true; });
++      onDeactivated(() => { feedbackActive.value = false; });
++    }
++    const delegatesFeedback = computed(() => props.noStyle && feedbackActive.value && !presentationState.readPretty.value);
++    let active = true;
+     const feedbackOwner = Symbol('form-item-feedback');
+     const feedbackSources = new Map<string, Map<symbol, { status: ValidateStatus | ""; message: string }>>();
+ 
+@@ -301,6 +309,8 @@
+       { status, message }: { status: ValidateStatus | ""; message: string },
+       owner = feedbackOwner,
+     ) => {
++      // Descendants detach after this item has withdrawn its feedback from the parent.
++      if (!active) return;
+       let sources = feedbackSources.get(field);
+       if (!sources) {
+         sources = new Map();
+@@ -454,7 +464,6 @@
+       });
+     };
+ 
+-    let active = true;
+     const validateWithTrigger = (trigger: ValidateTrigger) => {
+       if (!hasValidateTrigger(props.validateTrigger, trigger)) return;
+       const version = fieldVersion;
+--- frozen/packages/ui/src/list/list.vue
++++ workspace/packages/ui/src/list/list.vue
+@@ -1,5 +1,5 @@
+ <script setup lang="ts">
+-import { computed, ref, useSlots } from 'vue'
++import { computed, onActivated, onDeactivated, ref, useSlots, watch } from 'vue'
+ import Loading from '../loading/Loading.vue'
+ import Empty from '../empty'
+ import VirtualList from '../_components/virtual-list-v2'
+@@ -26,6 +26,28 @@
+   ...props.virtualListProps,
+   height: props.virtualListProps?.height ?? (maxHeight.value || undefined),
+ }))
++let active = true
++let position: { element: HTMLElement; top: number; left: number } | undefined
++
++function handleViewportScroll(event: Event) {
++  if (virtual.value || !active) return
++  const element = event.target as HTMLElement | null
++  if (element?.isConnected) {
++    position = { element, top: element.scrollTop, left: element.scrollLeft }
++  }
++  emit('scroll', event)
++}
++
++watch([viewport, virtual], () => { position = undefined })
++onDeactivated(() => { active = false })
++onActivated(() => {
++  active = true
++  if (position?.element.isConnected) {
++    position.element.scrollTop = position.top
++    position.element.scrollLeft = position.left
++  }
++})
++
+ function scrollIntoView(options: ScrollIntoViewOptions) {
+   if (virtual.value) virtualRef.value?.scrollTo(options)
+ }
+@@ -35,7 +57,7 @@
+ <template>
+   <div :class="classes(n(), n('--' + size), [bordered, n('--bordered')], [split, n('--split')])" :aria-busy="loading">
+     <Loading :class="n('loading')" :loading="loading">
+-      <component :is="viewport" v-bind="viewportProps" :class="n('viewport')" :style="contentStyle" @scroll="!virtual && emit('scroll', $event)">
++      <component :is="viewport" v-bind="viewportProps" :class="n('viewport')" :style="contentStyle" @scroll="handleViewportScroll">
+         <div v-if="slots.header" :class="n('header')"><slot name="header" /></div>
+         <VirtualList v-if="virtual && data?.length" ref="virtualRef" v-bind="virtualProps" :data="data" :class="classes(n('content'), n('--virtual'))" :content-attrs="{ role: 'list' }" @scroll="emit('scroll', $event)">
+           <template #item="{ item, index }"><slot name="item" :item="item" :index="index" /></template>
+--- frozen/packages/ui/src/search/HistoryContent.vue
++++ workspace/packages/ui/src/search/HistoryContent.vue
+@@ -1,119 +0,0 @@
+-<template>
+-  <div :class="n('popup-content')">
+-    <div :class="n('field')">
+-      <SearchSelect
+-        v-if="settings.fields.length"
+-        :model-value="state.computedField"
+-        :options="settings.fields"
+-        :style="settings.selectStyle"
+-        :disabled="state.searchDisabled"
+-        :class="n('select')"
+-        @change="state.handleFieldChange"
+-      />
+-      <label
+-        v-else-if="settings.label || $slots.label"
+-        :for="String((inputAttrs ?? settings.inputAttrs)?.id ?? '')"
+-        :class="n('label')"
+-      >
+-        <slot name="label">{{ settings.label }}</slot>
+-      </label>
+-      <SearchInput
+-        ref="inputRef"
+-        :loading="settings.loading && settings.loadingMode === 'line'"
+-        :loading-mode="settings.loadingMode"
+-        edit-mode="direct"
+-        v-bind="inputOptions"
+-        :model-value="state.computedValue"
+-        :empty-value="settings.emptyValue"
+-        :input-attrs="inputAttrs ?? settings.inputAttrs"
+-        :error="settings.error"
+-        :placeholder="state.searchPlaceholder"
+-        :class="n('input')"
+-        :hint="false"
+-        :line="false"
+-        autofocus
+-        @update:model-value="state.updateValue"
+-        @input="state.handleInput"
+-        @change="state.handleChange"
+-        @clear="state.handleClear"
+-        @press-enter="state.handleSearch"
+-        @blur="state.handleBlur"
+-        @focus="state.handlePopupFocus"
+-      >
+-        <template v-if="slots.prefix" #prefix><slot name="prefix" /></template>
+-        <template v-if="slots.suffix" #suffix><slot name="suffix" /></template>
+-        <template v-if="slots['clear-icon']" #clear-icon="scope"><slot name="clear-icon" v-bind="scope" /></template>
+-      </SearchInput>
+-      <SearchButton :class="n('cancel')" variant="text" :disabled="state.searchDisabled" @click="state.handleCancel">
+-        {{ state.cancelText }}
+-      </SearchButton>
+-    </div>
+-    <div :class="n('history')">
+-      <button
+-        v-for="(item, index) in settings.recentSearches"
+-        :key="index"
+-        type="button"
+-        :class="n('history-item')"
+-        :disabled="state.searchDisabled"
+-        @click="state.handleHistorySelect(item, $event)"
+-      >
+-        {{ item }}
+-      </button>
+-    </div>
+-  </div>
+-</template>
+-
+-<script setup lang="ts">
+-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+-import type { CompatibleReactive as UnwrapNestedRefs } from '../_utils/compatible-reactive'
+-import { createNamespace } from '../_utils/global-config'
+-import SearchButton from '../button/base'
+-import SearchInput from '../input/base'
+-import SearchSelect from './FieldSelect.vue'
+-import type { SearchResolvedProps } from './props'
+-import type { SearchSlots } from './types'
+-import type { SearchControl } from './use-search-control'
+-
+-const props = defineProps<{
+-  inputAttrs?: Record<string, unknown>
+-  settings: SearchResolvedProps
+-  state: UnwrapNestedRefs<SearchControl>
+-}>()
+-const slots = defineSlots<SearchSlots>()
+-const { n } = createNamespace('search')
+-const inputRef = ref<InstanceType<typeof SearchInput>>()
+-watch(inputRef, (target) => props.state.setPopupInput(target))
+-onBeforeUnmount(() => props.state.setPopupInput(undefined))
+-const inputOptions = computed(() => {
+-  const {
+-    modelModifiers,
+-    type,
+-    ariaLabel,
+-    maxLength,
+-    enterkeyhint,
+-    textColor,
+-    focusColor,
+-    blurColor,
+-    size,
+-    variant,
+-    clearable,
+-  } = props.settings
+-  const label =
+-    ariaLabel ?? props.inputAttrs?.['aria-label'] ?? props.settings.inputAttrs?.['aria-label'] ?? props.settings.label
+-  return {
+-    modelModifiers,
+-    type,
+-    ariaLabel: label == null ? undefined : String(label),
+-    maxLength,
+-    readonly: props.state.mergedReadonly,
+-    disabled: props.state.mergedDisabled,
+-    enterkeyhint: enterkeyhint || 'search',
+-    textColor,
+-    focusColor,
+-    blurColor,
+-    size,
+-    variant,
+-    clearable,
+-  }
+-})
+-</script>
+--- frozen/packages/ui/src/search/history-presentation.vue
++++ workspace/packages/ui/src/search/history-presentation.vue
+@@ -1,18 +0,0 @@
+-<template>
+-  <SearchDrawer
+-    :open="open" placement="top" height="100vh" :overlay="false"
+-    :header="false" :footer="false" :closable="false"
+-    :drawer-class="n('popup')" :body-style="{ padding: 0 }"
+-    :aria-label="historyText"
+-    @update:open="$emit('update:open', $event)" @closed="$emit('closed')"
+-  ><slot /></SearchDrawer>
+-</template>
+-<script setup lang="ts">
+-import SearchDrawer from '../drawer'
+-import { createNamespace } from '../_utils/global-config'
+-import { useSearchLocale } from './use-search-locale'
+-const { historyText } = useSearchLocale()
+-defineProps<{ open: boolean }>()
+-defineEmits<{ 'update:open': [open: boolean]; closed: [] }>()
+-const { n } = createNamespace('search')
+-</script>
+--- frozen/packages/ui/src/search/props.ts
++++ workspace/packages/ui/src/search/props.ts
+@@ -10,7 +10,7 @@
+ import { inputProps } from "../input/props";
+ 
+ export type SearchShape = "square" | "round";
+-export type SearchEditMode = "direct" | "popup";
++export type { FieldEditMode as SearchEditMode } from "../_components/field-presentation/context";
+ export type SearchActionType = "cancel" | "search";
+ 
+ export interface SearchField {
+@@ -50,13 +50,8 @@
+     type: Number,
+     default: 5,
+   },
+-  /** 行内搜索与历史菜单，或全屏搜索弹层。 */
+-  /** 搜索编辑模式；direct 为直接编辑，popup 为全屏弹层。 */
+-  editMode: {
+-    type: String as PropType<SearchEditMode>,
+-    default: "direct",
+-    validator: (value: string) => ["direct", "popup"].includes(value),
+-  },
++  /** 关键词编辑模式，未指定时继承 FormItem/Form。 */
++  editMode: inputProps.editMode,
+   /** 搜索字段可选项 */
+   fields: {
+     type: Array as PropType<SearchField[]>,
+--- frozen/packages/ui/src/search/search.vue
++++ workspace/packages/ui/src/search/search.vue
+@@ -22,7 +22,6 @@
+       <label
+         v-if="!fields.length && (label || slots.label)"
+         :for="getReferenceId()"
+-        :aria-hidden="popupActive || undefined"
+         :class="n('label')"
+       >
+         <slot name="label">{{ label }}</slot>
+@@ -69,7 +68,8 @@
+           :placeholder="searchPlaceholder"
+           :size="mergedSize"
+           :disabled="mergedDisabled"
+-          :readonly="mergedReadonly || popupActive"
++          :readonly="mergedReadonly"
++          :edit-mode="editMode"
+           :variant="variant"
+           :clearable="clearable"
+           :empty-value="emptyValue"
+@@ -78,14 +78,14 @@
+           @input="handleInput"
+           @change="handleChange"
+           @clear="handleClear"
+-          @press-enter="handleSearch"
++          @press-enter="editMode === 'direct' && handleSearch($event)"
+           @focus="handleFocus"
+           @blur="handleBlur"
+         >
+           <template v-if="slots.prefix" #prefix><slot name="prefix" /></template>
+           <template #suffix>
+             <button
+-              v-if="!searchButton"
++              v-if="!searchButton && editMode === 'direct'"
+               type="button"
+               :class="n('icon-button')"
+               :disabled="searchDisabled"
+@@ -101,6 +101,12 @@
+           <template v-if="slots['clear-icon']" #clear-icon="scope"><slot name="clear-icon" v-bind="scope" /></template>
+         </SearchInput>
+       </SearchDropdown>
++      <button v-if="!searchButton && editMode !== 'direct'" type="button" :class="n('icon-button')"
++        :aria-label="buttonText || searchText" :disabled="searchDisabled" @click="handleSearch">
++        <IconLoading v-if="loading && loadingMode !== 'line'" />
++        <IconSearch v-else-if="searchIcon === 'search'" />
++        <SearchIcon v-else :name="searchIcon" />
++      </button>
+       <SearchButton
+         v-if="effectiveShowAction"
+         :status="searchButton ? 'primary' : undefined"
+@@ -122,19 +128,6 @@
+         <slot v-else name="action">{{ effectiveActionText }}</slot>
+       </SearchButton>
+     </SearchInputGroup>
+-    <HistoryPresentation
+-      v-if="editMode === 'popup'"
+-      :open="historyPopupVisible"
+-      @update:open="handlePopupVisibleChange"
+-      @closed="handleHistoryPopupClosed"
+-    >
+-      <HistoryContent :settings="props" :state="state" :input-attrs="getPopupAttrs()">
+-        <template v-if="slots.prefix" #prefix><slot name="prefix" /></template>
+-        <template v-if="slots.suffix" #suffix><slot name="suffix" /></template>
+-        <template v-if="slots.label" #label><slot name="label" /></template>
+-        <template v-if="slots['clear-icon']" #clear-icon="scope"><slot name="clear-icon" v-bind="scope" /></template>
+-      </HistoryContent>
+-    </HistoryPresentation>
+   </div>
+ </template>
+ <script setup lang="ts">
+@@ -153,8 +146,6 @@
+ import SearchInputGroup from '../input/InputGroup.vue'
+ import SearchDropdown, { MenuOption } from '../menu'
+ import SearchSelect from './FieldSelect.vue'
+-import HistoryPresentation from './history-presentation.vue'
+-import HistoryContent from './HistoryContent.vue'
+ import { searchProps } from './props'
+ import type { SearchExpose, SearchSlots } from './types'
+ import { searchEmits, useSearchControl } from './use-search-control'
+@@ -168,24 +159,22 @@
+ const { n, classes } = createNamespace('search')
+ const inputRef = ref<InstanceType<typeof SearchInput>>()
+ const presentationState = useFieldPresentation(
+-  () => undefined,
++  () => props.editMode,
+   () => props.readPretty,
+ )
+ const readPretty = presentationState.readPretty
+-const control = useSearchControl(props, emit, inputRef, () => readPretty.value)
+-const editMode = control.editMode
++const control = useSearchControl(props, emit, inputRef, () => readPretty.value, () => presentationState.editMode.value)
++const editMode = presentationState.editMode
+ const emptyPolicy = useEmptyValues(props, undefined, Boolean(presentationState.item))
+ const state = reactive(control)
+-const popupActive = computed(() => state.historyPopupVisible)
+-const { getReferenceId, getLabel, getReferenceAttrs, getPopupAttrs } = useSearchInput(
++const { getReferenceId, getLabel, getReferenceAttrs } = useSearchInput(
+   props,
+-  () => popupActive.value,
+   () => attrs,
+ )
+ watch(
+   readPretty,
+   (reading) => {
+-    if (reading) control.resetHistory()
++    if (reading) control.closeHistoryMenu()
+   },
+   { flush: 'sync' },
+ )
+@@ -204,7 +193,6 @@
+   effectiveActionType,
+   effectiveActionText,
+   historyMenuVisible,
+-  historyPopupVisible,
+   updateValue,
+   handleInput,
+   handleChange,
+@@ -216,8 +204,6 @@
+   handleAction,
+   handleHistoryMenuVisibleChange,
+   handleHistoryMenuSelect,
+-  handlePopupVisibleChange,
+-  handleHistoryPopupClosed,
+   focus,
+   blur,
+ } = control
+--- frozen/packages/ui/src/search/style/index.less
++++ workspace/packages/ui/src/search/style/index.less
+@@ -6,6 +6,7 @@
+   align-items: center;
+   box-sizing: border-box;
+   width: 100%;
++  min-width: 0;
+   min-height: var(--c-search-size-min-height);
+   padding: var(--c-search-spacing-padding);
+   background: var(--c-search-color-bg);
+@@ -41,7 +42,6 @@
+   &__input { flex: 1; min-width: 0; }
+   &__select .c-selection-field__icon { font-size: var(--c-search-select-icon-size); margin-inline-start: var(--c-search-select-icon-spacing); }
+   &__select { min-width: var(--c-search-select-size-min-width); max-width: var(--c-search-select-size-max-width); }
+-  &__popup-content { height: 100%; overflow: auto; background: var(--c-search-color-bg); }
+   &__history { padding: var(--c-search-history-spacing-padding); }
+   &__history-item {
+     display: flex; align-items: center; width: 100%;
+--- frozen/packages/ui/src/search/style/index.ts
++++ workspace/packages/ui/src/search/style/index.ts
+@@ -4,5 +4,4 @@
+ import '../../menu/style'
+ import '../../select/style'
+ import '../../icon/style'
+-import '../../drawer/style'
+ import './index.less'
+--- frozen/packages/ui/src/search/use-search-control.ts
++++ workspace/packages/ui/src/search/use-search-control.ts
+@@ -6,12 +6,11 @@
+   onBeforeUnmount,
+   onDeactivated,
+   ref,
+-  shallowRef,
+   watch,
+ } from 'vue'
+ import type { SetupContext } from 'vue'
+ import { useInputForm } from '../input/use-input-form'
+-import type { SearchResolvedProps } from './props'
++import type { SearchEditMode, SearchResolvedProps } from './props'
+ import type { SearchResult } from './result'
+ import { useSearchLocale } from './use-search-locale'
+ 
+@@ -33,17 +32,13 @@
+   emit: SetupContext<typeof searchEmits>['emit'],
+   input: { value: { focus(): void; blur(): void } | null | undefined },
+   reading: () => boolean = () => false,
++  editMode: () => SearchEditMode = () => 'direct',
+ ) {
+   const { searchText, cancelText } = useSearchLocale()
+   const instance = getCurrentInstance()
+-  const editMode = computed(() => props.editMode ?? 'direct')
+-  const popupInput = shallowRef<{ focus(): void; blur(): void }>()
+-  const activeInput = shallowRef<{ focus(): void; blur(): void }>()
+   const value = ref<string | null>(props.defaultValue)
+   const field = ref<string | undefined>(props.defaultField ?? props.fields[0]?.value)
+   const historyMenuVisible = ref(false)
+-  const historyPopupVisible = ref(false)
+-  const historyPopupClosing = ref(false)
+   let disposed = false
+   let inactive = false
+   const { mergedDisabled, mergedReadonly, mergedSize, eventHandlers } = useInputForm(props)
+@@ -53,8 +48,6 @@
+   onDeactivated(() => {
+     inactive = true
+     historyMenuVisible.value = false
+-    historyPopupVisible.value = false
+-    historyPopupClosing.value = false
+   })
+   onBeforeUnmount(() => {
+     disposed = true
+@@ -81,7 +74,6 @@
+       ? (props.buttonText ?? searchText.value)
+       : (props.actionText ?? (props.actionType === 'search' ? searchText.value : cancelText.value)),
+   )
+-  const historyOptions = computed(() => props.recentSearches.map((item) => ({ value: item, label: item })))
+ 
+   watch(
+     () => props.fields.map((item) => item.value),
+@@ -120,79 +112,39 @@
+     }
+   }
+ 
+-  function resetHistory() {
+-    historyMenuVisible.value = false
+-    historyPopupVisible.value = false
+-    historyPopupClosing.value = false
+-    activeInput.value = undefined
+-  }
+   function closeHistoryMenu() {
+     historyMenuVisible.value = false
+   }
+-  function closeHistoryPopup() {
+-    if (historyPopupVisible.value) historyPopupClosing.value = true
+-    historyPopupVisible.value = false
+-    closeHistoryMenu()
++  function handleHistoryMenuVisibleChange(open: boolean) {
++    historyMenuVisible.value = open && !disposed && !inactive && editMode() === 'direct' &&
++      !searchDisabled.value && props.recentSearches.length > 0
+   }
+   function openHistory() {
+-    if (disposed || inactive || searchDisabled.value || historyPopupClosing.value || !props.recentSearches.length)
+-      return
+-    if (editMode.value === 'popup') historyPopupVisible.value = true
+-    else historyMenuVisible.value = true
+-  }
+-  function handleHistoryMenuVisibleChange(open: boolean) {
+-    historyMenuVisible.value =
+-      open && editMode.value === 'direct' && !searchDisabled.value && props.recentSearches.length > 0
+-  }
+-  function handlePopupVisibleChange(open: boolean) {
+-    if (!open) closeHistoryPopup()
+-    else if (editMode.value === 'popup') openHistory()
+-  }
+-  function handleHistoryPopupClosed() {
+-    blur()
+-    activeInput.value = undefined
+-    historyPopupClosing.value = false
+-  }
+-  watch([searchDisabled, () => props.recentSearches.length, () => editMode.value], () => {
+-    closeHistoryPopup()
+-    if (editMode.value === 'direct') historyPopupClosing.value = false
+-  })
++    handleHistoryMenuVisibleChange(true)
++  }
++  watch([searchDisabled, () => props.recentSearches.length, editMode], closeHistoryMenu)
+ 
+   function handleInput(nextValue: string, event: Event) {
+     emit('input', nextValue, event)
+     openHistory()
+   }
+   function handleChange(nextValue: string | null, event?: Event) {
+-    // Search renders direct Input children, whose commits have native sources.
+-    if (!event) {
+-      return
+-    }
+-
+-    emit('change', nextValue, event)
++    emit('change', nextValue, event ?? new Event('change'))
+   }
+   function handleClear(event: Event) {
+     emit('clear', event)
+     openHistory()
+   }
+   function handleFocus(event: FocusEvent) {
+-    activeInput.value = input.value ?? undefined
+     openHistory()
+     emit('focus', event)
+   }
+-  function handlePopupFocus(event: FocusEvent) {
+-    activeInput.value = popupInput.value
+-    emit('focus', event)
+-  }
+-  function setPopupInput(target: { focus(): void; blur(): void } | undefined) {
+-    popupInput.value = target
+-    if (historyPopupVisible.value && target) activeInput.value = target
+-  }
+   function handleBlur(event: FocusEvent) {
+     emit('blur', event)
+   }
+   async function handleSearch(event: Event = new Event('search')) {
+     if (searchDisabled.value) return
+-    closeHistoryPopup()
++    closeHistoryMenu()
+     await nextTick()
+     if (!disposed && !inactive && !searchDisabled.value) emit('search', getResult(), event)
+   }
+@@ -226,7 +178,7 @@
+   }
+   async function handleCancel(event: Event) {
+     if (searchDisabled.value) return
+-    closeHistoryPopup()
++    closeHistoryMenu()
+     updateValue('')
+     emit('cancel', event)
+     emit('change', '', event)
+@@ -235,14 +187,13 @@
+     if (!disposed && !inactive) blur()
+   }
+   function focus() {
+-    ;(historyPopupVisible.value ? (popupInput.value ?? input.value) : input.value)?.focus()
++    input.value?.focus()
+   }
+   function blur() {
+-    ;(activeInput.value ?? input.value)?.blur()
++    input.value?.blur()
+   }
+ 
+   return {
+-    editMode,
+     searchText,
+     cancelText,
+     computedValue,
+@@ -255,10 +206,7 @@
+     effectiveShowAction,
+     effectiveActionType,
+     effectiveActionText,
+-    historyOptions,
+     historyMenuVisible,
+-    historyPopupVisible,
+-    historyPopupClosing,
+     updateValue,
+     getResult,
+     handleFieldChange,
+@@ -266,8 +214,6 @@
+     handleChange,
+     handleClear,
+     handleFocus,
+-    handlePopupFocus,
+-    setPopupInput,
+     handleBlur,
+     handleSearch,
+     handleAction,
+@@ -275,12 +221,8 @@
+     handleHistorySelect,
+     handleHistoryMenuSelect,
+     handleHistoryMenuVisibleChange,
+-    handlePopupVisibleChange,
+-    handleHistoryPopupClosed,
+     openHistory,
+-    closeHistoryPopup,
+     closeHistoryMenu,
+-    resetHistory,
+     focus,
+     blur,
+   }
+--- frozen/packages/ui/src/search/use-search-input.ts
++++ workspace/packages/ui/src/search/use-search-input.ts
+@@ -2,40 +2,21 @@
+ import { useId } from '../_utils/vue-compat'
+ import type { SearchResolvedProps } from './props'
+ 
+-/** One accessible editor; the reference remains the sole native form value carrier. */
+ export function useSearchInput(
+   props: SearchResolvedProps,
+-  popupActive: () => boolean,
+   referenceAttrs: () => Record<string, unknown> = () => ({}),
+ ) {
+   const generated = 'search-' + useId()
+   const getInputId = () => String(props.inputAttrs?.id ?? referenceAttrs().id ?? generated)
+-  const getReferenceId = () => (popupActive() ? generated + '-reference' : getInputId())
+-  const getPopupId = () => (popupActive() ? getInputId() : generated + '-history')
+   const getLabel = () => {
+     const label = props.ariaLabel ?? props.inputAttrs?.['aria-label'] ?? referenceAttrs()['aria-label'] ?? props.label
+     return label == null ? undefined : String(label)
+   }
+-  const getCommonAttrs = () => ({
++  const getReferenceAttrs = () => ({
+     ...props.inputAttrs,
++    id: getInputId(),
+     'aria-label': getLabel(),
+     'aria-busy': props.loading || (props.inputAttrs?.['aria-busy'] ?? referenceAttrs()['aria-busy']),
+   })
+-  const getReferenceAttrs = () => ({
+-    ...getCommonAttrs(),
+-    id: getReferenceId(),
+-    'aria-hidden': popupActive() ? true : props.inputAttrs?.['aria-hidden'],
+-    tabindex: popupActive() ? -1 : props.inputAttrs?.tabindex,
+-  })
+-  const getPopupAttrs = () => ({
+-    ...getCommonAttrs(),
+-    id: getPopupId(),
+-    // The reference owns successful native submission, including implicit forms.
+-    // An explicit form attribute still associates editor constraints with that form.
+-    name: undefined,
+-    form: popupActive() ? (props.inputAttrs?.form ?? referenceAttrs().form) : '',
+-    'aria-hidden': popupActive() ? props.inputAttrs?.['aria-hidden'] : true,
+-    tabindex: popupActive() ? props.inputAttrs?.tabindex : -1,
+-  })
+-  return { getReferenceId, getPopupId, getLabel, getReferenceAttrs, getPopupAttrs }
++  return { getReferenceId: getInputId, getLabel, getReferenceAttrs }
+ }
+--- frozen/packages/ui/src/table/table.tsx
++++ workspace/packages/ui/src/table/table.tsx
+@@ -2072,12 +2072,16 @@
+     };
+ 
+     const paginationTarget = computed(() => isObject(props.pagination) ? props.pagination.container : undefined);
+-    const readyPaginationTarget = shallowRef<string | HTMLElement>();
++    const readyPaginationTarget = shallowRef<string | HTMLElement | null>();
++    // Give the disabled Teleport a table-local destination for its empty anchors.
++    // The visible inline content stays at the Teleport's source, including during SSR.
++    const inlinePaginationId = encodeURIComponent(semanticId);
++    const inlinePaginationSelector = `[data-pagination-anchor="${inlinePaginationId}"]`;
+     let paginationTargetEpoch = 0;
+     watch(paginationTarget, (target) => {
+       const epoch = ++paginationTargetEpoch;
+       if (!target || typeof target !== 'string' || typeof document === 'undefined') {
+-        readyPaginationTarget.value = target;
++        readyPaginationTarget.value = target || null;
+         return;
+       }
+       const resolve = () => {
+@@ -2105,7 +2109,13 @@
+         </div>
+       ) : renderPagination();
+       const target = readyPaginationTarget.value;
+-      return target ? <Teleport to={target}>{content}</Teleport> : paginationTarget.value ? null : content;
++      if (target === undefined) return null;
++      return (
++        <Fragment>
++          <span hidden data-pagination-anchor={inlinePaginationId} />
++          <Teleport to={target ?? inlinePaginationSelector} disabled={!target}>{content}</Teleport>
++        </Fragment>
++      );
+     };
+ 
+     const style = computed<CSSProperties | undefined>(() => {

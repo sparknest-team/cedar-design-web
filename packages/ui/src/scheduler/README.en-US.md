@@ -159,7 +159,7 @@ Preview configuration: `data-virtual-resources-demo`, `v-model:resource-filters=
 
 Compare recurring hours with date-specific overrides. Attempt creation or editing inside and outside available periods to inspect full-duration validation.
 
-<demo src="./__demos__/working-hours-comparison.vue"></demo>
+<demo src="./__demos__/working-hours-comparison.en-US.vue"></demo>
 
 ### Maintenance
 

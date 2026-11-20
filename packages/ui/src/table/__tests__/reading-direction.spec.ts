@@ -60,6 +60,25 @@ test('mixed multi-level groups project into aligned physical header sections wit
   expect(JSON.stringify(source)).toBe(snapshot)
 })
 
+test('nested LTR group headers span exactly the leaves that scroll together', () => {
+  const { groupColumns } = getGroupColumns([{
+    title: 'User Info',
+    children: [
+      { dataIndex: 'birthday', fixed: 'left' },
+      { title: 'Address', children: [{ dataIndex: 'city', fixed: 'left' }, { dataIndex: 'road' }] },
+    ],
+  }], new Map(), {})
+  const sections = groupColumns.flat().filter(column => column.children).map(column => [
+    column.title, column.fixed, column.colSpan, column.children?.map(leaf => leaf.dataIndex),
+  ])
+  expect(sections).toEqual([
+    ['User Info', 'left', 2, ['birthday', 'city']],
+    ['User Info', undefined, 1, ['road']],
+    ['Address', 'left', 1, ['city']],
+    ['Address', undefined, 1, ['road']],
+  ])
+})
+
 import { useFilter } from '../hooks/use-filter'
 import { useSorter } from '../hooks/use-sorter'
 test('direction/width column rebuilds retain uncontrolled filter and sort state while real default changes reset it', async () => {

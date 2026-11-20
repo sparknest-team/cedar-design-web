@@ -1,0 +1,16 @@
+{
+  "comparison": "passed",
+  "engine": "ego-lite Chromium",
+  "sourcePair": "release-verified",
+  "states": [
+    "initial",
+    "scrolled",
+    "paged",
+    "rtl",
+    "changed"
+  ],
+  "warnings": [],
+  "virtualBodyIdentity": "preserved",
+  "hydration": "no warnings",
+  "nativeScrollPanels": "body/header/summary synchronized"
+}

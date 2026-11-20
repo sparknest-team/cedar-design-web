@@ -33,7 +33,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Compare sizes and semantic colors independently of navigation, disabled interception and loading.
 
-<demo src="./__demos__/appearance-comparison.vue"></demo>
+<demo src="./__demos__/appearance-comparison.en-US.vue"></demo>
 
 ### Link Mode
 

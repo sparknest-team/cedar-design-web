@@ -37,7 +37,7 @@
         v-if="__apiReview.slotEnabled['resource-header'] !== false"
         #resource-header="{ resource, date }"
       >
-        <strong>{{ resource?.label ?? formatDemoDate(date) }}</strong>
+        <strong>{{ resource?.label ?? date.toLocaleDateString(getLocale()) }}</strong>
         <small v-if="resource">
           · {{ resource.disabled ? "维护中" : "可预约" }}</small
         >
@@ -113,7 +113,7 @@
   </DemoApiReviewPanel>
 </template>
 <script setup lang="ts">
-import { formatDemoDate } from "../../__demos__/locale";
+import { getLocale } from "@cedar-design/ui-vue";
 import DemoApiReviewPanel from "../../../docs/.vuepress/components/ApiReviewPanel.vue";
 import {
   defineReviewConfig,

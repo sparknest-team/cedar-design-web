@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("timeRangeFormatComparison");
 import { ref } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -29,7 +27,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="format"
     >
-      <h4>{{ demoCopy.format }}</h4>
+      <h4>显示格式</h4>
       <c-space direction="column" fill>
         <c-time-range
           v-model="scene1.range"
@@ -56,7 +54,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="ampm"
     >
-      <h4>{{ demoCopy.ampm }}</h4>
+      <h4>十二小时制</h4>
       <c-space direction="column" :size="12" style="width: 100%">
         <p>分别切换起止端的 AM/PM；12 AM 是午夜，12 PM 是中午。</p>
         <c-time-range

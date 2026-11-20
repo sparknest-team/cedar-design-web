@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("radioGroupDeclarationComparison");
 import { ref } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -28,7 +26,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="group"
     >
-      <h4>{{ demoCopy.group }}</h4>
+      <h4>单选框组</h4>
       <c-space direction="column" size="lg">
         <c-radio-group>
           <c-radio value="A">A</c-radio>
@@ -49,7 +47,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="group-options"
     >
-      <h4>{{ demoCopy.groupOptions }}</h4>
+      <h4>单选框组选项</h4>
       <c-space direction="column" size="lg">
         <c-radio-group v-model="scene2.value1" :options="scene2.plainOptions" />
         <c-radio-group v-model="scene2.value2" :options="scene2.options" />

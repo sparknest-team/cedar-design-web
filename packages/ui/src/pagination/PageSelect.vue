@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ComponentSize } from "../_utils/constant";
 import type { PaginationPageSizeProps } from "./types";
-import BaseSelect from "../select";
+import BaseSelect from "../select/select";
 defineProps<{
   modelValue?: number;
   options: { value: number; label: string }[];

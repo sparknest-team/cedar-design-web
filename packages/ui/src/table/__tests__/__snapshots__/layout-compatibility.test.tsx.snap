@@ -1,0 +1,432 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`pre-refactor Table layout compatibility > filter reset, page selection and public calls keep their event trace and raw identity 1`] = `
+Array [
+  Array [
+    "selection-change",
+    Array [
+      "a",
+    ],
+  ],
+  Array [
+    "update:selectedKeys",
+    Array [
+      "a",
+    ],
+  ],
+  Array [
+    "page-change",
+    2,
+  ],
+  Array [
+    "change",
+    Array [
+      "c",
+    ],
+    Object {
+      "dragTarget": undefined,
+      "filters": Object {
+        "kind": Array [
+          "x",
+        ],
+      },
+      "page": 2,
+      "pageSize": 1,
+      "sorter": undefined,
+      "type": "pagination",
+    },
+    Array [
+      "a",
+      "c",
+    ],
+  ],
+  Array [
+    "selection-change",
+    Array [],
+  ],
+  Array [
+    "update:selectedKeys",
+    Array [],
+  ],
+  Array [
+    "filter-change",
+    "kind",
+    Array [],
+  ],
+  Array [
+    "change",
+    Array [
+      "b",
+    ],
+    Object {
+      "dragTarget": undefined,
+      "filters": Object {
+        "kind": Array [],
+      },
+      "page": 2,
+      "pageSize": 1,
+      "sorter": undefined,
+      "type": "filter",
+    },
+    Array [
+      "a",
+      "b",
+      "c",
+    ],
+  ],
+  Array [
+    "filter-change",
+    "kind",
+    Array [
+      "x",
+    ],
+  ],
+  Array [
+    "change",
+    Array [
+      "c",
+    ],
+    Object {
+      "dragTarget": undefined,
+      "filters": Object {
+        "kind": Array [
+          "x",
+        ],
+      },
+      "page": 2,
+      "pageSize": 1,
+      "sorter": undefined,
+      "type": "filter",
+    },
+    Array [
+      "a",
+      "c",
+    ],
+  ],
+]
+`;
+
+exports[`pre-refactor Table layout compatibility > frozen offsets preserve group boundaries, physical sides and operation identity 1`] = `"d13c835676ebce051c595e8c088d6afad2aeb310f78ed29f1f0533812660fa85"`;
+
+exports[`pre-refactor Table layout compatibility > public runtime surface and instance fields remain available 1`] = `
+Object {
+  "emits": Array [
+    "cell-click",
+    "cell-contextmenu",
+    "cell-dblclick",
+    "cell-mouse-enter",
+    "cell-mouse-leave",
+    "change",
+    "column-resize",
+    "expand",
+    "expanded-change",
+    "filter-change",
+    "header-click",
+    "page-change",
+    "page-size-change",
+    "row-click",
+    "row-contextmenu",
+    "row-dblclick",
+    "select",
+    "select-all",
+    "selection-change",
+    "sorter-change",
+    "update:columns",
+    "update:expandedKeys",
+    "update:selectedKeys",
+  ],
+  "exports": Array [
+    "DEFAULT_EXTRA_COLUMN_WIDTH",
+    "TABLE_EXTRA_COLUMN_KEY",
+    "Table",
+    "TableColumn",
+    "Tbody",
+    "Td",
+    "Th",
+    "Thead",
+    "Tr",
+    "_TableColumnComponent",
+    "_TableComponent",
+    "_TbodyComponent",
+    "_TdComponent",
+    "_ThComponent",
+    "_TheadComponent",
+    "_TrComponent",
+    "default",
+    "defineTableConfig",
+    "getExtraColumnWidth",
+    "resolveExtraColumnConfig",
+    "tableProps",
+  ],
+  "methods": Array [
+    "clearFilters",
+    "clearSorters",
+    "expand",
+    "expandAll",
+    "resetFilters",
+    "resetSorters",
+    "select",
+    "selectAll",
+  ],
+  "props": Object {
+    "bordered": Object {
+      "default": true,
+      "types": Array [
+        "Boolean",
+        "Object",
+      ],
+    },
+    "columnResizable": Object {
+      "types": Array [
+        "Boolean",
+      ],
+    },
+    "columns": Object {
+      "default": Array [],
+      "types": Array [
+        "Array",
+      ],
+    },
+    "components": Object {
+      "types": Array [
+        "Object",
+      ],
+    },
+    "data": Object {
+      "default": Array [],
+      "types": Array [
+        "Array",
+      ],
+    },
+    "defaultExpandAllRows": Object {
+      "default": false,
+      "types": Array [
+        "Boolean",
+      ],
+    },
+    "defaultExpandedKeys": Object {
+      "types": Array [
+        "Array",
+      ],
+    },
+    "defaultSelectedKeys": Object {
+      "types": Array [
+        "Array",
+      ],
+    },
+    "draggable": Object {
+      "types": Array [
+        "Object",
+      ],
+    },
+    "expandable": Object {
+      "types": Array [
+        "Object",
+      ],
+    },
+    "expandedKeys": Object {
+      "types": Array [
+        "Array",
+      ],
+    },
+    "extraColumn": Object {
+      "default": false,
+      "types": Array [
+        "Boolean",
+        "Object",
+      ],
+    },
+    "filterIconAlignLeft": Object {
+      "default": false,
+      "types": Array [
+        "Boolean",
+      ],
+    },
+    "fit": Object {
+      "default": true,
+      "types": Array [
+        "Boolean",
+      ],
+    },
+    "height": Object {
+      "types": Array [
+        "Number",
+        "String",
+      ],
+    },
+    "hideExpandButtonOnEmpty": Object {
+      "default": false,
+      "types": Array [
+        "Boolean",
+      ],
+    },
+    "hoverable": Object {
+      "default": true,
+      "types": Array [
+        "Boolean",
+      ],
+    },
+    "indentSize": Object {
+      "default": 16,
+      "types": Array [
+        "Number",
+      ],
+    },
+    "loadMore": Object {
+      "types": Array [
+        "Function",
+      ],
+    },
+    "loading": Object {
+      "default": false,
+      "types": Array [
+        "Boolean",
+        "Object",
+      ],
+    },
+    "maxHeight": Object {
+      "types": Array [
+        "Number",
+        "String",
+      ],
+    },
+    "pagination": Object {
+      "default": true,
+      "types": Array [
+        "Boolean",
+        "Object",
+      ],
+    },
+    "rowClass": Object {
+      "types": Array [
+        "String",
+        "Array",
+        "Object",
+        "Function",
+      ],
+    },
+    "rowKey": Object {
+      "default": "key",
+      "types": Array [
+        "String",
+      ],
+    },
+    "rowNumber": Object {
+      "types": Array [
+        "Boolean",
+        "Object",
+      ],
+    },
+    "rowSelection": Object {
+      "types": Array [
+        "Object",
+      ],
+    },
+    "scrollbar": Object {
+      "default": true,
+      "types": Array [
+        "Object",
+        "Boolean",
+      ],
+    },
+    "selectedKeys": Object {
+      "types": Array [
+        "Array",
+      ],
+    },
+    "showEmptyTree": Object {
+      "default": false,
+      "types": Array [
+        "Boolean",
+      ],
+    },
+    "showHeader": Object {
+      "default": true,
+      "types": Array [
+        "Boolean",
+      ],
+    },
+    "size": Object {
+      "default": "md",
+      "types": Array [
+        "String",
+      ],
+    },
+    "spanAll": Object {
+      "default": false,
+      "types": Array [
+        "Boolean",
+      ],
+    },
+    "spanMethod": Object {
+      "types": Array [
+        "Function",
+      ],
+    },
+    "stickyHeader": Object {
+      "default": false,
+      "types": Array [
+        "Boolean",
+        "Number",
+      ],
+    },
+    "stickyPagination": Object {
+      "default": false,
+      "types": Array [
+        "Boolean",
+        "Number",
+      ],
+    },
+    "stripe": Object {
+      "default": false,
+      "types": Array [
+        "Boolean",
+      ],
+    },
+    "summary": Object {
+      "types": Array [
+        "Boolean",
+        "Function",
+      ],
+    },
+    "summarySpanMethod": Object {
+      "types": Array [
+        "Function",
+      ],
+    },
+    "summaryText": Object {
+      "default": "Summary",
+      "types": Array [
+        "String",
+      ],
+    },
+    "tableLayout": Object {
+      "default": "fixed",
+      "types": Array [
+        "String",
+      ],
+    },
+    "virtualListProps": Object {
+      "types": Array [
+        "Object",
+      ],
+    },
+  },
+}
+`;
+
+exports[`pre-refactor Table layout compatibility > public runtime surface and instance fields remain available 2`] = `
+Array [
+  "render",
+  "selfClearFilters",
+  "selfClearSorters",
+  "selfExpand",
+  "selfExpandAll",
+  "selfResetFilters",
+  "selfResetSorters",
+  "selfSelect",
+  "selfSelectAll",
+]
+`;
+
+exports[`pre-refactor Table layout compatibility > width allocation preserves rounding, missing fields, collisions and writebacks 1`] = `"0afbad8560c78277571ac3973617a1f53a738bb940051437cb68e50edd92022b"`;

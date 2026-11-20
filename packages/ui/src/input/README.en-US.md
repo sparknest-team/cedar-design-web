@@ -22,7 +22,7 @@ The input inherits `dir` from its page or local scope. Affixes, clear actions an
 - `size`: Controls the component size.
 - `variant`: Selects the visual variant.
 
-<demo src="../field-decorator/__demos__/control-sizes.vue"></demo>
+<demo src="../field-decorator/__demos__/control-sizes.en-US.vue"></demo>
 
 <demo src="./__demos__/basic.vue"></demo>
 
@@ -46,7 +46,7 @@ The input inherits `dir` from its page or local scope. Affixes, clear actions an
 
 Choose an axis to compare its available values with the same content and model. Other settings remain unchanged while comparing.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ### Form Feedback
 
@@ -125,7 +125,7 @@ When `hint` is omitted it inherits InputGroup; the standalone library default is
 <!-- demo-config-notes:end -->
 
 
-<demo src="./__demos__/default-value.vue"></demo>
+<demo src="./__demos__/default-value.en-US.vue"></demo>
 
 `v-model.trim` follows Vue model event rules: `update:modelValue` is trimmed during input, while `input` reports the original text after length normalization. An uncontrolled editor may retain surrounding whitespace while editing and normalizes its local display on commit; committing does not repeat the same model proposal already reported. Controlled display follows the final parent value, and `change` still denotes a commit.
 
@@ -163,7 +163,7 @@ Cancellable hooks use `(payload, done, context)`: closure payloads contain `{ ac
 
 Toggle loading to compare the default indicator and bottom line. The input remains editable while loading.
 
-<demo src="./__demos__/loading.vue"></demo>
+<demo src="./__demos__/loading.en-US.vue"></demo>
 
 ## Composition input
 

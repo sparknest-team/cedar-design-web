@@ -2,4 +2,4 @@
 "@cedar-design/ui-vue": patch
 ---
 
-Render FilterForm with a transparent background and zero border width, corner radius, and outer padding by default. Wrap it in Card for a bordered panel.
+Remove the FilterForm padding, border, corner radius and background tokens. FilterForm has zero outer margin and padding and no border across themes. Wrap it in Card for a bordered panel.

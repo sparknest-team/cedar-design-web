@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("inputTagLinkTitleInline");
+const inlineCopy = {
+  couldNotFetchTheTitle: "获取标题失败，请重试"
+};
 
 import { ref } from "vue";
 
@@ -45,7 +46,7 @@ async function searchLinks(query: string, { signal }: { signal: AbortSignal }) {
 
 <template>
   <c-space direction="column" style="width: 100%" :size="12">
-    <p>{{ inlineCopy.pasteOrTypeOneOf }}</p>
+    <p>粘贴或输入 https://vuejs.org 或 https://github.com；唯一结果自动添加，模型保存原始链接。</p>
     <c-input-tag
       v-model="links"
       :options="searchLinks"
@@ -53,15 +54,13 @@ async function searchLinks(query: string, { signal }: { signal: AbortSignal }) {
       :search-delay="300"
       auto-commit-single
       unique-value
-      :placeholder="inlineCopy.pasteOrTypeAURL"
-      :aria-label="inlineCopy.pasteOrTypeAURL"
+      placeholder="粘贴或输入链接"
+      aria-label="粘贴或输入链接"
       clearable
       @load-error="error = inlineCopy.couldNotFetchTheTitle"
     />
     <p v-if="error" role="alert">{{ error }}</p>
-    <c-button :disabled="!links.length" @click="submitted = [...links]">{{
-      inlineCopy.submit
-    }}</c-button>
+    <c-button :disabled="!links.length" @click="submitted = [...links]">提交</c-button>
     <pre v-if="submitted !== null" aria-live="polite">{{
       JSON.stringify({ links: submitted }, null, 2)
     }}</pre>

@@ -1,15 +1,10 @@
-<script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("alertDismissComparison");
-</script>
-
 <template>
   <div class="demo-comparison">
     <section
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="closable"
     >
-      <h4>{{ demoCopy.closable }}</h4>
+      <h4>可关闭</h4>
       <c-row :gutter="[40, 20]">
         <c-col :span="12">
           <c-alert closable>This is an info alert.</c-alert>
@@ -36,7 +31,7 @@ const demoCopy = useDemoLocale("alertDismissComparison");
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="close-icon"
     >
-      <h4>{{ demoCopy.closeIcon }}</h4>
+      <h4>自定义关闭图标</h4>
       <c-row :gutter="[40, 20]">
         <c-col :span="12">
           <c-alert closable>

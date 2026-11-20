@@ -40,7 +40,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Compare flat groups, nested menus and option content. Expand or select options to inspect their hierarchy.
 
-<demo src="./__demos__/structure-comparison.vue"></demo>
+<demo src="./__demos__/structure-comparison.en-US.vue"></demo>
 
 ### Active Rendering
 

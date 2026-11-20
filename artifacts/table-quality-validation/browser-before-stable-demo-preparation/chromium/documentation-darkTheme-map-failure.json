@@ -1,0 +1,160 @@
+{
+  "failures": [],
+  "diagnostic": {
+    "url": "http://127.0.0.1:62062/components/map/#%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95",
+    "text": "number\n  name?: string\n}\n\n\n组件导出以下类型定义\n\nimport type { MapProps } from '@cedar-design/ui-vue'\n\nCSS Variables\n\n通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。\n\n变量\t默认值／条件\t影响的样式\n--c-map-locate-me-bg\tvar(--c-color-bg-white)\tbackground\n--c-map-locate-me-bottom\tvar(--c-spacing-10)\tbottom\n--c-map-locate-me-icon-size\t18px\theight, width\n--c-map-locate-me-left\tvar(--c-spacing-6)\tleft\n--c-map-locate-me-shadow-blur\tvar(--c-spacing-2)\tbox-shadow\n--c-map-locate-me-shadow-color\trgb(var(--c-gray-10))\tbox-shadow\n--c-map-locate-me-size\tvar(--c-size-6)\theight, width\n--c-map-poi-address-color\tvar(--c-color-text-3)\tcolor, stroke\n--c-map-poi-address-font-size\tvar(--c-font-size-body-1)\tfont-size\n--c-map-poi-bg\trgb(var(--c-gray-10))\tbackground-color\n--c-map-poi-border-radius\tvar(--c-size-25)\tborder-radius\n--c-map-poi-edit-margin-left\tvar(--c-spacing-2)\tmargin-inline-start\n--c-map-poi-name-color\tvar(--c-color-white)\tcolor\n--c-map-poi-name-font-size\tvar(--c-font-size-body-3)\tfont-size\n--c-map-poi-padding-x\tvar(--c-spacing-9)\tpadding\n--c-map-poi-padding-y\tvar(--c-spacing-5)\tpadding\n--c-map-poi-translate-y\t-7px\ttransform\n--c-map-position-current-right\tvar(--c-size-10)\tright\n--c-map-position-current-size\tvar(--c-size-6)\theight, width\n--c-map-position-current-top\tvar(--c-size-25)\ttop\n--c-map-position-dot-margin-left\tcalc(-1 * var(--c-spacing-6))\tmargin-left\n--c-map-position-dot-margin-top\tcalc(-1 * var(--c-size-6))\tmargin-top\n--c-map-position-dot-size\tvar(--c-size-6)\theight, width\n--c-map-search-box-padding-x\tvar(--c-spacing-6)\tpadding\n--c-map-search-box-padding-y\t7px\tpadding\n--c-map-search-empty-padding\tvar(--c-spacing-8)\tpadding\n--c-map-search-item-address-color\tvar(--c-color-text-3)\tcolor\n--c-map-search-item-name-color\tvar(--c-color-text-1)\tcolor\n--c-map-search-item-padding-x\tvar(--c-spacing-6)\tpadding\n--c-map-search-item-padding-y\tvar(--c-spacing-4)\tpadding\n--c-map-search-item-selected-bg\tvar(--c-color-fill-1)\tbackground-color\n--c-map-search-margin\tvar(--c-spacing-9)\tmargin\n--c-map-search-width\t230px\twidth\n--c-map-tips-color\tvar(--c-color-text-3)\tcolor\n--c-map-tips-padding-y\tvar(--c-spacing-5)\tpadding\n\n将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：\n\n.component-theme {\n  --c-map-locate-me-icon-size: 18px;\n}\n\n\n显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。\n\n编辑此页",
+    "numericSteps": [],
+    "overflow": [],
+    "previews": [
+      "<div class=\"vmi-previewer-example\" style=\"\" data-v-a1d6c6fd=\"\"><div class=\"c-space c-space--block\" style=\"gap: var(--c-space-size-md-row-gap) var(--c-space-size-md-column-gap); flex-flow: column; justify-content: flex-start; align-items: stretch;\"><div class=\"c-space__group\"><div class=\"c-space__item\"><p>未接入地图 SDK 时显示降级状态，不请求定位权限、不发送真实接口请求。按钮只演示本地位置模型。</p></div><!----></div><div class=\"c-space__group\"><div class=\"c-space__item\"><div class=\"c-space c-space--block\" style=\"gap: var(--c-space-size-md-row-gap) var(--c-space-size-md-column-gap); flex-flow: wrap; justify-content: flex-start; align-items: center;\"><div class=\"c-space__group\"><div class=\"c-space__item\"><button class=\"c-button c-button--size-md c-button--status-default c-button--variant-outline\" type=\"button\"><!----><!----><span class=\"c-button__content\">使用上海示例位置</span><div class=\"c-hover-overlay\"></div></button></div><!----></div><div class=\"c-space__group\"><div class=\"c-space__item\"><button class=\"c-button c-button--size-md c-button--status-default c-button--variant-outline\" type=\"button\"><!----><!----><span class=\"c-button__content\">重置位置</span><div class=\"c-hover-overlay\"></div></button></div><!----></div></div></div><!----></div><div class=\"c-space__group\"><div class=\"c-space__item\"><p role=\"status\">当前位置：北京示例位置（116.397, 39.908）</p></div><!----></div><div class=\"c-space__group\"><div class=\"c-space__item\"><div class=\"map-tips\">拖动地图或搜索地址，选择定位点位置</div><div class=\"map-wrapper\"><div class=\"map-search\"><div class=\"map-search-input c-input c-input--disabled\"><div class=\"c-field-decorator c-field-decorator--size-md c-field-decorator--variant-outline c-field-decorator--disabled\" style=\"--c-internal-field-content-offset: 34px; --c-internal-field-content-width: 184px;\"><span class=\"c-field-decorator__prefix\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 48 48\" width=\"1em\" height=\"1em\" class=\"c-icon c-icon-search\" stroke-width=\"4\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" aria-hidden=\"true\" role=\"img\"><!--v-if--><path d=\"M33.072 33.071c6.248-6.248 6.248-16.379 0-22.627-6.249-6.249-16.38-6.249-22.628 0s-6.248 16.379 0 22.627 16.38 6.248 22.628 0Zm0 0 8.485 8.485\"></path></svg></span><span class=\"c-field-decorator__middle\"><input id=\"v-0\" autocomplete=\"off\" class=\"c-input__inner\" type=\"text\" disabled=\"\" placeholder=\"搜索地址\" value=\"\"></span><!----><!----><!----><span class=\"c-field-decorator__border\" aria-hidden=\"true\"></span><span class=\"c-field-decorator__border-state\" aria-hidden=\"true\"></span></div></div><div class=\"map-search-box-empty\" role=\"status\">Map SDK unavailable / 地图服务未配置</div></div><svg viewBox=\"0 0 24 24\" class=\"position-dot\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6z\"></path></svg><!----><div class=\"poi\"><!----><div class=\"poi-address\"><span>北京示例位置</span><!----></div></div><div style=\"height: 300px;\"></div></div></div><!----></div></div></div>",
+      "<div class=\"vmi-previewer-example\" style=\"\" data-v-a1d6c6fd=\"\"><div role=\"alert\" class=\"c-alert c-alert--info c-alert--standard c-alert--with-title\"><div class=\"c-alert__icon\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 48 48\" width=\"1em\" height=\"1em\" class=\"c-icon c-icon-info-circle-fill\" stroke-width=\"4\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" aria-hidden=\"true\" role=\"img\"><!--v-if--><path fill=\"currentColor\" fill-rule=\"evenodd\" stroke=\"none\" d=\"M24 44c11.046 0 20-8.954 20-20S35.046 4 24 4 4 12.954 4 24s8.954 20 20 20m2-30a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1zm0 17h1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-6a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1h1v-8a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1z\" clip-rule=\"evenodd\"></path></svg></div><div class=\"c-alert__body\"><div class=\"c-alert__title\">地图 SDK 接入</div><div class=\"c-alert__content\"> 本地示例不需要登录、令牌或外部图片。生产应用须自行接入地图 SDK 适配器、配置服务与授权域名，再验证搜索、选点和定位；当前降级展示不代表 SDK 已接入成功。 </div></div><!----><!----></div></div>"
+    ],
+    "controls": [
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到 RTL / Switch to right-to-left",
+        "class": "docs-direction-toggle"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "默认亮色",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "默认暗色✓",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "中文✓",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "English",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "使用上海示例位置",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-outline"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "重置位置",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-outline"
+      },
+      {
+        "tag": "P",
+        "role": "status",
+        "label": "当前位置：北京示例位置（116.397, 39.908）",
+        "class": ""
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "DIV",
+        "role": "status",
+        "label": "Map SDK unavailable / 地图服务未配置",
+        "class": "map-search-box-empty"
+      },
+      {
+        "tag": "DIV",
+        "role": "alert",
+        "label": "地图 SDK 接入 本地示例不需要登录、令牌或外部图片。生产应用须自行接入地图 SDK 适配器、配置服务与授权域名，再验证搜索、选点和定位；",
+        "class": "c-alert c-alert--info c-alert--standard c-alert--with-title"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "DIV",
+        "role": "status",
+        "label": "Map SDK unavailable / 地图服务未配置",
+        "class": "map-search-box-empty"
+      },
+      {
+        "tag": "P",
+        "role": "status",
+        "label": "London sample location",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "返回顶部",
+        "class": "vp-back-to-top-button"
+      },
+      {
+        "tag": "SPAN",
+        "role": "progressbar",
+        "label": "",
+        "class": "vp-scroll-progress"
+      }
+    ]
+  },
+  "error": "TimeoutError: locator.evaluate: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.vmi-previewer').first().locator('[title=\"展开或收起源码\"]')\u001b[22m\n"
+}

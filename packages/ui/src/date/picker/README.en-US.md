@@ -145,7 +145,7 @@ Preview configuration: `showTime`.
 - `max`: Sets the upper bound.
 - `day-start-of-week`: The first day of the week starts on the day of the week, 0-Sunday, 1-Monday, and so on.
 
-<demo src="./__demos__/entry-boundary.vue"></demo>
+<demo src="./__demos__/entry-boundary.en-US.vue"></demo>
 
 ## Reading direction
 

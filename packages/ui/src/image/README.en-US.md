@@ -42,7 +42,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Compare caption and extra-slot placement independently of previews, loading and failures.
 
-<demo src="./__demos__/content-comparison.vue"></demo>
+<demo src="./__demos__/content-comparison.en-US.vue"></demo>
 
 ### Error
 
@@ -178,13 +178,13 @@ Preview configuration: `v-model:open="open"`, `:images="images"`, `:loop="false"
 
 Preview configuration: `v-model:open="open"`, `:images="images"`, `:loop="loop"`, `name="Replace images / 换图"`.
 
-<demo src="./__demos__/track-lifecycle.vue"></demo>
+<demo src="./__demos__/track-lifecycle.en-US.vue"></demo>
 
 ### Controller Lifecycle
 
 Preview configuration: `v-model:open="open"`, `:src="source"`, `interaction="touch"`, `:keyboard="true"`.
 
-<demo src="./__demos__/controller-lifecycle.vue"></demo>
+<demo src="./__demos__/controller-lifecycle.en-US.vue"></demo>
 
 ## Reading direction
 

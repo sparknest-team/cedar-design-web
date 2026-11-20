@@ -54,7 +54,7 @@ import type { TimeRangeProps, TimeRangeInstance } from "@cedar-design/ui-vue";
 
 Compare minute, second and 12-hour range displays and edit both endpoints. Next-day rules and model formats remain separate.
 
-<demo src="./__demos__/format-comparison.vue"></demo>
+<demo src="./__demos__/format-comparison.en-US.vue"></demo>
 
 ### Placeholder
 

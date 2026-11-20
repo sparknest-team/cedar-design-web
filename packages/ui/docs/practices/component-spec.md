@@ -385,12 +385,11 @@ import type { ComponentProps } from "@cedar-design/ui-vue";
 要求：
 
 - 所有 `<demo src="...">` 路径必须是 `kebab-case`。
-- 共享中英文结构的 Demo 通过 `src/__demos__/locale` 的 `useDemoLocale` 读取示例字典，直接跟随文档顶部切换同步的全局语言；中英文文档引用同一个 Demo，不通过 `english` / `locale` 参数或英文包装组件选择语言。
-- VuePress 站点入口同步 Cedar 的全局语言，`useDemoLocale(scope)` 已通过 `getLocale()` 响应其变化。Demo 的脚本和模板直接消费该计算值，避免监听语言后赋给本地 ref，或自行比较语言码来选择文案。可参考 `src/section/__demos__/plain.vue`。
-- 示例文案按场景维护在 `src/__demos__/locale/zh-cn.ts`、`en-us.ts`，包含标签、选项、说明、无障碍名称及带参数的提示；英文字典通过 `DemoMessages` 校验结构。组件中不混写中英文判断，也不将示例业务文案加入组件库公共语言包。
-- 用计算属性读取当前字典中的选项和展示数据；可编辑模型从字典复制初始值，切换语言不得覆盖用户已编辑的数据或修改字典对象。
-- 不通过双语 `<span lang>` 或 CSS `[lang]` 选择器实现 Demo 翻译；比较场景标题、公共对比提示统一维护在示例字典的 `comparison-zh-cn.ts` / `comparison-en-us.ts`。日期、时间和数字展示使用同模块的 `formatDemoDate` / `formatDemoTime` / `formatDemoDateTime` / `formatDemoNumber`，跟随顶部语言，避免写死地区或依赖操作系统语言。
-- `src/__demos__/locale/__tests__/global-language-audit.spec.ts` 全量检查组件 Demo 的上述约束；生成器输出也须使用相同字典入口，新增比较场景时同步登记字典键。
+- VuePress 根据中文或英文路由在站点入口同步全局语言，组件内置文案随全局 Locale 切换。
+- 公开 Demo 可以独立复制。静态与交互示例都直接写页面对应语言的文案；两种语言内容相同时共用 SFC，有翻译时各自引用 `name.vue` 和 `name.en-US.vue`。交互状态由示例自己维护。参见 `src/section/__demos__/heading-options.vue`。
+- 示例的可编辑模型由组件实例维护，交互不写入站点语言状态。
+- 不通过双语 `<span lang>` 或 CSS `[lang]` 选择器实现 Demo 翻译；比较场景标题在生成时使用文档对应语言，对比说明随文档维护。日期、时间和数字使用原生格式化方法，并传入组件库公开的 `getLocale()`。从网页复制完整示例即可使用，无需站点私有 JS。
+- `src/__demos__/locale/__tests__/global-language-audit.spec.ts` 全量检查组件 Demo 的上述约束；生成器输出遵循相同的全局语言与可复制源码约定。
 - 当组件存在"父级配置 + 子级覆盖"机制时，必须在表格下方加 **注意** 段说明继承关系（参考 button README）。
 - `orientation` / `inset` / `spacing` 这类有方向语义的 prop，必须显式说明切换 orientation 后的视觉表现。
 

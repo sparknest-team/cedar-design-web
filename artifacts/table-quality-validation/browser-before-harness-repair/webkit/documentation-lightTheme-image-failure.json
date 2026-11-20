@@ -1,0 +1,359 @@
+{
+  "failures": [],
+  "diagnostic": {
+    "url": "http://127.0.0.1:62210/components/image/",
+    "text": "d-text\tvar(--c-color-text-4)\tcolor\n--c-image-preview-color-action-hover-bg\tvar(--c-color-neutral-2)\tbackground-color\n--c-image-preview-color-action-hover-text\tvar(--c-sys-color-content-brand)\tcolor\n--c-image-preview-color-action-text\tvar(--c-color-neutral-8)\tcolor\n--c-image-preview-color-close-btn-bg\trgba(0, 0, 0, 0.5)\tbackground\n--c-image-preview-color-close-btn-text\tvar(--c-color-white)\tcolor\n--c-image-preview-color-loading-bg\t#232324\tbackground-color\n--c-image-preview-color-loading-text\tvar(--c-sys-color-content-brand)\tcolor\n--c-image-preview-color-scale-value-text\tvar(--c-color-white)\tcolor\n--c-image-preview-color-toolbar-bg\tvar(--c-color-bg-2)\tbackground-color\n--c-image-preview-font-size-action\t14px\tfont-size\n--c-image-preview-font-size-loading\t18px\tfont-size\n--c-image-preview-margin-action-right\tvar(--c-spacing-none)\tmargin-inline-end\n--c-image-preview-overlay-bg\tvar(--c-color-overlay-bg)\tbackground-color\n--c-image-preview-padding-action-content\t13px\tpadding\n--c-image-preview-position-close-btn-right\t36px\tinset-inline-end\n--c-image-preview-position-close-btn-top\t36px\ttop\n--c-image-preview-position-toolbar-bottom\t46px\tbottom\n--c-image-preview-size-close-btn-width\t32px\theight, line-height, width\n--c-image-preview-size-close-icon\t14px\tfont-size\n--c-image-preview-size-loading-height\t48px\theight\n--c-image-preview-size-loading-width\t48px\twidth\n--c-image-preview-spacing-loading-padding\tvar(--c-spacing-5)\tpadding\n--c-image-preview-spacing-toolbar-horizontal\tvar(--c-spacing-7)\tpadding\n--c-image-preview-spacing-toolbar-vertical\tvar(--c-spacing-2)\tpadding\n--c-image-spacing-actions-left\tvar(--c-spacing-6)\tpadding-inline-start\n--c-image-spacing-error-padding\tvar(--c-spacing-7)\tpadding\n--c-image-spacing-footer-top\tvar(--c-spacing-2)\tmargin-top\n--c-image-title-text-color-footer-inner\tvar(--c-color-white)\tcolor\n--c-image-title-text-color-footer-outer\tvar(--c-color-text-1)\tcolor\n\n将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：\n\n.component-theme {\n  --c-image-border-radius: var(--c-border-radius-sm);\n}\n\n\n显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。\n\n样式定制\n\n预览组箭头字号由 --c-image-preview-arrow-font-size 控制。使用 preview-color-action-*、preview-padding-action-content 定制预览工具栏，footer 变量定制底栏。错误／加载层填满图片，不另加100px最小高度。缩放与轨道过渡消费 system motion，reduced-motion 时关闭。\n\n编辑此页",
+    "numericSteps": [],
+    "overflow": [],
+    "previews": [
+      "<div class=\"vmi-previewer-example\" style=\"\" data-v-a1d6c6fd=\"\"><!----></div>",
+      "<div class=\"vmi-previewer-example\" style=\"\" data-v-a1d6c6fd=\"\"><!----></div>"
+    ],
+    "controls": []
+  },
+  "navigation": {
+    "url": "http://127.0.0.1:62210/components/image/",
+    "elapsedMs": 5007,
+    "events": [],
+    "requests": [
+      {
+        "url": "http://127.0.0.1:62210/components/image/",
+        "type": "document",
+        "startedMs": 64,
+        "status": 200,
+        "finishedMs": 313
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/style-DB1qvrSY.css",
+        "type": "stylesheet",
+        "startedMs": 272,
+        "status": 200,
+        "finishedMs": 424
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/app-BA_0nRfp.js",
+        "type": "script",
+        "startedMs": 279,
+        "status": 200,
+        "finishedMs": 357
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/siteData-CYXFkFKh.js",
+        "type": "script",
+        "startedMs": 279,
+        "status": 200,
+        "finishedMs": 506
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/index.html-CRA8hGte.js",
+        "type": "script",
+        "startedMs": 279,
+        "status": 200,
+        "finishedMs": 377
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/basic-DfqjQwHY.js",
+        "type": "script",
+        "startedMs": 279,
+        "status": 200,
+        "finishedMs": 500
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/fit-mode-DzvhKQ6r.js",
+        "type": "script",
+        "startedMs": 279,
+        "status": 200,
+        "finishedMs": 499
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/content-comparison-Z4o-Uz6_.js",
+        "type": "script",
+        "startedMs": 279,
+        "status": 200,
+        "finishedMs": 507
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/error-DVkFh8Wt.js",
+        "type": "script",
+        "startedMs": 280,
+        "status": 200,
+        "finishedMs": 507
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/loader-Nfi0jzGp.js",
+        "type": "script",
+        "startedMs": 280,
+        "status": 200,
+        "finishedMs": 508
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/lazy-BoxTzVYF.js",
+        "type": "script",
+        "startedMs": 280,
+        "status": 200,
+        "finishedMs": 507
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/disable-preview-Bj-KrAjC.js",
+        "type": "script",
+        "startedMs": 299,
+        "status": 200,
+        "finishedMs": 508
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/preview-entry.vue_vue_type_script_setup_true_lang-DaKTnGL_.js",
+        "type": "script",
+        "startedMs": 299,
+        "status": 200,
+        "finishedMs": 818
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/component-preview.vue_vue_type_script_setup_true_lang-BU8qlOdb.js",
+        "type": "script",
+        "startedMs": 299,
+        "status": 200,
+        "finishedMs": 819
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/imperative-preview.vue_vue_type_script_setup_true_lang-Dsp5ZfIj.js",
+        "type": "script",
+        "startedMs": 299,
+        "status": 200,
+        "finishedMs": 820
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/preview-group-Dwg1m94k.js",
+        "type": "script",
+        "startedMs": 299,
+        "status": 200,
+        "finishedMs": 820
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/component-preview-group.vue_vue_type_script_setup_true_lang-CYcl4s51.js",
+        "type": "script",
+        "startedMs": 299,
+        "status": 200,
+        "finishedMs": 820
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/ripple-BINP9NRk.js",
+        "type": "script",
+        "startedMs": 299,
+        "status": 200,
+        "finishedMs": 823
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/overlay-closable-BGH7MgBH.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 824
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/hide-footer-never-BRtXeMj4.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 824
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/preview-features-DREtrP1i.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 826
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/presentation-BgsbdEGz.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 824
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/preview-popup-container-CYGEGItw.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 825
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/track-lifecycle.vue_vue_type_script_setup_true_lang-CWcf3Z9N.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 826
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/controller-lifecycle.vue_vue_type_script_setup_true_lang-n-lj_ecE.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 827
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/index-C2cbjPh-.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 830
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/index-Cd5tlckK.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 826
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/preview-api-DBb1Zw9T.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 827
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/index-BozhE_9g.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 829
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/is-DqrGXBQZ.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 830
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/index-DSanNeXO.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 830
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/useEventListener-BVQiki2N.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 831
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/popup-transition-Cw18_1aB.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 831
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/scroll-lock-Ce2_KbrJ.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 831
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/index-mq9Z4IqQ.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 832
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/index-BLAewsU5.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 831
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/index-MVde2_zR.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 832
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/index-BlDLxYrx.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 832
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/constant-0mfGR27J.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 833
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/index-Dk9zeW3_.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 833
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/index-w-LGsqgU.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 837
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/base-BVYFeadL.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 832
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/index-0VYtVLeT.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 837
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/use-size-Bk-EEcvf.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 838
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/useChildren-8fK9NbQH.js",
+        "type": "script",
+        "startedMs": 300,
+        "status": 200,
+        "finishedMs": 841
+      },
+      {
+        "url": "http://127.0.0.1:62210/assets/cat2-0tUVHDcX.js",
+        "type": "script",
+        "startedMs": 302
+      },
+      {
+        "url": "http://127.0.0.1:62210/logo.svg",
+        "type": "image",
+        "startedMs": 305
+      }
+    ],
+    "pending": [
+      {
+        "url": "http://127.0.0.1:62210/assets/cat2-0tUVHDcX.js",
+        "type": "script",
+        "startedMs": 302
+      },
+      {
+        "url": "http://127.0.0.1:62210/logo.svg",
+        "type": "image",
+        "startedMs": 305
+      }
+    ]
+  },
+  "error": "TimeoutError: page.goto: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:62210/components/image/\", waiting until \"load\"\u001b[22m\n\nNavigation diagnostic: {\"url\":\"http://127.0.0.1:62210/components/image/\",\"elapsedMs\":5007,\"events\":[],\"requests\":[{\"url\":\"http://127.0.0.1:62210/components/image/\",\"type\":\"document\",\"startedMs\":64,\"status\":200,\"finishedMs\":313},{\"url\":\"http://127.0.0.1:62210/assets/style-DB1qvrSY.css\",\"type\":\"stylesheet\",\"startedMs\":272,\"status\":200,\"finishedMs\":424},{\"url\":\"http://127.0.0.1:62210/assets/app-BA_0nRfp.js\",\"type\":\"script\",\"startedMs\":279,\"status\":200,\"finishedMs\":357},{\"url\":\"http://127.0.0.1:62210/assets/siteData-CYXFkFKh.js\",\"type\":\"script\",\"startedMs\":279,\"status\":200,\"finishedMs\":506},{\"url\":\"http://127.0.0.1:62210/assets/index.html-CRA8hGte.js\",\"type\":\"script\",\"startedMs\":279,\"status\":200,\"finishedMs\":377},{\"url\":\"http://127.0.0.1:62210/assets/basic-DfqjQwHY.js\",\"type\":\"script\",\"startedMs\":279,\"status\":200,\"finishedMs\":500},{\"url\":\"http://127.0.0.1:62210/assets/fit-mode-DzvhKQ6r.js\",\"type\":\"script\",\"startedMs\":279,\"status\":200,\"finishedMs\":499},{\"url\":\"http://127.0.0.1:62210/assets/content-comparison-Z4o-Uz6_.js\",\"type\":\"script\",\"startedMs\":279,\"status\":200,\"finishedMs\":507},{\"url\":\"http://127.0.0.1:62210/assets/error-DVkFh8Wt.js\",\"type\":\"script\",\"startedMs\":280,\"status\":200,\"finishedMs\":507},{\"url\":\"http://127.0.0.1:62210/assets/loader-Nfi0jzGp.js\",\"type\":\"script\",\"startedMs\":280,\"status\":200,\"finishedMs\":508},{\"url\":\"http://127.0.0.1:62210/assets/lazy-BoxTzVYF.js\",\"type\":\"script\",\"startedMs\":280,\"status\":200,\"finishedMs\":507},{\"url\":\"http://127.0.0.1:62210/assets/disable-preview-Bj-KrAjC.js\",\"type\":\"script\",\"startedMs\":299,\"status\":200,\"finishedMs\":508},{\"url\":\"http://127.0.0.1:62210/assets/preview-entry.vue_vue_type_script_setup_true_lang-DaKTnGL_.js\",\"type\":\"script\",\"startedMs\":299,\"status\":200,\"finishedMs\":818},{\"url\":\"http://127.0.0.1:62210/assets/component-preview.vue_vue_type_script_setup_true_lang-BU8qlOdb.js\",\"type\":\"script\",\"startedMs\":299,\"status\":200,\"finishedMs\":819},{\"url\":\"http://127.0.0.1:62210/assets/imperative-preview.vue_vue_type_script_setup_true_lang-Dsp5ZfIj.js\",\"type\":\"script\",\"startedMs\":299,\"status\":200,\"finishedMs\":820},{\"url\":\"http://127.0.0.1:62210/assets/preview-group-Dwg1m94k.js\",\"type\":\"script\",\"startedMs\":299,\"status\":200,\"finishedMs\":820},{\"url\":\"http://127.0.0.1:62210/assets/component-preview-group.vue_vue_type_script_setup_true_lang-CYcl4s51.js\",\"type\":\"script\",\"startedMs\":299,\"status\":200,\"finishedMs\":820},{\"url\":\"http://127.0.0.1:62210/assets/ripple-BINP9NRk.js\",\"type\":\"script\",\"startedMs\":299,\"status\":200,\"finishedMs\":823},{\"url\":\"http://127.0.0.1:62210/assets/overlay-closable-BGH7MgBH.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":824},{\"url\":\"http://127.0.0.1:62210/assets/hide-footer-never-BRtXeMj4.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":824},{\"url\":\"http://127.0.0.1:62210/assets/preview-features-DREtrP1i.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":826},{\"url\":\"http://127.0.0.1:62210/assets/presentation-BgsbdEGz.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":824},{\"url\":\"http://127.0.0.1:62210/assets/preview-popup-container-CYGEGItw.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":825},{\"url\":\"http://127.0.0.1:62210/assets/track-lifecycle.vue_vue_type_script_setup_true_lang-CWcf3Z9N.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":826},{\"url\":\"http://127.0.0.1:62210/assets/controller-lifecycle.vue_vue_type_script_setup_true_lang-n-lj_ecE.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":827},{\"url\":\"http://127.0.0.1:62210/assets/index-C2cbjPh-.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":830},{\"url\":\"http://127.0.0.1:62210/assets/index-Cd5tlckK.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":826},{\"url\":\"http://127.0.0.1:62210/assets/preview-api-DBb1Zw9T.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":827},{\"url\":\"http://127.0.0.1:62210/assets/index-BozhE_9g.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":829},{\"url\":\"http://127.0.0.1:62210/assets/is-DqrGXBQZ.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":830},{\"url\":\"http://127.0.0.1:62210/assets/index-DSanNeXO.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":830},{\"url\":\"http://127.0.0.1:62210/assets/useEventListener-BVQiki2N.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":831},{\"url\":\"http://127.0.0.1:62210/assets/popup-transition-Cw18_1aB.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":831},{\"url\":\"http://127.0.0.1:62210/assets/scroll-lock-Ce2_KbrJ.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":831},{\"url\":\"http://127.0.0.1:62210/assets/index-mq9Z4IqQ.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":832},{\"url\":\"http://127.0.0.1:62210/assets/index-BLAewsU5.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":831},{\"url\":\"http://127.0.0.1:62210/assets/index-MVde2_zR.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":832},{\"url\":\"http://127.0.0.1:62210/assets/index-BlDLxYrx.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":832},{\"url\":\"http://127.0.0.1:62210/assets/constant-0mfGR27J.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":833},{\"url\":\"http://127.0.0.1:62210/assets/index-Dk9zeW3_.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":833},{\"url\":\"http://127.0.0.1:62210/assets/index-w-LGsqgU.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":837},{\"url\":\"http://127.0.0.1:62210/assets/base-BVYFeadL.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":832},{\"url\":\"http://127.0.0.1:62210/assets/index-0VYtVLeT.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":837},{\"url\":\"http://127.0.0.1:62210/assets/use-size-Bk-EEcvf.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":838},{\"url\":\"http://127.0.0.1:62210/assets/useChildren-8fK9NbQH.js\",\"type\":\"script\",\"startedMs\":300,\"status\":200,\"finishedMs\":841},{\"url\":\"http://127.0.0.1:62210/assets/cat2-0tUVHDcX.js\",\"type\":\"script\",\"startedMs\":302},{\"url\":\"http://127.0.0.1:62210/logo.svg\",\"type\":\"image\",\"startedMs\":305}],\"pending\":[{\"url\":\"http://127.0.0.1:62210/assets/cat2-0tUVHDcX.js\",\"type\":\"script\",\"startedMs\":302},{\"url\":\"http://127.0.0.1:62210/logo.svg\",\"type\":\"image\",\"startedMs\":305}]}"
+}

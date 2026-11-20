@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("avatarShapeSizeComparison");
 import { proxyRefs as demoProxyRefs } from "vue";
 
 const scene1 = demoProxyRefs(
@@ -23,7 +21,7 @@ const scene1 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="size"
     >
-      <h4>{{ demoCopy.size }}</h4>
+      <h4>尺寸</h4>
       <c-space direction="column" :size="20">
         <c-space align="flex-end" :size="16" wrap>
           <c-space
@@ -70,7 +68,7 @@ const scene1 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="shape"
     >
-      <h4>{{ demoCopy.shape }}</h4>
+      <h4>形状</h4>
       <c-space align="flex-end" :size="16" wrap>
         <c-space direction="column" align="center" :size="8">
           <c-avatar>圆</c-avatar>

@@ -1,15 +1,14 @@
-import { computed, createVNode, defineComponent, inject, onActivated, onBeforeUnmount, onDeactivated, PropType, ref, VNode, watch } from "vue"
+import { renderCellElement, renderBodyContent, renderTextContent } from './render/cells'
+import { useCellLoad } from './features/expansion/use-cell-load'
+import { renderDataContent } from './render/cell-content'
+import { computed, defineComponent, inject, PropType, VNode } from "vue"
 import { getPrefixCls, createNamespace } from "../_utils/global-config"
 import { TableColumnData, TableData, TableDataWithRaw, TableOperationColumn } from "./types"
-import { getFixedCls, getStyle } from "./utils"
-import { getValueByPath } from "../_utils/get-value-by-path"
+import { getFixedCls, getStyle } from "./render/cell-layout"
 import { IconLoading } from '@cedar-design/icons-vue/icon-loading'
 import { isFunction, isObject } from "../_utils/is"
 import { TableContext, tableInjectionKey } from "./context"
 import AutoTooltip from "../_components/auto-tooltip/auto-tooltip"
-import TableSlot from "./TableSlot.vue"
-import { forwardTableColumnSlot, forwardTableSlot } from "./forward-table-slot"
-import { getColumnLayoutKey, isTableExtraColumn } from "./extra-column"
 import { firstStructuralNode } from './structural-slot'
 
 const TD_TYPES = [
@@ -165,128 +164,22 @@ export default defineComponent({
       return undefined;
     });
 
-    const renderContent = () => {
-      if (slots.default) {
-        return slots.default();
-      }
-      const data = {
-        record: props.record?.raw,
-        column: props.column,
-        rowIndex: props.rowIndex ?? -1,
-      };
-      if (slots.cell) {
-        return <TableSlot slotProps={data} v-slots={forwardTableSlot(slots.cell)} />;
-      }
-      if (props.column.slots?.cell) {
-        return <TableSlot slotProps={data} v-slots={forwardTableColumnSlot(props.column.slots.cell)} />;
-      }
-      if (
-        isTableExtraColumn(props.column) &&
-        props.column.slotName &&
-        tableCtx.slots?.[props.column.slotName]
-      ) {
-        return <TableSlot slotProps={data} v-slots={forwardTableSlot(tableCtx.slots[props.column.slotName])} />;
-      }
-      if (props.column.render) {
-        return props.column.render(data);
-      }
-      if (props.column.slotName && tableCtx.slots?.[props.column.slotName]) {
-        return <TableSlot slotProps={data} v-slots={forwardTableSlot(tableCtx.slots[props.column.slotName])} />;
-      }
-      return String(
-        getValueByPath(props.record?.raw, props.column.dataIndex) ?? "",
-      );
-    };
+    const renderContent = () => renderDataContent(props, slots, tableCtx.slots);
 
-    const isLoading = ref(false);
-    let lazyActive = true;
-    let lazyRun = 0;
-    const cancelLazyLoad = () => { lazyRun++; isLoading.value = false; };
-    watch([() => props.record?.raw, () => props.record?.key, () => props.record?.isLeaf, () => props.record?.children, () => tableCtx.loadMore], cancelLazyLoad, { flush: 'sync' });
-    onActivated(() => { lazyActive = true; });
-    const stopLazyLoad = () => { lazyActive = false; cancelLazyLoad(); };
-    onDeactivated(stopLazyLoad);
-    onBeforeUnmount(stopLazyLoad);
-    const handleClick = (ev: Event) => {
-      ev.stopPropagation();
-      const record = props.record;
-      const loader = tableCtx.loadMore;
-      if (!lazyActive || isLoading.value || typeof loader !== 'function' || record.isLeaf || record.children) return;
-      const run = ++lazyRun;
-      let settled = false;
-      isLoading.value = true;
-      const done = (children?: TableData[]) => {
-        if (settled) return;
-        settled = true;
-        if (!lazyActive || run !== lazyRun || props.record.raw !== record.raw || props.record.key !== record.key || tableCtx.loadMore !== loader) return;
-        isLoading.value = false;
-        if (children !== undefined) tableCtx.addLazyLoadData?.(children, record);
-      };
-      try {
-        const result = loader(record.raw, done) as unknown;
-        if (result && typeof (result as PromiseLike<unknown>).then === 'function') {
-          return Promise.resolve(result).catch((error) => { done(); throw error; });
-        }
-      } catch (error) {
-        done();
-        throw error;
-      }
-    };
+    const { isLoading, handleClick } = useCellLoad(props, tableCtx);
 
-    const renderCell = () => {
-      return (
-        <span
-          class={[
-            `${prefixCls}-cell`,
-            `${prefixCls}-cell-align-${props.column?.align ?? "start"}`,
-            {
-              [`${prefixCls}-cell-fixed-expand`]: props.isFixedExpand,
-              [`${prefixCls}-cell-expand-icon`]: props.showExpandBtn,
-            },
-          ]}
-          style={cellStyle.value}
-        >
-          {props.indentSize > 0 && (
-            <span
-              style={{
-                paddingInlineStart: `${props.indentSize}px`,
-              }}
-            />
-          )}
-          {props.showExpandBtn && (
-            <span
-              class={`${prefixCls}-cell-inline-icon`}
-              onClick={handleClick}
-            >
-              {isLoading.value ? (
-                <IconLoading />
-              ) : (
-                props.renderExpandBtn?.(props.record, false)
-              )}
-            </span>
-          )}
-          {props.column?.ellipsis && props.column?.tooltip ? (
-            <AutoTooltip
-              class={`${prefixCls}-td-content`}
-              tooltipProps={tooltipProps.value}
-            >
-              {renderContent()}
-            </AutoTooltip>
-          ) : (
-            <span
-              class={[
-                `${prefixCls}-td-content`,
-                {
-                  [`${prefixCls}-text-ellipsis`]: props.column?.ellipsis,
-                },
-              ]}
-            >
-              {renderContent()}
-            </span>
-          )}
-        </span>
-      );
-    };
+    const renderCell = () => renderBodyContent(prefixCls, {
+      align: props.column?.align,
+      fixedExpand: props.isFixedExpand,
+      hasExpand: props.showExpandBtn,
+      style: cellStyle.value,
+      indent: props.indentSize,
+      onExpand: handleClick,
+      expand: () => isLoading.value ? <IconLoading /> : props.renderExpandBtn?.(props.record, false),
+      content: () => props.column?.ellipsis && props.column?.tooltip
+        ? <AutoTooltip class={`${prefixCls}-td-content`} tooltipProps={tooltipProps.value}>{renderContent()}</AutoTooltip>
+        : renderTextContent(prefixCls, renderContent(), props.column?.ellipsis),
+    });
 
     return () => {
       const customCell = firstStructuralNode(slots.td?.({
@@ -297,21 +190,16 @@ export default defineComponent({
       const customHeaders = customCell?.props && Object.prototype.hasOwnProperty.call(customCell.props, 'headers') && customCell.props.headers !== undefined
         ? customCell.props.headers
         : props.headers;
-      return createVNode(
-        customCell ?? "td",
+      return renderCellElement(
+        "td", customCell, props.column,
         {
           class: cls.value,
           style: style.value,
           rowspan: props.rowSpan > 1 ? props.rowSpan : undefined,
           colspan: props.colSpan > 1 ? props.colSpan : undefined,
           headers: customHeaders,
-          // auto 布局下渲染后按此 key 量宽回写，修正冻结列 sticky 偏移
-          "data-column-key": props.column?.dataIndex,
-          "data-column-layout-key": getColumnLayoutKey(props.column) !== props.column.dataIndex ? getColumnLayoutKey(props.column) : undefined,
         },
-        {
-          default: () => [renderCell()],
-        },
+        () => [renderCell()],
       );
     };
   },

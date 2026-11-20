@@ -45,7 +45,7 @@ Preview configuration: `aria-label="验证码"`.
 
 Preview configuration: `layout="vertical"`, `aria-label="variant"`, `options`, `variant="button"`.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ### States
 

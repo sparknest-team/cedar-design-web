@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-19",
+  "scope": "Column-width/frozen-column kernel extraction only; preserves concurrent component/style fixes",
+  "environment": {
+    "node": "v26.13.1",
+    "vite": "8.3.8",
+    "typescript": "5.6.3",
+    "vueTsc": "2.2.12",
+    "declarationTypescript": "5.6.3",
+    "vue": "3.5.45",
+    "lockfile": "86406dd95d7df4543491d20f1039ccdd6a1719bfc29499d6b5774cedfcc27f8c",
+    "buildCore": "0ee8a46c8b049d361bdd1f55d33c4d55c1d7e26f53e759a9cc5be56b17c22723"
+  },
+  "checks": {
+    "tableTests": {
+      "passed": 363,
+      "total": 363,
+      "stableInputs": true
+    },
+    "originalAlgorithmScenarios": {
+      "columnWidths": 800,
+      "frozenOffsets": 600
+    },
+    "baselineGateTests": 11,
+    "checkTableLayout": "passed (fresh isolated production build and comparison)",
+    "lint": "passed",
+    "typecheck": "passed",
+    "runtimeDependencies": "passed (5 contract checks, no cycles or root backflow)",
+    "vueSourceCompatibility": "passed",
+    "documentationAndSourceStability": "passed"
+  },
+  "notRun": [
+    "full quality",
+    "production three-engine interaction/hydration",
+    "mobile native-device acceptance"
+  ]
+}

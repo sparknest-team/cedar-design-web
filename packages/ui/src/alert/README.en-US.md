@@ -19,7 +19,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Choose an axis to compare its available values with the same content and model. Other settings remain unchanged while comparing.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ## Content and presentation
 
@@ -41,7 +41,7 @@ Choose an axis to compare its available values with the same content and model. 
 
 Compare title hierarchy, centered content and page-wide banners. Actions and dismiss behavior have separate examples.
 
-<demo src="./__demos__/content-comparison.vue"></demo>
+<demo src="./__demos__/content-comparison.en-US.vue"></demo>
 
 ### Show Icon
 
@@ -77,7 +77,7 @@ Compare title hierarchy, centered content and page-wide banners. Actions and dis
 
 Operate the default and custom dismiss controls to compare the same dismissal behavior.
 
-<demo src="./__demos__/dismiss-comparison.vue"></demo>
+<demo src="./__demos__/dismiss-comparison.en-US.vue"></demo>
 
 ## API
 

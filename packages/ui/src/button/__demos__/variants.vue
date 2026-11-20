@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("buttonVariantsInline");
+const inlineCopy = {
+  navy: "深蓝",
+  white: "白色",
+  lightGray: "浅灰",
+  darkGray: "深灰"
+};
 
 import { computed, ref } from "vue";
 
@@ -22,28 +26,28 @@ const statuses = [
 const backgrounds = [
   {
     get label() {
-      return inlineCopy.value.navy;
+      return inlineCopy.navy;
     },
     value: "navy",
     color: "#17224B",
   },
   {
     get label() {
-      return inlineCopy.value.white;
+      return inlineCopy.white;
     },
     value: "light",
     color: "#FFFFFF",
   },
   {
     get label() {
-      return inlineCopy.value.lightGray;
+      return inlineCopy.lightGray;
     },
     value: "muted",
     color: "#F5F5F5",
   },
   {
     get label() {
-      return inlineCopy.value.darkGray;
+      return inlineCopy.darkGray;
     },
     value: "dark",
     color: "#252525",

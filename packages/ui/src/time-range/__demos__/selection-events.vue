@@ -1,5 +1,5 @@
 <script setup>
-import { formatDemoTime } from "../../__demos__/locale";
+import { getLocale } from "@cedar-design/ui-vue";
 import { ref } from "vue";
 
 const value = ref(["09:00", "18:00"]);
@@ -9,10 +9,10 @@ const disabled = ref(false);
 const events = ref([]);
 function record(name, value, dates) {
   const times = Array.isArray(dates)
-    ? dates.map((date) => (date == null ? undefined : formatDemoTime(date)))
+    ? dates.map((date) => (date == null ? undefined : date.toLocaleTimeString(getLocale())))
     : dates == null
       ? undefined
-      : formatDemoTime(dates);
+      : dates.toLocaleTimeString(getLocale());
   events.value = [
     JSON.stringify({ event: name, value: value ?? null, time: times ?? null }),
     ...events.value,

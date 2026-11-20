@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("inputTagSearchOptionsInline");
+const inlineCopy = {
+  searchFailed: "搜索失败"
+};
 
 import { ref } from "vue";
 
@@ -52,12 +53,12 @@ async function searchPeople(
       :search-delay="250"
       auto-commit-single
       unique-value
-      :placeholder="inlineCopy.searchAccounts"
-      :aria-label="inlineCopy.searchAccounts"
+      placeholder="搜索账号"
+      aria-label="搜索账号"
       @load-error="error = inlineCopy.searchFailed"
     />
     <p v-if="error" role="alert">{{ error }}</p>
-    <p>{{ inlineCopy.savedIDs }} {{ JSON.stringify(tags) }}</p>
+    <p>保存的账号 {{ JSON.stringify(tags) }}</p>
     <p>单值模式：选择新账号替换旧值；无匹配时按回车保存输入。</p>
     <c-input-tag
       v-model="singleTag"
@@ -66,9 +67,9 @@ async function searchPeople(
       :min-search-length="2"
       :search-delay="250"
       auto-commit-single
-      :placeholder="inlineCopy.singleAccount"
-      :aria-label="inlineCopy.singleAccount"
+      placeholder="单个账号"
+      aria-label="单个账号"
     />
-    <p>{{ inlineCopy.singleID }} {{ JSON.stringify(singleTag) }}</p>
+    <p>单个账号 {{ JSON.stringify(singleTag) }}</p>
   </c-space>
 </template>

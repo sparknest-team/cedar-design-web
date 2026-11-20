@@ -453,16 +453,16 @@
   }
 
   // colgroup selection
-  &-selection-checkbox-col,
-  &-selection-radio-col {
+  &-selection-checkbox-col.c-table-col-default-width,
+  &-selection-radio-col.c-table-col-default-width {
     .fixed-width(var(~"--c-table-selection-col-width"));
   }
 
-  &-expand-col {
+  &-expand-col.c-table-col-default-width {
     .fixed-width(var(~"--c-table-expand-icon-col-width"));
   }
 
-  &-drag-handle-col {
+  &-drag-handle-col.c-table-col-default-width {
     .fixed-width(var(~"--c-table-drag-handle-col-width"));
   }
 
@@ -739,6 +739,12 @@
     background-color: var(~"--c-table-body-bg");
   }
 
+  // Keep sticky cells below the sibling scrollbar tracks.
+  &-content.c-scrollbar-container,
+  &-body.c-scrollbar-container {
+    isolation: isolate;
+  }
+
   &-scroll-x &-body {
     overflow-x: auto;
   }
@@ -968,17 +974,12 @@
   justify-content: flex-end;
   margin-top: var(~"--c-table-pagination-margin");
 
+  > .c-pagination {
+    justify-content: inherit;
+  }
+
   &-left {
     justify-content: flex-start;
-  }
-
-  &-center {
-    justify-content: center;
-  }
-
-  &-top {
-    margin-top: 0;
-    margin-bottom: var(~"--c-table-pagination-margin");
   }
 
   &-sticky {

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("progressAppearanceComparison");
 import { proxyRefs as demoProxyRefs } from "vue";
 
 const scene1 = demoProxyRefs(
@@ -33,7 +31,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="size"
     >
-      <h4>{{ demoCopy.size }}</h4>
+      <h4>五档与自定义尺寸</h4>
       <c-space direction="column" size="16px">
         <c-space
           v-for="size in scene1.sizes"
@@ -59,7 +57,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="status"
     >
-      <h4>{{ demoCopy.status }}</h4>
+      <h4>八种状态</h4>
       <c-space direction="column" size="16px">
         <c-progress
           v-for="status in scene2.statuses"

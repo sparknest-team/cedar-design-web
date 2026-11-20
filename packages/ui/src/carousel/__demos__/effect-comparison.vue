@@ -1,15 +1,10 @@
-<script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("carouselEffectComparison");
-</script>
-
 <template>
   <div class="demo-comparison">
     <section
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="effect-fade"
     >
-      <h4>{{ demoCopy.effectFade }}</h4>
+      <h4>effect-fade</h4>
       <c-carousel class="carousel" effect="fade">
         <c-carousel-item>
           <img class="carousel-item" :src="'/cat.jpg'" alt="" />
@@ -27,7 +22,7 @@ const demoCopy = useDemoLocale("carouselEffectComparison");
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="effect-card"
     >
-      <h4>{{ demoCopy.effectCard }}</h4>
+      <h4>effect-card</h4>
       <c-carousel class="carousel" effect="card">
         <c-carousel-item>
           <img class="carousel-item" :src="'/cat.jpg'" alt="" />

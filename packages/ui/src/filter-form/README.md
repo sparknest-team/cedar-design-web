@@ -197,12 +197,7 @@ field 支持与 FormItem 一致的点号及方括号路径。写入时自动创�
 | --- | --- | --- |
 | `--c-filter-form-action-offset` | `calc(1em * var(--c-form-line-height) + var(--c-form-vertical-label-margin-bottom))` | `padding-top` |
 | `--c-filter-form-actions-gap` | `var(--c-sys-space-5)` | `gap` |
-| `--c-filter-form-background-color` | `transparent` | `background-color` |
-| `--c-filter-form-border-color` | `var(--c-sys-color-border-subtle)` | `border` |
-| `--c-filter-form-border-radius` | `0px` | `border-radius` |
-| `--c-filter-form-border-width` | `0px` | `border` |
 | `--c-filter-form-item-margin-bottom` | `0px` | `margin-bottom` |
-| `--c-filter-form-padding` | `0px` | `padding` |
 
 </div>
 

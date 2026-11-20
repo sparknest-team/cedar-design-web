@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("mentionAsyncReadPrettyInline");
+const inlineCopy = {
+  edit: "切换到编辑态",
+  read: "切换到阅读态"
+};
 
 import { ref } from "vue";
 
@@ -44,7 +46,7 @@ const searchPeople = (query: string, { signal }: { signal: AbortSignal }) =>
     :size="12"
     data-demo="async-read-pretty"
   >
-    <p>{{ inlineCopy.selectXiaomingSearchLisiThen }}</p>
+    <p>输入 @xiaoming 并选择小明，再输入 @lisi 搜索其他人员，然后切换阅读态查看反显。</p>
     <c-mention
       v-model="content"
       atomic
@@ -58,7 +60,7 @@ const searchPeople = (query: string, { signal }: { signal: AbortSignal }) =>
       readPretty ? inlineCopy.edit : inlineCopy.read
     }}</c-button>
     <div>
-      {{ inlineCopy.model }}<code data-mention-model>{{ content }}</code>
+      保存值<code data-mention-model>{{ content }}</code>
     </div>
   </c-space>
 </template>

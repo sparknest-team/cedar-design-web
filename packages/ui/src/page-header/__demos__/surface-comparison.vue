@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("pageHeaderSurfaceComparison");
 import { Message } from "@cedar-design/ui-vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -18,7 +16,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="breadcrumb"
     >
-      <h4>{{ demoCopy.breadcrumb }}</h4>
+      <h4>页头上方内容</h4>
       <c-card variant="outline" size="md">
         <c-page-header title="设计系统" subtitle="项目概览">
           <template #header>
@@ -36,7 +34,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="transparent"
     >
-      <h4>{{ demoCopy.transparent }}</h4>
+      <h4>透明底色</h4>
       <c-card variant="tonal" size="md">
         <c-page-header title="设计系统" subtitle="项目概览">
           <template #extra

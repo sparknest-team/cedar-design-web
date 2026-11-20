@@ -1,0 +1,152 @@
+{
+  "library": "cedar",
+  "browser": {
+    "name": "firefox",
+    "engine": "firefox",
+    "launchOptions": {},
+    "version": "153.0",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "recordedAt": "2026-11-20T04:03:46.859Z",
+    "evidenceType": "automated-engine-regression",
+    "nativeDeviceAcceptance": false,
+    "userAgentEmulation": "device routing preset; not evidence of an actual OS/browser version",
+    "gestureInput": "synthetic touch events (handler regression only)"
+  },
+  "components": 1,
+  "sourcesStable": false,
+  "sourceFingerprint": "5084885c1a0869b254ed16c157dabcefaedc0af6e54e2c49699fe0926f732925",
+  "buildIndexHash": "db774f05c72354910876bfaba09d415055557e1fe3eb8a426a969ecbc6a57787",
+  "node": "v26.13.1",
+  "productionInputsStable": false,
+  "productionFingerprint": "b849a9ee7dd449d65f0af11ffce126b3d4bc6952333d4a96de80ae731e9919d9",
+  "concurrency": 2,
+  "browserLaunches": 1,
+  "expectedComponentCases": 2,
+  "readingDirection": "ltr",
+  "directionCore": false,
+  "expectedGuideCases": 14,
+  "completedComponentCases": 2,
+  "results": [
+    {
+      "readingDirection": "ltr",
+      "component": "table",
+      "surface": "documentation",
+      "theme": "lightTheme",
+      "kind": "interaction",
+      "source": "/Users/shuaimeng/github_web/cedar-design-web/packages/ui/src/table/__demos__/capability-composition.vue",
+      "directionGeometry": [],
+      "checkedSources": 37,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/atomic-css",
+      "theme": "lightTheme",
+      "checkedSources": 7,
+      "passed": true
+    },
+    {
+      "readingDirection": "ltr",
+      "component": "table",
+      "surface": "documentation",
+      "theme": "darkTheme",
+      "kind": "interaction",
+      "source": "/Users/shuaimeng/github_web/cedar-design-web/packages/ui/src/table/__demos__/capability-composition.vue",
+      "directionGeometry": [],
+      "checkedSources": 2,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/atomic-usage",
+      "theme": "lightTheme",
+      "checkedSources": 5,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/color",
+      "theme": "lightTheme",
+      "checkedSources": 4,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/elevation",
+      "theme": "lightTheme",
+      "checkedSources": 2,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/palette",
+      "theme": "lightTheme",
+      "checkedSources": 1,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/utilities",
+      "theme": "lightTheme",
+      "checkedSources": 1,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/typography",
+      "theme": "lightTheme",
+      "checkedSources": 6,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/atomic-css",
+      "theme": "darkTheme",
+      "checkedSources": 7,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/atomic-usage",
+      "theme": "darkTheme",
+      "checkedSources": 5,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/elevation",
+      "theme": "darkTheme",
+      "checkedSources": 2,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/color",
+      "theme": "darkTheme",
+      "checkedSources": 4,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/palette",
+      "theme": "darkTheme",
+      "checkedSources": 1,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/utilities",
+      "theme": "darkTheme",
+      "checkedSources": 1,
+      "passed": true
+    },
+    {
+      "kind": "guide",
+      "component": "style/typography",
+      "theme": "darkTheme",
+      "checkedSources": 6,
+      "passed": true
+    }
+  ]
+}

@@ -218,19 +218,21 @@ const handleFieldKeydown = (event: KeyboardEvent) => {
     if (dialogVisible.value && !mergedDisabled.value && !mergedReadonly.value && !loading.value && !controller.session.pending &&
       event.key === 'ArrowDown' && !event.isComposing && event.keyCode !== 229 && target === fieldRef.value?.inputRef) {
       const dialog = popupElement.value
-      if (!showSearchPanel.value) {
-        const entry = Array.from(dialog?.querySelectorAll<HTMLElement>('[data-cascader-key][tabindex="0"]:not([aria-disabled="true"])') ?? [])
-          .find(item => item.closest('[role="dialog"]') === dialog)
-        if (entry && target?.matches(':focus')) {
-          event.preventDefault()
-          entry.focus()
-          return
-        }
+      const search = showSearchPanel.value
+      const selector = search
+        ? `.${getPrefixCls('cascader-option')}-checkbox input[type="checkbox"]:not(:disabled)`
+        : '[data-cascader-key][tabindex="0"]:not([aria-disabled="true"])'
+      const boundary = search ? `.${getPrefixCls('cascader')}-search-panel` : '[role="dialog"]'
+      const entry = Array.from(dialog?.querySelectorAll<HTMLElement>(selector) ?? [])
+        .find((item) => item.closest(boundary) === dialog)
+      if (entry && (search || target?.matches(':focus'))) {
+        event.preventDefault()
+        entry.focus()
+        return
+      }
+      if (!search) {
         return handleKeyDown.value(event)
       }
-      const checkbox = Array.from(dialog?.querySelectorAll<HTMLInputElement>(`.${getPrefixCls('cascader-option')}-checkbox input[type="checkbox"]:not(:disabled)`) ?? [])
-        .find(input => input.closest(`.${getPrefixCls('cascader')}-search-panel`) === dialog)
-      if (checkbox) { event.preventDefault(); checkbox.focus(); return }
     }
     const dialogItem = dialogVisible.value && showSearchPanel.value ? target?.closest('[data-cascader-key]') : null
     if (dialogItem && target !== dialogItem && event.key !== 'Escape') return

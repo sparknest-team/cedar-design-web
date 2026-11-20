@@ -1304,12 +1304,7 @@ permalink: /guide/design-token-reference/
 | --- | --- | --- | --- |
 | `--c-filter-form-action-offset` | 公开 | `calc(1em * var(--c-form-line-height) + var(--c-form-vertical-label-margin-bottom))` | 本组件 CSS<br>`padding-top` |
 | `--c-filter-form-actions-gap` | 公开 | `var(--c-sys-space-5)` | 本组件 CSS<br>`gap` |
-| `--c-filter-form-background-color` | 公开 | `transparent` | 本组件 CSS<br>`background-color` |
-| `--c-filter-form-border-color` | 公开 | `var(--c-sys-color-border-subtle)` | 本组件 CSS<br>`border` |
-| `--c-filter-form-border-radius` | 公开 | `0px` | 本组件 CSS<br>`border-radius` |
-| `--c-filter-form-border-width` | 公开 | `0px` | 本组件 CSS<br>`border` |
 | `--c-filter-form-item-margin-bottom` | 公开 | `0px` | 本组件 CSS<br>`margin-bottom` |
-| `--c-filter-form-padding` | 公开 | `0px` | 本组件 CSS<br>`padding` |
 
 </div>
 
@@ -2572,13 +2567,17 @@ expand-duration／fade-duration 消费到 transform／opacity 过渡；运行时
 | `--c-section-description-size` | 公开 | `13px` | 本组件 CSS<br>`font-size` |
 | `--c-section-divider-color` | 公开 | `var(--c-sys-color-border-default)` | 本组件 CSS<br>`border`, `border-block-start` |
 | `--c-section-divider-width` | 公开 | `1px` | 本组件 CSS<br>`border`, `border-block-start` |
-| `--c-section-end-divider-gap` | 公开 | `24px` | 本组件 CSS<br>`margin-block-start` |
 | `--c-section-header-gap` | 公开 | `20px` | 本组件 CSS<br>`margin-block-end` |
 | `--c-section-heading-gap` | 公开 | `16px` | 本组件 CSS<br>`margin-inline-start` |
-| `--c-section-marker-gap` | 公开 | `8px` | 本组件 CSS<br>`margin-inline-end`, `row-gap` |
+| `--c-section-marker-gap` | 公开 | `12px` | 本组件 CSS<br>`padding-inline-end`, `row-gap` |
 | `--c-section-marker-height` | 公开 | `16px` | 本组件 CSS<br>`height` |
 | `--c-section-marker-radius` | 公开 | `2px` | 本组件 CSS<br>`border-radius` |
 | `--c-section-marker-width` | 公开 | `3px` | 本组件 CSS<br>`width` |
+| `--c-section-size-sm-card-padding` | 公开 | `12px` | 本组件 CSS<br>`padding` |
+| `--c-section-size-sm-header-gap` | 公开 | `12px` | 本组件 CSS<br>`margin-block-end` |
+| `--c-section-size-sm-marker-height` | 公开 | `14px` | 本组件 CSS<br>`height` |
+| `--c-section-size-sm-title-line-height` | 公开 | `20px` | 本组件 CSS<br>`line-height` |
+| `--c-section-size-sm-title-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
 | `--c-section-title-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
 | `--c-section-title-line-height` | 公开 | `24px` | 本组件 CSS<br>`line-height` |
 | `--c-section-title-size` | 公开 | `16px` | 本组件 CSS<br>`font-size` |

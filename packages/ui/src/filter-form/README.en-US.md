@@ -21,13 +21,13 @@ Preview configuration: `v-model:collapsed="collapsed"`, `:fields="fields"`, `:ru
 
 The filter and table share the same left edge. Enter an order number or customer name to filter the rows.
 
-<demo src="./__demos__/above-table.vue"></demo>
+<demo src="./__demos__/above-table.en-US.vue"></demo>
 
 ### Inside a Card
 
 An outline Card supplies the border, surface and padding around the filters. Apply or reset the status filter to update the order list.
 
-<demo src="./__demos__/inside-card.vue"></demo>
+<demo src="./__demos__/inside-card.en-US.vue"></demo>
 
 ## Content and presentation
 
@@ -180,12 +180,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | --- | --- | --- |
 | `--c-filter-form-action-offset` | `calc(1em * var(--c-form-line-height) + var(--c-form-vertical-label-margin-bottom))` | `padding-top` |
 | `--c-filter-form-actions-gap` | `var(--c-sys-space-5)` | `gap` |
-| `--c-filter-form-background-color` | `transparent` | `background-color` |
-| `--c-filter-form-border-color` | `var(--c-sys-color-border-subtle)` | `border` |
-| `--c-filter-form-border-radius` | `0px` | `border-radius` |
-| `--c-filter-form-border-width` | `0px` | `border` |
 | `--c-filter-form-item-margin-bottom` | `0px` | `margin-bottom` |
-| `--c-filter-form-padding` | `0px` | `padding` |
 
 </div>
 

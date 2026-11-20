@@ -1,5 +1,9 @@
 <template>
-  <c-table :columns="columns" :data="data" :height="200" :expandable="expandable" />
+  <c-table :columns="columns" :data="data" :height="200" :expandable="expandable">
+    <template #expand-row="{ record }">
+      {{ record.name }} · {{ record.address }}
+    </template>
+  </c-table>
 </template>
 
 <script lang="ts" setup>
@@ -41,7 +45,6 @@ const data = reactive([
     salary: 23000,
     address: '32 Park Road, London',
     email: 'jane.doe@example.com',
-    expand: 'Expand Content',
   },
   {
     key: '2',

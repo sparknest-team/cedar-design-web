@@ -1,0 +1,88 @@
+{
+  "failures": [],
+  "diagnostic": {
+    "url": "http://127.0.0.1:62062/components/color/#%E5%A4%96%E8%A7%82%E4%B8%8E%E7%8A%B6%E6%80%81",
+    "text": "\n\n基础示例\n基本用法\n#00BEBE\n外观与状态\n尺寸\n本组配置对照\n配置\t作用\t相关示例\nsize\t尺寸\t尺寸\nshow-text\t显示颜色值\t尺寸\n#165DFF\n#165DFF\n<template>\n  <c-space>\n    <c-color v-model=\"value\" size=\"xs\" />\n    <c-color v-model=\"value\" size=\"sm\" />\n    <c-color v-model=\"value\" size=\"md\" show-text />\n    <c-color v-model=\"value\" size=\"lg\" show-text />\n  </c-space>\n</template>\n\n<script setup>\nimport { ref } from 'vue'\n\nconst value = ref('#165DFF')\n</script>\n\nAPI\n空值识别与阅读空文案\n\nempty-values 用于空值识别，empty-value 保留原清空输出；empty-text 仅在 read-pretty 空内容下展示，默认 '-'，字段 > FormItem > Form，自定义 read 插槽优先。显式配置 empty-values 后，内置 required 接入该策略，自定义校验仍收到原值。详见统一说明。\n\n参数\t类型\t缺省与范围\nempty-values\treadonly unknown[]\t字段 > FormItem > Form > 组件族默认；完整覆盖，不合并\nempty-text\tstring\t字段 > FormItem > Form > '-'；显式 '' 有效\n\n以上是字段展示层 API；纯面板不因此新增阅读模式。Form 与 FormItem 提供继承配置。empty-value 的现有类型与默认输出仍按该组件原 API 执行。\n\nColor Props\n参数\t说明\t类型\t默认值\nmodel-value\t绑定值\tstring\t-\ndefault-value\t非受控初始值\tstring\tundefined\nformat\t颜色格式\thex | rgb\t-\nsize\t尺寸\txs | sm | md | lg | xl\tmd\nshow-text\t显示颜色值\tboolean\tfalse\nshow-history\t显示历史颜色\tboolean\tfalse\nshow-preset\t显示预设颜色\tboolean\tfalse\ndisabled\t禁用，未设置时继承表单\tboolean\tundefined\nreadonly\t只读，未设置时继承表单\tboolean\tundefined\ndisabled-alpha\t禁用透明通道\tboolean\tfalse\nhistory-colors\t历史颜色\tstring[]\tundefined\npreset-colors\t预设颜色\tstring[]\tundefined\nempty-value\t清空时使用的值或工厂\tstring | null | (() => string | null)\tundefined\ncolor-picker-props\t透传给 ColorPicker\tPartial<ColorPickerProps>\t{}\nColor Events\n事件\t说明\t参数\nupdate:modelValue\t更新字段值\t(value)\nchange\t通知颜色变化\t(value: string)\nupdate:open / open-change\t更新或通知字段编辑层的打开状态\t(open: boolean)\nColor Slots\n插槽\t说明\t参数\ndefault\t自定义颜色选择触发器\t—\nread\t自定义纯阅读内容\t{ value, text }\n编辑与确认\n\n通过 edit-mode 配置编辑方式；未指定时依次继承 FormItem、Form，默认 direct。支持值：direct / click / dblclick。非 direct 编辑模式通过字段值入口打开编辑面板，并维护单份草稿；确认后才更新 v-model，取消、重置或启用 readPretty 时丢弃草稿。\n\nCedar 使用 edit-mode=\"click\" / \"dblclick\" 在字段附近打开编辑浮层，Enter/F2 也可进入；取消/Escape 丢弃草稿，确认后提交。readPretty 为独立阅读属性，与 readonly、disabled 分开。\n\nbefore-commit(value, { previousValue, signal }) 可拦截弹层保存；FormItem 先校验候选值，失败保持编辑。open / default-open / update:open 控制编辑层。#read=\"{ value, text }\" 可自定义阅读内容。集中示例见 Form 的“各类字段统一展示”。\n\nread-pretty 为独立布尔属性，与 readonly、disabled 同级；字段 > FormItem > Form 继承，显式 false 覆盖父级。默认 false。纯阅读不显示编辑器。\n\n拖动监听绑定控件所属视图。KeepAlive 停用或卸载会结束当前手势并释放监听；重新激活后需重新开始手势，旧手势回调不能继续改值。\n\nCSS Variables\n\n本组件未声明独立的公共 CSS 变量。请使用本页公开的配置与布局入口。 组合控件的外观复用 color-picker 的公共变量；共享变量可能同时影响同一 DOM 子树中的其他控件。\n\n内部自定义属性与测量中间值属于实现细节，不作为业务定制 API。\n\n编辑此页",
+    "numericSteps": [],
+    "overflow": [],
+    "previews": [
+      "<div class=\"vmi-previewer-example\" style=\"\" data-v-a1d6c6fd=\"\"><button type=\"button\" aria-label=\"选择颜色\" class=\"c-color-picker c-color-picker-size-md\"><!----><div class=\"c-color-picker-preview\" style=\"background-color: rgb(0, 190, 190);\"></div><div class=\"c-color-picker-value\">#00BEBE</div></button></div>",
+      "<div class=\"vmi-previewer-example\" style=\"\" data-v-a1d6c6fd=\"\"><div class=\"c-space c-space--block\" style=\"gap: var(--c-space-size-md-row-gap) var(--c-space-size-md-column-gap); flex-flow: row; justify-content: flex-start; align-items: center;\"><div class=\"c-space__group\"><div class=\"c-space__item\"><button type=\"button\" aria-label=\"选择颜色\" class=\"c-color-picker c-color-picker-size-xs\"><!----><div class=\"c-color-picker-preview\" style=\"background-color: rgb(22, 93, 255);\"></div><!----></button></div><!----></div><div class=\"c-space__group\"><div class=\"c-space__item\"><button type=\"button\" aria-label=\"选择颜色\" class=\"c-color-picker c-color-picker-size-sm\"><!----><div class=\"c-color-picker-preview\" style=\"background-color: rgb(22, 93, 255);\"></div><!----></button></div><!----></div><div class=\"c-space__group\"><div class=\"c-space__item\"><button type=\"button\" aria-label=\"选择颜色\" class=\"c-color-picker c-color-picker-size-md\"><!----><div class=\"c-color-picker-preview\" style=\"background-color: rgb(22, 93, 255);\"></div><div class=\"c-color-picker-value\">#165DFF</div></button></div><!----></div><div class=\"c-space__group\"><div class=\"c-space__item\"><button type=\"button\" aria-label=\"选择颜色\" class=\"c-color-picker c-color-picker-size-lg\"><!----><div class=\"c-color-picker-preview\" style=\"background-color: rgb(22, 93, 255);\"></div><div class=\"c-color-picker-value\">#165DFF</div></button></div><!----></div></div></div>"
+    ],
+    "controls": [
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到 RTL / Switch to right-to-left",
+        "class": "docs-direction-toggle"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "默认亮色✓",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "默认暗色",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "中文✓",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "English",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "选择颜色",
+        "class": "c-color-picker c-color-picker-size-md"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "选择颜色",
+        "class": "c-color-picker c-color-picker-size-xs"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "选择颜色",
+        "class": "c-color-picker c-color-picker-size-sm"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "选择颜色",
+        "class": "c-color-picker c-color-picker-size-md"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "选择颜色",
+        "class": "c-color-picker c-color-picker-size-lg"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "返回顶部",
+        "class": "vp-back-to-top-button"
+      },
+      {
+        "tag": "SPAN",
+        "role": "progressbar",
+        "label": "",
+        "class": "vp-scroll-progress"
+      }
+    ]
+  },
+  "error": "TimeoutError: locator.waitFor: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.vmi-previewer').nth(1).locator('.vmi-previewer-sources pre').first() to be visible\u001b[22m\n"
+}

@@ -1,6 +1,8 @@
 <script setup>
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("notificationApiReviewServiceInline");
+const inlineCopy = {
+  review: "审查",
+  triggerAfterCombiningControls: "组合配置和回调后再次触发"
+};
 
 import { onUnmounted, shallowRef } from "vue";
 import { Notification as ReviewService } from "@cedar-design/ui-vue";
@@ -11,8 +13,8 @@ const handle = shallowRef();
 const sample = {
   src: "/cat.jpg",
   images: ["/cat.jpg", "/cat2.jpg"],
-  title: inlineCopy.value.review,
-  content: inlineCopy.value.triggerAfterCombiningControls,
+  title: inlineCopy.review,
+  content: inlineCopy.triggerAfterCombiningControls,
   message: "Review",
   duration: 0,
   actions: [{ name: "Review A" }, { name: "Review B", disabled: true }],
@@ -112,19 +114,17 @@ onUnmounted(() => {
     :service="service"
     :handle="handle"
     :method-defaults="methodDefaults"
-    ><p>{{ inlineCopy.triggerAfterChangingControlsInspect }}</p>
+    ><p>修改配置后点击触发；可在下方选择方法、编辑参数并查看调用结果</p>
     <c-space wrap
-      ><c-button @click="run(scope.bindings, scope.record)">{{
-        inlineCopy.trigger
-      }}</c-button
+      ><c-button @click="run(scope.bindings, scope.record)">触发</c-button
       ><c-button
         :disabled="typeof handle?.update !== 'function'"
         @click="act('update', scope.record)"
-        >{{ inlineCopy.updateHandle }}</c-button
+        >更新返回句柄</c-button
       ><c-button
         :disabled="typeof handle?.close !== 'function'"
         @click="act('close', scope.record)"
-        >{{ inlineCopy.closeHandle }}</c-button
+        >关闭返回句柄</c-button
       ></c-space
     ></DemoApiReviewPanel
   >

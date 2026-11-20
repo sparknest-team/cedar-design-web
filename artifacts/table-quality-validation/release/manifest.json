@@ -1,0 +1,61 @@
+{
+  "purpose": "Local frozen validation artifacts; not published",
+  "packages": [
+    {
+      "file": "cedar-design-icons-vue-1.1.12.tgz",
+      "sha256": "604e457c6748e3d7e6ae059ea2c45be37ce0d2296d98161a397f6b3e01cedcdc",
+      "bytes": 301597,
+      "name": "@cedar-design/icons-vue",
+      "version": "1.1.12",
+      "dependencies": {}
+    },
+    {
+      "file": "cedar-design-shared-vue-1.1.12.tgz",
+      "sha256": "ce1115572eea6ad36e3f6f19e86b85e5700bff0bd560c4d568a744ff7df68db5",
+      "bytes": 8061,
+      "name": "@cedar-design/shared-vue",
+      "version": "1.1.12",
+      "dependencies": {}
+    },
+    {
+      "file": "cedar-design-ui-vue-1.1.12.tgz",
+      "sha256": "6e551acc88782a2f48a257c4b2f8f2e5ec77b418991ec23e24219beb84d4fc40",
+      "bytes": 4278889,
+      "name": "@cedar-design/ui-vue",
+      "version": "1.1.12",
+      "dependencies": {
+        "@js-temporal/polyfill": "^0.5.1",
+        "b-tween": "^0.3.3",
+        "b-validate": "^1.5.3",
+        "compute-scroll-into-view": "^3.1.1",
+        "csstype": "^3.2.3",
+        "dayjs": "^1.10.3",
+        "decimal.js": "^10.6.0",
+        "kotlin-playground": "^1.30.0",
+        "lodash": "^4.17.21",
+        "lodash-es": "^4.17.21",
+        "number-precision": "^1.6.0",
+        "resize-observer-polyfill": "^1.5.1",
+        "rrule": "^2.8.1",
+        "scroll-into-view-if-needed": "^3.1.0",
+        "sortablejs": "^1.15.3",
+        "zod": "^4.1.12",
+        "@cedar-design/shared-vue": "1.1.12",
+        "@cedar-design/use-vue": "1.1.12",
+        "@cedar-design/icons-vue": "1.1.12"
+      },
+      "publishedJsCssSha256": "219e0a19974e07e9b8c48f1cbae9340982737397d9b479aca26f3aa871c8e435",
+      "publishedJsCssFiles": 2917
+    },
+    {
+      "file": "cedar-design-use-vue-1.1.12.tgz",
+      "sha256": "2046fee7bcc811ca9423d2cbc755745748668637953747ce9454fcbf704f29c6",
+      "bytes": 16167,
+      "name": "@cedar-design/use-vue",
+      "version": "1.1.12",
+      "dependencies": {
+        "@cedar-design/shared-vue": "1.1.12"
+      }
+    }
+  ]
+}

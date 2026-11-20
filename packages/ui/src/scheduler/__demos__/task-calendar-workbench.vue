@@ -178,7 +178,7 @@
         </div>
       </template>
       <template #resource-header="{ date: day }">
-        {{ formatDemoDate(day, { weekday: "short" }) }}
+        {{ day.toLocaleDateString(getLocale(), { weekday: "short" }) }}
         {{ day.getDate() }}
       </template>
       <template #column-background="{ date: day }">
@@ -423,11 +423,7 @@
   </c-dialog>
 </template>
 <script setup lang="ts">
-import {
-  formatDemoTime,
-  formatDemoDateTime,
-  formatDemoDate,
-} from "../../__demos__/locale";
+import { getLocale } from "@cedar-design/ui-vue";
 import {
   computed,
   nextTick,
@@ -1020,13 +1016,13 @@ async function goToday() {
 const time = (value: SchedulerEvent["start"]) =>
   value == null
     ? ""
-    : formatDemoTime(new Date(value), {
+    : new Date(value).toLocaleTimeString(getLocale(), {
         hour: "2-digit",
         minute: "2-digit",
         hour12: false,
       });
 const format = (value: string) =>
-  formatDemoDateTime(new Date(value), {
+  new Date(value).toLocaleString(getLocale(), {
     month: "numeric",
     day: "numeric",
     hour: "2-digit",

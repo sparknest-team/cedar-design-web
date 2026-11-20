@@ -22,15 +22,10 @@ const fields = [
 const input = (wrapper) => wrapper.get('input.c-input__inner')
 
 describe('Search shared control', () => {
-  test('uses inline history by default and switches explicitly to popup', async () => {
+  test('opens inline history by default', async () => {
     const wrapper = mount(Search, { props: { recentSearches: ['candidate'] } })
     await input(wrapper).trigger('focus')
     expect(wrapper.vm.$.setupState.state.historyMenuVisible).toBe(true)
-    expect(wrapper.vm.$.setupState.state.historyPopupVisible).toBe(false)
-    await wrapper.setProps({ editMode: 'popup' })
-    await input(wrapper).trigger('focus')
-    expect(wrapper.vm.$.setupState.state.historyMenuVisible).toBe(false)
-    expect(wrapper.vm.$.setupState.state.historyPopupVisible).toBe(true)
   })
   test('never mutates a frozen model, and reads external replacements', async () => {
     const model = Object.freeze({ name: 'initial', untouched: true })
@@ -99,7 +94,7 @@ describe('Search shared control', () => {
       model: { name: 'actual' },
     })
   })
-  test.each(['direct', 'popup'])(
+  test.each(['direct'])(
     'history selection respects controlled rejection, presentation=%s',
     async (editMode) => {
       const wrapper = mount(Search, {
@@ -116,7 +111,6 @@ describe('Search shared control', () => {
         recentSearches: ['actual', 'candidate'],
       })
       expect(wrapper.vm.$.setupState.state.historyMenuVisible).toBe(false)
-      expect(wrapper.vm.$.setupState.state.historyPopupVisible).toBe(false)
     },
   )
   test('normalizes and bounds history without changing the supplied array', async () => {
@@ -166,18 +160,6 @@ describe('Search shared control', () => {
     expect(search.emitted('search')).toBeUndefined()
     expect(search.emitted('cancel')).toBeUndefined()
     expect(search.vm.$.setupState.state.historyMenuVisible).toBe(false)
-    expect(search.vm.$.setupState.state.historyPopupVisible).toBe(false)
-  })
-  test('switching history presentation resets the closing guard', async () => {
-    const wrapper = mount(Search, {
-      props: { editMode: 'popup', recentSearches: ['x'] },
-    })
-    wrapper.vm.$.setupState.state.openHistory()
-    expect(wrapper.vm.$.setupState.state.historyPopupVisible).toBe(true)
-    await wrapper.setProps({ editMode: 'direct' })
-    await wrapper.setProps({ editMode: 'popup' })
-    wrapper.vm.$.setupState.state.openHistory()
-    expect(wrapper.vm.$.setupState.state.historyPopupVisible).toBe(true)
   })
   test('KeepAlive deactivation cancels pending search and can reactivate', async () => {
     const shown = ref(true)
@@ -192,7 +174,7 @@ describe('Search shared control', () => {
     shown.value = true
     await nextTick()
     search.vm.$.setupState.state.openHistory()
-    expect(search.vm.$.setupState.state.historyMenuVisible || search.vm.$.setupState.state.historyPopupVisible).toBe(
+    expect(search.vm.$.setupState.state.historyMenuVisible).toBe(
       true,
     )
   })

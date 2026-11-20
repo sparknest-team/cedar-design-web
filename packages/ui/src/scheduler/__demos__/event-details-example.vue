@@ -173,7 +173,7 @@
   </c-dialog>
 </template>
 <script setup lang="ts">
-import { formatDemoDateTime, formatDemoTime } from "../../__demos__/locale";
+import { getLocale } from "@cedar-design/ui-vue";
 import { ref, shallowRef, watch } from "vue";
 import EventSummaryPopover from "./event-summary-popover.vue";
 import { cloneSchedulerEvent, schedulerDate } from "../core";
@@ -224,7 +224,7 @@ const events = ref<SchedulerEvent[]>([
 function timeRange(event: SchedulerEvent) {
   return event.start == null
     ? "未排期"
-    : `${formatDemoDateTime(schedulerDate(event.start))} — ${formatDemoTime(schedulerDate(event.end!), { hour: "2-digit", minute: "2-digit" })}`;
+    : `${schedulerDate(event.start).toLocaleString(getLocale())} — ${schedulerDate(event.end!).toLocaleTimeString(getLocale(), { hour: "2-digit", minute: "2-digit" })}`;
 }
 function activate(value: SchedulerEditorRequest) {
   closePreviews();

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("comparison");
 import { reactive as __demoReactive } from "vue";
 
 const __demoAppearance = __demoReactive({
@@ -82,10 +80,10 @@ const demoComparedOptions = demoComputed(
         />
       </c-form-item>
     </c-form>
-    <p class="demo-config-comparison-hint">{{ demoCopy.hint }}</p>
+    <p class="demo-config-comparison-hint">选择一个对比维度；其他配置和内容保持一致。输入类示例共享同一个值，便于比较外观。</p>
     <c-radio-group
       v-model="demoCompareAxis"
-      :aria-label="demoCopy.configuration"
+      aria-label="对比配置"
       :options="
         demoCompareFields.map((field) => ({
           label: field.name,

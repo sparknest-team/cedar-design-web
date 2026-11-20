@@ -53,11 +53,11 @@ case-sensitive defaults to false. search-fields defaults to ['label']; ['value',
 
 Choose a dimension to compare all its values side by side while keeping other settings and content identical. Change the other settings to inspect combinations; input specimens share one model.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ### Control Sizes
 
-<demo src="../field-decorator/__demos__/control-sizes.vue"></demo>
+<demo src="../field-decorator/__demos__/control-sizes.en-US.vue"></demo>
 
 ## Selection modes and options
 
@@ -202,7 +202,7 @@ Applies only to overlay editing. Single selection commits and closes on choice b
 <!-- demo-config-notes:end -->
 
 
-<demo src="./__demos__/selection-data-flow.vue"></demo>
+<demo src="./__demos__/selection-data-flow.en-US.vue"></demo>
 
 ### Linkage
 
@@ -240,7 +240,7 @@ Toggle disabled, read-only and error states, then interact with the same instanc
 <!-- demo-config-notes:end -->
 
 
-<demo src="./__demos__/loading.vue"></demo>
+<demo src="./__demos__/loading.en-US.vue"></demo>
 
 ### Search
 

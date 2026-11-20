@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("backTopSchedulerLifecycleInline");
 
 import { ref } from "vue";
 import type { BackTopInstance } from "@cedar-design/ui-vue";
@@ -19,14 +17,10 @@ const lower = () => {
 </script>
 <template>
   <div style="position: relative">
-    <c-button @click="lower">{{ inlineCopy.scrollDown }}</c-button>
-    <c-button @click="alternate = !alternate">{{
-      inlineCopy.switchTarget
-    }}</c-button>
-    <c-button @click="active = !active">{{ inlineCopy.activate }}</c-button>
-    <c-button @click="retained?.scrollToTop()">{{
-      inlineCopy.retainedCommand
-    }}</c-button>
+    <c-button @click="lower">滚动到底部</c-button>
+    <c-button @click="alternate = !alternate">切换目标</c-button>
+    <c-button @click="active = !active">停用与激活</c-button>
+    <c-button @click="retained?.scrollToTop()">保留命令</c-button>
     <p>
       Start an animation, switch or deactivate before completion. Old work must
       not resume.

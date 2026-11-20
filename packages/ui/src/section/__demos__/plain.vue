@@ -1,16 +1,10 @@
 <template>
-  <c-section :title="copy.permissions" :description="copy.scope">
+  <c-section title="成员权限" description="权限变更将应用到所有项目成员。">
     <dl>
-      <dt>{{ copy.admin }}</dt>
-      <dd>{{ copy.manage }}</dd>
-      <dt>{{ copy.member }}</dt>
-      <dd>{{ copy.update }}</dd>
+      <dt>管理员</dt>
+      <dd>管理成员、修改项目设置</dd>
+      <dt>成员</dt>
+      <dd>查看项目、更新任务</dd>
     </dl>
   </c-section>
 </template>
-
-<script setup lang="ts">
-import { useDemoLocale } from '../../__demos__/locale'
-
-const copy = useDemoLocale('section')
-</script>

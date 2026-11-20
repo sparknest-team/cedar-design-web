@@ -22,7 +22,6 @@
       <label
         v-if="!fields.length && (label || slots.label)"
         :for="getReferenceId()"
-        :aria-hidden="popupActive || undefined"
         :class="n('label')"
       >
         <slot name="label">{{ label }}</slot>
@@ -69,7 +68,8 @@
           :placeholder="searchPlaceholder"
           :size="mergedSize"
           :disabled="mergedDisabled"
-          :readonly="mergedReadonly || popupActive"
+          :readonly="mergedReadonly"
+          :edit-mode="editMode"
           :variant="variant"
           :clearable="clearable"
           :empty-value="emptyValue"
@@ -78,14 +78,14 @@
           @input="handleInput"
           @change="handleChange"
           @clear="handleClear"
-          @press-enter="handleSearch"
+          @press-enter="editMode === 'direct' && handleSearch($event)"
           @focus="handleFocus"
           @blur="handleBlur"
         >
           <template v-if="slots.prefix" #prefix><slot name="prefix" /></template>
           <template #suffix>
             <button
-              v-if="!searchButton"
+              v-if="!searchButton && editMode === 'direct'"
               type="button"
               :class="n('icon-button')"
               :disabled="searchDisabled"
@@ -101,6 +101,12 @@
           <template v-if="slots['clear-icon']" #clear-icon="scope"><slot name="clear-icon" v-bind="scope" /></template>
         </SearchInput>
       </SearchDropdown>
+      <button v-if="!searchButton && editMode !== 'direct'" type="button" :class="n('icon-button')"
+        :aria-label="buttonText || searchText" :disabled="searchDisabled" @click="handleSearch">
+        <IconLoading v-if="loading && loadingMode !== 'line'" />
+        <IconSearch v-else-if="searchIcon === 'search'" />
+        <SearchIcon v-else :name="searchIcon" />
+      </button>
       <SearchButton
         v-if="effectiveShowAction"
         :status="searchButton ? 'primary' : undefined"
@@ -122,19 +128,6 @@
         <slot v-else name="action">{{ effectiveActionText }}</slot>
       </SearchButton>
     </SearchInputGroup>
-    <HistoryPresentation
-      v-if="editMode === 'popup'"
-      :open="historyPopupVisible"
-      @update:open="handlePopupVisibleChange"
-      @closed="handleHistoryPopupClosed"
-    >
-      <HistoryContent :settings="props" :state="state" :input-attrs="getPopupAttrs()">
-        <template v-if="slots.prefix" #prefix><slot name="prefix" /></template>
-        <template v-if="slots.suffix" #suffix><slot name="suffix" /></template>
-        <template v-if="slots.label" #label><slot name="label" /></template>
-        <template v-if="slots['clear-icon']" #clear-icon="scope"><slot name="clear-icon" v-bind="scope" /></template>
-      </HistoryContent>
-    </HistoryPresentation>
   </div>
 </template>
 <script setup lang="ts">
@@ -153,8 +146,6 @@ import SearchInput from '../input/input.vue'
 import SearchInputGroup from '../input/InputGroup.vue'
 import SearchDropdown, { MenuOption } from '../menu'
 import SearchSelect from './FieldSelect.vue'
-import HistoryPresentation from './history-presentation.vue'
-import HistoryContent from './HistoryContent.vue'
 import { searchProps } from './props'
 import type { SearchExpose, SearchSlots } from './types'
 import { searchEmits, useSearchControl } from './use-search-control'
@@ -168,24 +159,22 @@ const attrs = useAttrs()
 const { n, classes } = createNamespace('search')
 const inputRef = ref<InstanceType<typeof SearchInput>>()
 const presentationState = useFieldPresentation(
-  () => undefined,
+  () => props.editMode,
   () => props.readPretty,
 )
 const readPretty = presentationState.readPretty
-const control = useSearchControl(props, emit, inputRef, () => readPretty.value)
-const editMode = control.editMode
+const control = useSearchControl(props, emit, inputRef, () => readPretty.value, () => presentationState.editMode.value)
+const editMode = presentationState.editMode
 const emptyPolicy = useEmptyValues(props, undefined, Boolean(presentationState.item))
 const state = reactive(control)
-const popupActive = computed(() => state.historyPopupVisible)
-const { getReferenceId, getLabel, getReferenceAttrs, getPopupAttrs } = useSearchInput(
+const { getReferenceId, getLabel, getReferenceAttrs } = useSearchInput(
   props,
-  () => popupActive.value,
   () => attrs,
 )
 watch(
   readPretty,
   (reading) => {
-    if (reading) control.resetHistory()
+    if (reading) control.closeHistoryMenu()
   },
   { flush: 'sync' },
 )
@@ -204,7 +193,6 @@ const {
   effectiveActionType,
   effectiveActionText,
   historyMenuVisible,
-  historyPopupVisible,
   updateValue,
   handleInput,
   handleChange,
@@ -216,8 +204,6 @@ const {
   handleAction,
   handleHistoryMenuVisibleChange,
   handleHistoryMenuSelect,
-  handlePopupVisibleChange,
-  handleHistoryPopupClosed,
   focus,
   blur,
 } = control

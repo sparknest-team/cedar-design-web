@@ -39,7 +39,7 @@ Omitted disabled, readonly and size inherit FormItem and Form; size then uses Co
 
 Compare density at each size and disabled-option behavior.
 
-<demo src="./__demos__/appearance-state-comparison.vue"></demo>
+<demo src="./__demos__/appearance-state-comparison.en-US.vue"></demo>
 
 ## Layout and arrangement
 

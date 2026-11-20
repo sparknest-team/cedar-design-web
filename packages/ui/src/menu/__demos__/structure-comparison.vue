@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("menuStructureComparison");
 import { h } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -83,7 +81,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="group"
     >
-      <h4>{{ demoCopy.group }}</h4>
+      <h4>选项分组</h4>
       <c-menu :options="scene1.options">
         <c-button>选项分组</c-button>
       </c-menu>
@@ -93,7 +91,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="submenu"
     >
-      <h4>{{ demoCopy.submenu }}</h4>
+      <h4>多级菜单</h4>
       <c-menu :options="scene2.options">
         <c-button>多级菜单</c-button>
       </c-menu>
@@ -103,7 +101,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--3"
       data-comparison-scene="option-content"
     >
-      <h4>{{ demoCopy.optionContent }}</h4>
+      <h4>自定义选项内容</h4>
       <c-menu :options="scene3.options">
         <c-button>自定义选项内容</c-button>
       </c-menu>

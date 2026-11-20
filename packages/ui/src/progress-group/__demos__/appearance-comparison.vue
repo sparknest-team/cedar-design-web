@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("progressGroupAppearanceComparison");
 import { proxyRefs as demoProxyRefs } from "vue";
 
 const scene1 = demoProxyRefs(
@@ -39,7 +37,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="sizes"
     >
-      <h4>{{ demoCopy.sizes }}</h4>
+      <h4>尺寸</h4>
       <c-space direction="column" size="16px" style="max-width: 520px">
         <div
           v-for="size in scene1.sizes"
@@ -61,7 +59,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="color"
     >
-      <h4>{{ demoCopy.color }}</h4>
+      <h4>颜色与纯进度轨</h4>
       <c-space direction="column" size="24px" style="max-width: 520px">
         <c-progress-group
           :items="scene2.inheritedColorItems"

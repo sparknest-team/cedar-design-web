@@ -1,0 +1,496 @@
+{
+  "failures": [],
+  "diagnostic": {
+    "url": "http://127.0.0.1:62062/components/cascader/#%E9%80%8F%E4%BC%A0%E9%85%8D%E7%BD%AE%E8%BE%B9%E7%95%8C%E4%B8%8E%E4%BC%98%E5%85%88%E7%BA%A7",
+    "text": "ariables\n\n通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。\n\n变量\t默认值／条件\t影响的样式\n--c-cascader-checkbox-bg-hover\tvar(--c-color-fill-3)\tbackground-color\n--c-cascader-font-item-size\tvar(--c-sys-font-size-md)\tfont-size\n--c-cascader-item-bg-active\ttransparent\tbackground, background-color\n--c-cascader-item-bg-disabled\ttransparent\tbackground-color\n--c-cascader-item-bg-disabled-active\tvar(--c-color-fill-2)\tbackground-color\n--c-cascader-item-bg-hover\tvar(--c-color-fill-2)\tbackground, background-color\n--c-cascader-item-check-color\tvar(--c-sys-color-action-primary)\tcolor\n--c-cascader-item-check-size\tvar(--c-sys-font-size-md)\theight, width\n--c-cascader-item-icon-color\tvar(--c-sys-color-content-secondary)\tcolor\n--c-cascader-item-text-color\tvar(--c-sys-color-content-primary)\tcolor\n--c-cascader-item-text-color-active\tvar(--c-sys-color-action-primary)\tcolor\n--c-cascader-item-text-color-disabled\tvar(--c-sys-color-content-disabled)\tcolor\n--c-cascader-item-text-color-disabled-active\tvar(--c-sys-color-content-disabled)\tcolor\n--c-cascader-item-text-color-hover\tvar(--c-cascader-item-text-color)\tcolor\n--c-cascader-margin-checkbox-right\tvar(--c-sys-space-4)\tmargin-inline-end\n--c-cascader-margin-item-icon-left\tvar(--c-sys-space-5)\tmargin-inline-start\n--c-cascader-option-min-width\t100px\tmin-width\n--c-cascader-padding-item-left\tvar(--c-sys-space-5)\tpadding-inline-end, padding-inline-start\n--c-cascader-padding-item-right\tvar(--c-sys-space-5)\tmargin-inline-end, padding-inline-end\n--c-cascader-panel-column-max-height\t200px\tmax-height\n--c-cascader-panel-column-min-width\t120px\tmin-width\n--c-cascader-popup-border-radius\tvar(--c-sys-radius-md)\tborder-radius\n--c-cascader-popup-box-shadow\t0 4px 10px rgba(0, 0, 0, 0.1)\tbox-shadow\n--c-cascader-popup-color-border\tvar(--c-color-fill-3)\tborder, border-inline-end, border-top\n--c-cascader-popup-max-height\t200px\theight\n--c-cascader-popup-padding-vertical\tvar(--c-sys-space-2)\tpadding, padding-block-end\n--c-cascader-size-item-height\t36px\theight, line-height\n--c-cascader-size-item-icon\t12px\theight, width\n--c-cascader-slide-margin\t120px\tmargin-inline-start\n\n将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：\n\n.component-theme {\n  --c-cascader-font-item-size: var(--c-sys-font-size-md);\n}\n\n\n显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。\n\n编辑此页",
+    "numericSteps": [],
+    "overflow": [],
+    "previews": [
+      "<div class=\"vmi-previewer-example\" style=\"\" data-v-a1d6c6fd=\"\"><div class=\"c-space c-space--block\" style=\"gap: var(--c-space-size-lg-row-gap) var(--c-space-size-lg-column-gap); flex-flow: column; justify-content: flex-start; align-items: stretch;\"><div class=\"c-space__group\"><div class=\"c-space__item\"><div class=\"c-field-decorator c-field-decorator--size-md c-field-decorator--variant-outline c-selection-field\" style=\"--c-internal-field-content-offset: 12px; --c-internal-field-content-width: 752px;\"><!----><span class=\"c-field-decorator__middle\"><span class=\"c-selection-field__content\"><!----><input aria-haspopup=\"dialog\" id=\"v-1\" class=\"c-selection-field__input\" placeholder=\"请选择地区\" readonly=\"\" aria-expanded=\"false\" aria-autocomplete=\"none\" role=\"combobox\" autocomplete=\"off\" value=\"\"></span></span><!----><span class=\"c-field-decorator__suffix\"><!----><!----><button type=\"button\" data-field-open-trigger=\"\" aria-label=\"请选择地区\" aria-expanded=\"false\" aria-haspopup=\"dialog\" class=\"c-selection-field__icon\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 48 48\" width=\"1em\" height=\"1em\" class=\"c-icon c-icon-down\" stroke-width=\"4\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" aria-hidden=\"true\" role=\"img\"><!--v-if--><path d=\"M39.6 17.443 24.043 33 8.487 17.443\"></path></svg></button></span><!----><span class=\"c-field-decorator__border\" aria-hidden=\"true\"></span><span class=\"c-field-decorator__border-state\" aria-hidden=\"true\"></span></div></div><!----></div><div class=\"c-space__group\"><div class=\"c-space__item\"><p role=\"status\">当前值：未选择</p></div><!----></div></div></div>",
+      "<div class=\"vmi-previewer-example\" style=\"\" data-v-a1d6c6fd=\"\"><div data-v-82817af9=\"\" class=\"c-space c-space--block\" style=\"gap: 16px; flex-flow: column; justify-content: flex-start; align-items: stretch;\"><div class=\"c-space__group\"><div class=\"c-space__item\"><form data-v-82817af9=\"\" class=\"c-form c-form-layout-vertical c-form-size-md\"><div data-v-82817af9=\"\" class=\"c-form-item c-form-item-layout-vertical\"><div class=\"c-form-item-label-col\"><label class=\"c-form-item-label\" id=\"c-form-label-v-7\"><!---->variant<!----> </label><!----></div><div class=\"c-form-item-wrapper-col\"><div class=\"c-form-item-content-wrapper\"><div class=\"c-form-item-content c-form-item-content-flex\" style=\"--c-form-content-align: start; --c-form-content-justify: flex-start; text-align: start; justify-content: flex-start;\"><div data-v-82817af9=\"\" role=\"radiogroup\" aria-label=\"variant\" class=\"c-radio-group c-radio-group--horizontal c-radio-group--size-sm c-radio-group--button\"><label class=\"c-radio c-radio--button c-radio--checked\"><input id=\"v-8\" class=\"c-radio__input\" type=\"radio\" checked=\"\" tabindex=\"0\" value=\"filled\"><span class=\"c-radio__button-label\">filled</span></label><label class=\"c-radio c-radio--button\"><input id=\"v-9\" class=\"c-radio__input\" type=\"radio\" tabindex=\"-1\" value=\"outline\"><span class=\"c-radio__button-label\">outline</span></label><label class=\"c-radio c-radio--button\"><input id=\"v-10\" class=\"c-radio__input\" type=\"radio\" tabindex=\"-1\" value=\"standard\"><span class=\"c-radio__button-label\">standard</span></label></div></div></div><!----><!----></div></div><div data-v-82817af9=\"\" class=\"c-form-item c-form-item-layout-vertical\"><div class=\"c-form-item-label-col\"><label class=\"c-form-item-label\" id=\"c-form-label-v-11\"><!---->size<!----> </label><!----></div><div class=\"c-form-item-wrapper-col\"><div class=\"c-form-item-content-wrapper\"><div class=\"c-form-item-content c-form-item-content-flex\" style=\"--c-form-content-align: start; --c-form-content-justify: flex-start; text-align: start; justify-content: flex-start;\"><div data-v-82817af9=\"\" role=\"radiogroup\" aria-label=\"size\" class=\"c-radio-group c-radio-group--horizontal c-radio-group--size-sm c-radio-group--button\"><label class=\"c-radio c-radio--button\"><input id=\"v-12\" class=\"c-radio__input\" type=\"radio\" tabindex=\"-1\" value=\"xs\"><span class=\"c-radio__button-label\">xs</span></label><label class=\"c-radio c-radio--button\"><input id=\"v-13\" class=\"c-radio__input\" type=\"radio\" tabindex=\"-1\" value=\"sm\"><span class=\"c-radio__button-label\">sm</span></label><label class=\"c-radio c-radio--button c-radio--checked\"><input id=\"v-14\" class=\"c-radio__input\" type=\"radio\" checked=\"\" tabindex=\"0\" value=\"md\"><span class=\"c-radio__button-label\">md</span></label><label class=\"c-radio c-radio--button\"><input id=\"v-15\" class=\"c-radio__input\" type=\"radio\" tabindex=\"-1\" value=\"lg\"><span class=\"c-radio__button-label\">lg</span></label><label class=\"c-radio c-radio--button\"><input id=\"v-16\" class=\"c-radio__input\" type=\"radio\" tabindex=\"-1\" value=\"xl\"><span class=\"c-radio__button-label\">xl</span></label></div></div></div><!----><!----></div></div></form></div><!----></div><div class=\"c-space__group\"><div class=\"c-space__item\"><p data-v-82817af9=\"\" class=\"demo-config-comparison-hint\">选择一个对比维度；其他配置和内容保持一致。输入类示例共享同一个值，便于比较外观。</p></div><!----></div><div class=\"c-space__group\"><div class=\"c-space__item\"><div data-v-82817af9=\"\" role=\"radiogroup\" aria-label=\"对比配置\" class=\"c-radio-group c-radio-group--horizontal c-radio-group--size-md\"><label class=\"c-radio c-radio--checked\"><input id=\"v-17\" class=\"c-radio__input\" type=\"radio\" checked=\"\" tabindex=\"0\" value=\"variant\"><span class=\"c-radio__control\" aria-hidden=\"true\"><span class=\"c-radio__icon\"></span></span><span class=\"c-radio__label\">variant</span></label><label class=\"c-radio\"><input id=\"v-18\" class=\"c-radio__input\" type=\"radio\" tabindex=\"-1\" value=\"size\"><span class=\"c-radio__control\" aria-hidden=\"true\"><span class=\"c-radio__icon\"></span></span><span class=\"c-radio__label\">size</span></label></div></div><!----></div><div class=\"c-space__group\"><div class=\"c-space__item\"><div data-v-82817af9=\"\" class=\"demo-config-comparison\"><section data-v-82817af9=\"\"><p data-v-82817af9=\"\"><code data-v-82817af9=\"\">variant=filled</code></p><div class=\"c-field-decorator c-field-decorator--size-md c-field-decorator--variant-filled c-selection-field\" style=\"--c-internal-field-content-offset: 12px; --c-internal-field-content-width: 359px;\"><!----><span class=\"c-field-decorator__middle\"><span class=\"c-selection-field__content\"><span class=\"c-selection-field__selection\"><span class=\"c-selection-field__label\">华东 / 上海</span></span><input aria-haspopup=\"dialog\" id=\"v-20\" class=\"c-selection-field__input c-selection-field__input--with-value\" readonly=\"\" aria-expanded=\"false\" aria-autocomplete=\"none\" role=\"combobox\" autocomplete=\"off\" value=\"\"></span></span><!----><span class=\"c-field-decorator__suffix\"><button type=\"button\" class=\"c-field-decorator__clear-btn\" aria-label=\"清空\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 48 48\" width=\"1em\" height=\"1em\" class=\"c-icon c-icon-close-circle-fill\" stroke-width=\"4\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" aria-hidden=\"true\" role=\"img\"><!--v-if--><path fill=\"currentColor\" fill-rule=\"evenodd\" stroke=\"none\" d=\"M24 44c11.046 0 20-8.954 20-20S35.046 4 24 4 4 12.954 4 24s8.954 20 20 20m4.955-27.771-4.95 4.95-4.95-4.95a1 1 0 0 0-1.414 0l-1.414 1.414a1 1 0 0 0 0 1.414l4.95 4.95-4.95 4.95a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l4.95-4.95 4.95 4.95a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-4.95-4.95 4.95-4.95a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0\" clip-rule=\"evenodd\"></path></svg></button><!----><button type=\"button\" data-field-open-trigger=\"\" aria-label=\"请选择\" aria-expanded=\"false\" aria-haspopup=\"dialog\" class=\"c-selection-field__icon\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 48 48\" width=\"1em\" height=\"1em\" class=\"c-"
+    ],
+    "controls": [
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "清空",
+        "class": "c-field-decorator__clear-btn"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "Cascader long values",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "Please select ...",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "Please select ...",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "SPAN",
+        "role": "button",
+        "label": "关闭",
+        "class": "c-tag__close-btn"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input c-selection-field__input--with-value c-selection-field__input--hide-placeholder"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "Please select ...",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "Please select ...",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input c-selection-field__input--with-value c-selection-field__input--hide-placeholder"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "Please select ...",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input c-selection-field__input--with-value c-selection-field__input--hide-placeholder"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "清空",
+        "class": "c-field-decorator__clear-btn"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "Please select ...",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "Please select ...",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": "switch",
+        "label": "",
+        "class": "c-switch c-switch--variant-circle c-switch--size-md"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "输入 fruit、Fruit、apple 或 Apple",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "Please select ...",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-checkbox__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-checkbox__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-checkbox__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input c-selection-field__input--with-value"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "清空",
+        "class": "c-field-decorator__clear-btn"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "请选择",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "打开面板",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-outline"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "透传配置示例",
+        "class": "c-selection-field__input"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "请选择",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "P",
+        "role": "status",
+        "label": "顶层 open：false；嵌套配置：向上展开并调整偏移。",
+        "class": ""
+      },
+      {
+        "tag": "DIV",
+        "role": "radiogroup",
+        "label": "",
+        "class": "c-radio-group c-radio-group--horizontal c-radio-group--size-md"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-radio__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-radio__input"
+      },
+      {
+        "tag": "BUTTON",
+        "role": "switch",
+        "label": "",
+        "class": "c-switch c-switch--variant-circle c-switch--size-md c-switch--checked"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input c-selection-field__input--with-value"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "请选择",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input"
+      },
+      {
+        "tag": "DIV",
+        "role": "status",
+        "label": "加载中",
+        "class": "c-loading"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "展开远程分组",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "UL",
+        "role": "menu",
+        "label": "请选择",
+        "class": "c-cascader-list"
+      },
+      {
+        "tag": "LI",
+        "role": "menuitem",
+        "label": "Remote group",
+        "class": "c-cascader-option"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "返回子项",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-outline c-button--disabled"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "结束并重试",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-outline c-button--disabled"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "替换数据",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-outline"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "返回旧请求",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-outline c-button--disabled"
+      },
+      {
+        "tag": "P",
+        "role": "status",
+        "label": "展开 Remote group 后选择返回结果",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "加载设备树",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-outline"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-selection-field__input c-selection-field__input--with-value c-selection-field__input--hide-placeholder"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "清空",
+        "class": "c-field-decorator__clear-btn"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "选择设备路径",
+        "class": "c-selection-field__icon"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "返回顶部",
+        "class": "vp-back-to-top-button"
+      },
+      {
+        "tag": "SPAN",
+        "role": "progressbar",
+        "label": "",
+        "class": "vp-scroll-progress"
+      }
+    ]
+  },
+  "error": "TimeoutError: locator.waitFor: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.vmi-previewer').nth(11).locator('.vmi-previewer-sources pre').first() to be visible\u001b[22m\n"
+}

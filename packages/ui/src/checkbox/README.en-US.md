@@ -37,7 +37,7 @@ Preview configuration: `value="1"`.
 
 Compare child-component declarations with options data. Both use a group model; field mapping and asynchronous data are separate.
 
-<demo src="./__demos__/group-declaration-comparison.vue"></demo>
+<demo src="./__demos__/group-declaration-comparison.en-US.vue"></demo>
 
 ### Grid
 
@@ -170,7 +170,7 @@ Preview configuration: `:icon-size="28"`, `checked-color="#137547"`, `unchecked-
 
 Preview configuration: `edit-mode="direct"`, `:options="options"`, `:max="2"`.
 
-<demo src="./__demos__/async-options.vue"></demo>
+<demo src="./__demos__/async-options.en-US.vue"></demo>
 
 ## Native input attributes and keyboard cancellation
 

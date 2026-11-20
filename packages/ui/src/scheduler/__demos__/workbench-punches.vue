@@ -29,7 +29,7 @@
   </c-popover>
 </template>
 <script setup lang="ts">
-import { formatDemoDateTime } from "../../__demos__/locale";
+import { getLocale } from "@cedar-design/ui-vue";
 import { computed, nextTick, ref } from "vue";
 import {
   nearestPunch,
@@ -51,7 +51,7 @@ const nearest = computed(() =>
   nearestPunch(props.task, props.start, records.value),
 );
 const format = (value: string) =>
-  formatDemoDateTime(new Date(value), {
+  new Date(value).toLocaleString(getLocale(), {
     month: "numeric",
     day: "numeric",
     hour: "2-digit",

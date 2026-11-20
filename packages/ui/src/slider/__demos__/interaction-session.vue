@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("sliderInteractionSessionInline");
 
 import { ref } from "vue";
 import type { SliderValue } from "..";
@@ -29,25 +27,25 @@ function restore() {
 </script>
 <template>
   <div style="width: 100%; padding: 24px 0" @keydown="keyboard">
-    <p>{{ inlineCopy.whileDraggingPressDR }}</p>
+    <p>拖动滑块时按 D 禁用、R 只读、M 改上限。取消后仍会收到一次 end。</p>
     <c-slider
       v-model="value"
       edit-mode="direct"
       :disabled="disabled"
       :readonly="readonly"
       :max="max"
-      :aria-label="inlineCopy.sessionEnd"
+      aria-label="交互收尾"
       @start="starts++"
       @end="recordEnd"
     />
     <p role="status">
-      start: {{ starts }}；end: {{ ends.length }}{{ inlineCopy.lastProposal }}
+      start: {{ starts }}；end: {{ ends.length }}；最后提案
       {{ JSON.stringify(ends.at(-1)) ?? "—" }}
     </p>
     <p>
       value: {{ value }}；disabled: {{ disabled }}；readonly:
       {{ readonly }}；max: {{ max }}
     </p>
-    <c-button @click="restore">{{ inlineCopy.restoreControls }}</c-button>
+    <c-button @click="restore">恢复可交互</c-button>
   </div>
 </template>

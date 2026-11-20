@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("mentionSearchOptionsInline");
 
 import { ref } from "vue";
 import type { OptionsLoader } from "../../_hooks/use-option-request";
@@ -63,16 +61,16 @@ const searchPeople: OptionsLoader<(typeof people)[number]> = (
       v-model="localValue"
       atomic
       :options="people"
-      :aria-label="inlineCopy.localPeopleSearch"
+      aria-label="本地人员搜索"
     />
     <c-mention
       v-model="remoteValue"
       atomic
       :options="searchPeople"
       :min-search-length="2"
-      :aria-label="inlineCopy.remotePeopleSearch"
+      aria-label="异步人员搜索"
     />
-    <p>{{ inlineCopy.automaticallyCommitTheOnlyMatching }}</p>
+    <p>唯一候选自动提交</p>
     <c-mention
       v-model="autoValue"
       atomic
@@ -80,14 +78,13 @@ const searchPeople: OptionsLoader<(typeof people)[number]> = (
       :min-search-length="2"
       :search-delay="250"
       auto-commit-single
-      :aria-label="inlineCopy.commitSingleResult"
+      aria-label="唯一结果自动提交"
     />
     <div>
-      {{ inlineCopy.localValue }}<code data-local-value>{{ localValue }}</code>
+      本地保存值<code data-local-value>{{ localValue }}</code>
     </div>
     <div>
-      {{ inlineCopy.remoteValue
-      }}<code data-remote-value>{{ remoteValue }}</code>
+      异步保存值<code data-remote-value>{{ remoteValue }}</code>
     </div>
   </c-space>
 </template>

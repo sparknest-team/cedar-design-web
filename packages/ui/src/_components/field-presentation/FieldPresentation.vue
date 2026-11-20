@@ -38,6 +38,7 @@
         aria-modal="false"
       >
         <EditorPanel
+          :popup-container="popupContainer"
           ref="panel"
           compact
           defer-escape

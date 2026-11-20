@@ -32,7 +32,7 @@ Both libraries use the same implementation and examples; package prefixes, theme
 
 The `default` variant uses white text for primary, info, success, warning, danger and secondary solid fills.
 
-<demo src="./__demos__/variants.vue"></demo>
+<demo src="./__demos__/variants.en-US.vue"></demo>
 
 ### Five sizes
 
@@ -69,7 +69,7 @@ Cedar Button resolves size from its own prop, then its group, then ConfigProvide
 
 Use built-in icons to compare icon-only, inline and stacked labels across four variants and five sizes. Stacked buttons grow with content and keep at least 8px of top and bottom padding. Omit the default slot for icon-only buttons; round controls shape and stacked controls label layout.
 
-<demo src="./__demos__/icons.vue"></demo>
+<demo src="./__demos__/icons.en-US.vue"></demo>
 
 ### Block buttons
 
@@ -118,7 +118,7 @@ Use built-in icons to compare icon-only, inline and stacked labels across four v
 - `size`: Controls the component size.
 - `variant`: Selects the visual variant.
 
-<demo src="../field-decorator/__demos__/control-sizes.vue"></demo>
+<demo src="../field-decorator/__demos__/control-sizes.en-US.vue"></demo>
 
 ### Native form, focus and touch events
 
@@ -157,7 +157,7 @@ Use built-in icons to compare icon-only, inline and stacked labels across four v
 
 ### Controlled loading and failure recovery
 
-<demo src="./__demos__/controlled-loading.vue"></demo>
+<demo src="./__demos__/controlled-loading.en-US.vue"></demo>
 
 ## Reading direction
 

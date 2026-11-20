@@ -1,6 +1,4 @@
 <script setup>
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("searchNativeFormInline");
 
 import { ref, useId } from "vue";
 
@@ -23,22 +21,19 @@ function submit() {
 </script>
 <template>
   <section>
-    <p>{{ inlineCopy.editInHistoryThenSubmit }}</p>
+    <p>输入关键词或选择历史记录后提交表单。</p>
     <c-space wrap>
-      <c-button html-type="button" @click="waiting = !waiting">{{
-        inlineCopy.toggleWaiting
-      }}</c-button>
+      <c-button html-type="button" @click="waiting = !waiting">切换等待</c-button>
       <c-button
         html-type="button"
         @click="loadingMode = loadingMode === 'default' ? 'line' : 'default'"
-        >{{ inlineCopy.toggleLoadingLayout }}</c-button
+        >切换加载布局</c-button
       >
     </c-space>
     <form :id="formId" ref="form" @submit.prevent="submit">
       <c-search
         v-model="query"
-        :label="inlineCopy.keywords"
-        edit-mode="popup"
+        label="关键词"
         :recent-searches="['report', 'invoice']"
         :loading="waiting"
         :loading-mode="loadingMode"
@@ -51,12 +46,10 @@ function submit() {
         }"
         @search="searchEvents++"
       />
-      <p :id="helpId">{{ inlineCopy.editsUpdateImmediatelyNativeRequired }}</p>
-      <c-button html-type="submit" :disabled="waiting">{{
-        inlineCopy.captureNativeForm
-      }}</c-button>
+      <p :id="helpId">输入即时更新；HTML 必填校验关联此表单。</p>
+      <c-button html-type="submit" :disabled="waiting">记录原生表单</c-button>
     </form>
-    <p>{{ inlineCopy.readingPreview }}</p>
+    <p>阅读预览</p>
     <c-search
       :model-value="query"
       read-pretty

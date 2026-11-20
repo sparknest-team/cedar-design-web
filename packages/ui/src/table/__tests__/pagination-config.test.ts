@@ -19,3 +19,23 @@ describe('Table optional total compatibility', () => {
     }
   })
 })
+
+test.each(['ltr', 'rtl'])('aligns the pagination bar in the table direction (%s)', async (dir) => {
+  const wrapper = mount(Table, { attrs: { dir }, props: { data: [{ key: 1 }], pagination: {} } })
+  try {
+    await flushPromises()
+    const bar = () => wrapper.get('.c-table-pagination')
+    expect(bar().attributes('dir')).toBe(dir)
+    expect(bar().classes()).toContain('c-table-pagination-right')
+    await wrapper.setProps({ pagination: { align: 'start' } })
+    expect(bar().classes()).toContain('c-table-pagination-left')
+    expect(wrapper.get('table').element.compareDocumentPosition(bar().element) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(wrapper.getComponent(Pagination).attributes('align')).toBeUndefined()
+    await wrapper.setProps({ pagination: { align: 'end' } })
+    expect(bar().classes()).toContain('c-table-pagination-right')
+    await wrapper.setProps({ pagination: true })
+    expect(bar().classes()).toContain('c-table-pagination-right')
+  } finally {
+    wrapper.unmount()
+  }
+})

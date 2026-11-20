@@ -8,10 +8,8 @@
       @end="ends++"
     />
     <c-space>
-      <c-button @click="duration = duration === 0 ? 600 : 0">{{
-        inlineCopy.toggleDuration
-      }}</c-button>
-      <c-button @click="counter?.reset()">{{ inlineCopy.replay }}</c-button>
+      <c-button @click="duration = duration === 0 ? 600 : 0">切换时长</c-button>
+      <c-button @click="counter?.reset()">重新播放</c-button>
     </c-space>
     <p role="status">
       Duration: {{ duration }}ms; end: {{ ends }}. 0
@@ -20,8 +18,6 @@
   </c-space>
 </template>
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("countToZeroDurationInline");
 
 import { ref } from "vue";
 import type { CountToInstance } from "@cedar-design/ui-vue";

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("affixOffsetContainerComparison");
 import { ref, type ComponentPublicInstance } from "vue";
 const asHTMLElement = (
   element: Element | ComponentPublicInstance | null,
@@ -36,7 +34,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="top"
     >
-      <h4>{{ demoCopy.top }}</h4>
+      <h4>顶部偏移</h4>
       <p>Scroll inside the bordered area.</p>
       <div
         :ref="(element) => (scene1.containerRef = asHTMLElement(element))"
@@ -54,7 +52,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="bottom"
     >
-      <h4>{{ demoCopy.bottom }}</h4>
+      <h4>底部偏移</h4>
       <p>Scroll inside the bordered area.</p>
       <div
         :ref="(element) => (scene2.containerRef = asHTMLElement(element))"
@@ -73,7 +71,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--3"
       data-comparison-scene="container"
     >
-      <h4>{{ demoCopy.container }}</h4>
+      <h4>指定滚动容器</h4>
       <p>Scroll inside the bordered area.</p>
       <div
         :ref="(element) => (scene3.containerRef = asHTMLElement(element))"

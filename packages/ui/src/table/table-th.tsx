@@ -1,6 +1,8 @@
+import { renderCellElement, renderHeaderContent } from './render/cells'
+import { useDesktopHeaderSorter } from './desktop/use-header-sorter'
+import { useDesktopHeaderFilter } from './desktop/use-header-filter'
 import {
   computed,
-  createVNode,
   defineComponent,
   inject,
   PropType,
@@ -9,26 +11,15 @@ import {
 } from "vue";
 import { getPrefixCls, createNamespace } from "../_utils/global-config";
 import { firstStructuralNode } from './structural-slot'
-import Checkbox from "../checkbox";
-import Radio from "../radio";
-import Button from "../button";
-import Trigger from "../trigger";
-import { IconCaretDown } from '@cedar-design/icons-vue/icon-caret-down'
-import { IconCaretUp } from '@cedar-design/icons-vue/icon-caret-up'
-import { IconFilter } from '@cedar-design/icons-vue/icon-filter'
 import { TableColumnData, TableOperationColumn } from "./types";
-import { useColumnSorter } from "./hooks/use-column-sorter";
-import { useColumnFilter } from "./hooks/use-column-filter";
-import { getFixedCls, getStyle } from "./utils";
+import { getFixedCls, getStyle } from "./render/cell-layout";
 import { isBoolean, isFunction, isObject } from "../_utils/is";
 import { TableContext, tableInjectionKey } from "./context";
 import AutoTooltip from "../_components/auto-tooltip/auto-tooltip";
-import IconHover from "../_components/IconHover.vue";
 import { getColumnLayoutKey, isTableExtraColumn } from "./extra-column";
 import { useI18n } from "../locale";
 import TableSlot from "./TableSlot.vue";
 import { forwardTableColumnSlot, forwardTableSlot } from "./forward-table-slot";
-import { isComponentColumn } from "./column-slot-source";
 
 const { name } = createNamespace("th");
 
@@ -81,137 +72,9 @@ export default defineComponent({
       return tableCtx.filterIconAlignLeft;
     });
 
-    const {
-      sortOrder,
-      hasSorter,
-      hasAscendBtn,
-      hasDescendBtn,
-      nextSortOrder,
-      handleClickSorter,
-      // @ts-ignore
-    } = useColumnSorter({
-      column,
-      tableCtx,
-    });
+    const { sortOrder, hasSorter, nextSortOrder, handleClickSorter, renderSorterNode } = useDesktopHeaderSorter(column, tableCtx, prefixCls);
 
-    const {
-      filterOpen,
-      isFilterActive,
-      isMultipleFilter,
-      columnFilterValue,
-      handleFilterOpenChange,
-      setFilterValue,
-      handleCheckboxFilterChange,
-      handleRadioFilterChange,
-      handleFilterConfirm,
-      handleFilterReset,
-    } = useColumnFilter({
-      column,
-      tableCtx,
-    });
-
-    const renderFilterContent = () => {
-      const { filterable } = props.column;
-
-      if (props.column.slots?.["filter-content"]) {
-        return <TableSlot slotProps={{ filterValue: columnFilterValue.value, setFilterValue, handleFilterConfirm, handleFilterReset }} v-slots={forwardTableColumnSlot(props.column.slots["filter-content"])} />;
-      }
-
-      if (filterable?.slotName && tableCtx.slots?.[filterable.slotName]) {
-        return <TableSlot slotProps={{ filterValue: columnFilterValue.value, setFilterValue, handleFilterConfirm, handleFilterReset }} v-slots={forwardTableSlot(tableCtx.slots[filterable.slotName])} />;
-      }
-
-      if (filterable?.renderContent) {
-        return filterable.renderContent({
-          filterValue: columnFilterValue.value,
-          setFilterValue,
-          handleFilterConfirm,
-          handleFilterReset,
-        });
-      }
-
-      return (
-        <div class={`${prefixCls}-filters-content`}>
-          <ul class={`${prefixCls}-filters-list`}>
-            {filterable?.filters?.map((item, index) => {
-              return (
-                <li class={`${prefixCls}-filters-item`} key={index}>
-                  {isMultipleFilter.value ? (
-                    <Checkbox
-                      value={item.value}
-                      modelValue={columnFilterValue.value}
-                      uninjectGroupContext
-                      // @ts-ignore
-                      onChange={handleCheckboxFilterChange}
-                    >
-                      {item.text}
-                    </Checkbox>
-                  ) : (
-                    <Radio
-                      value={item.value}
-                      modelValue={columnFilterValue.value[0] ?? ""}
-                      uninjectGroupContext
-                      // @ts-ignore
-                      onChange={handleRadioFilterChange}
-                    >
-                      {item.text}
-                    </Radio>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-          <div class={`${prefixCls}-filters-bottom`}>
-            <Button size="xs" onClick={handleFilterReset}>
-              {t("table.resetText")}
-            </Button>
-            <Button status="primary" size="xs" onClick={handleFilterConfirm}>
-              {t("table.confirmButtonText")}
-            </Button>
-          </div>
-        </div>
-      );
-    };
-
-    const renderFilter = () => {
-      const { filterable } = props.column;
-
-      if (!filterable) {
-        return null;
-      }
-
-      const iconSlot = props.column.slots?.["filter-icon"];
-      const icon = iconSlot && isComponentColumn(props.column)
-        ? <TableSlot v-slots={forwardTableColumnSlot(iconSlot)} />
-        : iconSlot?.() ?? filterable.icon?.() ?? <IconFilter />;
-
-      return (
-        <Trigger
-          v-slots={{ content: renderFilterContent }}
-          open={filterOpen.value}
-          trigger="click"
-          autoFitPosition
-          popupOffset={inlineFilter.value ? 4 : 0}
-          onUpdate:open={handleFilterOpenChange}
-          {...filterable.triggerProps}
-        >
-          <IconHover
-            class={[
-              `${prefixCls}-filters`,
-              {
-                [`${prefixCls}-filters-active`]: isFilterActive.value,
-                [`${prefixCls}-filters-open`]: filterOpen.value,
-                [`${prefixCls}-filters-align-left`]: inlineFilter.value,
-              },
-            ]}
-            // @ts-ignore
-            onClick={(ev: Event) => ev.stopPropagation()}
-          >
-            {icon}
-          </IconHover>
-        </Trigger>
-      );
-    };
+    const { renderFilter } = useDesktopHeaderFilter({ props, column, tableCtx, prefixCls, inline: () => inlineFilter.value, t });
 
     const cellCls = computed(() => {
       const cls: any[] = [
@@ -314,40 +177,6 @@ export default defineComponent({
       );
     };
 
-    const renderSorterNode = () => {
-      if (!hasSorter.value) return null;
-      return (
-        <span class={`${prefixCls}-sorter`}>
-          {hasAscendBtn.value && (
-            <div
-              class={[
-                `${prefixCls}-sorter-icon`,
-                {
-                  [`${prefixCls}-sorter-icon-active`]:
-                    sortOrder.value === "ascend",
-                },
-              ]}
-            >
-              <IconCaretUp />
-            </div>
-          )}
-          {hasDescendBtn.value && (
-            <div
-              class={[
-                `${prefixCls}-sorter-icon`,
-                {
-                  [`${prefixCls}-sorter-icon-active`]:
-                    sortOrder.value === "descend",
-                },
-              ]}
-            >
-              <IconCaretDown />
-            </div>
-          )}
-        </span>
-      );
-    };
-
     const isNestedInteractive = (event: Event) => {
       const target = event.target as HTMLElement | null
       const current = event.currentTarget as HTMLElement | null
@@ -367,13 +196,13 @@ export default defineComponent({
         );
       }
 
-      return (
-        <span
-          class={cellCls.value}
-          role={hasSorter.value ? 'button' : undefined}
-          tabindex={hasSorter.value ? 0 : undefined}
-          onClick={hasSorter.value ? (event: MouseEvent) => { if (!event.defaultPrevented && !isNestedInteractive(event)) handleClickSorter(event) } : undefined}
-          onKeydown={
+      return renderHeaderContent(prefixCls, {
+        class: cellCls.value,
+        interaction: {
+          role: hasSorter.value ? 'button' : undefined,
+          tabindex: hasSorter.value ? 0 : undefined,
+          onClick: hasSorter.value ? (event: MouseEvent) => { if (!event.defaultPrevented && !isNestedInteractive(event)) handleClickSorter(event) } : undefined,
+          onKeydown:
             hasSorter.value
               ? (event: KeyboardEvent) => {
                   if (!event.defaultPrevented && !isNestedInteractive(event) && (event.key === 'Enter' || event.key === ' ')) {
@@ -382,26 +211,13 @@ export default defineComponent({
                   }
                 }
               : undefined
-          }
-        >
-          <span class={`${prefixCls}-th-main`}>
-            {renderTitleNode()}
-            {renderSorterNode()}
-            {filterIconAlignLeft.value && renderFilter()}
-          </span>
-          {showHeaderActions.value && (
-            <span
-              class={`${prefixCls}-th-actions`}
-              role="presentation"
-              // @ts-ignore
-              onClick={(ev: Event) => ev.stopPropagation()}
-            >
-              {filterInActions.value && renderFilter()}
-              {renderHeaderActions()}
-            </span>
-          )}
-        </span>
-      );
+          ,
+        },
+        title: renderTitleNode,
+        sorter: renderSorterNode,
+        inlineFilter: () => filterIconAlignLeft.value && renderFilter(),
+        actions: showHeaderActions.value ? () => [filterInActions.value && renderFilter(), renderHeaderActions()] : undefined,
+      });
     };
 
     const style = computed(() => {
@@ -445,20 +261,16 @@ export default defineComponent({
       const translatedResizeLabel = t('table.resizeColumn', resizeColumnName);
       const customHeader = firstStructuralNode([props.customHeader]) ?? firstStructuralNode(slots.th?.({ column: props.column }));
 
-      return createVNode(
-        customHeader ?? "th",
+      return renderCellElement(
+        "th", customHeader, props.column,
         {
           class: cls.value,
           style: style.value,
           colspan: colSpan > 1 ? colSpan : undefined,
           rowspan: rowSpan > 1 ? rowSpan : undefined,
           'aria-sort': sortOrder.value === 'ascend' ? 'ascending' : sortOrder.value === 'descend' ? 'descending' : undefined,
-          // auto 布局下渲染后按此 key 量宽回写，修正冻结列 sticky 偏移
-          "data-column-key": props.column.dataIndex,
-          "data-column-layout-key": getColumnLayoutKey(props.column) !== props.column.dataIndex ? getColumnLayoutKey(props.column) : undefined,
         },
-        {
-          default: () => [
+        () => [
             renderCell(),
             !inlineFilter.value && renderFilter(),
             props.resizable && (
@@ -476,7 +288,6 @@ export default defineComponent({
               />
             ),
           ],
-        },
       );
     };
   },

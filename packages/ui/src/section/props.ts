@@ -1,8 +1,12 @@
 import type { PropType, VNodeChild } from 'vue'
 
+import type { ComponentSize, SemanticStatus } from '../_utils/constant'
 import type { CompatiblePublicProps } from '../_utils/public-props'
 
-export type SectionVariant = 'plain' | 'line' | 'card'
+export type SectionSize = Extract<ComponentSize, 'sm' | 'md'>
+export type SectionMarkerPlacement = 'title' | 'section'
+export type SectionStatus = Extract<SemanticStatus, 'default' | 'info' | 'success' | 'warning' | 'danger'>
+export type SectionVariant = 'plain' | 'heading-line' | 'tonal' | 'outline'
 export type SectionHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6
 
 export const sectionProps = {
@@ -12,12 +16,20 @@ export const sectionProps = {
   title: { type: String, default: "" },
   /** 标题下方的补充说明。 */
   description: { type: String, default: "" },
-  /** 分区外观，表单中默认为 line，其他场景默认为 plain。 */
+  /** 分区尺寸，控制标题字号、标题色条和间距。 */
+  size: {
+    type: String as PropType<SectionSize>,
+    default: 'md',
+    validator: (size: SectionSize) => size === 'sm' || size === 'md',
+  },
+  /** 分区外观，表单中默认为 heading-line，其他场景默认为 plain。 */
   variant: String as PropType<SectionVariant>,
-  /** 标题色条，默认随表单上下文开启。 */
+  /** 分区的语义状态，用于色条、浅色底和描边。 */
+  status: String as PropType<SectionStatus>,
+  /** 显示色条，默认随表单上下文开启。 */
   showMarker: { type: Boolean, default: undefined },
-  /** 在内容后绘制结束线。 */
-  showEndDivider: { type: Boolean, default: false },
+  /** 色条标记标题或整个分区。 */
+  markerPlacement: { type: String as PropType<SectionMarkerPlacement>, default: 'title' },
   /** 分区标题在文档中的层级。 */
   headingLevel: {
     type: Number as PropType<SectionHeadingLevel>,

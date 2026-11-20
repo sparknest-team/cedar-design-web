@@ -1,22 +1,20 @@
 <template>
-  <c-section :title="copy.history" variant="line">
+  <c-section title="发布记录" variant="heading-line">
     <template #extra>
       <c-button :aria-expanded="expanded" @click="expanded = !expanded">
-        {{ expanded ? copy.latest : copy.all }}
+        {{ expanded ? '只看最新' : '查看全部' }}
       </c-button>
     </template>
     <ul>
-      <li>{{ copy.exportRelease }}</li>
-      <li v-if="expanded">{{ copy.memberRelease }}</li>
+      <li>v1.2 · 新增项目导出</li>
+      <li v-if="expanded">v1.1 · 新增成员管理</li>
     </ul>
   </c-section>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useDemoLocale } from '../../__demos__/locale'
 
-const copy = useDemoLocale('section')
 
 const expanded = ref(false)
 </script>

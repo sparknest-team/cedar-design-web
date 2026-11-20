@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { Input, type FilterFormField } from '@cedar-design/ui-vue'
-import { useDemoLocale } from '../../__demos__/locale'
 
-const copy = useDemoLocale('filterFormLayout')
+const copy = {
+  keyword: "订单号或客户名称",
+  order: "订单号",
+  customer: "客户"
+};
 const filter = ref<Record<string, unknown>>({})
 const fields = computed<FilterFormField[]>(() => [
-  { field: 'keyword', label: copy.value.keyword, component: Input, props: { clearable: true } },
+  { field: 'keyword', label: copy.keyword, component: Input, props: { clearable: true } },
 ])
 const columns = computed(() => [
-  { title: copy.value.order, dataIndex: 'key' },
-  { title: copy.value.customer, dataIndex: 'customer' },
+  { title: copy.order, dataIndex: 'key' },
+  { title: copy.customer, dataIndex: 'customer' },
 ])
 const orders = [
   { key: 'SO-1042', customer: 'Lin Chen' },

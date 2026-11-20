@@ -25,6 +25,7 @@
     "check:cli": "pnpm --filter @cedar-design/cli-vue test",
     "check:resolver": "pnpm --filter @cedar-design/resolver-vue test",
     "check:shared": "node --test scripts/quality/shared-bundle.test.mjs",
+    "check:table-layout": "node --test scripts/quality/table-layout-contract.test.mjs scripts/quality/table-layout-original.test.mjs scripts/quality/table-render-contract.test.mjs scripts/quality/table-orchestration-contract.test.mjs && NODE_ENV=production node scripts/quality/table-orchestration-check.mjs",
     "check:runtime-dependencies": "node scripts/quality/runtime-dependency-check.mjs && pnpm --dir packages/ui exec vitest run --config site-imports.vitest.config.mts --maxWorkers=1 --no-file-parallelism",
     "format": "pnpm --filter @cedar-design/ui-vue format",
     "lint": "pnpm --filter @cedar-design/ui-vue lint",

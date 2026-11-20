@@ -35,6 +35,36 @@
     "./reset.css": {
       "types": "./reset/index.d.ts",
       "default": "./reset/index.css"
+    },
+    "./table/core": {
+      "types": "./types/table/core/index.d.ts",
+      "import": "./es/table/core/index.mjs",
+      "require": "./lib/table/core/index.js"
+    },
+    "./table/features/filter": {
+      "types": "./types/table/features/filter/index.d.ts",
+      "import": "./es/table/features/filter/index.mjs",
+      "require": "./lib/table/features/filter/index.js"
+    },
+    "./table/features/filter/client": {
+      "types": "./types/table/features/filter/client/index.d.ts",
+      "import": "./es/table/features/filter/client/index.mjs",
+      "require": "./lib/table/features/filter/client/index.js"
+    },
+    "./table/features/sort": {
+      "types": "./types/table/features/sort/index.d.ts",
+      "import": "./es/table/features/sort/index.mjs",
+      "require": "./lib/table/features/sort/index.js"
+    },
+    "./table/features/sort/client": {
+      "types": "./types/table/features/sort/client/index.d.ts",
+      "import": "./es/table/features/sort/client/index.mjs",
+      "require": "./lib/table/features/sort/client/index.js"
+    },
+    "./table/core/style": {
+      "types": "./reset/index.d.ts",
+      "import": "./es/table/core/style/index.mjs",
+      "require": "./lib/table/core/style/index.js"
     }
   },
   "files": [

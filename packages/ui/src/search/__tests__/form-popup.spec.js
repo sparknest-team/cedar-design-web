@@ -18,7 +18,7 @@ afterEach(() => {
 function formContext(onChange) {
   return { [formItemInjectionKey]: { disabled: false, readonly: false, eventHandlers: { onChange } } }
 }
-describe('Search form and popup interaction', () => {
+describe('Search form interaction', () => {
   test('cancel consumes an uncommitted edit without a second blur change', async () => {
     const onChange = vi.fn()
     const wrapper = mount(Search, { attachTo: document.body, props: { defaultValue: 'before', showAction: true },
@@ -30,9 +30,9 @@ describe('Search form and popup interaction', () => {
     expect(wrapper.emitted('change').map(args => args[0])).toEqual([''])
     expect(onChange).toHaveBeenCalledTimes(1)
   })
-  test('native inputAttrs and error reach outer and popup inputs', async () => {
+  test('native inputAttrs and error reach the keyword input', async () => {
     const wrapper = mount(Search, { attachTo: document.body, props: {
-      editMode: 'popup', recentSearches: ['x'], error: true,
+      editMode: 'direct', recentSearches: ['x'], error: true,
       inputAttrs: { name: 'query', autocomplete: 'off', 'aria-describedby': 'query-help' },
     } })
     const outer = wrapper.get('input.c-input__inner')
@@ -40,12 +40,8 @@ describe('Search form and popup interaction', () => {
     expect(outer.attributes('aria-invalid')).toBe('true')
     await outer.trigger('focus')
     await nextTick()
-    const inner = document.body.querySelector('.c-search__popup-content input')
-    expect(inner.hasAttribute('name')).toBe(false)
-    expect(outer.attributes('name')).toBe('query')
-    expect(inner.getAttribute('autocomplete')).toBe('off')
-    expect(inner.getAttribute('aria-describedby')).toBe('query-help')
-    expect(inner.getAttribute('aria-invalid')).toBe('true')
+    expect(outer.attributes('autocomplete')).toBe('off')
+    expect(outer.attributes('aria-describedby')).toBe('query-help')
   })
 
   test('typing, cancel, fields and history notify the Form once per committed action', async () => {
@@ -72,13 +68,13 @@ describe('Search form and popup interaction', () => {
     const childContext = child.vm.$.provides[formItemInjectionKey]
     expect(childContext.eventHandlers.onChange).toBeUndefined()
   })
-  test('popup Input is addressed by public focus/blur; inner cancel clears once', async () => {
+  test('public focus and blur target the keyword input; cancel clears once', async () => {
     const onChange = vi.fn()
-    const wrapper = mount(Search, { attachTo: document.body, props: { defaultValue: 'before', editMode: 'popup', recentSearches: ['before'] },
+    const wrapper = mount(Search, { attachTo: document.body, props: { defaultValue: 'before', showAction: true, editMode: 'direct', recentSearches: ['before'] },
       global: { provide: formContext(onChange) } })
     await wrapper.get('input.c-input__inner').trigger('focus')
     await nextTick()
-    const inner = document.body.querySelector('.c-search__popup-content input')
+    const inner = wrapper.get('input').element
     expect(inner).toBeTruthy()
     wrapper.vm.focus()
     await nextTick()
@@ -89,7 +85,7 @@ describe('Search form and popup interaction', () => {
     expect(document.activeElement).not.toBe(inner)
     expect(wrapper.emitted('blur')).toHaveLength(before + 1)
     expect(wrapper.emitted('focus').some(([event]) => event.target === inner)).toBe(true)
-    document.body.querySelector('.c-search__cancel').click()
+    await wrapper.get('.c-search__action').trigger('click')
     await nextTick()
     expect(wrapper.emitted('cancel')).toHaveLength(1)
     expect(wrapper.emitted('update:modelValue')).toEqual([['']])

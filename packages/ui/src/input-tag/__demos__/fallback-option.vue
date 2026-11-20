@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("inputTagFallbackOptionInline");
 
 import { reactive, ref } from "vue";
 
@@ -21,7 +19,7 @@ function loadTitles() {
 <template>
   <c-space direction="column" style="width: 100%" :size="12">
     <c-input-tag v-model="urls" :fallback-option="fallbackOption" />
-    <c-button @click="loadTitles">{{ inlineCopy.loadMockTitles }}</c-button>
+    <c-button @click="loadTitles">模拟获取标题</c-button>
     <pre>{{ JSON.stringify(urls, null, 2) }}</pre>
   </c-space>
 </template>

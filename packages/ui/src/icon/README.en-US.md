@@ -32,7 +32,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Compare size and color independently of rotation, animation and click handling.
 
-<demo src="./__demos__/appearance-comparison.vue"></demo>
+<demo src="./__demos__/appearance-comparison.en-US.vue"></demo>
 
 ## Content and presentation
 
@@ -293,7 +293,7 @@ References: [Vue and Web Components](https://vuejs.org/guide/extras/web-componen
 
 - `size`: Controls the component size.
 
-<demo src="./__demos__/lifecycle.vue"></demo>
+<demo src="./__demos__/lifecycle.en-US.vue"></demo>
 
 ## API
 

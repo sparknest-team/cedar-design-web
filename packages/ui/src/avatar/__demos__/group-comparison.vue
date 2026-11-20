@@ -1,15 +1,10 @@
-<script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("avatarGroupComparison");
-</script>
-
 <template>
   <div class="demo-comparison">
     <section
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="group"
     >
-      <h4>{{ demoCopy.group }}</h4>
+      <h4>头像组</h4>
       <c-space direction="column" :size="24">
         <c-space direction="column" :size="8">
           <span class="label">默认叠层</span>
@@ -64,7 +59,7 @@ const demoCopy = useDemoLocale("avatarGroupComparison");
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="group-vertical"
     >
-      <h4>{{ demoCopy.groupVertical }}</h4>
+      <h4>纵向头像组</h4>
       <c-space align="flex-end" :size="32" wrap>
         <c-space direction="column" :size="8">
           <span class="label">offset = -12</span>

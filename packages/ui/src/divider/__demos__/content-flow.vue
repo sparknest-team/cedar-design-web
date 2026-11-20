@@ -1,39 +1,35 @@
-<script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("dividerContentFlowInline");
-</script>
 <template>
   <section class="divider-flow-demo">
-    <h4>{{ inlineCopy.minimumExplicitWidth }}</h4>
+    <h4>1px：最小显式线宽</h4>
     <div class="flow-sample">
       <c-divider
         data-min-line
         :thickness="1"
         :spacing="0"
-        :description="inlineCopy.contentStaysInNormalFlow"
+        description="内容仍正常占位"
       />
-      <p>{{ inlineCopy.followingContent }}</p>
+      <p>后续正文</p>
     </div>
-    <h4>{{ inlineCopy.multilineContent }}</h4>
+    <h4>4px：多行文字</h4>
     <div class="flow-sample">
       <c-divider
         data-multiline
         :thickness="4"
         :spacing="0"
-        :description="inlineCopy.aWrappingSectionTitleReserves"
+        description="分区标题支持换行，并为后续内容保留完整空间"
       />
-      <p>{{ inlineCopy.followingContent }}</p>
+      <p>后续正文</p>
     </div>
-    <h4>{{ inlineCopy.customContent }}</h4>
+    <h4>默认插槽</h4>
     <div class="flow-sample">
       <c-divider data-custom-content :spacing="0"
         ><span class="flow-content"
-          >{{ inlineCopy.firstLine }}<br />{{ inlineCopy.secondLine }}</span
+          >第一行<br />第二行</span
         ></c-divider
       >
-      <p>{{ inlineCopy.followingContent }}</p>
+      <p>后续正文</p>
     </div>
-    <p>{{ inlineCopy.hairlineTakesPriorityAndHalves }}</p>
+    <p>thickness ≥ 1；hairline 优先，使用主题线宽的一半。</p>
   </section>
 </template>
 <style scoped>

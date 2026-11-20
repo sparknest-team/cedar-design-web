@@ -59,7 +59,7 @@ permalink: /components/search/
 
 | 配置 | 作用 | 相关示例 |
 | ----------------- | ------------------------------------------------- | -------------- |
-| `edit-mode` | 搜索编辑方式：direct 为直接搜索，popup 为弹层搜索 | 历史展示与插槽 |
+| `edit-mode` | 关键词编辑模式，未指定时继承 FormItem/Form | 历史展示与插槽 |
 | `recent-searches` | 受控搜索历史 | 历史展示与插槽 |
 | `label` | 标签内容；外层 label 关联关键词输入 | 历史展示与插槽 |
 | `placeholder` | 占位符 | 历史展示与插槽 |
@@ -105,13 +105,13 @@ permalink: /components/search/
 
 `loading-mode="line"` 使用 FieldDecorator 的共享加载线；默认模式保留本组件已有的加载展示。加载状态本身不隐式设置 disabled 或 readonly。
 
-### 原生表单与弹层身份
+### 原生表单与搜索历史
 
 活动关键词输入独占配置的 id；外侧参照和关闭后缓存的输入使用不同内部 id，并退出辅助技术和 Tab 顺序。可见 label 关联对应输入，ariaLabel 优先于标签文案；字段选择器提供字段选择语义，关键词输入使用独立名称。
 
-原生 FormData 始终由外侧参照输入提供一份 name/value；弹层编辑器即时更新同一模型，不重复提交 name。需要弹层参与 HTML 必填等约束校验时，请给 form 设置 id，并用 inputAttrs.form 显式关联。关闭时编辑器释放表单校验归属，缓存输入不会拦截后续提交。
+关键词输入框通过 inputAttrs.name 参与原生表单提交。
 
-popup 中输入即时更新 v-model；cancel 结束历史界面，业务负责取消自己的请求。非空 recent-searches 才会打开历史界面，切换为阅读模式会释放历史状态。loading 由业务控制，编辑仍可用，重复搜索被阻止；普通 search/change 通知返回的 Promise 不控制等待。
+direct 模式在输入时更新 v-model，并可展示历史菜单；click 和 dblclick 模式确认后更新关键词。cancel 结束历史界面，业务负责取消自己的请求。非空 recent-searches 才会打开历史界面，切换为阅读模式会释放历史状态。loading 由业务控制，编辑仍可用，重复搜索被阻止；普通 search/change 通知返回的 Promise 不控制等待。
 
 <demo src="./__demos__/native-form.vue"></demo>
 
@@ -141,7 +141,7 @@ popup 中输入即时更新 v-model；cancel 结束历史界面，业务负责�
 | `select-style` | 字段选择器样式 | _StyleValue_ | `-` |
 | `recent-searches` | 受控搜索历史 | _string[]_ | `[]` |
 | `max-search-history-count` | 生成下一份历史时保留的最大数量 | _number_ | `5` |
-| `edit-mode` | 搜索编辑方式：direct 为直接搜索，popup 为弹层搜索 | `'direct' \| 'popup'` | `'direct'` |
+| `edit-mode` | 关键词编辑模式，未指定时继承 FormItem/Form | `'direct' \| 'click' \| 'dblclick'` | `'direct'` |
 | `search-button` | 是否显示公共搜索按钮 | _boolean_ | `false` |
 | `button-text` | 公共搜索按钮文字 | _string_ | `-` |
 | `button-props` | 公共搜索按钮属性 | _ButtonProps_ | `-` |
@@ -241,11 +241,11 @@ popup 中输入即时更新 v-model；cancel 结束历史界面，业务负责�
 
 历史不按输入过滤，也不内部持久化；`search` 返回的新历史统一 trim、去空、去重并截取最大数量。空关键词不添加记录，非有限/负数最大数量按 0 处理。清空不执行搜索；取消提议空字符串并发出 cancel/change，不提交搜索。
 
-输入编辑发出 `input → update:modelValue`；提交值变化时才发出 `change`。清空为 `clear → input → update:modelValue → change`，仅一次。只读、禁用、loading 会阻止搜索/取消/历史/字段操作；禁用和只读可继承 Form / FormItem / InputGroup。失活或卸载会取消未完成的异步搜索。
+直接编辑时发出 `input → update:modelValue`；提交值变化时才发出 `change`。清空为 `clear → input → update:modelValue → change`，仅一次。只读、禁用、loading 会阻止搜索/取消/历史/字段操作；禁用和只读可继承 Form / FormItem / InputGroup。失活或卸载会取消未完成的异步搜索。
 
 ### 平台差异
 
-两端默认 edit-mode=direct；Cedar 默认 shape=square，Maple 默认 shape=round。Cedar 保留外侧 InputGroup，Maple 使用移动搜索条布局和触控间距。Input 支持五种尺寸，外层条密度通过 Search 的 CSS 变量控制。
+两端独立使用时均默认直接编辑。Cedar 的关键词支持单击和双击编辑，Maple 支持全屏搜索。Cedar 默认 shape=square，Maple 默认 shape=round。Cedar 保留外侧 InputGroup，Maple 使用移动搜索条布局和触控间距。Input 支持五种尺寸，外层条密度通过 Search 的 CSS 变量控制。
 
 ### 公开类型
 

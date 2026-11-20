@@ -1,28 +1,24 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("themeProviderLocalThemeInline");
 
 import { ref } from "vue";
 const theme = ref<"light" | "dark">("dark");
 </script>
 <template>
   <div>
-    <c-button @click="theme = theme === 'dark' ? 'light' : 'dark'">{{
-      inlineCopy.toggleLocalTheme
-    }}</c-button>
+    <c-button @click="theme = theme === 'dark' ? 'light' : 'dark'">切换局部主题</c-button>
     <c-theme-provider :theme="theme" class="theme-region">
-      <p>{{ inlineCopy.outer }} {{ theme }}</p>
-      <c-button status="primary">{{ inlineCopy.themedButton }}</c-button>
+      <p>外层主题 {{ theme }}</p>
+      <c-button status="primary">主题按钮</c-button>
       <c-select
         :options="[{ label: 'Body popup inherits theme', value: 1 }]"
-        :placeholder="inlineCopy.openPopup"
+        placeholder="打开弹层"
       />
       <c-theme-provider theme="light" class="theme-region">
-        <p>{{ inlineCopy.nestedLight }}</p>
-        <c-button variant="outline">{{ inlineCopy.lightButton }}</c-button>
+        <p>嵌套亮色</p>
+        <c-button variant="outline">亮色按钮</c-button>
       </c-theme-provider>
     </c-theme-provider>
-    <p>{{ inlineCopy.outsideIsUnchanged }}</p>
+    <p>外部保持原主题</p>
   </div>
 </template>
 <style scoped>

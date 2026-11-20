@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("formSubmitInputsInline");
+const inlineCopy = {
+  enterAllowed: "请输入 allowed"
+};
 
 import {
   onBeforeUnmount,
@@ -34,7 +35,7 @@ function complete() {
   const [task, ...rest] = pending.value;
   if (!task) return;
   pending.value = rest;
-  task.resolve(task.value === "allowed" ? true : inlineCopy.value.enterAllowed);
+  task.resolve(task.value === "allowed" ? true : inlineCopy.enterAllowed);
 }
 function submitted(data: {
   values: Record<string, unknown>;
@@ -53,7 +54,7 @@ onDeactivated(cleanup);
 </script>
 <template>
   <section>
-    <p>{{ inlineCopy.editWhileWaitingThenResolve }}</p>
+    <p>提交后修改输入，再返回旧结果：提交次数仍为 0。重新提交并返回本次结果，才会通知。</p>
     <c-form :model="model" edit-mode="direct" @submit="submitted">
       <c-form-item
         field="name"
@@ -66,12 +67,12 @@ onDeactivated(cleanup);
         <c-input :id="id" v-model="model.name" edit-mode="direct" />
       </c-form-item>
       <c-space>
-        <c-button html-type="submit">{{ inlineCopy.submit }}</c-button>
+        <c-button html-type="submit">提交</c-button>
         <c-button
           html-type="button"
           :disabled="!pending.length"
           @click="complete"
-          >{{ inlineCopy.resolveOldest }}</c-button
+          >返回最早结果</c-button
         >
       </c-space>
     </c-form>

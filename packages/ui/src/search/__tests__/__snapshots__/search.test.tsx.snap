@@ -16,7 +16,7 @@ exports[`Search > render 1`] = `
     <!--teleport start-->
     <!--teleport end-->
     <!--v-if-->
+    <!--v-if-->
   </div>
-  <!--v-if-->
 </div>"
 `;

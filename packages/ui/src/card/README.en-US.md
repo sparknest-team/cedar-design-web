@@ -30,7 +30,7 @@ Source changes synchronously invalidate render generations. Close, row direction
 
 Choose a dimension to compare all its values side by side while keeping other settings and content identical. Change the other settings to inspect combinations; input specimens share one model.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ### Hover style
 
@@ -129,7 +129,7 @@ Compose Card, Tabs and vertical Space. Compact outlined cards group each panel; 
 <!-- demo-config-notes:end -->
 
 
-<demo src="./__demos__/scheduler-lifecycle.vue"></demo>
+<demo src="./__demos__/scheduler-lifecycle.en-US.vue"></demo>
 
 The same scenarios, parameters and interactions as Cedar. Only component prefixes differ; themes and site shells remain independent.
 

@@ -1,18 +1,17 @@
 <script setup lang="ts">
+import { IconSearch } from '@cedar-design/icons-vue/icon-search'
 import { ref } from "vue";
+const clickToEdit = ref(false)
 const keyword = ref("");
-const popup = ref(false);
 const history = ref(["Project A", "Device B"]);
 const lastAction = ref("No search yet");
 </script>
 <template>
   <div class="search-demo">
-    <c-checkbox v-model="popup"
-      >popup fullscreen search (uncheck for inline)</c-checkbox
-    >
+    <c-checkbox v-model="clickToEdit">Click to edit the keyword</c-checkbox>
     <c-search
       v-model="keyword"
-      :edit-mode="popup ? 'popup' : 'direct'"
+      :edit-mode="clickToEdit ? 'click' : 'direct'"
       :recent-searches="history"
       label="Resource"
       placeholder="Enter resource name"
@@ -34,7 +33,7 @@ const lastAction = ref("No search yet");
       placeholder="Custom button slots"
       @search="(result) => (lastAction = result.modelValue)"
     >
-      <template #button-icon><span aria-hidden="true">⌕</span></template>
+      <template #button-icon><IconSearch aria-hidden="true" /></template>
       <template #button-default>Find</template>
     </c-search>
     <div>Last action：{{ lastAction }}</div>

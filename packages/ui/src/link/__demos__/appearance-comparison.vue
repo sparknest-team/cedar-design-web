@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("linkAppearanceComparison");
 import { proxyRefs as demoProxyRefs } from "vue";
 
 const scene1 = demoProxyRefs(
@@ -17,7 +15,7 @@ const scene1 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="size"
     >
-      <h4>{{ demoCopy.size }}</h4>
+      <h4>五种尺寸</h4>
       <c-space direction="column" size="md">
         <c-space
           v-for="size in scene1.sizes"
@@ -37,7 +35,7 @@ const scene1 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="link-status"
     >
-      <h4>{{ demoCopy.linkStatus }}</h4>
+      <h4>链接状态</h4>
       <c-space wrap size="sm">
         <c-link status="default">默认链接</c-link>
         <c-link status="primary">主要链接</c-link>

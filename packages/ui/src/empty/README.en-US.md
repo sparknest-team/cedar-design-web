@@ -52,7 +52,7 @@ Preview configuration: `:image-size="size"`, `:description="image-size: ${size}"
 
 Compare custom artwork and extra actions to distinguish content replacement from supplemental controls.
 
-<demo src="./__demos__/content-comparison.vue"></demo>
+<demo src="./__demos__/content-comparison.en-US.vue"></demo>
 
 ### Show
 

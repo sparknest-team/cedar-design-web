@@ -1,15 +1,10 @@
-<script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("iconAppearanceComparison");
-</script>
-
 <template>
   <div class="demo-comparison">
     <section
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="size"
     >
-      <h4>{{ demoCopy.size }}</h4>
+      <h4>图标尺寸</h4>
       <c-space wrap align="center" :size="24">
         <c-icon size="20"><c-icon-check-circle /></c-icon>
         <c-icon size="28"><c-icon-check-circle /></c-icon>
@@ -21,7 +16,7 @@ const demoCopy = useDemoLocale("iconAppearanceComparison");
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="color"
     >
-      <h4>{{ demoCopy.color }}</h4>
+      <h4>图标颜色</h4>
       <c-space wrap :size="24">
         <c-icon size="28" color="rgb(var(--c-primary-6))"
           ><c-icon-check-circle

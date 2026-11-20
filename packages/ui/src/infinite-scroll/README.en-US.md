@@ -69,7 +69,7 @@ Start with the basic example, then compare related settings before moving to con
 
 - `status`: Selects the semantic state.
 
-<demo src="./__demos__/scheduler-lifecycle.vue"></demo>
+<demo src="./__demos__/scheduler-lifecycle.en-US.vue"></demo>
 
 When `target` is a selector, its element must exist when binding occurs. `check()` uses the current binding and does not resolve the selector again; pass the element or change `target` to rebind. Accept the emitted `loading` via `v-model:status`, then set `idle`, `error`, or `finished` when the request settles; assigning the original `idle` alone does not release the request lock. A negative numeric offset requires scrolling past the bottom. String offsets are resolved as CSS widths: negative lengths fall back to zero, and percentages use the measurement element’s CSS containing-block width.
 
