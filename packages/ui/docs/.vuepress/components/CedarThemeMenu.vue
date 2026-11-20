@@ -32,7 +32,7 @@ onBeforeUnmount(() => { observer?.disconnect(); window.removeEventListener('ceda
   <Teleport v-if="navbarTarget" :to="navbarTarget">
     <div class="cedar-docs-tools">
       <DirectionToggle />
-      <a href="https://github.com/loca-spirit/cedar-design-web" target="_blank" rel="noopener noreferrer" :aria-label="english ? 'Source on GitHub' : 'GitHub 源码'" :title="english ? 'Source on GitHub' : 'GitHub 源码'" class="cedar-docs-source">
+      <a href="https://github.com/sparknest-team/cedar-design-web" target="_blank" rel="noopener noreferrer" :aria-label="english ? 'Source on GitHub' : 'GitHub 源码'" :title="english ? 'Source on GitHub' : 'GitHub 源码'" class="cedar-docs-source">
         <DocsSourceIcon />
       </a>
       <DocsSelect icon="theme" :label="english ? 'Theme' : '主题'" :value="currentTheme" :options="themeOptions" @change="selectTheme" />

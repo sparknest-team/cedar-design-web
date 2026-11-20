@@ -46,14 +46,14 @@ jobs:
             await resolve({ github, context, core });
       - uses: actions/checkout@v4
         with:
-          repository: loca-spirit/design-ui
+          repository: sparknest-team/design-ui
           path: design-ui
           ref: ${{ fromJSON(steps.linked.outputs.refs)['design-ui'] }}
           token: ${{ secrets.DESIGN_SYSTEM_CI_TOKEN || github.token }}
           persist-credentials: false
       - uses: actions/checkout@v4
         with:
-          repository: loca-spirit/maple-design-mobile
+          repository: sparknest-team/maple-design-mobile
           path: maple-design-mobile
           ref: ${{ fromJSON(steps.linked.outputs.refs)['maple-design-mobile'] }}
           token: ${{ secrets.DESIGN_SYSTEM_CI_TOKEN || github.token }}
