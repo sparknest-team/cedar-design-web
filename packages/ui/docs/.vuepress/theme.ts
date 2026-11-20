@@ -50,6 +50,7 @@ export default hopeTheme(
     },
 
     plugins: {
+      activeHeaderLinks: false,
       redirect: { switchLocale: false },
       photoSwipe: false,
       components: {

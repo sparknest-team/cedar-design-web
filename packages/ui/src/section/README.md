@@ -10,11 +10,13 @@ permalink: /components/section/
 
 ### 普通分区
 
-默认使用 plain，可直接放入已有容器。
+设置 `variant="plain"` 可隐藏标题分隔线。
 
 <demo src="./__demos__/plain.vue"></demo>
 
 ### 带线分区
+
+`heading-line` 是默认外观。
 
 heading-line 在标题后绘制装饰线，操作放入 extra 插槽。
 
@@ -28,7 +30,15 @@ heading-line 在标题后绘制装饰线，操作放入 extra 插槽。
 
 ### 分区尺寸
 
-两个标题都是四级标题。上方紧凑分区的标题为 14px，下方默认分区的标题为 16px。
+切换尺寸和标题层级即可实时预览。表中 h1 到 h6 各列是默认标题字号，虚线框标出内容区域。
+
+| 尺寸 | h1 | h2 | h3 | h4 | h5 | h6 | 卡片内边距 | 标题与内容间距 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `xs` | 24px | 20px | 18px | 16px | 14px | 12px | 8px | 8px |
+| `sm` | 24px | 20px | 18px | 16px | 14px | 12px | 12px | 12px |
+| `md` | 26px | 22px | 20px | 18px | 16px | 14px | 16px | 20px |
+| `lg` | 30px | 26px | 24px | 22px | 20px | 18px | 20px | 24px |
+| `xl` | 34px | 30px | 28px | 26px | 24px | 22px | 24px | 28px |
 
 <demo src="./__demos__/sizes.vue"></demo>
 
@@ -53,8 +63,8 @@ heading-line 在标题后绘制装饰线，操作放入 extra 插槽。
 | id | 分区锚点 | 自动生成 |
 | title | 标题文本 | 空 |
 | description | 标题下方的说明 | 空 |
-| size | 视觉尺寸（sm / md），独立于标题层级 | md |
-| variant | 外观，可选 plain、heading-line、tonal、outline | 表单内 heading-line，其他场景 plain |
+| size | 视觉尺寸（xs / sm / md / lg / xl） | md |
+| variant | 外观，可选 plain、heading-line、tonal、outline | heading-line |
 | status | 状态决定色条、tonal 浅色背景和 outline 描边的颜色（default / info / success / warning / danger） | — |
 | heading-level | 标题层级，取值 1 至 6 | 表单内 3，其他场景 2 |
 | show-marker | 显示色条 | 表单内开启 |
@@ -80,6 +90,7 @@ heading-line 在标题后绘制装饰线，操作放入 extra 插槽。
 | `--c-section-card-background` | `var(--c-sys-color-surface-default)` | `background` |
 | `--c-section-card-padding` | `16px` | `padding` |
 | `--c-section-card-radius` | `6px` | `border-radius` |
+| `--c-section-content-size` | `14px` | `font-size` |
 | `--c-section-description-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-section-description-gap` | `4px` | `margin-block-start` |
 | `--c-section-description-line-height` | `20px` | `line-height` |
@@ -92,6 +103,22 @@ heading-line 在标题后绘制装饰线，操作放入 extra 插槽。
 | `--c-section-marker-height` | `16px` | `height` |
 | `--c-section-marker-radius` | `2px` | `border-radius` |
 | `--c-section-marker-width` | `3px` | `width`, `padding-inline-start` |
+| `--c-section-heading-size-step` | `1px` | 标题字号与行高的层级步长 |
+| `--c-section-size-lg-card-padding` | `20px` | `padding` |
+| `--c-section-size-lg-header-gap` | `24px` | `margin-block-end` |
+| `--c-section-size-lg-marker-height` | `20px` | `height` |
+| `--c-section-size-lg-title-line-height` | `28px` | `line-height` |
+| `--c-section-size-lg-title-size` | `20px` | `font-size` |
+| `--c-section-size-xs-card-padding` | `8px` | `padding` |
+| `--c-section-size-xs-header-gap` | `8px` | `margin-block-end` |
+| `--c-section-size-xs-marker-height` | `12px` | `height` |
+| `--c-section-size-xs-title-line-height` | `18px` | `line-height` |
+| `--c-section-size-xs-title-size` | `14px` | `font-size` |
+| `--c-section-size-xl-card-padding` | `24px` | `padding` |
+| `--c-section-size-xl-header-gap` | `28px` | `margin-block-end` |
+| `--c-section-size-xl-marker-height` | `24px` | `height` |
+| `--c-section-size-xl-title-line-height` | `32px` | `line-height` |
+| `--c-section-size-xl-title-size` | `24px` | `font-size` |
 | `--c-section-size-sm-card-padding` | `12px` | `padding` |
 | `--c-section-size-sm-header-gap` | `12px` | `margin-block-end` |
 | `--c-section-size-sm-marker-height` | `14px` | `height` |

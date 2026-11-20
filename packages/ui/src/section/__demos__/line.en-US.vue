@@ -1,5 +1,5 @@
 <template>
-  <c-section title="Release history" variant="heading-line">
+  <c-section title="Release history">
     <template #extra>
       <c-button :aria-expanded="expanded" @click="expanded = !expanded">
         {{ expanded ? 'Show latest' : 'Show all' }}

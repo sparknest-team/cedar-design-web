@@ -1,5 +1,5 @@
 <template>
-  <c-section title="发布记录" variant="heading-line">
+  <c-section title="发布记录">
     <template #extra>
       <c-button :aria-expanded="expanded" @click="expanded = !expanded">
         {{ expanded ? '只看最新' : '查看全部' }}

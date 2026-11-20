@@ -1,5 +1,5 @@
 import { connectComponentLanguage } from './i18n/client'
-import { defineClientConfig } from '@vuepress/client'
+import { defineClientConfig, useRouter } from '@vuepress/client'
 import './configs/styles/index.scss'
 import 'prismjs/themes/prism.css'
 import { vLoading } from '../../src/loading'
@@ -13,6 +13,7 @@ import '../../src/loading/style'
 import '../../src/tooltip/style'
 import { defineAsyncComponent, defineComponent, h, onBeforeUnmount, onMounted } from 'vue'
 import CedarThemeMenu from './components/CedarThemeMenu.vue'
+import { installScrollHash } from './scroll-hash'
 import ShowcaseOverview from './components/ShowcaseOverview.vue'
 
 const themedLayout = (Layout: any) => defineComponent({
@@ -31,12 +32,18 @@ export default defineClientConfig({
     app.directive('tooltip', vTooltip)
   },
   setup() {
+    const router = useRouter()
+    let stopScrollHash: (() => void) | undefined
     let stopThemeSync: (() => void) | undefined
     onMounted(() => {
       // Polyfill global
       window.global = window
       stopThemeSync = themeConfig()
+      stopScrollHash = installScrollHash(router)
     })
-    onBeforeUnmount(() => stopThemeSync?.())
+    onBeforeUnmount(() => {
+      stopScrollHash?.()
+      stopThemeSync?.()
+    })
   },
 })

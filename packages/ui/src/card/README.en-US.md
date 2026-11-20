@@ -32,6 +32,20 @@ Choose a dimension to compare all its values side by side while keeping other se
 
 <demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
+### Sizes and heading levels
+
+Choose the Card size, title level, or footer alignment to preview a Card containing a Section. Use the Section variant control to change the nested Section appearance. The Card description stays at 15px and the Section description stays at 13px. Changes to Card size affect the spacing around its description.
+
+| Size | h1 | h2 | h3 | h4 | h5 | h6 | Body horizontal padding | Description top margin |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `xs` | 25px | 21px | 19px | 17px | 15px | 13px | 8px | 6px |
+| `sm` | 26px | 22px | 20px | 18px | 16px | 14px | 12px | 8px |
+| `md` | 30px | 26px | 24px | 22px | 20px | 18px | 16px | 20px |
+| `lg` | 34px | 30px | 28px | 26px | 24px | 22px | 20px | 20px |
+| `xl` | 38px | 34px | 32px | 30px | 28px | 26px | 24px | 24px |
+
+<demo src="./__demos__/sizes-and-headings.en-US.vue"></demo>
+
 ### Hover style
 
 <demo src="./__demos__/hoverable.vue"></demo>
@@ -60,7 +74,7 @@ Choose a dimension to compare all its values side by side while keeping other se
 
 Group headings use TypographyTitle.
 
-Compose Card, Tabs and vertical Space. Compact outlined cards group each panel; wide tables scroll within their own container on small screens. The industry panel uses section headings without extra cards.
+Card contains the report, Tabs switch analysis views, and Section groups the content in each view. The industry view uses a deeper heading level for upstream and downstream topics. Wide tables scroll within their own container on small screens.
 
 <demo src="./__demos__/nested-tabs.vue"></demo>
 
@@ -164,15 +178,17 @@ The default close button uses the current locale's close label; override it with
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | variant | Appearance | `default / outline / tonal` | `outline` |
-| size | Density; omitted value follows platform rules below | `sm / md` | `undefined` |
+| size | Density; omitted value follows platform rules below | `xs / sm / md / lg / xl` | `undefined` |
+| heading-level | Semantic heading level for the title; also controls its font size | `1 / 2 / 3 / 4 / 5 / 6` | `undefined` |
+| footer-align | Footer alignment; start and end follow the reading direction | `start / center / end` | `end` |
 | direction | Order of cover and body, default column; supports row, column and row-reverse. Does not position the card itself | `row / column / row-reverse` | `column` |
 | hoverable | Hover styling | `boolean` | `false` |
 | title-style | Title row styles | `CSSProperties` | `undefined` |
 | title | Title | `string` | `undefined` |
 | subtitle | Subtitle | `string` | `undefined` |
 | description | Description | `string` | `undefined` |
-| top-divider | Top divider | `boolean` | `false` |
-| bottom-divider | Bottom divider | `boolean` | `false` |
+| top-divider | Top divider with the same horizontal inset as the content | `boolean` | `false` |
+| bottom-divider | Bottom divider with the same horizontal inset as the content | `boolean` | `false` |
 | image-src | Cover image URL; cover slot takes precedence | `string` | `undefined` |
 | image-fit | Cover image fit | `fill / contain / cover / none / scale-down` | `cover` |
 | image-height | Image height; numbers use px | `string / number` | `undefined` |
@@ -203,7 +219,7 @@ The default close button uses the current locale's close label; override it with
 | title | Title | `{ slotClass: string }` |
 | title-action | Title action | — |
 | subtitle | Subtitle | `{ slotClass: string }` |
-| description | Description | `{ slotClass: string }` |
+| description | Custom description content uses the Card description container and spacing | `{ slotClass: string }` |
 | footer | Footer actions | — |
 | floating-content | Expanded content; column layout only | — |
 | close-button | Custom close button; update floating yourself | — |
@@ -226,7 +242,6 @@ The component exports the following types
 import type { CardProps } from '@cedar-design/ui-vue'
 ```
 
-Only the documented size presets are supported, rather than every ComponentSize value.
 
 ## CSS Variables
 
@@ -250,23 +265,23 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-card-close-button-size` | `56px` | `height`, `width` |
 | `--c-card-close-button-text-color` | `var(--c-sys-color-content-on-dark)` | `color` |
 | `--c-card-content-color` | `var(--c-sys-color-content-tertiary)` | `color` |
-| `--c-card-content-font-size` | `14px` | `font-size` |
+| `--c-card-content-font-size` | `15px` | `font-size` |
 | `--c-card-content-margin` | `16px 0 0 0` | `margin` |
 | `--c-card-content-padding` | `0 16px` | `padding` |
 | `--c-card-content-row-margin` | `16px 0 0 0` | `margin` |
 | `--c-card-description-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-card-description-font-size` | `14px` | `font-size` |
+| `--c-card-description-font-size` | `15px` | `font-size` |
 | `--c-card-description-margin` | `20px 0 0 0` | `margin` |
-| `--c-card-description-padding` | `0 13px` | `padding` |
+| `--c-card-description-padding` | `0 16px` | `padding` |
 | `--c-card-filled-background` | `var(--c-sys-color-surface-muted)` | `background-color` |
 | `--c-card-floating-buttons-bottom` | `16px` | `bottom` |
 | `--c-card-floating-buttons-color` | `var(--c-sys-color-content-primary)` | `color` |
 | `--c-card-floating-buttons-right` | `16px` | `inset-inline-end` |
 | `--c-card-footer-bottom` | `9px` | `bottom` |
 | `--c-card-footer-margin` | `30px 0 0 0` | `margin` |
-| `--c-card-footer-padding` | `0 12px` | `padding` |
+| `--c-card-footer-padding` | `0 16px` | `padding` |
 | `--c-card-footer-right` | `13px` | `inset-inline-end` |
-| `--c-card-hover-shadow` | `0 4px 12px rgba(0, 0, 0, 0.12)` | `box-shadow` |
+| `--c-card-hover-shadow` | Elevation 1 | `box-shadow` |
 | `--c-card-image-height` | `200px` | `height` |
 | `--c-card-image-width` | `100%` | `width` |
 | `--c-card-line-height` | `22px` | `line-height` |
@@ -275,18 +290,28 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-card-row-height` | `140px` | `min-height` |
 | `--c-card-row-image-width` | `140px` | `width` |
 | `--c-card-row-line-height` | `1.5` | `line-height` |
+| `--c-card-heading-size-step` | `1px` | `font-size` |
+| `--c-card-size-xs-title-font-size` | `15px` | `font-size` |
+| `--c-card-size-xs-section-margin` | `6px 0 0` | `margin` |
+| `--c-card-size-xs-section-padding` | `0 8px` | `padding` |
+| `--c-card-size-lg-title-font-size` | `24px` | `font-size` |
+| `--c-card-size-lg-section-margin` | `20px 0 0` | `margin` |
+| `--c-card-size-lg-section-padding` | `0 20px` | `padding` |
+| `--c-card-size-xl-title-font-size` | `28px` | `font-size` |
+| `--c-card-size-xl-section-margin` | `24px 0 0` | `margin` |
+| `--c-card-size-xl-section-padding` | `0 24px` | `padding` |
 | `--c-card-size-sm-section-margin` | `8px 0 0` | `margin` |
 | `--c-card-size-sm-section-padding` | `0 12px` | `padding` |
 | `--c-card-size-sm-title-font-size` | `16px` | `font-size` |
 | `--c-card-subtitle-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-card-subtitle-font-size` | `14px` | `font-size` |
+| `--c-card-subtitle-font-size` | `15px` | `font-size` |
 | `--c-card-subtitle-margin` | `10px 0 0 0` | `margin` |
-| `--c-card-subtitle-padding` | `0 12px` | `padding` |
+| `--c-card-subtitle-padding` | `0 16px` | `padding` |
 | `--c-card-subtitle-row-margin` | `-8px 0 0 0` | `margin` |
 | `--c-card-title-color` | `var(--c-sys-color-content-primary)` | `color` |
 | `--c-card-title-font-size` | `20px` | `font-size` |
 | `--c-card-title-margin` | `15px 0 0 0` | `margin` |
-| `--c-card-title-padding` | `0 12px` | `padding` |
+| `--c-card-title-padding` | `0 16px` | `padding` |
 | `--c-card-title-row-margin` | `12px 0` | `margin` |
 
 </div>
@@ -305,4 +330,4 @@ Explicit inline styles and props that write the same CSS property take precedenc
 
 ### Sizing and motion
 
-Use `--c-card-content-row-margin` for horizontal content spacing. Card supports only sm / md sizes. `--c-card-animation-duration` defaults to `var(--c-sys-motion-duration-slow)` and `--c-card-animation-easing` to `var(--c-sys-motion-easing-standard)`. Reduced motion disables Card transitions.
+Use `--c-card-content-row-margin` for horizontal content spacing. `--c-card-animation-duration` defaults to `var(--c-sys-motion-duration-slow)` and `--c-card-animation-easing` to `var(--c-sys-motion-easing-standard)`. Reduced motion disables Card transitions.

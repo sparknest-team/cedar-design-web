@@ -1,3 +1,8 @@
+@c-elevation-1-shadow:
+  0 2px 1px -1px var(~"--c-shadow-key-umbra-opacity"),
+  0 1px 1px 0 var(~"--c-shadow-key-penumbra-opacity"),
+  0 1px 3px 0 var(~"--c-shadow-key-ambient-opacity");
+
 .c-elevation {
   &--0 {
     box-shadow:
@@ -7,10 +12,7 @@
   }
 
   &--1 {
-    box-shadow:
-      0 2px 1px -1px var(~"--c-shadow-key-umbra-opacity"),
-      0 1px 1px 0 var(~"--c-shadow-key-penumbra-opacity"),
-      0 1px 3px 0 var(~"--c-shadow-key-ambient-opacity");
+    box-shadow: @c-elevation-1-shadow;
   }
 
   &--2 {

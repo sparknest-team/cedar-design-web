@@ -4,6 +4,7 @@ import { vLoading } from '../../loading'
 import { describe, expect, test, vi } from 'vitest'
 import { cardProps } from '../props'
 import Card from '../Card.vue'
+import Section from '../../section/Section.vue'
 describe('Card shared contract', () => {
   test('independent instances and supported presets', async () => {
     const a = mount(Card, { props: { title: 'first', size: 'sm', variant: 'outline', direction: 'row' } })
@@ -15,6 +16,53 @@ describe('Card shared contract', () => {
     expect(b.text()).toContain('second')
     expect(b.text()).not.toContain('changed')
     a.unmount(); b.unmount()
+  })
+  test('updates headings and density while preserving the nested section and description', async () => {
+    const wrapper = mount(Card, {
+      props: { title: 'Project', description: 'Card description' },
+      slots: {
+        default: () => h(Section, { title: 'Permissions', description: 'Section description', headingLevel: 3 }),
+      },
+    })
+    expect(wrapper.get('span.c-card__title-text').text()).toBe('Project')
+    const section = wrapper.get('section').element
+    const description = wrapper.get('.c-card__description').element
+    expect(description.compareDocumentPosition(section) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+
+    for (const size of ['xs', 'sm', 'md', 'lg', 'xl']) {
+      await wrapper.setProps({ size })
+      expect(wrapper.classes()).toContain(`c-card--size-${size}`)
+    }
+    for (const headingLevel of [1, 2, 3, 4, 5, 6]) {
+      await wrapper.setProps({ headingLevel })
+      expect(wrapper.get(`h${headingLevel}.c-card__title-text`).text()).toBe('Project')
+      expect(wrapper.get('section').element).toBe(section)
+      expect(wrapper.get('.c-card__description').element).toBe(description)
+    }
+    expect(wrapper.get('section h3').text()).toBe('Permissions')
+    expect(wrapper.get('section').text()).toContain('Section description')
+    wrapper.unmount()
+  })
+  test('sets footer alignment in column and row layouts', async () => {
+    const wrapper = mount(Card, { slots: { footer: 'Footer' } })
+    const footer = wrapper.get('.c-card__footer')
+    expect(footer.classes()).toEqual(['c-card__footer'])
+    await wrapper.setProps({ footerAlign: 'start' })
+    expect(footer.classes()).toContain('c-card__footer--start')
+    await wrapper.setProps({ direction: 'row', footerAlign: 'center' })
+    expect(footer.classes()).toContain('c-card__footer--center')
+    await wrapper.setProps({ footerAlign: 'end' })
+    expect(footer.classes()).toEqual(['c-card__footer'])
+    wrapper.unmount()
+  })
+  test('wraps a custom description without requiring a slot class', () => {
+    const wrapper = mount(Card, {
+      slots: {
+        description: () => h('span', { class: 'long-title' }, 'Custom description'),
+      },
+    })
+    expect(wrapper.get('.c-card__description > .long-title').text()).toBe('Custom description')
+    wrapper.unmount()
   })
   test('cover wins over src; body, footer and click stay available', async () => {
     const wrapper = mount(Card, { props: { imageSrc: '/unused.png' }, slots: { cover: 'cover', footer: 'footer', default: 'body' } })

@@ -7,7 +7,7 @@ const Card: import('../_utils/global-config').ComponentWithInstall<typeof _Card>
 
 export type CardInstance = InstanceType<typeof _Card>
 export { cardProps }
-export type { CardDirection, CardFit, CardProps, CardSize, CardVariant } from './props'
+export type { CardDirection, CardFit, CardFooterAlign, CardHeadingLevel, CardProps, CardSize, CardVariant } from './props'
 export { Card }
 export const _CardComponent: typeof Card = Card
 

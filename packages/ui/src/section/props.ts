@@ -1,9 +1,9 @@
 import type { PropType, VNodeChild } from 'vue'
 
-import type { ComponentSize, SemanticStatus } from '../_utils/constant'
+import { componentSizes, type ComponentSize, type SemanticStatus } from '../_utils/constant'
 import type { CompatiblePublicProps } from '../_utils/public-props'
 
-export type SectionSize = Extract<ComponentSize, 'sm' | 'md'>
+export type SectionSize = ComponentSize
 export type SectionMarkerPlacement = 'title' | 'section'
 export type SectionStatus = Extract<SemanticStatus, 'default' | 'info' | 'success' | 'warning' | 'danger'>
 export type SectionVariant = 'plain' | 'heading-line' | 'tonal' | 'outline'
@@ -20,10 +20,10 @@ export const sectionProps = {
   size: {
     type: String as PropType<SectionSize>,
     default: 'md',
-    validator: (size: SectionSize) => size === 'sm' || size === 'md',
+    validator: (size: SectionSize) => componentSizes.includes(size),
   },
-  /** 分区外观，表单中默认为 heading-line，其他场景默认为 plain。 */
-  variant: String as PropType<SectionVariant>,
+  /** 分区外观，默认为 heading-line。 */
+  variant: { type: String as PropType<SectionVariant>, default: 'heading-line' },
   /** 分区的语义状态，用于色条、浅色底和描边。 */
   status: String as PropType<SectionStatus>,
   /** 显示色条，默认随表单上下文开启。 */

@@ -643,7 +643,7 @@ permalink: /guide/design-token-reference/
 | `--c-card-footer-margin` | 公开 | `30px 0 0 0` | 本组件 CSS<br>`margin` |
 | `--c-card-footer-padding` | 公开 | `0 12px` | 本组件 CSS<br>`padding` |
 | `--c-card-footer-right` | 公开 | `13px` | 本组件 CSS<br>`inset-inline-end` |
-| `--c-card-hover-shadow` | 公开 | `0 4px 12px rgba(0, 0, 0, 0.12)` | 本组件 CSS<br>`box-shadow` |
+| `--c-card-hover-shadow` | 公开 | 海拔 1 | 本组件 CSS<br>`box-shadow` |
 | `--c-card-image-height` | 公开 | `200px` | 本组件 CSS<br>`height` |
 | `--c-card-image-width` | 公开 | `100%` | 本组件 CSS<br>`width` |
 | `--c-card-line-height` | 公开 | `22px` | 本组件 CSS<br>`line-height` |

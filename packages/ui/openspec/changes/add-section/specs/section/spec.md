@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Content grouping
-Section SHALL render a semantic section with optional title, description, actions and default content. The heading level SHALL default to 2 outside a Form.
+Section SHALL render a semantic section with optional title, description, actions and default content. The heading level SHALL default to 2 outside a Form. The default variant SHALL be heading-line in all contexts.
 
 #### Scenario: Change appearance
 - **WHEN** a plain section switches to heading-line
@@ -29,4 +29,6 @@ Section SHALL accept an optional status of default, info, success, warning or da
 - **THEN** the surface updates and the section content stays mounted
 
 ### Requirement: Visual size
-Section SHALL support sm and md (default). Size controls title typography, title marker height, header spacing and padded surfaces. Changing size SHALL preserve the semantic heading level.
+Section SHALL support xs, sm, md (default), lg, and xl. Size controls title typography, title marker height, header spacing and padded surfaces. Changing size SHALL preserve the semantic heading level.
+
+Within each size, typography SHALL decrease from h1 through h6. Changing the heading level SHALL update the semantic heading tag and its font size and line height.

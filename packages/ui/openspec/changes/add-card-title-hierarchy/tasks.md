@@ -1,0 +1,3 @@
+- [x] Extend Card size resolution, heading rendering, and theme variables on both platforms.
+- [x] Add bilingual interactive examples with a nested Section and descriptions.
+- [x] Verify the component contracts for size changes and heading changes.

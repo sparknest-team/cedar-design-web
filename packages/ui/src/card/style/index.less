@@ -7,7 +7,23 @@
   &--hoverable:hover { box-shadow: var(--c-card-hover-shadow); }
   &--variant-outline &__floater { background: transparent; }
   &__title { display: flex; align-items: center; justify-content: space-between; }
-  &__divider { margin: var(--c-card-content-margin); }
+  &__divider {
+    margin: var(--c-card-content-margin);
+    padding: var(--c-card-content-padding);
+  }
+  &--size-xs {
+    --c-card-title-font-size: var(--c-card-size-xs-title-font-size);
+    --c-card-title-margin: var(--c-card-size-xs-section-margin);
+    --c-card-subtitle-margin: var(--c-card-size-xs-section-margin);
+    --c-card-description-margin: var(--c-card-size-xs-section-margin);
+    --c-card-content-margin: var(--c-card-size-xs-section-margin);
+    --c-card-footer-margin: var(--c-card-size-xs-section-margin);
+    --c-card-content-padding: var(--c-card-size-xs-section-padding);
+    --c-card-title-padding: var(--c-card-size-xs-section-padding);
+    --c-card-subtitle-padding: var(--c-card-size-xs-section-padding);
+    --c-card-description-padding: var(--c-card-size-xs-section-padding);
+    --c-card-footer-padding: var(--c-card-size-xs-section-padding);
+  }
   &--size-sm {
     --c-card-title-font-size: var(--c-card-size-sm-title-font-size);
     --c-card-title-margin: var(--c-card-size-sm-section-margin);
@@ -16,6 +32,36 @@
     --c-card-content-margin: var(--c-card-size-sm-section-margin);
     --c-card-footer-margin: var(--c-card-size-sm-section-margin);
     --c-card-content-padding: var(--c-card-size-sm-section-padding);
+    --c-card-title-padding: var(--c-card-size-sm-section-padding);
+    --c-card-subtitle-padding: var(--c-card-size-sm-section-padding);
+    --c-card-description-padding: var(--c-card-size-sm-section-padding);
+    --c-card-footer-padding: var(--c-card-size-sm-section-padding);
+  }
+  &--size-lg {
+    --c-card-title-font-size: var(--c-card-size-lg-title-font-size);
+    --c-card-title-margin: var(--c-card-size-lg-section-margin);
+    --c-card-subtitle-margin: var(--c-card-size-lg-section-margin);
+    --c-card-description-margin: var(--c-card-size-lg-section-margin);
+    --c-card-content-margin: var(--c-card-size-lg-section-margin);
+    --c-card-footer-margin: var(--c-card-size-lg-section-margin);
+    --c-card-content-padding: var(--c-card-size-lg-section-padding);
+    --c-card-title-padding: var(--c-card-size-lg-section-padding);
+    --c-card-subtitle-padding: var(--c-card-size-lg-section-padding);
+    --c-card-description-padding: var(--c-card-size-lg-section-padding);
+    --c-card-footer-padding: var(--c-card-size-lg-section-padding);
+  }
+  &--size-xl {
+    --c-card-title-font-size: var(--c-card-size-xl-title-font-size);
+    --c-card-title-margin: var(--c-card-size-xl-section-margin);
+    --c-card-subtitle-margin: var(--c-card-size-xl-section-margin);
+    --c-card-description-margin: var(--c-card-size-xl-section-margin);
+    --c-card-content-margin: var(--c-card-size-xl-section-margin);
+    --c-card-footer-margin: var(--c-card-size-xl-section-margin);
+    --c-card-content-padding: var(--c-card-size-xl-section-padding);
+    --c-card-title-padding: var(--c-card-size-xl-section-padding);
+    --c-card-subtitle-padding: var(--c-card-size-xl-section-padding);
+    --c-card-description-padding: var(--c-card-size-xl-section-padding);
+    --c-card-footer-padding: var(--c-card-size-xl-section-padding);
   }
   border-radius: var(--c-card-border-radius);
   overflow: hidden;
@@ -89,6 +135,15 @@
       font-size var(--c-card-animation-duration);
   }
 
+  @heading-offsets: 10, 6, 4, 2, 0, -2;
+  each(@heading-offsets, {
+    &__title > h@{index}&__title-text {
+      margin: 0;
+      font-size: calc(1em + @value * var(--c-card-heading-size-step));
+      line-height: 1.4;
+    }
+  });
+
   &--direction-row &__title {
     max-width: 100%;
     overflow: hidden;
@@ -118,7 +173,7 @@
     overflow: hidden;
   }
 
-  &__description {
+  &__container > &__description {
     font-size: var(--c-card-description-font-size);
     color: var(--c-card-description-color);
     margin: var(--c-card-description-margin);
@@ -128,6 +183,10 @@
       padding var(--c-card-animation-duration),
       margin var(--c-card-animation-duration),
       font-size var(--c-card-animation-duration);
+
+    > .c-card__description {
+      margin: 0;
+    }
   }
 
   &__footer {
@@ -143,6 +202,23 @@
     padding: 0;
     inset-inline-end: var(--c-card-footer-right);
     bottom: var(--c-card-footer-bottom);
+  }
+
+  &__footer--start {
+    justify-content: flex-start;
+  }
+
+  &__footer--center {
+    justify-content: center;
+  }
+
+  &--direction-row &__footer--start {
+    inset-inline-start: var(--c-card-footer-right);
+    inset-inline-end: auto;
+  }
+
+  &--direction-row &__footer--center {
+    inset-inline-start: var(--c-card-footer-right);
   }
 
   &__floating-content {
