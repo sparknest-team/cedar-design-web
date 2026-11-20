@@ -8,11 +8,11 @@
     "cedar"
   ],
   "bugs": {
-    "url": "https://github.com/loca-spirit/cedar-design-web/issues"
+    "url": "https://github.com/sparknest-team/cedar-design-web/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/loca-spirit/cedar-design-web"
+    "url": "https://github.com/sparknest-team/cedar-design-web"
   },
   "license": "MIT",
   "author": "shuai.meng",

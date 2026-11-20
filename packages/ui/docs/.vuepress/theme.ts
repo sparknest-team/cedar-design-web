@@ -19,7 +19,7 @@ export default hopeTheme(
 
     logo: '/logo.svg',
 
-    repo: 'https://github.com/loca-spirit/cedar-design-web',
+    repo: 'https://github.com/sparknest-team/cedar-design-web',
 
     navbarLayout: {
       start: ['Brand'],

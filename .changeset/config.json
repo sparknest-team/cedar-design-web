@@ -3,7 +3,7 @@
   "changelog": [
     "@changesets/changelog-github",
     {
-      "repo": "loca-spirit/cedar-design-web"
+      "repo": "sparknest-team/cedar-design-web"
     }
   ],
   "commit": false,
