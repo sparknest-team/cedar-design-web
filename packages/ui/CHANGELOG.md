@@ -1,13 +1,35 @@
 # @cedar-design/ui-vue
 
+## 1.3.0
+
+### Minor Changes
+
+- [#8](https://github.com/loca-spirit/cedar-design-web/pull/8) [`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Add opt-in TableCore JS, types and styles for native flat-data rendering, adaptive widths and frozen columns. Provide separate headless filter/sort state and explicit client processing entries. Extract shared rendering and private capability modules while preserving the complete Table API, default behavior and desktop interactions.
+
+- [#8](https://github.com/loca-spirit/cedar-design-web/pull/8) [`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Support logical start and end alignment through the Table pagination configuration.
+
+  Table now renders its pagination bar below the rows. Replace the former `page-position` option with `pagination.align` when selecting the start or end edge.
+
+### Patch Changes
+
+- [#8](https://github.com/loca-spirit/cedar-design-web/pull/8) [`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Extract Table column-width allocation and frozen-column offsets into dependency-free layout modules while preserving the existing Table API and behavior. Add compatibility and production-consumer bundle baselines for the refactor.
+
+- [#8](https://github.com/loca-spirit/cedar-design-web/pull/8) [`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Extract Table summary data, span/render orchestration and virtual row planning/list adaptation into private feature modules. Preserve the public API, default pipeline, slots, events, refs and lazy detail evaluation, and add published-format compatibility and bundle regressions.
+
+- [#8](https://github.com/loca-spirit/cedar-design-web/pull/8) [`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Fix native form label targeting and nested field feedback, Cascader keyboard and search ownership, popup reference motion tracking, and inherited reading direction. Align Checkbox and Radio theme tokens and refresh their documentation.
+
+- [#8](https://github.com/loca-spirit/cedar-design-web/pull/8) [`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Remove the FilterForm padding, border, corner radius and background tokens. FilterForm has zero outer margin and padding and no border across themes. Wrap it in Card for a bordered panel.
+
+- Updated dependencies [[`059ce60`](https://github.com/loca-spirit/cedar-design-web/commit/059ce60c8f5aafb2f913a5ffd246ef114c6e9d69)]:
+  - @cedar-design/use-vue@1.2.2
+
 ## 1.2.0
+
 ### Minor Changes
 
 - [#6](https://github.com/loca-spirit/cedar-design-web/pull/6) [`6620155`](https://github.com/loca-spirit/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Release the public packages together at 1.2.0 so applications can install matching versions.
 
 - [#1](https://github.com/loca-spirit/cedar-design-web/pull/1) [`38eb17b`](https://github.com/loca-spirit/cedar-design-web/commit/38eb17b7aeb14ce04638b3e51c8286d7dab5787d) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Replace CFormSection and Form.Section with CSection. Import Section and its types from the Section entry and rename c-form-section CSS overrides to c-section. Inside Form, Section retains the previous field layout and appearance.
-
-
 
 - [`c3b76e0`](https://github.com/loca-spirit/cedar-design-web/commit/c3b76e0d3578aecf4b446e527400d2ce12a78618) - Develop with Vue 3.5.45 while supporting consumers on Vue 3.2.47 and later Vue 3 releases. Preserve compatible component IDs and public declarations, and gate releases on packed runtime and type compatibility checks.
 
@@ -16,8 +38,6 @@
 ### Patch Changes
 
 - [#6](https://github.com/loca-spirit/cedar-design-web/pull/6) [`6620155`](https://github.com/loca-spirit/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Keep a standard Textarea without a suffix within the field's width.
-
-
 
 - [#6](https://github.com/loca-spirit/cedar-design-web/pull/6) [`6620155`](https://github.com/loca-spirit/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Fix keyboard listener types in Trigger while preserving Escape handling and listener cleanup across document windows.
 
@@ -28,18 +48,15 @@
 
 - [#5](https://github.com/loca-spirit/cedar-design-web/pull/5) [`60c9c1a`](https://github.com/loca-spirit/cedar-design-web/commit/60c9c1a504108fde2acfde47e84554770e57835b) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Fix native form label targeting and nested field feedback, Cascader keyboard and search ownership, popup reference motion tracking, and inherited reading direction. Align Checkbox and Radio theme tokens and refresh their documentation.
 
-
-
 - [#1](https://github.com/loca-spirit/cedar-design-web/pull/1) [`38eb17b`](https://github.com/loca-spirit/cedar-design-web/commit/38eb17b7aeb14ce04638b3e51c8286d7dab5787d) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Close an open menu branch when another menu is opened from the keyboard.
-
-
 
 - [#1](https://github.com/loca-spirit/cedar-design-web/pull/1) [`38eb17b`](https://github.com/loca-spirit/cedar-design-web/commit/38eb17b7aeb14ce04638b3e51c8286d7dab5787d) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Remove patch-package from the published component library's runtime dependencies. Documentation-only dependency patches are managed by pnpm during development installation.
 
 - Updated dependencies [[`60c9c1a`](https://github.com/loca-spirit/cedar-design-web/commit/60c9c1a504108fde2acfde47e84554770e57835b), [`c3b76e0`](https://github.com/loca-spirit/cedar-design-web/commit/c3b76e0d3578aecf4b446e527400d2ce12a78618)]:
   - @cedar-design/use-vue@1.2.0
   - @cedar-design/icons-vue@1.2.0
-permalink: /changelog/
+    permalink: /changelog/
+
 ---
 
 [//]: # "template"
