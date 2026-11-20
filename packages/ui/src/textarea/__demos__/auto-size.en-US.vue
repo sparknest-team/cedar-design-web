@@ -1,34 +1,20 @@
 <script setup lang="ts">
-const inlineCopy = {
-  firstLine: "First line"
-};
+import { ref } from 'vue'
 
-import { ref } from "vue";
-
-const content = ref(inlineCopy.firstLine);
-const boundedContent = ref("第一行 / First line\n第二行 / Second line");
-const maxRows = ref(5);
+const content = ref('First line')
+const boundedContent = ref('First line\nSecond line')
+const maxRows = ref(5)
 function fill() {
-  boundedContent.value = "one\ntwo\nthree\nfour\nfive\nsix";
+  boundedContent.value = 'one\ntwo\nthree\nfour\nfive\nsix'
 }
 </script>
 <template>
   <c-space direction="column" size="lg" fill>
-    <c-textarea
-      default-value="Native three rows"
-      :rows="3"
-      aria-label="Native rows"
-    />
-    <c-textarea
-      v-model="content"
-      auto-size
-      placeholder="Grow with content"
-    />
+    <c-textarea default-value="Native three rows" :rows="3" aria-label="Native rows" />
+    <c-textarea v-model="content" auto-size placeholder="Grow with content" />
     <c-space wrap>
       <c-button @click="fill">Fill six lines</c-button>
-      <c-button @click="maxRows = maxRows === 5 ? 2 : 5"
-        >Toggle row limit: {{ maxRows }}</c-button
-      >
+      <c-button @click="maxRows = maxRows === 5 ? 2 : 5">Toggle row limit: {{ maxRows }}</c-button>
     </c-space>
     <template v-for="box in ['border-box', 'content-box']" :key="box">
       <p>{{ box }} · 2–{{ maxRows }} rows</p>

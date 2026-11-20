@@ -6379,6 +6379,8 @@ When focus is in a native dialog opened with `showModal()`, Escape goes to the d
 
 Pressing Escape inside an expanded Card dismisses an open native auto or hint popover first. This also applies when focus remains on its trigger.
 
+When focus is in a native dialog opened with `showModal()`, Escape goes to the dialog. A `cancel` handler can keep the dialog open, and the Card stays expanded.
+
 When focus remains inside the expanded content or on the close button, closing attempts to return focus to the control used before expansion. If focus has moved elsewhere, it is not moved back. During the expansion delay, focusing the expanded content displays it immediately without waiting for the fade-in animation. Expanded content and the close button that are still hidden and unfocused during this delay are excluded from the accessibility tree; focusing either displays them immediately.
 
 If the opener is inside an external closed Shadow Root, Card cannot access the internal control directly. The host must delegate focus or the application must restore focus. `delegatesFocus` can forward host focus into the root, but does not guarantee the original control when several controls are present.
@@ -46423,6 +46425,12 @@ function submit() {
     }}</pre>
   </section>
 </template>
+<style scoped>
+.native-search-results {
+  max-width: 100%;
+  overflow-x: auto;
+}
+</style>
 ```
 
 ## API
@@ -62500,36 +62508,22 @@ Example source: src/textarea/__demos__/auto-size.en-US.vue
 
 ```vue
 <script setup lang="ts">
-const inlineCopy = {
-  firstLine: "First line"
-};
+import { ref } from 'vue'
 
-import { ref } from "vue";
-
-const content = ref(inlineCopy.firstLine);
-const boundedContent = ref("第一行 / First line\n第二行 / Second line");
-const maxRows = ref(5);
+const content = ref('First line')
+const boundedContent = ref('First line\nSecond line')
+const maxRows = ref(5)
 function fill() {
-  boundedContent.value = "one\ntwo\nthree\nfour\nfive\nsix";
+  boundedContent.value = 'one\ntwo\nthree\nfour\nfive\nsix'
 }
 </script>
 <template>
   <c-space direction="column" size="lg" fill>
-    <c-textarea
-      default-value="Native three rows"
-      :rows="3"
-      aria-label="Native rows"
-    />
-    <c-textarea
-      v-model="content"
-      auto-size
-      placeholder="Grow with content"
-    />
+    <c-textarea default-value="Native three rows" :rows="3" aria-label="Native rows" />
+    <c-textarea v-model="content" auto-size placeholder="Grow with content" />
     <c-space wrap>
       <c-button @click="fill">Fill six lines</c-button>
-      <c-button @click="maxRows = maxRows === 5 ? 2 : 5"
-        >Toggle row limit: {{ maxRows }}</c-button
-      >
+      <c-button @click="maxRows = maxRows === 5 ? 2 : 5">Toggle row limit: {{ maxRows }}</c-button>
     </c-space>
     <template v-for="box in ['border-box', 'content-box']" :key="box">
       <p>{{ box }} · 2–{{ maxRows }} rows</p>
