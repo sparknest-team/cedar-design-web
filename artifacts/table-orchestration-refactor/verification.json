@@ -1,0 +1,118 @@
+{
+  "scope": "Phase 3 private summary and virtual orchestration; public API/default behavior preserved",
+  "sourcePair": "release-verified",
+  "originalReference": "original-table/manifest.json",
+  "productionSourcesStillMatchCapture": true,
+  "compatibility": {
+    "runtimeApiAndDefaults": "passed",
+    "publicDeclarations": "passed, existing VirtualListProps binding retained",
+    "esmAndCjs": "passed",
+    "summaryVirtualSsrCasesPerFormat": 13,
+    "coreConsumers": "identical JS/CSS sizes and module graphs",
+    "strictPublishedConsumerTypes": "passed"
+  },
+  "tests": {
+    "tableAndVirtualList": {
+      "passed": 441,
+      "failed": 0,
+      "table": 382,
+      "virtualList": 59,
+      "report": "tests.json"
+    },
+    "newOrchestrationTests": 8,
+    "contractAndOriginalAlgorithm": 19,
+    "lint": "full source passed plus final affected-source pass",
+    "typecheck": "passed including public API project",
+    "sourceVueCompatibility": "passed",
+    "runtimeDependencies": "passed: no cycles or root backflow",
+    "spec": "passed"
+  },
+  "size": {
+    "jsBudgetPercent": 1,
+    "cssBudget": "all metrics unchanged",
+    "gzip": {
+      "full": {
+        "before": 122264,
+        "after": 123476,
+        "css": 30943
+      },
+      "basicProps": {
+        "before": 122264,
+        "after": 123476,
+        "css": 30943
+      },
+      "frozenProps": {
+        "before": 122274,
+        "after": 123487,
+        "css": 30943
+      },
+      "summaryProps": {
+        "before": 122259,
+        "after": 123473,
+        "css": 30943
+      },
+      "virtualProps": {
+        "before": 122284,
+        "after": 123496,
+        "css": 30943
+      },
+      "core": {
+        "before": 13462,
+        "after": 13462,
+        "css": 5681
+      },
+      "coreFrozen": {
+        "before": 13506,
+        "after": 13506,
+        "css": 5681
+      },
+      "coreFilterState": {
+        "before": 14059,
+        "after": 14059,
+        "css": 5681
+      },
+      "coreLocalFilter": {
+        "before": 14187,
+        "after": 14187,
+        "css": 5681
+      },
+      "coreSortState": {
+        "before": 14076,
+        "after": 14076,
+        "css": 5681
+      },
+      "coreLocalSort": {
+        "before": 14273,
+        "after": 14273,
+        "css": 5681
+      }
+    },
+    "fullDelta": 1212
+  },
+  "browser": {
+    "comparison": "browser-comparison.json",
+    "engine": "ego-lite Chromium",
+    "spaceId": 101,
+    "spaceClosed": true,
+    "localPreviewStopped": true,
+    "beforeAfterStatesIdentical": [
+      "initial",
+      "scrolled",
+      "paged",
+      "rtl",
+      "changed"
+    ],
+    "warnings": [],
+    "screenshot": "summary-virtual-production.png"
+  },
+  "notRun": [
+    "full pnpm quality",
+    "three-engine production suite",
+    "native-browser and physical-device release acceptance"
+  ],
+  "notes": [
+    "Original source reference and recorded baselines are immutable; paired runs only refresh the shared source context in temporary directories.",
+    "Unrelated workspace changes were preserved.",
+    "Standalone browser fixture bundles are generated on demand, not retained in the evidence directory."
+  ]
+}

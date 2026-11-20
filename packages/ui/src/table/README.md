@@ -390,7 +390,9 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 ### 虚拟列表
 
 设置 `virtual-list-props` 开启虚拟列表功能。
-目前虚拟滚动表格受限比较多，开启虚拟滚动后不能使用展开行、树形数据、固定列等功能
+默认虚拟行结构会把展开的树节点和详情计入读屏行号。函数生成的详情在对应记录进入渲染窗口时计算一次，内容和行号共用这个结果。若所有已展开的函数型详情均在窗口内，表格会给出准确总数；若有详情在窗口外，总数标为未知（`aria-rowcount="-1"`）。窗口之前有未渲染的函数型详情时，其结果会影响后续所有行，表格会省略当前行号。虚拟滚动下固定列仍有限制。
+
+编辑虚拟行时，用稳定的行键保存草稿。例如，在单元格插槽中使用 `v-model="drafts[record.key]"`，并在表格外定义响应式的 `drafts`。滚动足够远时，表格会卸载该行；返回后，新输入框会从草稿中恢复值。
 
 <demo src="./__demos__/virtual-list-props.vue"></demo>
 
@@ -427,6 +429,12 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 
 <demo src="./__demos__/form-attribute.vue"></demo>
 
+### 轻量入口与功能组合
+
+Core、当前页汇总和虚拟列表分别组合；切换布局、分页、阅读方向或数据时，保持各表格自己的状态和滚动容器。
+
+<demo src="./__demos__/capability-composition.vue"></demo>
+
 ## 加载与等待
 
 ### 手动加载与原生插槽
@@ -437,7 +445,102 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 
 <demo src="./__demos__/loading.vue"></demo>
 
+## 轻量入口与按需功能
+
+原有 `Table`、`tableProps`、实例方法和 `table/style` 保持完整功能及默认行为。只需要平面数据展示、分组表头、自适应列宽、冻结列和原生横向滚动时，可主动导入 `TableCore`；它使用独立样式，不会自动注册到原有 Table resolver。
+
+```ts
+import TableCore from '@cedar-design/ui-vue/table/core'
+import '@cedar-design/ui-vue/table/core/style'
+import type { TableCoreColumn } from '@cedar-design/ui-vue/table/core'
+
+const columns: TableCoreColumn[] = [
+  { dataIndex: 'name', title: 'Name', fixed: 'left', width: 120 },
+  { dataIndex: 'description', title: 'Description', minWidth: 180 },
+]
+```
+
+`TableCore` 接收已经准备好的平面 `data`，不会隐式筛选、排序、分页、展开树或启用虚拟列表。`tableLayout="auto"` 按浏览器实际内容宽度测量冻结偏移；默认 `fixed` 使用列宽分配内核。`fixed: 'left' | 'right'` 表示物理方向，`dir="rtl"` 保留相同含义。原生滚动区域可以聚焦后使用方向键、Home 和 End。
+
+筛选、排序状态与客户端计算具有独立入口。远程场景只引入状态，在回调中自行请求并更新 `data`；受控值仍以列配置为准，回调同时提供用户请求和当前有效状态。清空/重置时，每个受影响字段分别触发回调。
+
+```ts
+import { computed, ref } from 'vue'
+import { useTableFilters } from '@cedar-design/ui-vue/table/features/filter'
+import type { TableFilterColumn } from '@cedar-design/ui-vue/table/features/filter'
+
+const filterColumns = ref<TableFilterColumn[]>([
+  { dataIndex: 'status', filterable: { defaultFilteredValue: [] } },
+])
+const { filters, setFilter, resetFilters, clearFilters } = useTableFilters({
+  columns: filterColumns,
+  onChange(field, requested, effective) {
+    // 使用 requested 发起远程请求；将结果赋给传入 TableCore 的 data。
+  },
+})
+```
+
+需要本地计算时再显式组合下列入口；这些函数只处理传入的平面数组，不修改原数组，保留行对象身份。列配置使用原有 `TableColumnData` 的 `filterable.filter` / `sortable.sorter`。`sortable.sorter: true` 保留远程排序语义，不执行本地重排。
+
+```ts
+import { filterTableData } from '@cedar-design/ui-vue/table/features/filter/client'
+import { useTableSorting } from '@cedar-design/ui-vue/table/features/sort'
+import { sortTableData } from '@cedar-design/ui-vue/table/features/sort/client'
+
+const { sorter, setSorter, resetSorters, clearSorters } = useTableSorting({
+  columns: localColumns, // Ref<TableColumnData[]>
+  onChange(field, direction, effective) {},
+})
+const visibleData = computed(() => sortTableData(
+  filterTableData(rows.value, filters.value, localColumns.value),
+  sorter.value,
+  localColumns.value,
+))
+```
+
+筛选面板、移动端操作面板和分页控件由调用方组合；完整 `Table` 继续使用原桌面交互，不会因新增入口改变行为。
+
 ## API
+
+### TableCore Props
+
+| 名称 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| columns | `TableCoreColumn[]` | `[]` | 数据列和分组列 |
+| data | `TableCoreData[]` | `[]` | 外部处理后的平面数据 |
+| row-key | `string` | `'key'` | 行身份字段，缺失时回退当前索引 |
+| size | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | 基础尺寸 |
+| table-layout | `'fixed' \| 'auto'` | `'fixed'` | 列宽分配或原生内容布局 |
+| fit | `boolean` | `true` | 弹性列吸收剩余宽度 |
+| height / max-height | `number \| string` | — | 滚动视口高度 / 最大高度；数字为 px |
+| sticky-header / show-header | `boolean` | `true` | 视口内固定表头 / 显示表头 |
+| bordered / hoverable | `boolean` | `true` | 边框 / 行悬停 |
+| stripe / loading | `boolean` | `false` | 斑马纹 / aria-busy 状态；loading 保留数据行 |
+
+### TableCore Events
+
+| 名称 | 参数 | 说明 |
+| --- | --- | --- |
+| row-click | `(record, event)` | 点击数据行 |
+| cell-click | `(record, column, event)` | 点击数据单元格 |
+| header-click | `(column, event)` | 点击表头 |
+
+### TableCore Slots
+
+| 名称 | 参数 | 说明 |
+| --- | --- | --- |
+| header | `{ column }` | 表头内容，优先于列的 titleSlotName/title |
+| cell | `{ record, column, rowIndex }` | 单元格内容，优先于列 render/slotName |
+| empty / footer | — | 空数据内容 / 视口外底部内容 |
+| 列 titleSlotName / slotName | 对应 header / cell 参数 | 按名称提供列内容 |
+
+### TableCore Methods
+
+| 名称 | 参数 | 说明 |
+| --- | --- | --- |
+| scrollTo | `ScrollToOptions` | 使用原生物理滚动坐标，RTL 与 HTMLElement.scrollTo 相同 |
+
+`TableCoreColumn` 支持 `dataIndex`、`title`、`children`、`width`、`minWidth`、`fixed`、`align`、`ellipsis`、`render`、`slotName`、`titleSlotName` 和表头/单元格 class/style。`render` 接收 `{ record, column, rowIndex }`；`record` 是原始行对象。省略内容以 CSS 截断，不自动引入桌面 Tooltip。
 
 ### Table Props
 
@@ -457,7 +560,6 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 | max-height                  | 表格最大高度。内容不足时收缩，超出后表体滚动。数字单位为 px                                | `number \| string`                                                                                                                                                            |     `-`     |
 | fit                         | 剩余空间的分配方式（表格始终至少铺满父容器）。`true`：全给未设 `width` 的弹性列；`false`：按各列基础宽度比例放大分摊 | `boolean`                                                                                                                                                                     |   `true`    |
 | pagination                  | 分页的属性配置                                                                             | `boolean \| TablePaginationConfig`                                                                                                                                                  |   `true`    |
-| page-position               | 分页器在表格容器内部的区域，当前使用 tl/top/tr/bl/bottom/br；不是条数选择器的弹层方位 | `'tl' \| 'top' \| tr' \| 'bl' \| 'bottom' \| 'br'`                                                                                                                            |   `'br'`    |
 | indent-size                 | 树形表格的缩进距离                                                                         | `number`                                                                                                                                                                      |    `16`     |
 | row-key                     | 表格行 `key` 的取值字段                                                                    | `string`                                                                                                                                                                      |   `'key'`   |
 | show-header                 | 是否显示表头                                                                               | `boolean`                                                                                                                                                                     |   `true`    |
@@ -591,9 +693,9 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 
 `Thead` 和 `Tbody` 分别渲染表头和表体，默认插槽提供内容；同名插槽可定制对应元素。`Tr`、`Th` 和 `Td` 是依赖 Table 上下文的底层渲染器，不是独立的数据表格。通常通过 Table 的 `tr`、`th`、`td` 插槽定制元素。
 
-标题和单元格具名插槽、列级 `title`、`cell`、`filter-icon` 和 `filter-content`、`empty`、`footer`、`expand-row`、`expand-icon`、分页插槽、`summary-cell`、`drag-handle-icon`、扩展列表头/单元格及 `header-cell-actions` 支持在内容中组合 `v-for` 与 `v-memo`。
+客户端渲染时，内容插槽和结构插槽都可以在列表项上组合 `v-for`、`:key` 和 `v-memo`。
 
-目前在服务端渲染时，`thead`、`tbody`、`tr`、`th`、`td` 自定义结构插槽内组合使用 `v-for` 和 `v-memo` 会导致渲染报错。即使循环数组为空也会报错。在 Vue 3.2.47 至 3.5.45 的指定版本对照中，直接调用编译插槽并以 `h()` 渲染也会复现该错误；使用模板 `<slot>` 转发的最小对照则正常。需要 SSR 时，请暂时移除这些结构插槽中的 `v-memo`。
+**服务端渲染**时，Vue 3.5.45 编译使用方模板可能在业务页面的服务端构建产物中生成引用未声明 `_cache` 的插槽函数，导致首屏缺少内容。在 Table 发布入口已复现于标题、单元格、筛选图标与面板、空状态、页脚、展开行与图标、分页、汇总单元格、拖动手柄、扩展列和表头操作区。自定义 `thead`、`tbody`、`tr`、`th`、`td` 同样受影响，即使循环为空也可能报错。需要 SSR 时，在这些插槽的列表项上保留 `v-for` 和稳定的 `:key`，移除同一节点的 `v-memo`。
 
 通过 `#columns` 声明的 `TableColumn` 支持服务端输出表头与数据单元格，包括分组列和动态列；也可以通过 `columns` 属性定义列。
 
@@ -617,7 +719,9 @@ Table **不内置**列管理。通过扩展点与外部 `TableColumnManager` 组
 
 ### 分页配置类型
 
-`TablePaginationConfig = Omit<PaginationProps, 'total'> & { total?: number }`。表格省略 `pagination.total` 时由有效数据条数推导；远程分页可继续显式传入总数。原 `PaginationProps` 对象仍可直接传给表格，独立 `Pagination` 的 `total` 必填要求不变。根入口与 table 入口均导出 `TablePaginationConfig`。
+`pagination.align` 支持 `start` 和 `end`，默认靠末端（LTR 居右，RTL 居左）。使用 `:pagination="{ align: 'start' }"` 可将分页条移至起始侧。分页条位于表格底部。
+
+`TablePaginationConfig = Omit<PaginationProps, 'total'> & { total?: number; container?: string | HTMLElement; align?: 'start' | 'end' }`。表格省略 `pagination.total` 时由有效数据条数推导；远程分页可继续显式传入总数。原 `PaginationProps` 对象仍可直接传给表格，独立 `Pagination` 的 `total` 必填要求不变。根入口与 table 入口均导出 `TablePaginationConfig`。
 
 ### 透传配置优先级
 
@@ -827,15 +931,15 @@ Table 继承最近的原生 `dir`；直接传入 `dir` 时，服务端首屏即�
 
 | 变量 | 默认值／条件 | 影响的样式 |
 | --- | --- | --- |
-| `--c-table-body-bg` | `var(--c-color-bg-2)` | `background-color` |
+| `--c-table-body-bg` | `var(--c-color-bg-2)` | `background`, `background-color` |
 | `--c-table-body-cell-bg` | `var(--c-color-bg-2)` | `background-color` |
 | `--c-table-body-cell-text-color` | `rgb(var(--c-gray-10))` | `color` |
 | `--c-table-body-min-height` | `40px` | `min-height` |
 | `--c-table-body-row-active-bg` | `var(--c-color-fill-1)` | `background-color` |
 | `--c-table-body-row-active-dark-bg` | `var(--c-color-neutral-2)` | `background-color` |
-| `--c-table-body-row-hover-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-body-row-hover-bg` | `var(--c-color-fill-1)` | `background`, `background-color` |
 | `--c-table-body-sorted-cell-bg` | `var(--c-color-fill-1)` | `background-color` |
-| `--c-table-body-stripe-row-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-body-stripe-row-bg` | `var(--c-color-fill-1)` | `background`, `background-color` |
 | `--c-table-border-color` | `var(--c-color-neutral-3)` | `border`, `border-bottom`, `border-left`, `border-right`, `border-top`, `box-shadow` |
 | `--c-table-border-radius` | `var(--c-border-radius-md)` | `border-radius`, `border-top-left-radius`, `border-top-right-radius` |
 | `--c-table-border-style` | `solid` | `border`, `border-bottom`, `border-left`, `border-right`, `border-top` |
@@ -899,7 +1003,7 @@ Table 继承最近的原生 `dir`；直接传入 `dir` 时，服务端首屏即�
 | `--c-table-header-cell-action-color` | `var(--c-color-text-3)` | `color` |
 | `--c-table-header-cell-action-hover-color` | `var(--c-color-text-1)` | `color` |
 | `--c-table-header-cell-action-margin-left` | `2px` | `margin-inline-start` |
-| `--c-table-header-cell-bg` | `var(--c-color-neutral-2)` | `background-color` |
+| `--c-table-header-cell-bg` | `var(--c-color-neutral-2)` | `background`, `background-color` |
 | `--c-table-header-cell-text-color` | `rgb(var(--c-gray-10))` | `color` |
 | `--c-table-header-filters-icon-active-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-table-header-filters-icon-color` | `var(--c-color-text-2)` | `color` |
@@ -931,25 +1035,25 @@ Table 继承最近的原生 `dir`；直接传入 `dir` 时，服务端首屏即�
 | `--c-table-size-lg-font-size` | `var(--c-table-size-md-font-size)` | `font-size` |
 | `--c-table-size-lg-header-font-size` | `var(--c-table-size-md-header-font-size)` | `font-size` |
 | `--c-table-size-lg-padding-horizontal` | `var(--c-table-size-md-padding-horizontal)` | `margin`, `padding` |
-| `--c-table-size-lg-padding-vertical` | `var(--c-table-size-md-padding-vertical)` | `margin`, `padding` |
+| `--c-table-size-lg-padding-vertical` | `var(--c-table-size-md-padding-vertical)` | `margin`, `padding`, `padding-block` |
 | `--c-table-size-md-extra-icon-font-size` | `16px` | `font-size` |
 | `--c-table-size-md-extra-padding-horizontal` | `var(--c-spacing-2)` | `padding` |
 | `--c-table-size-md-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-table-size-md-header-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-table-size-md-padding-horizontal` | `var(--c-spacing-7)` | `margin`, `padding` |
-| `--c-table-size-md-padding-vertical` | `9px` | `margin`, `padding` |
+| `--c-table-size-md-padding-vertical` | `9px` | `margin`, `padding`, `padding-block` |
 | `--c-table-size-sm-extra-icon-font-size` | `14px` | `font-size` |
 | `--c-table-size-sm-extra-padding-horizontal` | `var(--c-spacing-1)` | `padding` |
 | `--c-table-size-sm-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-table-size-sm-header-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-table-size-sm-padding-horizontal` | `var(--c-spacing-7)` | `margin`, `padding` |
-| `--c-table-size-sm-padding-vertical` | `5px` | `margin`, `padding` |
+| `--c-table-size-sm-padding-vertical` | `5px` | `margin`, `padding`, `padding-block` |
 | `--c-table-size-xs-extra-icon-font-size` | `14px` | `font-size` |
 | `--c-table-size-xs-extra-padding-horizontal` | `var(--c-spacing-1)` | `padding` |
 | `--c-table-size-xs-font-size` | `var(--c-font-size-body-1)` | `font-size` |
 | `--c-table-size-xs-header-font-size` | `var(--c-font-size-body-1)` | `font-size` |
 | `--c-table-size-xs-padding-horizontal` | `var(--c-spacing-7)` | `margin`, `padding` |
-| `--c-table-size-xs-padding-vertical` | `2px` | `margin`, `padding` |
+| `--c-table-size-xs-padding-vertical` | `2px` | `margin`, `padding`, `padding-block` |
 | `--c-table-sticky-scrollbar-height` | `16px` | `height` |
 | `--c-table-sticky-scrollbar-opacity` | `0.8` | `opacity` |
 | `--c-table-tfoot-bg` | `var(--c-color-neutral-2)` | `background-color` |

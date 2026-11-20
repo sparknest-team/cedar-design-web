@@ -1,0 +1,20 @@
+{
+  "completedAt": "2026-11-20T07:24:47.891Z",
+  "candidateRoot": "/private/tmp/cedar-quality-frozen-4_u_kjcl/cedar-design-web",
+  "node": "v26.13.1",
+  "sourceFingerprint": "66ced0d7a4df5da1b17c7e2f2799e8be8e9002e7bbadcdf30770bbb3dc5f8bd7",
+  "productionFingerprint": "1c956da3ed47e3ef858935363c54c1b39698e3cdcc51ea3eba149d3beac73796",
+  "buildIndexHash": "69e6c505eb94c329988b898b89a3df0fa44432265076408ee02f0ba874973284",
+  "artifactSha256": "219e0a19974e07e9b8c48f1cbae9340982737397d9b479aca26f3aa871c8e435",
+  "harness": {
+    "actions": "ec68b92fe80f321ea95df160313e565377e11a53df3944ba501c565afb333262",
+    "runner": "ce2a55045dbf5eba497880ac982b6b5fc75745b3ef1587df0ff90858a6ec8a2f",
+    "contracts": "0a2929899b80881948a8b48ae12253be20e0086a957c9ee9d93872f8ff438b89",
+    "table-capabilities": "37eb2c2dca9e4e1fd2baf7fac98e9f9e574afdc33fd3a2c53ef57979a6634af5",
+    "navigation-gate": "686f10470c1e7ff36ac0e710e893dcbfaf1519be636ff66fee2e7980a6afbe96",
+    "snapshot": "8241e7b7ea5c8057e23a7b7de513a1464b274a8ec4578da1b10884d387aff552"
+  },
+  "workspaceSourceFingerprint": "c3fd9a931b0f0f4a7d597a4d2db711946fa6597da2cc66276f7c18bf1543af23",
+  "workspaceProductionFingerprint": "c377689f1d730f04f38faf1eb76ae8df4d48a7c4dc446890f4f07d62a1d471a2",
+  "nativeDeviceAcceptance": false
+}

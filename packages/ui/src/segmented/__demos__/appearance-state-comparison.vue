@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("segmentedAppearanceStateComparison");
 import { ref } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -27,7 +25,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="size"
     >
-      <h4>{{ demoCopy.size }}</h4>
+      <h4>尺寸</h4>
       <c-space direction="column">
         <c-segmented
           v-model="scene1.value"
@@ -61,7 +59,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="disabled"
     >
-      <h4>{{ demoCopy.disabled }}</h4>
+      <h4>禁用</h4>
       <c-space wrap>
         <c-segmented disabled :options="['A', 'B', 'C']" default-value="A" />
         <c-segmented

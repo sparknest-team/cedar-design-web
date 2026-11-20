@@ -39,7 +39,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Preview configuration: `:slides-per-view="2.5"`, `:space-between="10"`, `:model-value="current"`, `:loop="loop"`.
 
-<demo src="./__demos__/multi-slides.vue"></demo>
+<demo src="./__demos__/multi-slides.en-US.vue"></demo>
 
 ### Centered Slides
 
@@ -51,7 +51,7 @@ Preview configuration: `:slides-per-view="1.5"`, `:space-between="10"`, `centere
 
 - `height`: Constrains the component height.
 
-<demo src="./__demos__/auto-sized.vue"></demo>
+<demo src="./__demos__/auto-sized.en-US.vue"></demo>
 
 ## Navigation and effects
 
@@ -77,13 +77,13 @@ Preview configuration: `show-arrow="always"`, `show-arrow="hover"`.
 
 All indicator presets use the same three local slides and active-slide model. Click an indicator or a navigation arrow in any specimen: every specimen changes to the same slide. The first group compares dot, line and slider; the second compares top and outer positions. The grid stacks on narrow screens.
 
-<demo src="./__demos__/indicator-comparison.vue"></demo>
+<demo src="./__demos__/indicator-comparison.en-US.vue"></demo>
 
 ### Transition effects
 
 Change adjacent slides to compare fade, card and slide effects independently of autoplay and input methods.
 
-<demo src="./__demos__/effect-comparison.vue"></demo>
+<demo src="./__demos__/effect-comparison.en-US.vue"></demo>
 
 ### Custom Indicator
 
@@ -149,13 +149,13 @@ Preview configuration: `keyboard`.
 
 - `height`: Constrains the component height.
 
-<demo src="./__demos__/controlled.vue"></demo>
+<demo src="./__demos__/controlled.en-US.vue"></demo>
 
 ### Interactive Content
 
 - `height`: Constrains the component height.
 
-<demo src="./__demos__/interactive-content.vue"></demo>
+<demo src="./__demos__/interactive-content.en-US.vue"></demo>
 
 ## Lifecycle
 
@@ -176,7 +176,7 @@ Preview configuration: `keyboard`.
 
 - `height`: Constrains the component height.
 
-<demo src="./__demos__/scheduler-lifecycle.vue"></demo>
+<demo src="./__demos__/scheduler-lifecycle.en-US.vue"></demo>
 
 ## Usage notes
 

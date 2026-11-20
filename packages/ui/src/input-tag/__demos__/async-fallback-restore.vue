@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("inputTagAsyncFallbackRestoreInline");
+const inlineCopy = {
+  edit: "切换到编辑态",
+  read: "切换到阅读态",
+  loadingNames: "正在加载姓名…",
+  namesLoaded: "姓名已加载"
+};
 
 import { onBeforeUnmount, ref } from "vue";
 
@@ -48,7 +52,7 @@ onBeforeUnmount(() => {
     :size="12"
     data-demo="input-tag-async-fallback-restore"
   >
-    <p>{{ inlineCopy.saveAndReloadToResolve }}</p>
+    <p>模拟保存后重新初始化：请求期间先显示 ID，姓名返回后自动更新。</p>
     <c-input-tag
       :key="generation"
       v-model="values"
@@ -56,7 +60,7 @@ onBeforeUnmount(() => {
       :read-pretty="readPretty"
     />
     <c-space wrap>
-      <c-button @click="saveAndReload">{{ inlineCopy.saveAndReload }}</c-button>
+      <c-button @click="saveAndReload">模拟保存并重新加载</c-button>
       <c-button @click="readPretty = !readPretty">{{
         readPretty ? inlineCopy.edit : inlineCopy.read
       }}</c-button>
@@ -65,8 +69,7 @@ onBeforeUnmount(() => {
       {{ loading ? inlineCopy.loadingNames : inlineCopy.namesLoaded }}
     </div>
     <div>
-      {{ inlineCopy.savedValues
-      }}<code data-saved-value>{{ JSON.stringify(saved) }}</code>
+      模拟保存值<code data-saved-value>{{ JSON.stringify(saved) }}</code>
     </div>
   </c-space>
 </template>

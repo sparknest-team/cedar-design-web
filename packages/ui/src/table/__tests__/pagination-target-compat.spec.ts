@@ -70,3 +70,29 @@ test('cancels a pending target lookup when the table unmounts', async () => {
     expect(warn).not.toHaveBeenCalledWith('[Table] Pagination target not found: #timing-unmounted')
   } finally { wrapper.unmount(); warn.mockRestore() }
 })
+
+test.each([false, true])('preserves the pagination slot when moving between hosts (initially external: %s)', async initiallyExternal => {
+  const first = document.createElement('div')
+  const second = document.createElement('div')
+  document.body.append(first, second)
+  const wrapper = mount(Table, {
+    attachTo: document.body,
+    props: { columns, data, pagination: { pageSize: 1, container: initiallyExternal ? first : undefined } },
+    slots: { 'pagination-left': () => h('input', { 'data-draft': '' }) },
+  })
+  try {
+    const input = (initiallyExternal ? first : wrapper.element).querySelector<HTMLInputElement>('[data-draft]')!
+    input.value = 'unsaved'
+    for (const container of [undefined, first, undefined, second]) {
+      await wrapper.setProps({ pagination: { pageSize: 1, container } })
+      await settle()
+      const current = (container ?? wrapper.element).querySelector<HTMLInputElement>('[data-draft]')
+      expect(current).toBe(input)
+      expect(current?.value).toBe('unsaved')
+    }
+  } finally {
+    wrapper.unmount()
+    first.remove()
+    second.remove()
+  }
+})

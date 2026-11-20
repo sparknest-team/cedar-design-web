@@ -1,0 +1,6 @@
+{
+  "base": "../original-table",
+  "overlays": {
+    "style/index.less": "Concurrent viewport isolation fix; identical current stylesheet in both captures."
+  }
+}

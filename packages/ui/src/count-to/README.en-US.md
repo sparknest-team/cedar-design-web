@@ -33,7 +33,7 @@ Preview configuration: `:to="123456"`.
 
 Compare final precision and the effect of duration and easing on number transitions. Manual playback remains separate.
 
-<demo src="./__demos__/number-format-comparison.vue"></demo>
+<demo src="./__demos__/number-format-comparison.en-US.vue"></demo>
 
 ## Customization and slots
 
@@ -67,17 +67,17 @@ Preview configuration: `:to="123456"`, `:auto-start="false"`.
 
 Precision is an integer from -292 to 292. Fractional and nonfinite precision falls back to 0; out-of-range integers are clamped. Unsupported inputs produce a development prop warning. String precision keeps the existing parseFloat conversion. Negative precision rounds at tens/hundreds and larger decimal places. The result is a number rounded toward negative infinity, without trailing-zero padding, and may use scientific notation. Changing precision only reformats the current value. IEEE-754 representability still applies; animation values are not decimal accounting values.
 
-<demo src="./__demos__/decimal-floor.vue"></demo>
+<demo src="./__demos__/decimal-floor.en-US.vue"></demo>
 
 ### Zero duration and replay
 
-<demo src="./__demos__/zero-duration.vue"></demo>
+<demo src="./__demos__/zero-duration.en-US.vue"></demo>
 
 ### Change easing and replay
 
 Changing timing-function affects the next reset, including resets caused by from, to or duration changes. It does not restart the current animation. Pause/start resumes the existing curve; reset creates a fresh playback using the latest function. Clearing the function restores linear easing. A curve may reach the target early, but end still reports completion of the configured duration.
 
-<demo src="./__demos__/easing-replay.vue"></demo>
+<demo src="./__demos__/easing-replay.en-US.vue"></demo>
 
 ## Animation duration boundaries
 

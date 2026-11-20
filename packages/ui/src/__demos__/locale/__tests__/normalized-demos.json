@@ -50,6 +50,7 @@
   "src/divider/__demos__/basic.vue",
   "src/divider/__demos__/content-flow.vue",
   "src/divider/__demos__/custom.vue",
+  "src/divider/__demos__/custom.en-US.vue",
   "src/divider/__demos__/line-appearance-comparison.vue",
   "src/divider/__demos__/with-text.vue",
   "src/drawer/__demos__/api-review-service.vue",

@@ -1,5 +1,5 @@
-import type { PropType } from "vue";
-import { defineComponent, TransitionGroup } from "vue";
+import type { ComponentPublicInstance, PropType } from "vue";
+import { defineComponent, shallowRef, TransitionGroup } from "vue";
 import { getPrefixCls, createNamespace } from "../_utils/global-config";
 import Notification from "./Notification.vue";
 import {
@@ -7,6 +7,7 @@ import {
   NotificationItem,
   NotificationPosition,
 } from "./types";
+import { useVisualSurface } from "../_utils/visual-surface";
 import usePopupManager from "../_hooks/use-popup-manager";
 import { getSlotFunction } from "../_utils/vue-utils";
 
@@ -44,10 +45,17 @@ export default defineComponent({
     const kebabPosition = props.position;
     const { zIndex } = usePopupManager("message", { runOnMounted: true });
 
+    const list = shallowRef<ComponentPublicInstance>();
+    useVisualSurface(() => {
+      const element = list.value?.$el;
+      return element?.nodeType === 1 ? element as HTMLElement : undefined;
+    }, () => zIndex.value, 'positioned');
+
     const isRight = props.position.endsWith("-right");
 
     return () => (
       <TransitionGroup
+        ref={list}
         {...({
           class: [prefixCls, `${prefixCls}-${kebabPosition}`],
           style: { zIndex: zIndex.value },

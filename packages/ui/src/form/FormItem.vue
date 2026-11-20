@@ -89,8 +89,10 @@ import {
   defineComponent,
   inject,
   nextTick,
+  onActivated,
   onBeforeUnmount,
   onBeforeUpdate,
+  onDeactivated,
   onMounted,
   provide,
   reactive,
@@ -241,6 +243,10 @@ export default defineComponent({
       () => !presentationState.readPretty.value && isError.value && finalMessage.value.length > 0,
       () => props.noStyle,
       () => !presentationState.readPretty.value && isError.value && finalMessage.value.length === 0 && Boolean(props.help || hasHelpSlot.value),
+      (kind) => ({
+        element: contentRef.value,
+        text: kind === 'error' ? finalMessage.value.join(' ') : (hasHelpSlot.value ? '' : props.help ?? ''),
+      }),
     );
     const labelContext = provideFormItemLabel({
       generated: labelId,
@@ -288,7 +294,13 @@ export default defineComponent({
     );
 
     const formItemCtx = inject(formItemInjectionKey, undefined);
-    const delegatesFeedback = computed(() => props.noStyle && !presentationState.readPretty.value);
+    const feedbackActive = ref(true);
+    if (formItemCtx) {
+      onActivated(() => { feedbackActive.value = true; });
+      onDeactivated(() => { feedbackActive.value = false; });
+    }
+    const delegatesFeedback = computed(() => props.noStyle && feedbackActive.value && !presentationState.readPretty.value);
+    let active = true;
     const feedbackOwner = Symbol('form-item-feedback');
     const feedbackSources = new Map<string, Map<symbol, { status: ValidateStatus | ""; message: string }>>();
 
@@ -297,6 +309,8 @@ export default defineComponent({
       { status, message }: { status: ValidateStatus | ""; message: string },
       owner = feedbackOwner,
     ) => {
+      // Descendants detach after this item has withdrawn its feedback from the parent.
+      if (!active) return;
       let sources = feedbackSources.get(field);
       if (!sources) {
         sources = new Map();
@@ -450,7 +464,6 @@ export default defineComponent({
       });
     };
 
-    let active = true;
     const validateWithTrigger = (trigger: ValidateTrigger) => {
       if (!hasValidateTrigger(props.validateTrigger, trigger)) return;
       const version = fieldVersion;

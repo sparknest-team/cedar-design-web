@@ -1,6 +1,12 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("dialogDraggableInline");
+const inlineCopy = {
+  disableDrag: "停用拖动",
+  enableDrag: "启用拖动",
+  exitFullscreen: "退出全屏",
+  fullscreen: "进入全屏",
+  dragEnabled: "允许拖动",
+  dragStopped: "拖动已停止"
+};
 
 import { ref } from "vue";
 const open = ref(false);
@@ -17,17 +23,17 @@ function keyboard(event: KeyboardEvent) {
 }
 </script>
 <template>
-  <c-button @click="open = true">{{ inlineCopy.openDragExample }}</c-button>
+  <c-button @click="open = true">打开拖动示例</c-button>
   <c-dialog
     v-model:open="open"
     :draggable="draggable"
     :fullscreen="fullscreen"
-    :title="inlineCopy.dragTitle"
+    title="拖动标题"
     @keydown="keyboard"
     @confirm="open = false"
     @cancel="open = false"
   >
-    <p>{{ inlineCopy.dragTheTitlePressD }}</p>
+    <p>拖动标题时按 D 开关拖动，按 F 开关全屏。关闭后可以重新打开。</p>
     <c-space wrap>
       <c-button @click="draggable = !draggable">{{
         draggable ? inlineCopy.disableDrag : inlineCopy.enableDrag

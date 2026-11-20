@@ -32,7 +32,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Preview configuration: `layout="vertical"`, `aria-label="status"`, `options`, `variant="button"`.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ### Step types and states
 
@@ -63,7 +63,7 @@ Preview configuration: `aria-label="Current step"`, `options`, `variant="button"
 
 </details>
 
-<demo src="./__demos__/types.vue"></demo>
+<demo src="./__demos__/types.en-US.vue"></demo>
 
 ## Layout and arrangement
 

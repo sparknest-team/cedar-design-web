@@ -23,13 +23,13 @@ One theme boundary for the entire application or a subtree. A provider around th
 
 ### Variable overrides
 
-<demo src="../theme-provider/__demos__/basic.vue"></demo>
+<demo src="../theme-provider/__demos__/basic.en-US.vue"></demo>
 
 ## Local themes
 
 ### Application roots and nesting
 
-<demo src="../theme-provider/__demos__/local-theme.vue"></demo>
+<demo src="../theme-provider/__demos__/local-theme.en-US.vue"></demo>
 
 ```vue
 <c-theme-provider :theme="mode">

@@ -21,7 +21,7 @@ test.each([1, 3])('compiled token selectors have real FilterForm targets at %s c
     expect(wrapper.classes().includes('c-filter-form--stacked')).toBe(cols === 1)
     expect(wrapper.get('.c-filter-form__action-item').element.matches('.c-filter-form .c-form-item')).toBe(true)
     expect(wrapper.get('.c-filter-form__actions').element.contains(wrapper.get('.c-filter-form__action-slot').element)).toBe(true)
-    expect(wrapper.get('button.c-filter-form__collapse').attributes('type')).toBe('button')
+    expect(wrapper.get('.c-filter-form__collapse').attributes('role')).toBe('button')
   } finally {
     wrapper.unmount()
     if (descriptor) Object.defineProperty(window, 'matchMedia', descriptor)

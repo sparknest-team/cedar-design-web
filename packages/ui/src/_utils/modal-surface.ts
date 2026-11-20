@@ -1,4 +1,5 @@
 import { computed, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch, type Ref } from 'vue'
+import { useVisualSurface } from './visual-surface'
 import { useZIndex } from '../context/zIndex'
 import { useModalFocus } from './modal-focus'
 import type { PopupContainer } from './popup-container'
@@ -68,6 +69,10 @@ export function useModalSurface(options: ModalSurfaceOptions) {
   const layerActive = () => mergedOpen.value && !teleportDisabled.value
   const { zIndex } = useZIndex(layerActive, 3)
   const mergedZIndex = computed(() => options.zIndex() ?? zIndex.value)
+  useVisualSurface(
+    () => (mergedOpen.value || transition.leaving.value) && modalDocument() ? options.root.value : undefined,
+    () => mergedZIndex.value,
+  )
   const { onStackTop } = usePopupLayer(
     layerActive,
     mergedZIndex,

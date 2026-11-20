@@ -47,7 +47,7 @@ The textarea inherits source `dir`, aligns text to inline start and its counter 
 
 ### Appearance Lab
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ## Content and presentation
 
@@ -121,7 +121,7 @@ The textarea inherits source `dir`, aligns text to inline start and its counter 
 
 Auto sizing converts the measured box to the actual CSS box model, counting padding and the top/bottom borders once. Explicit `minRows / maxRows` override the theme minimum; excess content scrolls within the row cap. Turning auto size off restores native height and the platform resize default. Compare both box models, fill six lines, and switch the cap.
 
-<demo src="./__demos__/auto-size.vue"></demo>
+<demo src="./__demos__/auto-size.en-US.vue"></demo>
 
 ### Interaction
 
@@ -137,7 +137,7 @@ Auto sizing converts the measured box to the actual CSS box model, counting padd
 
 Changing empty-value (including its factory) affects the next clear operation. Changing empty-values reformats the existing model without emitting a model update. Direct clear publishes immediately; deferred clear remains a draft until confirmation.
 
-<demo src="./__demos__/empty-policy.vue"></demo>
+<demo src="./__demos__/empty-policy.en-US.vue"></demo>
 
 ## Design notes
 

@@ -56,7 +56,7 @@ The examples above compare shared formats, steps and bounds. The following examp
 - `size`: Controls the component size.
 - `variant`: Input variant
 
-<demo src="../field-decorator/__demos__/control-sizes.vue"></demo>
+<demo src="../field-decorator/__demos__/control-sizes.en-US.vue"></demo>
 
 ### Field Appearance
 
@@ -69,7 +69,7 @@ The examples above compare shared formats, steps and bounds. The following examp
 
 Compare minute, second and 12-hour displays. Distinguish midnight (12 AM) from noon (12 PM); model formats and step constraints remain separate.
 
-<demo src="./__demos__/format-comparison.vue"></demo>
+<demo src="./__demos__/format-comparison.en-US.vue"></demo>
 
 ## Value model and selection rules
 

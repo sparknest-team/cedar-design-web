@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("schedulerWorkingHoursComparison");
 import { ref } from "vue";
 import type { SchedulerEvent } from "../core";
 import type { SchedulerWorkingHours } from "../core";
@@ -80,7 +78,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="working-hours"
     >
-      <h4>{{ demoCopy.workingHours }}</h4>
+      <h4>工作时间与维护时段</h4>
       <c-space direction="column" block>
         <c-alert
           >会议室工作日 09:00–12:00、13:00–18:00
@@ -102,7 +100,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="date-working-hours"
     >
-      <h4>{{ demoCopy.dateWorkingHours }}</h4>
+      <h4>指定日期工作时间</h4>
       <c-space direction="column" block>
         <c-alert
           >模拟周六补班：公共时段 09:00–12:00；小林改为

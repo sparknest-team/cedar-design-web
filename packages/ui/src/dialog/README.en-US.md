@@ -58,7 +58,7 @@ A modal dialog with matching declarative and programmatic APIs.
 
 Function calls honor `popupContainer` from explicit configuration or `setDefaultOptions`, using the component's selector/HTMLElement resolution and missing/invalid-selector fallback to body. The default targets body; `false` renders inline in the service's own body host. `handle.update({ popupContainer })` moves the same dialog and preserves content state and app context. Closing removes teleported content and its service host, independently of notification callback results. A custom container controls DOM attachment; layout still follows Dialog positioning and its containing block.
 
-<demo src="./__demos__/service-container.vue"></demo>
+<demo src="./__demos__/service-container.en-US.vue"></demo>
 
 ## Sizing and layout
 
@@ -78,7 +78,7 @@ Function calls honor `popupContainer` from explicit configuration or `setDefault
 
 Open one dialog at a time to compare widths, fullscreen layouts and long-content boundaries.
 
-<demo src="./__demos__/size-comparison.vue"></demo>
+<demo src="./__demos__/size-comparison.en-US.vue"></demo>
 
 ### No Padding
 
@@ -106,7 +106,7 @@ Open one dialog at a time to compare widths, fullscreen layouts and long-content
 <!-- demo-config-notes:end -->
 
 
-<demo src="./__demos__/draggable.vue"></demo>
+<demo src="./__demos__/draggable.en-US.vue"></demo>
 
 ### Custom Footer
 
@@ -116,7 +116,7 @@ Open one dialog at a time to compare widths, fullscreen layouts and long-content
 
 Open the panel and toggle the two switches independently. Both dividers start off.
 
-<demo src="./__demos__/dividers.vue"></demo>
+<demo src="./__demos__/dividers.en-US.vue"></demo>
 
 ### Custom Text
 

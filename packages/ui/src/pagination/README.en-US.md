@@ -65,7 +65,7 @@ Pagination with a shared API and container-responsive layout.
 
 Compare total labels, page-size selection and page jumpers. Change the available controls and observe their output.
 
-<demo src="./__demos__/auxiliary-controls-comparison.vue"></demo>
+<demo src="./__demos__/auxiliary-controls-comparison.en-US.vue"></demo>
 
 ## Page size, navigation and buttons
 

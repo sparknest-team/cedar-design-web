@@ -35,7 +35,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Compare space used at each size, then round and square boundaries. Image fitting and fallback remain separate.
 
-<demo src="./__demos__/shape-size-comparison.vue"></demo>
+<demo src="./__demos__/shape-size-comparison.en-US.vue"></demo>
 
 ### Style
 
@@ -67,7 +67,7 @@ Preview configuration: `hoverable`, `image-url="/cat.jpg"`, `alt="悬停放大"`
 
 Compare horizontal and vertical groups, maximum counts, stacking and overflow indicators.
 
-<demo src="./__demos__/group-comparison.vue"></demo>
+<demo src="./__demos__/group-comparison.en-US.vue"></demo>
 
 ## Content and presentation
 

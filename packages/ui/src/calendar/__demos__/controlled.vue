@@ -1,7 +1,7 @@
 <template>
   <c-space wrap>
-    <c-button @click="selectToday">{{ demoCopy.today }}</c-button>
-    <c-button @click="selectTomorrow">{{ demoCopy.tomorrow }}</c-button>
+    <c-button @click="selectToday">选择今天</c-button>
+    <c-button @click="selectTomorrow">选择明天</c-button>
   </c-space>
   <c-calendar
     v-model="value"
@@ -13,25 +13,32 @@
 </template>
 
 <script lang="ts" setup>
-import { useDemoLocale, formatDemoDate } from "../../__demos__/locale";
+import { getLocale } from "@cedar-design/ui-vue";
 import { computed, ref } from "vue";
 
 const value = ref(new Date());
-const demoCopy = useDemoLocale("calendarControlled");
+const demoCopy = {
+  today: "选择今天",
+  tomorrow: "选择明天",
+  hint: "可点击日期或切换月份",
+  selected: "选择了",
+  panel: "面板切换到",
+  external: "外部设置为"
+};
 const action = ref<"selected" | "panel" | "external">();
 const actionDate = ref(new Date());
 const lastAction = computed(() =>
   action.value
-    ? `${demoCopy.value[action.value]} ${action.value === "panel" ? formatMonth(actionDate.value) : format(actionDate.value)}`
-    : demoCopy.value.hint,
+    ? `${demoCopy[action.value]} ${action.value === "panel" ? formatMonth(actionDate.value) : format(actionDate.value)}`
+    : demoCopy.hint,
 );
 function record(kind: "selected" | "panel" | "external", date: Date) {
   action.value = kind;
   actionDate.value = date;
 }
-const format = (date: Date) => formatDemoDate(date);
+const format = (date: Date) => date.toLocaleDateString(getLocale());
 const formatMonth = (date: Date) =>
-  formatDemoDate(date, { year: "numeric", month: "long" });
+  date.toLocaleDateString(getLocale(), { year: "numeric", month: "long" });
 function selectToday() {
   value.value = new Date();
   record("external", value.value);

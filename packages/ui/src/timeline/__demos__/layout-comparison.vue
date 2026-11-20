@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("timelineLayoutComparison");
 import { ref } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -50,7 +48,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="vertical"
     >
-      <h4>{{ demoCopy.vertical }}</h4>
+      <h4>纵向时间轴</h4>
       <div>
         <c-row
           align="center"
@@ -170,7 +168,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="direction"
     >
-      <h4>{{ demoCopy.direction }}</h4>
+      <h4>横向时间轴</h4>
       <div>
         <c-row
           align="center"
@@ -290,7 +288,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--3"
       data-comparison-scene="label"
     >
-      <h4>{{ demoCopy.label }}</h4>
+      <h4>标签文本位置</h4>
       <div>
         <c-row align="center">
           <c-typography-text>labelPosition: &nbsp; &nbsp;</c-typography-text>

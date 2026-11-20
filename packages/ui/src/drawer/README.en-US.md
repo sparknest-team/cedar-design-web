@@ -34,7 +34,7 @@ The default header associates its `title` slot with the dialog through a stable,
 
 Open each drawer separately to compare placement and occupied space. Nesting, containers and guards remain separate.
 
-<demo src="./__demos__/position-size-comparison.vue"></demo>
+<demo src="./__demos__/position-size-comparison.en-US.vue"></demo>
 
 ### Popup Container
 
@@ -54,7 +54,7 @@ Open each drawer separately to compare placement and occupied space. Nesting, co
 
 Open the panel and toggle the two switches independently. Both dividers start off.
 
-<demo src="./__demos__/dividers.vue"></demo>
+<demo src="./__demos__/dividers.en-US.vue"></demo>
 
 ### Function Call
 

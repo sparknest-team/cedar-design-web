@@ -15,4 +15,3 @@
   - @cedar-design/shared-vue@1.2.0
 
 - [#5](https://github.com/loca-spirit/cedar-design-web/pull/5) [`60c9c1a`](https://github.com/loca-spirit/cedar-design-web/commit/60c9c1a504108fde2acfde47e84554770e57835b) Thanks [@loca-spirit](https://github.com/loca-spirit)! - Fix native form label targeting and nested field feedback, Cascader keyboard and search ownership, popup reference motion tracking, and inherited reading direction. Align Checkbox and Radio theme tokens and refresh their documentation.
-

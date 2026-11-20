@@ -41,7 +41,7 @@ Preview configuration: `label="2017-03-10"`, `lineType="dashed"`, `type="seconda
 
 Compare orientation, sequence and label placement independently of pending states and custom nodes.
 
-<demo src="./__demos__/layout-comparison.vue"></demo>
+<demo src="./__demos__/layout-comparison.en-US.vue"></demo>
 
 ## Content and presentation
 

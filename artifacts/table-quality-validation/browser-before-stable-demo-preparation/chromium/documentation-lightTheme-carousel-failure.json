@@ -1,0 +1,707 @@
+{
+  "failures": [],
+  "diagnostic": {
+    "url": "http://127.0.0.1:62062/components/carousel/#%E7%9B%91%E5%90%AC%E5%88%87%E6%8D%A2%E4%BA%8B%E4%BB%B6",
+    "text": "Options) => void\nresize\t() => void\n\nCarouselItem 无自有 Props、事件或方法；默认插槽为页面内容。\n\nTypes\n\nCarouselProps, CarouselItemProps, CarouselInstance, CarouselItemInstance, CarouselEmits, CarouselSlots, CarouselItemSlots, CarouselExpose, CarouselSlotScope, CarouselToOptions, CarouselChangeData, CarouselOrientation, CarouselEffect, CarouselAutoPlayConfig, CarouselArrowType, CarouselIndicatorType, CarouselIndicatorPosition, CarouselTriggerEvent.\n\nCSS Variables\n\n通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。\n\n变量\t默认值／条件\t影响的样式\n--c-carousel-arrow-background\trgb(0 0 0 / 35%)\tbackground\n--c-carousel-arrow-background-hover\trgb(0 0 0 / 55%)\tbackground\n--c-carousel-arrow-color\tvar(--c-sys-color-content-on-dark)\tcolor\n--c-carousel-arrow-disabled-opacity\t0.4\topacity\n--c-carousel-arrow-font-size\tvar(--c-sys-font-size-xl)\tfont-size\n--c-carousel-arrow-margin\tvar(--c-sys-space-4)\tbottom, left, right, top\n--c-carousel-arrow-size\tvar(--c-sys-control-height-md)\theight, width\n--c-carousel-card-duration\tvar(--c-sys-motion-duration-standard)\ttransition\n--c-carousel-card-opacity\t0.6\topacity\n--c-carousel-card-scale\t0.85\ttransform\n--c-carousel-fade-duration\tvar(--c-sys-motion-duration-standard)\ttransition\n--c-carousel-focus-color\tvar(--c-sys-color-action-primary)\toutline\n--c-carousel-focus-offset\t2px\toutline-offset\n--c-carousel-focus-width\t2px\toutline\n--c-carousel-indicator-color-active\tvar(--c-sys-color-content-on-dark)\tbackground\n--c-carousel-indicator-color-default\trgb(255 255 255 / 35%)\tbackground\n--c-carousel-indicator-dot-size\t8px\theight, width\n--c-carousel-indicator-gap\tvar(--c-sys-space-3)\tgap\n--c-carousel-indicator-line-border-radius\tvar(--c-sys-radius-sm)\tborder-radius\n--c-carousel-indicator-line-height\t3px\theight\n--c-carousel-indicator-line-width\t20px\twidth\n--c-carousel-indicator-outer-margin-bottom\tvar(--c-sys-space-8)\tpadding-bottom\n--c-carousel-indicator-position\tvar(--c-sys-space-4)\tbottom, left, right, top\n--c-carousel-navigation-z-index\t10\tz-index\n--c-carousel-transition-duration\tvar(--c-sys-motion-duration-standard)\ttransition\n--c-carousel-transition-timing-function\tease\ttransition\n\n将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：\n\n.component-theme {\n  --c-carousel-arrow-background: rgb(0 0 0 / 35%);\n}\n\n\n显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。\n\n编辑此页",
+    "numericSteps": [],
+    "overflow": [
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "",
+        "right": 1601,
+        "width": 600
+      },
+      {
+        "tag": "IMG",
+        "class": "",
+        "text": "",
+        "right": 1601,
+        "width": 600
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "",
+        "right": 2201,
+        "width": 600
+      },
+      {
+        "tag": "IMG",
+        "class": "",
+        "text": "",
+        "right": 2201,
+        "width": 600
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "4",
+        "right": 1367,
+        "width": 234
+      },
+      {
+        "tag": "DIV",
+        "class": "",
+        "text": "4",
+        "right": 1367,
+        "width": 234
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "5",
+        "right": 1611,
+        "width": 234
+      },
+      {
+        "tag": "DIV",
+        "class": "",
+        "text": "5",
+        "right": 1611,
+        "width": 234
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "6",
+        "right": 1855,
+        "width": 234
+      },
+      {
+        "tag": "DIV",
+        "class": "",
+        "text": "6",
+        "right": 1855,
+        "width": 234
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel__track",
+        "text": "12345",
+        "right": 1333.666748046875,
+        "width": 798.0000610351562
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "2",
+        "right": 1602.9791259765625,
+        "width": 528.6561279296875
+      },
+      {
+        "tag": "DIV",
+        "class": "carousel-custom-slide",
+        "text": "2",
+        "right": 1602.9791259765625,
+        "width": 528.6561279296875
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "3",
+        "right": 2141.63525390625,
+        "width": 528.6561279296875
+      },
+      {
+        "tag": "DIV",
+        "class": "carousel-custom-slide",
+        "text": "3",
+        "right": 2141.63525390625,
+        "width": 528.6561279296875
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "4",
+        "right": 2680.291748046875,
+        "width": 528.656494140625
+      },
+      {
+        "tag": "DIV",
+        "class": "carousel-custom-slide",
+        "text": "4",
+        "right": 2680.291748046875,
+        "width": 528.656494140625
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel__track",
+        "text": "140px220px180px260px",
+        "right": 1528,
+        "width": 798
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "",
+        "right": 1601,
+        "width": 600
+      },
+      {
+        "tag": "IMG",
+        "class": "",
+        "text": "",
+        "right": 1601,
+        "width": 600
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "",
+        "right": 2201,
+        "width": 600
+      },
+      {
+        "tag": "IMG",
+        "class": "",
+        "text": "",
+        "right": 2201,
+        "width": 600
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "",
+        "right": 1601,
+        "width": 600
+      },
+      {
+        "tag": "IMG",
+        "class": "",
+        "text": "",
+        "right": 1601,
+        "width": 600
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "",
+        "right": 2201,
+        "width": 600
+      },
+      {
+        "tag": "IMG",
+        "class": "",
+        "text": "",
+        "right": 2201,
+        "width": 600
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "",
+        "right": 1437.328125,
+        "width": 255
+      },
+      {
+        "tag": "IMG",
+        "class": "",
+        "text": "",
+        "right": 1437.328125,
+        "width": 255
+      },
+      {
+        "tag": "DIV",
+        "class": "c-carousel-item",
+        "text": "",
+        "right": 1453.65625,
+        "width": 255
+      },
+      {
+        "tag": "IMG",
+        "class": "",
+        "text": "",
+        "right": 1453.65625,
+        "width": 255
+      }
+    ],
+    "previews": [
+      "<div class=\"vmi-previewer-example\" style=\"\" data-v-a1d6c6fd=\"\"><div role=\"region\" aria-roledescription=\"carousel\" aria-label=\"轮播\" tabindex=\"-1\" class=\"c-carousel c-carousel--slide\" style=\"height: 240px; width: 600px;\"><div class=\"c-carousel__viewport\" style=\"touch-action: pan-y;\"><div class=\"c-carousel__track\" style=\"gap: 0px; transform: translateX(0px);\"><div class=\"c-carousel-item c-carousel-item--active\" role=\"group\" aria-roledescription=\"slide\" aria-label=\"第 1 页，共 3 页\" aria-hidden=\"false\" tabindex=\"-1\" style=\"width: 600px; flex-shrink: 0;\"><img src=\"/cat.jpg\" style=\"width: 100%; height: 100%; object-fit: cover; pointer-events: none;\"></div><div class=\"c-carousel-item\" role=\"group\" aria-roledescription=\"slide\" aria-label=\"第 2 页，共 3 页\" aria-hidden=\"true\" inert=\"\" tabindex=\"-1\" style=\"width: 600px; flex-shrink: 0;\"><img src=\"/cat2.jpg\" style=\"width: 100%; height: 100%; object-fit: cover; pointer-events: none;\"></div><div class=\"c-carousel-item\" role=\"group\" aria-roledescription=\"slide\" aria-label=\"第 3 页，共 3 页\" aria-hidden=\"true\" inert=\"\" tabindex=\"-1\" style=\"width: 600px; flex-shrink: 0;\"><img src=\"/cat3.jpg\" style=\"width: 100%; height: 100%; object-fit: cover; pointer-events: none;\"></div></div></div><button type=\"button\" class=\"c-carousel__arrow c-carousel__arrow-prev\" aria-label=\"上一页\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 48 48\" width=\"1em\" height=\"1em\" class=\"c-icon c-icon-left\" stroke-width=\"4\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" aria-hidden=\"true\" role=\"img\"><!--v-if--><path d=\"M32 8.4 16.444 23.956 32 39.513\"></path></svg></button><button type=\"button\" class=\"c-carousel__arrow c-carousel__arrow-next\" aria-label=\"下一页\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 48 48\" width=\"1em\" height=\"1em\" class=\"c-icon c-icon-right\" stroke-width=\"4\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" aria-hidden=\"true\" role=\"img\"><!--v-if--><path d=\"m16 39.513 15.556-15.557L16 8.4\"></path></svg></button><div class=\"c-carousel__indicators c-carousel--indicators-bottom\"><button type=\"button\" class=\"c-carousel__indicator c-carousel--indicator-dot c-carousel--indicator-active\" aria-label=\"切换到第 1 页\" aria-current=\"true\"></button><button type=\"button\" class=\"c-carousel__indicator c-carousel--indicator-dot\" aria-label=\"切换到第 2 页\"></button><button type=\"button\" class=\"c-carousel__indicator c-carousel--indicator-dot\" aria-label=\"切换到第 3 页\"></button></div></div></div>",
+      "<div class=\"vmi-previewer-example\" style=\"\" data-v-a1d6c6fd=\"\"><div role=\"region\" aria-roledescription=\"carousel\" aria-label=\"轮播\" tabindex=\"-1\" class=\"c-carousel c-carousel--slide c-carousel--vertical\" style=\"height: 300px; width: 600px;\"><div class=\"c-carousel__viewport\" style=\"touch-action: pan-x;\"><div class=\"c-carousel__track\" style=\"gap: 0px; transform: translateY(0px);\"><div class=\"c-carousel-item c-carousel-item--active\" role=\"group\" aria-roledescription=\"slide\" aria-label=\"第 1 页，共 3 页\" aria-hidden=\"false\" tabindex=\"-1\" style=\"height: 300px; flex-shrink: 0;\"><img src=\"/cat.jpg\" style=\"width: 100%; height: 100%; object-fit: cover; pointer-events: none;\"></div><div class=\"c-carousel-item\" role=\"group\" aria-roledescription=\"slide\" aria-label=\"第 2 页，共 3 页\" aria-hidden=\"true\" inert=\"\" tabindex=\"-1\" style=\"height: 300px; flex-shrink: 0;\"><img src=\"/cat2.jpg\" style=\"width: 100%; height: 100%; object-fit: cover; pointer-events: none;\"></div><div class=\"c-carousel-item\" role=\"group\" aria-roledescription=\"slide\" aria-label=\"第 3 页，共 3 页\" aria-hidden=\"true\" inert=\"\" tabindex=\"-1\" style=\"height: 300px; flex-shrink: 0;\"><img src=\"/cat3.jpg\" style=\"width: 100%; height: 100%; object-fit: cover; pointer-events: none;\"></div></div></div><button type=\"button\" class=\"c-carousel__arrow c-carousel__arrow-prev\" aria-label=\"上一页\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 48 48\" width=\"1em\" height=\"1em\" class=\"c-icon c-icon-up\" stroke-width=\"4\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" aria-hidden=\"true\" role=\"img\"><!--v-if--><path d=\"M39.6 30.557 24.043 15 8.487 30.557\"></path></svg></button><button type=\"button\" class=\"c-carousel__arrow c-carousel__arrow-next\" aria-label=\"下一页\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 48 48\" width=\"1em\" height=\"1em\" class=\"c-icon c-icon-down\" stroke-width=\"4\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" aria-hidden=\"true\" role=\"img\"><!--v-if--><path d=\"M39.6 17.443 24.043 33 8.487 17.443\"></path></svg></button><div class=\"c-carousel__indicators c-carousel--indicators-bottom\"><button type=\"button\" class=\"c-carousel__indicator c-carousel--indicator-dot c-carousel--indicator-active\" aria-label=\"切换到第 1 页\" aria-current=\"true\"></button><button type=\"button\" class=\"c-carousel__indicator c-carousel--indicator-dot\" aria-label=\"切换到第 2 页\"></button><button type=\"button\" class=\"c-carousel__indicator c-carousel--indicator-dot\" aria-label=\"切换到第 3 页\"></button></div></div></div>"
+    ],
+    "controls": [
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 3 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "DIV",
+        "role": "region",
+        "label": "轮播",
+        "class": "c-carousel c-carousel--slide"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 1 页，共 3 页",
+        "class": "c-carousel-item c-carousel-item--active"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 2 页，共 3 页",
+        "class": "c-carousel-item"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 3 页，共 3 页",
+        "class": "c-carousel-item"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "上一页",
+        "class": "c-carousel__arrow c-carousel__arrow-prev"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "下一页",
+        "class": "c-carousel__arrow c-carousel__arrow-next"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 1 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot c-carousel--indicator-active"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 2 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 3 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "DIV",
+        "role": "region",
+        "label": "轮播",
+        "class": "c-carousel c-carousel--slide"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 1 页，共 3 页",
+        "class": "c-carousel-item c-carousel-item--active"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 2 页，共 3 页",
+        "class": "c-carousel-item"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 3 页，共 3 页",
+        "class": "c-carousel-item"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "上一页",
+        "class": "c-carousel__arrow c-carousel__arrow-prev"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "下一页",
+        "class": "c-carousel__arrow c-carousel__arrow-next"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 1 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot c-carousel--indicator-active"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 2 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 3 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "DIV",
+        "role": "region",
+        "label": "轮播",
+        "class": "c-carousel c-carousel--slide"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 1 页，共 3 页",
+        "class": "c-carousel-item c-carousel-item--active"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 2 页，共 3 页",
+        "class": "c-carousel-item"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 3 页，共 3 页",
+        "class": "c-carousel-item"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "上一页",
+        "class": "c-carousel__arrow c-carousel__arrow-prev"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "下一页",
+        "class": "c-carousel__arrow c-carousel__arrow-next"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 1 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot c-carousel--indicator-active"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 2 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 3 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-checkbox__input"
+      },
+      {
+        "tag": "DIV",
+        "role": "region",
+        "label": "轮播",
+        "class": "c-carousel c-carousel--slide"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 1 页，共 4 页",
+        "class": "c-carousel-item c-carousel-item--active"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 2 页，共 4 页",
+        "class": "c-carousel-item"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 3 页，共 4 页",
+        "class": "c-carousel-item"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 4 页，共 4 页",
+        "class": "c-carousel-item"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "上一页",
+        "class": "c-carousel__arrow c-carousel__arrow-prev"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "下一页",
+        "class": "c-carousel__arrow c-carousel__arrow-next"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 1 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot c-carousel--indicator-active"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 2 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 3 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 4 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "P",
+        "role": "status",
+        "label": "当前页: 1 · 切换次数: 0",
+        "class": ""
+      },
+      {
+        "tag": "DIV",
+        "role": "region",
+        "label": "轮播",
+        "class": "c-carousel c-carousel--slide carousel-interactive-demo"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 1 页，共 3 页",
+        "class": "c-carousel-item c-carousel-item--active"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "幻灯片1",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 2 页，共 3 页",
+        "class": "c-carousel-item"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "幻灯片2",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 3 页，共 3 页",
+        "class": "c-carousel-item"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "幻灯片3",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "上一页",
+        "class": "c-carousel__arrow c-carousel__arrow-prev"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "下一页",
+        "class": "c-carousel__arrow c-carousel__arrow-next"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 1 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot c-carousel--indicator-active"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 2 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 3 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "自动播放",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-outline"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "停用与激活",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-outline"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "卸载与挂载",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-outline"
+      },
+      {
+        "tag": "DIV",
+        "role": "region",
+        "label": "轮播",
+        "class": "c-carousel c-carousel--slide"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 1 页，共 3 页",
+        "class": "c-carousel-item c-carousel-item--active"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 2 页，共 3 页",
+        "class": "c-carousel-item"
+      },
+      {
+        "tag": "DIV",
+        "role": "group",
+        "label": "第 3 页，共 3 页",
+        "class": "c-carousel-item"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "上一页",
+        "class": "c-carousel__arrow c-carousel__arrow-prev"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "下一页",
+        "class": "c-carousel__arrow c-carousel__arrow-next"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 1 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot c-carousel--indicator-active"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 2 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到第 3 页",
+        "class": "c-carousel__indicator c-carousel--indicator-dot"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "返回顶部",
+        "class": "vp-back-to-top-button"
+      },
+      {
+        "tag": "SPAN",
+        "role": "progressbar",
+        "label": "",
+        "class": "vp-scroll-progress"
+      }
+    ]
+  },
+  "error": "TimeoutError: locator.waitFor: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.vmi-previewer').nth(15).locator('.vmi-previewer-sources pre').first() to be visible\u001b[22m\n"
+}

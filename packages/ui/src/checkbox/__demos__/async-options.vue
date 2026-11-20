@@ -1,6 +1,4 @@
 <script setup>
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("checkboxAsyncOptionsInline");
 
 import { onDeactivated, onUnmounted, ref, shallowRef } from "vue";
 
@@ -80,9 +78,7 @@ onUnmounted(cleanup);
 <template>
   <c-space class="checkbox-async-demo" direction="column">
     <p>业务值独立于当前选项，加载或移除选项不会清空已选值：{{ value }}</p>
-    <c-checkbox v-model="manual" edit-mode="direct" @change="remove">{{
-      inlineCopy.manualResponses
-    }}</c-checkbox>
+    <c-checkbox v-model="manual" edit-mode="direct" @change="remove">手动返回</c-checkbox>
     <c-space wrap>
       <c-button size="sm" @click="load">加载选项</c-button>
       <c-button size="sm" @click="remove">移除选项</c-button>

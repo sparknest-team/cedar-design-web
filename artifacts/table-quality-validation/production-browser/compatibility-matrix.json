@@ -1,0 +1,91 @@
+{
+  "library": "cedar",
+  "generatedAt": "2026-11-20T07:22:46.456Z",
+  "nativeDeviceAcceptance": false,
+  "latestTwoVersionsAccepted": false,
+  "completeEngineMatrix": true,
+  "evidenceOnly": false,
+  "results": [
+    {
+      "name": "chromium",
+      "startedAt": "2026-11-20T06:36:03.625Z",
+      "completedAt": "2026-11-20T06:48:36.026Z",
+      "passed": true,
+      "exitCode": 0,
+      "evidence": "/private/tmp/cedar-quality-frozen-4_u_kjcl/cedar-design-web/artifacts/docs-components/cedar/chromium",
+      "verified": {
+        "browser": {
+          "name": "chromium",
+          "engine": "chromium",
+          "launchOptions": {},
+          "version": "151.0.7922.34",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "recordedAt": "2026-11-20T06:48:33.950Z",
+          "evidenceType": "automated-engine-regression",
+          "nativeDeviceAcceptance": false,
+          "userAgentEmulation": "device routing preset; not evidence of an actual OS/browser version",
+          "gestureInput": "CDP touch injection"
+        },
+        "componentCases": 200,
+        "guideCases": 14,
+        "navigationCases": 4,
+        "passed": true
+      }
+    },
+    {
+      "name": "firefox",
+      "startedAt": "2026-11-20T06:48:36.026Z",
+      "completedAt": "2026-11-20T07:06:53.007Z",
+      "passed": true,
+      "exitCode": 0,
+      "evidence": "/private/tmp/cedar-quality-frozen-4_u_kjcl/cedar-design-web/artifacts/docs-components/cedar/firefox",
+      "verified": {
+        "browser": {
+          "name": "firefox",
+          "engine": "firefox",
+          "launchOptions": {},
+          "version": "153.0",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "recordedAt": "2026-11-20T07:06:49.459Z",
+          "evidenceType": "automated-engine-regression",
+          "nativeDeviceAcceptance": false,
+          "userAgentEmulation": "device routing preset; not evidence of an actual OS/browser version",
+          "gestureInput": "synthetic touch events (handler regression only)"
+        },
+        "componentCases": 200,
+        "guideCases": 14,
+        "navigationCases": 4,
+        "passed": true
+      }
+    },
+    {
+      "name": "webkit",
+      "startedAt": "2026-11-20T07:06:53.007Z",
+      "completedAt": "2026-11-20T07:22:46.455Z",
+      "passed": true,
+      "exitCode": 0,
+      "evidence": "/private/tmp/cedar-quality-frozen-4_u_kjcl/cedar-design-web/artifacts/docs-components/cedar/webkit",
+      "verified": {
+        "browser": {
+          "name": "webkit",
+          "engine": "webkit",
+          "launchOptions": {},
+          "version": "26.5",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "recordedAt": "2026-11-20T07:22:44.573Z",
+          "evidenceType": "automated-engine-regression",
+          "nativeDeviceAcceptance": false,
+          "userAgentEmulation": "device routing preset; not evidence of an actual OS/browser version",
+          "gestureInput": "synthetic touch events (handler regression only)"
+        },
+        "componentCases": 200,
+        "guideCases": 14,
+        "navigationCases": 4,
+        "passed": true
+      }
+    }
+  ]
+}

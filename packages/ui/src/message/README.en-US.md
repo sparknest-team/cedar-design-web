@@ -40,7 +40,7 @@ Start with the basic example, then compare related settings before moving to con
 
 - `status`: Selects the semantic state.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ## Layout and arrangement
 
@@ -169,6 +169,8 @@ duration must be finite and nonnegative. Negative values, NaN and Infinity do no
 
 `default`、`icon`、`action`。
 
+
+A teleported Message keeps its placement and actions through its leave transition when a Card is expanded.
 
 Messages automatically stay above active popups in the current document and track newly opened popups and explicit `zIndex` changes. They do not take over dialog focus or Esc handling. `--c-message-z-index` sets the minimum message stacking level. Custom mount containers must still avoid ancestor stacking contexts and clipping constraints.
 

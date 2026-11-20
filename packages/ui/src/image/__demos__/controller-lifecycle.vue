@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("imageControllerLifecycleInline");
 
 import { ImagePreviewAction as CImagePreviewAction } from "../index";
 
@@ -15,10 +13,10 @@ const switchSource = () => {
 </script>
 <template>
   <div>
-    <c-button @click="open = true">{{ inlineCopy.open }}</c-button>
-    <c-button @click="active = !active">{{ inlineCopy.activate }}</c-button>
+    <c-button @click="open = true">打开预览</c-button>
+    <c-button @click="active = !active">停用与激活</c-button>
     <p>
-      {{ inlineCopy.longPresses }} {{ presses }}. Cancel or deactivate; old
+      长按通知: {{ presses }}. Cancel or deactivate; old
       input must not replay.
     </p>
     <KeepAlive>
@@ -32,12 +30,12 @@ const switchSource = () => {
       >
         <template #actions>
           <c-image-preview-action
-            :name="inlineCopy.switchSource"
+            name="换图"
             @click="switchSource"
             >换图</c-image-preview-action
           >
           <c-image-preview-action
-            :name="inlineCopy.deactivate"
+            name="停用"
             @click="active = false"
             >停用</c-image-preview-action
           >

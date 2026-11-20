@@ -43,7 +43,7 @@ Preview configuration: `content="This is tooltip content"`, `content="This is a 
 
 Choose an axis to compare its available values with the same content and model. Other settings remain unchanged while comparing.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ## Layout and arrangement
 

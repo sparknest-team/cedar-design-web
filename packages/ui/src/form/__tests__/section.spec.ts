@@ -10,16 +10,16 @@ import { inject } from "vue";
 import { formInjectionKey } from "../context";
 
 describe("Section", () => {
-  it("switches styles without remounting fields and uses the card border as its end boundary", async () => {
+  it("switches styles without remounting fields", async () => {
     const wrapper = mount(Section, {
-      props: { title: "现场处置", variant: "line", showEndDivider: true },
+      props: { title: "现场处置", variant: "heading-line" },
       slots: { default: () => h("input") },
     });
     try {
       const input = wrapper.get("input").element;
       await wrapper.get("input").setValue("Draft onsite instructions");
       expect(wrapper.find(".c-section__line").exists()).toBe(true);
-      for (const variant of ["card", "plain", "line"] as const) {
+      for (const variant of ["outline", "plain", "heading-line"] as const) {
         await wrapper.setProps({ variant });
         expect(wrapper.classes()).toContain(`c-section--${variant}`);
         expect(wrapper.get("input").element).toBe(input);
@@ -27,10 +27,7 @@ describe("Section", () => {
           "Draft onsite instructions",
         );
         expect(wrapper.find(".c-section__line").exists()).toBe(
-          variant === "line",
-        );
-        expect(wrapper.find(".c-section__end-divider").exists()).toBe(
-          variant !== "card",
+          variant === "heading-line",
         );
       }
     } finally {
@@ -38,7 +35,7 @@ describe("Section", () => {
     }
   });
   it("adapts its defaults inside Form and preserves the following ungrouped fields", async () => {
-    const sectionState = reactive({ showEndDivider: true, showMarker: true });
+    const sectionState = reactive({ showMarker: true });
     const wrapper = mount(Form, {
       slots: {
         default: () => [
@@ -58,17 +55,12 @@ describe("Section", () => {
         section.get("h3").attributes("id"),
       );
       expect(section.findAll("input")).toHaveLength(1);
-      expect(
-        section.get(".c-section__end-divider").attributes("aria-hidden"),
-      ).toBe("true");
       expect(section.element.nextElementSibling?.textContent).toContain(
         "技能等级",
       );
-      sectionState.showEndDivider = false;
       sectionState.showMarker = false;
       await nextTick();
-      expect(section.find(".c-section__end-divider").exists()).toBe(false);
-      expect(section.find(".c-section__marker").exists()).toBe(false);
+      expect(section.find(".c-section__label--marked").exists()).toBe(false);
     } finally {
       wrapper.unmount();
     }

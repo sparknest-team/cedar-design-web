@@ -19,7 +19,7 @@ Input, textarea and numeric-input carets use `currentColor`, matching the curren
 
 Preview configuration: `aria-label="Comparison size"`, `:value="item"`, `aria-label="Comparison variant"`, `:size="size"`.
 
-<demo src="./__demos__/control-sizes.vue"></demo>
+<demo src="./__demos__/control-sizes.en-US.vue"></demo>
 
 ## Loading and waiting
 

@@ -1,5 +1,6 @@
+import { referenceOwnership, referenceValue, type ReferenceBaseline } from './reference-ownership'
 import type { CompatibleShallowRef } from '../_utils/compatible-shallow-ref'
-import { isVNode, onActivated, onBeforeUnmount, onDeactivated, onMounted, onUpdated, shallowRef, watch, type Ref, type VNode } from 'vue'
+import { cloneVNode, withDirectives, type ObjectDirective, isVNode, onActivated, onBeforeUnmount, onDeactivated, onMounted, onUpdated, shallowRef, watch, type Ref, type VNode } from 'vue'
 import type { TriggerReferenceAttrs } from './props'
 
 export type TriggerElement = HTMLElement | SVGElement
@@ -19,6 +20,17 @@ export function getTriggerElement(nodes: VNode | VNode[] | null | undefined): Tr
   return Array.isArray(nodes.children) ? getTriggerElement(nodes.children as VNode[]) : undefined
 }
 
+function firstReferenceNode(nodes: VNode[]): VNode | undefined {
+  for (const node of nodes) {
+    if (!isVNode(node)) continue
+    if (typeof node.type === 'string' || node.component) return node
+    if (Array.isArray(node.children)) {
+      const first = firstReferenceNode(node.children as VNode[])
+      if (first) return first
+    }
+  }
+}
+
 export function useTriggerReference(onChange?: (element?: TriggerElement) => void): {
   nodes: { value: VNode[] }
   element: CompatibleShallowRef<TriggerElement | undefined>
@@ -31,12 +43,40 @@ export function useTriggerReference(onChange?: (element?: TriggerElement) => voi
     element.value = next
     onChange?.(next)
   }
-  const resolve = () => update(getTriggerElement(nodes.value))
+  let observedParent: Node | undefined
+  let observer: MutationObserver | undefined
+  let active = true
+  function resolve() {
+    if (!active) return
+    const next = getTriggerElement(nodes.value)
+    update(next)
+    // An async or stateful component can replace its root without updating Trigger.
+    // Its original placeholder and subsequent roots share the same DOM parent.
+    const first = firstReferenceNode(nodes.value)
+    const parent: Node | undefined = first?.component ? (next ?? first.el)?.parentNode ?? undefined : undefined
+    if (parent === observedParent) return
+    observer?.disconnect()
+    observedParent = parent
+    const Observer = parent?.ownerDocument?.defaultView?.MutationObserver
+    if (parent && Observer) {
+      observer = new Observer(resolve)
+      observer.observe(parent, { childList: true })
+    }
+  }
+  function suspend() {
+    active = false
+    observer?.disconnect()
+    observedParent = undefined
+    update()
+  }
   onMounted(resolve)
   onUpdated(resolve)
-  onActivated(resolve)
-  onDeactivated(() => update())
-  onBeforeUnmount(() => update())
+  onActivated(() => {
+    active = true
+    resolve()
+  })
+  onDeactivated(suspend)
+  onBeforeUnmount(suspend)
   return { nodes, element }
 }
 
@@ -54,36 +94,56 @@ export function useTriggerReferenceAttrs(
   element: Readonly<Ref<TriggerElement | undefined>>,
   attrs: Readonly<Ref<TriggerReferenceAttrs>>,
 ) {
-  let appliedElement: TriggerElement | undefined
-  let originals = new Map<string, string | null>()
-
-  const restore = () => {
-    if (!appliedElement) return
-    for (const [name, value] of originals) {
-      if (value === null) appliedElement.removeAttribute(name)
-      else appliedElement.setAttribute(name, value)
-    }
-    appliedElement = undefined
-    originals = new Map()
+  // A hydrated reference already carries the server contribution. Keep the authored
+  // baseline so releasing the reference restores the caller's own attributes.
+  const baselines = new WeakMap<TriggerElement, ReferenceBaseline>()
+  const directive: ObjectDirective<TriggerElement, ReferenceBaseline> = {
+    getSSRProps: ({ value }) => Object.fromEntries([...value].map(([name, entry]) => [name, entry.rendered])),
+    created(element, binding) {
+      baselines.set(element, binding.value)
+    },
+    updated(target, binding) {
+      if (target !== appliedElement) return
+      for (const [name, entry] of binding.value) {
+        if (entry.original !== binding.oldValue?.get(name)?.original) ownership?.authored(name, entry.original)
+      }
+    },
   }
-
-  watch([element, attrs], ([nextElement, nextAttrs]) => {
-    restore()
-    if (!nextElement) return
-    appliedElement = nextElement
-    for (const [name, value] of Object.entries(nextAttrs)) {
-      if (value == null) continue
-      const original = nextElement.getAttribute(name)
-      originals.set(name, original)
-      if (name === 'aria-describedby') {
-        const ids = `${original ?? ''} ${String(value)}`.split(/[ \t\n\f\r]+/).filter(Boolean)
-        nextElement.setAttribute(name, [...new Set(ids)].join(' '))
-      } else nextElement.setAttribute(name, String(value))
-    }
+  const owner = Symbol('Trigger')
+  let appliedElement: TriggerElement | undefined
+  let ownership: ReturnType<typeof referenceOwnership> | undefined
+  const restore = () => {
+    ownership?.update(owner, {})
+    ownership = undefined
+    appliedElement = undefined
+  }
+  watch([element, attrs], ([target, next]) => {
+    const active = target && Object.values(next).some(value => value != null)
+    if (!active || target !== appliedElement) restore()
+    if (!target || !active) return
+    appliedElement = target
+    ownership ??= referenceOwnership(target)
+    ownership.update(owner, next, baselines.get(target))
+    baselines.delete(target)
   }, { immediate: true, flush: 'post' })
 
   onBeforeUnmount(restore)
   onDeactivated(restore)
+
+  return (node: VNode) => {
+    const baseline: ReferenceBaseline = new Map()
+    for (const [name, value] of Object.entries(attrs.value)) {
+      // Native ARIA and data attributes serialize as strings in both DOM and SSR.
+      if (value == null || !/^(?:aria|data)-[a-z0-9_.:-]+$/.test(name)) continue
+      const prop = node.props?.[name]
+      const original = prop == null ? null : String(prop)
+      baseline.set(name, { original, rendered: referenceValue(name, [String(value)], original)! })
+    }
+    if (!baseline.size) return node
+    const reference = cloneVNode(node)
+    if (node.dirs) reference.dirs = [...node.dirs]
+    return withDirectives(reference, [[directive, baseline]])
+  }
 }
 
 /** Resolve both slot roots and external references with one lifecycle contract. */

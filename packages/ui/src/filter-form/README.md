@@ -14,9 +14,9 @@ permalink: /components/filter-form/
 
 在 `fields` 中直接传入组件并配置字段。宽屏会自动多列展示，超出时可展开/收起。
 
-筛选容器使用主题表面色（亮色为白色、暗色随主题适配）、轻描边与20px内边距，不再使用输入控件的浅填充背景。操作区按按钮实际宽度自适应预留列数，展开/收起与操作按钮始终保持一行，并与字段控件顶边对齐。收起时操作区位于首行右侧；展开后字段使用完整列布局，操作区位于最后一行右侧，末行空间不足时另起一行靠右。容器或按钮宽度变化时自动重新计算预留空间。单列/双列折叠默认保留一行字段和独立操作行，避免只剩按钮。展开/收起为原生按钮，支持Tab聚焦、Enter/空格操作并提供aria-expanded。行间距默认16px，可由grid-props.rowGap覆盖。
+操作区按按钮实际宽度自适应预留列数，展开/收起与操作按钮始终保持一行，并与字段控件顶边对齐。收起时操作区位于首行右侧；展开后字段使用完整列布局，操作区位于最后一行右侧，末行空间不足时另起一行靠右。容器或按钮宽度变化时自动重新计算预留空间。单列/双列折叠默认保留一行字段和独立操作行，避免只剩按钮。展开/收起为原生按钮，支持Tab聚焦、Enter/空格操作并提供aria-expanded。行间距默认16px，可由grid-props.rowGap覆盖。
 
-The filter uses the theme surface with a subtle border and 20px inset, rather than an input-fill background. Actions reserve columns according to their actual width, with the expand/collapse control and action buttons kept on one line. Collapsed actions sit at the right of the first row. Expanded fields use the full column layout, with actions at the right of the last row, or on a new row when there is insufficient space. Resizing the container or changing button widths recalculates the reservation. One- and two-column collapse retain a row of fields above the actions by default. Expand/collapse is a native keyboard-accessible button with aria-expanded. The default 16px row gap can be overridden through grid-props.rowGap.
+Actions reserve columns according to their actual width, with the expand/collapse control and action buttons kept on one line. Collapsed actions sit at the right of the first row. Expanded fields use the full column layout, with actions at the right of the last row, or on a new row when there is insufficient space. Resizing the container or changing button widths recalculates the reservation. One- and two-column collapse retain a row of fields above the actions by default. Expand/collapse is a native keyboard-accessible button with aria-expanded. The default 16px row gap can be overridden through grid-props.rowGap.
 
 <demo src="./__demos__/basic.vue"></demo>
 
@@ -35,6 +35,18 @@ const fields: FilterFormField[] = [
 ```
 
 所有字段组件统一使用 `modelValue` / `update:modelValue` 同步值。自定义组件也应遵循该协议；其他协议可通过包装组件适配。值同步与 FilterForm 的防抖 `change` 通知独立，`autoEmitChange: false` 时值仍会即时同步。
+
+### 直接放在表格上方
+
+筛选栏和表格左边缘对齐。输入订单号或客户名称，表格会实时显示匹配的订单。
+
+<demo src="./__demos__/above-table.vue"></demo>
+
+### 用 Card 包裹筛选区
+
+由 outline Card 提供边框、背景和内边距。选择订单状态后点击查询，或点击重置恢复全部订单。
+
+<demo src="./__demos__/inside-card.vue"></demo>
 
 ## 内容与展示
 
@@ -185,17 +197,7 @@ field 支持与 FormItem 一致的点号及方括号路径。写入时自动创�
 | --- | --- | --- |
 | `--c-filter-form-action-offset` | `calc(1em * var(--c-form-line-height) + var(--c-form-vertical-label-margin-bottom))` | `padding-top` |
 | `--c-filter-form-actions-gap` | `var(--c-sys-space-5)` | `gap` |
-| `--c-filter-form-background-color` | `var(--c-sys-color-surface-default)` | `background-color` |
-| `--c-filter-form-border-color` | `var(--c-sys-color-border-subtle)` | `border` |
-| `--c-filter-form-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
-| `--c-filter-form-border-width` | `1px` | `border` |
-| `--c-filter-form-collapse-color` | `var(--c-color-text-2)` | `color` |
-| `--c-filter-form-collapse-gap` | `4px` | `gap` |
-| `--c-filter-form-collapse-hover-color` | `var(--c-sys-color-content-brand)` | `color`, `outline` |
-| `--c-filter-form-focus-offset` | `3px` | `outline-offset` |
-| `--c-filter-form-focus-width` | `2px` | `outline` |
 | `--c-filter-form-item-margin-bottom` | `0px` | `margin-bottom` |
-| `--c-filter-form-padding` | `var(--c-sys-space-7)` | `padding` |
 
 </div>
 

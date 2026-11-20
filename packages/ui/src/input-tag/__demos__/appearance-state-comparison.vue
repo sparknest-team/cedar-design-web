@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("inputTagAppearanceStateComparison");
 import { ref } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -18,7 +16,7 @@ const scene1 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="size"
     >
-      <h4>{{ demoCopy.size }}</h4>
+      <h4>输入框尺寸</h4>
       <c-space direction="column" size="lg">
         <c-radio-group type="button" v-model="scene1.size">
           <c-radio value="xs">xs</c-radio>
@@ -40,7 +38,7 @@ const scene1 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="status"
     >
-      <h4>{{ demoCopy.status }}</h4>
+      <h4>输入框状态</h4>
       <c-space direction="column" size="lg">
         <c-input-tag
           :default-value="['test']"

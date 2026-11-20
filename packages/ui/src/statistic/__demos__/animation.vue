@@ -17,9 +17,9 @@
   </c-space>
 
   <c-space direction="column" style="margin-top: 16px">
-    <h4>{{ inlineCopy.dynamicAnimation }}</h4>
+    <h4>动态开关与配置</h4>
     <c-statistic
-      :title="inlineCopy.dynamicTarget"
+      title="动态目标"
       :value="100"
       :animation="enabled"
       :value-from="origin"
@@ -29,23 +29,21 @@
       <c-button @click="enabled = !enabled">{{
         enabled ? inlineCopy.disableAnimation : inlineCopy.enableAnimation
       }}</c-button>
-      <c-button @click="origin = origin === 0 ? 20 : 0">{{
-        inlineCopy.changeOrigin
-      }}</c-button>
-      <c-button @click="duration = duration === 800 ? 1600 : 800">{{
-        inlineCopy.changeDuration
-      }}</c-button>
+      <c-button @click="origin = origin === 0 ? 20 : 0">切换起点</c-button>
+      <c-button @click="duration = duration === 800 ? 1600 : 800">切换时长</c-button>
     </c-space>
     <p>
-      {{ inlineCopy.from }} {{ origin }}{{ inlineCopy.duration }}
+      起点 {{ origin }}；时长
       {{ duration }}ms
     </p>
   </c-space>
 </template>
 
 <script lang="ts" setup>
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("statisticAnimationInline");
+const inlineCopy = {
+  disableAnimation: "关闭动画",
+  enableAnimation: "启用动画"
+};
 
 import { ref } from "vue";
 import { IconArrowRise as CIconArrowRise } from "@cedar-design/icons-vue";

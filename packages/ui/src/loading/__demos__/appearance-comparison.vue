@@ -1,15 +1,10 @@
-<script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("loadingAppearanceComparison");
-</script>
-
 <template>
   <div class="demo-comparison">
     <section
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="size"
     >
-      <h4>{{ demoCopy.size }}</h4>
+      <h4>大小</h4>
       <c-space align="center" justify="space-between">
         <c-loading size="sm" />
         <c-loading type="cube" size="sm" />
@@ -24,7 +19,7 @@ const demoCopy = useDemoLocale("loadingAppearanceComparison");
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="color"
     >
-      <h4>{{ demoCopy.color }}</h4>
+      <h4>颜色</h4>
       <c-space align="center" justify="space-between">
         <c-loading color="var(--c-color-info)" />
         <c-loading type="cube" color="var(--c-color-success)" />
@@ -38,7 +33,7 @@ const demoCopy = useDemoLocale("loadingAppearanceComparison");
       class="demo-comparison-case demo-comparison-case--3"
       data-comparison-scene="type"
     >
-      <h4>{{ demoCopy.type }}</h4>
+      <h4>类型</h4>
       <c-space align="center" justify="space-between">
         <c-loading />
         <c-loading type="cube" />

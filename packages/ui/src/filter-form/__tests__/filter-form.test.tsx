@@ -32,8 +32,8 @@ describe('FilterForm', () => {
       const items = wrapper.findAll('.c-grid-item')
       expect(items[0].element.style.display).not.toBe('none')
       expect(items[1].element.style.display).toBe('none')
-      expect(wrapper.get('button.c-filter-form__collapse').attributes('aria-expanded')).toBe('false')
-      await wrapper.get('button.c-filter-form__collapse').trigger('click')
+      expect(wrapper.get('.c-filter-form__collapse').attributes('aria-expanded')).toBe('false')
+      await wrapper.get('.c-filter-form__collapse').trigger('click')
       expect(items.slice(0, 3).every(item => item.element.style.display !== 'none')).toBe(true)
     } finally {
       wrapper.unmount()
@@ -165,9 +165,10 @@ describe('FilterForm', () => {
     await nextTick()
 
     const collapseBtn = wrapper.find('.c-filter-form__collapse')
-    expect(collapseBtn.exists()).toBe(true)
-    expect(collapseBtn.element.tagName).toBe('BUTTON')
-    expect(collapseBtn.attributes('type')).toBe('button')
+    expect(collapseBtn.classes()).toContain('c-link--hoverless')
+    expect(collapseBtn.attributes('tabindex')).toBe('0')
+    expect(collapseBtn.element.tagName).toBe('A')
+    expect(collapseBtn.attributes('role')).toBe('button')
     expect(collapseBtn.attributes('aria-expanded')).toBe('false')
     expect(collapseBtn.text()).toContain('展开')
 
@@ -175,7 +176,12 @@ describe('FilterForm', () => {
     await nextTick()
     expect(wrapper.find('.c-filter-form__collapse').text()).toContain('收起')
     expect(wrapper.find('.c-filter-form__collapse').attributes('aria-expanded')).toBe('true')
-    expect(wrapper.emitted('update:collapsed')?.[0]).toEqual([false])
+    await collapseBtn.trigger('keydown', { key: 'Enter' })
+    expect(collapseBtn.attributes('aria-expanded')).toBe('false')
+    await collapseBtn.trigger('keydown', { key: ' ' })
+    await collapseBtn.trigger('keyup', { key: ' ' })
+    expect(collapseBtn.attributes('aria-expanded')).toBe('true')
+    expect(wrapper.emitted('update:collapsed')).toEqual([[false], [true], [false]])
 
     wrapper.unmount()
   })

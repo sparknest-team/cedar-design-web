@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("paginationAuxiliaryControlsComparison");
 import { ref } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -20,7 +18,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="show-total"
     >
-      <h4>{{ demoCopy.showTotal }}</h4>
+      <h4>自定义总数插槽</h4>
       <div class="pagination-demo">
         <c-pagination :total="200" show-total
           ><template #total="{ total }"
@@ -34,7 +32,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="show-page-size"
     >
-      <h4>{{ demoCopy.showPageSize }}</h4>
+      <h4>每页条数与公共选择器配置</h4>
       <div class="pagination-demo">
         <c-pagination
           v-model="scene2.current"
@@ -57,7 +55,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--3"
       data-comparison-scene="show-jumper"
     >
-      <h4>{{ demoCopy.showJumper }}</h4>
+      <h4>跳转与前后缀插槽</h4>
       <div class="pagination-demo">
         <c-pagination :total="200" show-jumper :responsive="false">
           <template #jumper-prepend>Go to</template

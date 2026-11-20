@@ -58,7 +58,7 @@ test('model and collapsed mirrors keep unaccepted local proposals until an exter
   await nextTick()
   expect(w.getComponent(Control).props('modelValue')).toBe('local')
   expect(w.props('modelValue')).toEqual({ query: 'parent' })
-  await w.get('button.c-filter-form__collapse').trigger('click')
+  await w.get('.c-filter-form__collapse').trigger('click')
   expect(w.props('collapsed')).toBe(true)
   expect(w.getComponent(Grid).props('collapsed')).toBe(false)
   expect(w.emitted('update:collapsed')).toEqual([[false]])
@@ -105,7 +105,7 @@ test('actions exposes no scoped helpers and remains available with collapsible=f
     },
   )
   expect(w.find('[data-custom]').exists()).toBe(true)
-  expect(w.find('button.c-filter-form__collapse').exists()).toBe(false)
+  expect(w.find('.c-filter-form__collapse').exists()).toBe(false)
   expect(scopes.length).toBeGreaterThan(0)
   expect(scopes.every((scope) => Object.keys(scope as object).length === 0)).toBe(true)
 })

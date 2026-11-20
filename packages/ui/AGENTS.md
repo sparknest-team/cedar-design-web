@@ -77,6 +77,8 @@ src/<component>/
 
 ### Demo / 样例
 
+- 站点根据路由统一设置全局语言。公开示例直接写当前语言文案，有翻译时中文文档引用 `name.vue`、英文文档引用 `name.en-US.vue`。示例见 [Section](src/section/__demos__/heading-options.vue)。运行 `pnpm check:demo-i18n` 验证。
+
 - demo 里的 icon 必须用 kebab + `c-` 前缀，如 `<c-icon-more />`，**禁止**裸 PascalCase `<More />`——`CedarResolver` 只匹配 `^C[A-Z]`，不会解析裸 `Icon`。
 - demo 文件名 kebab-case；`<demo src="./__demos__/xxx.vue">` 路径同名。
 

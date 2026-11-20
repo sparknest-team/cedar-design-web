@@ -19,26 +19,86 @@
     }
   }
 
+  &--size-sm > &__surface {
+    --c-internal-section-card-padding: var(--c-section-size-sm-card-padding);
+    --c-internal-section-header-gap: var(--c-section-size-sm-header-gap);
+    --c-internal-section-marker-height: var(--c-section-size-sm-marker-height);
+    --c-internal-section-title-line-height: var(--c-section-size-sm-title-line-height);
+    --c-internal-section-title-size: var(--c-section-size-sm-title-size);
+  }
   &__surface {
+    --c-internal-section-card-padding: var(--c-section-card-padding);
+    --c-internal-section-header-gap: var(--c-section-header-gap);
+    --c-internal-section-marker-height: var(--c-section-marker-height);
+    --c-internal-section-title-line-height: var(--c-section-title-line-height);
+    --c-internal-section-title-size: var(--c-section-title-size);
     box-sizing: border-box;
     min-width: 0;
     width: 100%;
+    --c-internal-section-accent: var(--c-section-accent-color);
+    --c-internal-section-fill: var(--c-section-tonal-background);
+    --c-internal-section-outline: var(--c-section-outline-color);
   }
-  &--card > &__surface {
-    padding: var(--c-section-card-padding);
-    border: var(--c-section-divider-width) solid
-      var(--c-section-divider-color);
+  &--default > &__surface {
+    --c-internal-section-accent: var(--c-color-border-3);
+  }
+  each(info success warning danger, {
+    &--@{value} > &__surface {
+      --c-internal-section-accent: var(~'--c-sys-color-status-@{value}');
+      --c-internal-section-fill: color-mix(in srgb, var(--c-internal-section-accent) 12%, var(--c-section-card-background));
+      --c-internal-section-outline: var(--c-internal-section-accent);
+    }
+  });
+  &--tonal > &__surface,
+  &--outline > &__surface {
+    padding: var(--c-internal-section-card-padding);
     border-radius: var(--c-section-card-radius);
-    background: var(--c-section-card-background);
+  }
+  &--tonal > &__surface {
+    background-color: var(--c-internal-section-fill);
+  }
+  &--outline > &__surface {
+    border: var(--c-section-divider-width) solid var(--c-internal-section-outline);
+  }
+  &__surface--marked,
+  &__label--marked {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset-inline-start: 0;
+      width: var(--c-section-marker-width);
+      border-radius: var(--c-section-marker-radius);
+      background: var(--c-internal-section-accent);
+      pointer-events: none;
+    }
+  }
+  &__surface--marked::before {
+    inset-block: 0;
+  }
+  &__label--marked::before {
+    top: 50%;
+    height: var(--c-internal-section-marker-height);
+    transform: translateY(-50%);
+  }
+  &__label--marked,
+  &--plain > &__surface--marked,
+  &--heading-line > &__surface--marked {
+    padding-inline-start: calc(var(--c-section-marker-width) + var(--c-section-marker-gap));
+  }
+  &--plain > &__surface {
+    padding-inline-end: var(--c-section-marker-gap);
   }
   &__label {
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     min-width: 0;
     max-width: 100%;
   }
   &__header {
-    margin-block-end: var(--c-section-header-gap);
+    margin-block-end: var(--c-internal-section-header-gap);
   }
   &__heading {
     display: flex;
@@ -47,22 +107,14 @@
     row-gap: var(--c-section-marker-gap);
     min-width: 0;
   }
-  &__marker {
-    flex: none;
-    width: var(--c-section-marker-width);
-    height: var(--c-section-marker-height);
-    margin-inline-end: var(--c-section-marker-gap);
-    border-radius: var(--c-section-marker-radius);
-    background: var(--c-section-accent-color);
-  }
   &__title {
     min-width: 0;
     margin: 0;
     overflow-wrap: anywhere;
     color: var(--c-section-title-color);
-    font-size: var(--c-section-title-size);
+    font-size: var(--c-internal-section-title-size);
     font-weight: var(--c-section-title-weight);
-    line-height: var(--c-section-title-line-height);
+    line-height: var(--c-internal-section-title-line-height);
   }
   &__line,
   &__spacer {
@@ -100,11 +152,6 @@
   }
   &--form > &__surface > &__content > .c-form-item:last-child {
     margin-bottom: 0;
-  }
-  &__end-divider {
-    margin-block-start: var(--c-section-end-divider-gap);
-    border-block-start: var(--c-section-divider-width) solid
-      var(--c-section-divider-color);
   }
 }
 

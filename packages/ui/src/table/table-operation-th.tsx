@@ -1,5 +1,5 @@
 import { computed, defineComponent, inject, PropType } from 'vue'
-import { getOperationFixedCls, getOperationStyle } from './utils'
+import { getOperationFixedCls, getOperationStyle } from './render/cell-layout'
 import { getPrefixCls, createNamespace } from '../_utils/global-config'
 import Checkbox from '../checkbox'
 import { TableOperationColumn } from './types'

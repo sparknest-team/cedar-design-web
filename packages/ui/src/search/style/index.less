@@ -6,6 +6,7 @@
   align-items: center;
   box-sizing: border-box;
   width: 100%;
+  min-width: 0;
   min-height: var(--c-search-size-min-height);
   padding: var(--c-search-spacing-padding);
   background: var(--c-search-color-bg);
@@ -41,7 +42,6 @@
   &__input { flex: 1; min-width: 0; }
   &__select .c-selection-field__icon { font-size: var(--c-search-select-icon-size); margin-inline-start: var(--c-search-select-icon-spacing); }
   &__select { min-width: var(--c-search-select-size-min-width); max-width: var(--c-search-select-size-max-width); }
-  &__popup-content { height: 100%; overflow: auto; background: var(--c-search-color-bg); }
   &__history { padding: var(--c-search-history-spacing-padding); }
   &__history-item {
     display: flex; align-items: center; width: 100%;

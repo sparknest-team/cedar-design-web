@@ -1,6 +1,4 @@
 <script setup>
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("watermarkBasicInline");
 
 import { ref } from "vue";
 const dark = ref(false);
@@ -11,9 +9,9 @@ const clicks = ref(0);
 
 <template>
   <section class="watermark-contrast-demo">
-    <c-checkbox v-model="dark"> {{ inlineCopy.darkSurface }}</c-checkbox>
-    <c-checkbox v-model="shown"> {{ inlineCopy.showWatermark }}</c-checkbox>
-    <label>{{ inlineCopy.watermarkText }}<c-input v-model="content" /></label>
+    <c-checkbox v-model="dark"> 深色底</c-checkbox>
+    <c-checkbox v-model="shown"> 显示水印</c-checkbox>
+    <label>水印文字<c-input v-model="content" /></label>
     <c-watermark
       v-if="shown"
       :content="content"
@@ -24,10 +22,8 @@ const clicks = ref(0);
       }"
     >
       <div class="watermark-contrast-surface">
-        <p>{{ inlineCopy.localSyntheticContent }}</p>
-        <c-button html-type="button" @click="clicks++">{{
-          inlineCopy.clickThrough
-        }}</c-button>
+        <p>本地合成内容</p>
+        <c-button html-type="button" @click="clicks++">点击内容</c-button>
       </div>
     </c-watermark>
     <p role="status">

@@ -41,21 +41,21 @@ for (const kind of ['search', 'people'] as const) {
 }
 
 
-test('Search popup input follows dynamic caller descriptions and Form errors', async () => {
+test('Search click editor follows dynamic caller descriptions and Form errors', async () => {
   const invalid = ref<boolean | string>(false)
   const description = ref('external-one')
   const wrapper = mount(Form, {
     attachTo: document.body,
     props: { editMode: 'direct', model: { value: '' } },
     slots: { default: () => h(FormItem, { field: 'value', label: 'Value' }, () => h(Search, {
-      editMode: 'popup', recentSearches: ['previous'],
+      editMode: 'click', recentSearches: ['previous'],
       inputAttrs: { 'aria-invalid': invalid.value, 'aria-describedby': description.value },
     })) },
   })
   try {
-    await wrapper.get('input').trigger('focus')
+    await wrapper.get('button.c-field-presentation__reference').trigger('click')
     await flushPromises()
-    const input = () => document.querySelector<HTMLInputElement>('.c-search__popup-content input')!
+    const input = () => document.querySelector<HTMLInputElement>('input.c-input__inner')!
     expect(input()).toBeTruthy()
     expect(input().getAttribute('aria-invalid')).toBe('false')
     expect(input().getAttribute('aria-describedby')).toBe('external-one')

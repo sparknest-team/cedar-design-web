@@ -21,7 +21,7 @@ For example, string ID `shuai.meng` is stored as `@[shuai.meng]`; numeric `0` is
 
 Local candidates are matched case-insensitively against both `value` and `label`. For example, typing `@xiaoming` or `@小明` finds the same candidate; choosing it displays `@小明` and stores `@[xiaoming]`. In atomic mode, when there are no candidates, Enter also creates a mention if `fallback-option` returns an object for the typed ID. Unconfirmed text is not converted. Remote loaders receive the query and their results are not filtered again locally. During requests the field and suggestion dropdown show loading feedback; stale responses cannot replace the latest results.
 
-<demo src="./__demos__/atomic-mention.vue"></demo>
+<demo src="./__demos__/atomic-mention.en-US.vue"></demo>
 
 After confirming a mention, a space is added unless whitespace already follows; the space is part of the saved value. Mention text uses the primary brand foreground without a background.
 
@@ -31,19 +31,19 @@ After confirming a mention, a space is added unless whitespace already follows; 
 
 With a local array, type `@小` or `@xiaoming` to match a name or ID. The async example passes the query to application code and shows loading in the dropdown. Quickly change `@xi` to `@lisi` to see only the latest result. It uses mock data; a real loader can pass `signal` to `fetch`.
 
-<demo src="./__demos__/search-options.vue"></demo>
+<demo src="./__demos__/search-options.en-US.vue"></demo>
 
 ### Async search and read-pretty display
 
 Type `@xiaoming` and select the person, then search for `@lisi`. The selected name remains visible in read-pretty mode and when returning to the editor; the model retains its ID. This example uses a mock request for candidates and `fallback-option` for the initial ID.
 
-<demo src="./__demos__/async-read-pretty.vue"></demo>
+<demo src="./__demos__/async-read-pretty.en-US.vue"></demo>
 
 ### Restore saved values asynchronously
 
 This example simulates saving the model in memory, remounts the component, then loads names asynchronously. IDs appear while loading; the synchronous `fallback-option` resolves names when data arrives without changing the saved value. Applications own persistence and fetching display data by ID.
 
-<demo src="./__demos__/async-fallback-restore.vue"></demo>
+<demo src="./__demos__/async-fallback-restore.en-US.vue"></demo>
 
 ## Customization and slots
 
@@ -83,7 +83,7 @@ This example simulates saving the model in memory, remounts the component, then 
 
 Set loading explicitly to display feedback. Ordinary event return values do not drive loading. Before hooks retain their documented pending behavior.
 
-<demo src="./__demos__/loading.vue"></demo>
+<demo src="./__demos__/loading.en-US.vue"></demo>
 
 ## API
 

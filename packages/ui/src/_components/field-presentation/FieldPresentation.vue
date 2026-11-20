@@ -38,6 +38,7 @@
         aria-modal="false"
       >
         <EditorPanel
+          :popup-container="popupContainer"
           ref="panel"
           compact
           defer-escape
@@ -75,6 +76,7 @@ import { mergeProps,
 import { useDirection } from '../../_utils/direction'
 import { createNamespace } from '../../_utils/global-config'
 import { usePopupContainer, type PopupContainer } from '../../_utils/popup-container'
+import { useVisualSurface } from '../../_utils/visual-surface'
 import { usePopupLayer } from '../../_utils/popup-layer'
 import { useZIndex } from '../../context/zIndex'
 import { provideTriggerInteractionScope } from '../../trigger/interaction'
@@ -143,6 +145,7 @@ let disposed = false
 const active = ref(true)
 const layerActive = () => Boolean(props.open && active.value && !props.readPretty && props.editMode !== 'direct')
 const { zIndex } = useZIndex(layerActive, 1)
+useVisualSurface(() => overlay.value, () => zIndex.value, 'positioned')
 usePopupLayer(layerActive, zIndex, () => anchor.value?.ownerDocument)
 const view = () => anchor.value?.ownerDocument.defaultView
 let restoreFocus = true

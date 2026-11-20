@@ -53,12 +53,12 @@ describe('virtual table row positions', () => {
     wrapper.unmount()
   })
 
-  it('omits positions if a callback may or may not produce a detail row', async () => {
+  it('counts a mounted empty detail without shifting later rows', async () => {
     const wrapper = mount(Table, { props: { ...props, expandedKeys: [0], expandable: { expandedRowRender: () => null } } })
     await flushPromises()
     const table = wrapper.get('.c-table-body table')
-    expect(table.attributes('aria-rowcount')).toBeUndefined()
-    expect(table.findAll('tr').every(row => row.attributes('aria-rowindex') === undefined)).toBe(true)
+    expect(table.attributes('aria-rowcount')).toBe('32')
+    expect(table.findAll('tbody tr').slice(0, 2).map(row => row.attributes('aria-rowindex'))).toEqual(['3', '4'])
     wrapper.unmount()
   })
 
@@ -71,7 +71,8 @@ describe('virtual table row positions', () => {
     try {
       await flushPromises()
       const table = wrapper.get('.c-table-body table')
-      expect(table.attributes('aria-rowcount')).toBeUndefined()
+      expect(table.attributes('aria-rowcount')).toBe('-1')
+      expect(table.find('tbody tr').attributes('aria-rowindex')).toBe('3')
       expect(table.text()).not.toContain('Row 199')
       expect(expandedRowRender).toHaveBeenCalled()
       expect(expandedRowRender).not.toHaveBeenCalledWith(expect.objectContaining({ key: 199 }))
@@ -84,9 +85,61 @@ describe('virtual table row positions', () => {
     const html = await renderToString(createSSRApp({ render: () => h(Table, {
       ...props, data: rows, expandedKeys: [199], expandable: { expandedRowRender },
     }) }))
-    expect(html).not.toContain('aria-rowcount=')
+    expect(html).toContain('aria-rowcount="-1"')
+    expect(html).toContain('aria-rowindex="3"')
     expect(html).not.toContain('Row 199')
     expect(expandedRowRender).not.toHaveBeenCalledWith(expect.objectContaining({ key: 199 }))
+  })
+
+  it('reuses each rendered middle detail for SSR content, positions and hydration', async () => {
+    const detail = vi.fn(() => h('span', 'SSR detail'))
+    const records = [{ key: 'a', name: 'First' }, { key: 'b', name: 'Middle', expand: detail }, { key: 'c', name: 'Last' }]
+    const app = () => createSSRApp({ render: () => h(Table, { ...props, data: records, expandedKeys: ['b'] }) })
+    const html = await renderToString(app())
+    expect(html).toContain('aria-rowcount="6"')
+    expect(html).toContain('aria-rowindex="6"')
+    expect(html).toContain('SSR detail')
+    expect(detail).toHaveBeenCalledTimes(1)
+    const container = document.createElement('div')
+    container.innerHTML = html
+    const original = Array.from(container.querySelectorAll('.c-table-body tr'))
+    const client = app()
+    client.mount(container)
+    try {
+      await nextTick()
+      const hydrated = Array.from(container.querySelectorAll('.c-table-body tr'))
+      expect(hydrated).toHaveLength(original.length)
+      expect(hydrated.every((row, index) => row === original[index])).toBe(true)
+      expect(hydrated.map(row => row.getAttribute('aria-rowindex'))).toEqual(['1', '2', '3', '4', '5', '6'])
+    } finally { client.unmount() }
+  })
+
+  it('indexes a final optional nested detail only when rendered and reacts to following siblings', async () => {
+    const visible = ref(true)
+    const parent = { key: 'a', name: 'Parent', children: [
+      { key: 'b', name: 'Last', expand: () => visible.value ? 'Details' : null },
+    ] }
+    const wrapper = mount(Table, { props: { ...props, data: [parent], expandedKeys: ['a', 'b'] } })
+    try {
+      await flushPromises()
+      const table = wrapper.get('.c-table-body table')
+      const indices = () => table.findAll('tr').map(row => row.attributes('aria-rowindex'))
+      expect(table.attributes('aria-rowcount')).toBe('5')
+      expect(indices()).toEqual(['1', '2', '3', '4', '5'])
+      visible.value = false
+      await nextTick()
+      expect(indices()).toEqual(['1', '2', '3', '4'])
+      await wrapper.setProps({ data: [parent, { key: 'c', name: 'Sibling' }] })
+      expect(table.attributes('aria-rowcount')).toBe('5')
+      expect(indices()).toEqual(['1', '2', '3', '4', '5'])
+      visible.value = true
+      await nextTick()
+      expect(table.attributes('aria-rowcount')).toBe('6')
+      expect(indices()).toEqual(['1', '2', '3', '4', '5', '6'])
+      await wrapper.setProps({ expandedKeys: ['a'] })
+      expect(table.attributes('aria-rowcount')).toBe('5')
+      expect(indices()).toEqual(['1', '2', '3', '4', '5'])
+    } finally { wrapper.unmount() }
   })
 
   it('counts an expanded empty tree placeholder', async () => {
@@ -114,21 +167,21 @@ describe('virtual table row positions', () => {
     wrapper.unmount()
   })
 
-  it('updates row-position availability when detail changes between a callback and static content', async () => {
+  it('updates row positions when detail changes between a callback and static content', async () => {
     const records = (expand: string | (() => null)) => [{ key: 'a', name: 'One', expand }, { key: 'b', name: 'Two' }]
     const wrapper = mount(Table, { props: { ...props, data: records(() => null), expandedKeys: ['a'] } })
     try {
       await flushPromises()
       const table = wrapper.get('.c-table-body table')
-      expect(table.attributes('aria-rowcount')).toBeUndefined()
-      expect(table.findAll('tr').every(row => row.attributes('aria-rowindex') === undefined)).toBe(true)
+      expect(table.attributes('aria-rowcount')).toBe('4')
+      expect(table.findAll('tbody tr').map(row => row.attributes('aria-rowindex'))).toEqual(['3', '4'])
       await wrapper.setProps({ data: records('Details') })
       expect(table.attributes('aria-rowcount')).toBe('5')
       expect(table.findAll('tbody tr').map(row => row.attributes('aria-rowindex'))).toEqual(['3', '4', '5'])
       expect(table.text()).toContain('Details')
       await wrapper.setProps({ data: records(() => null) })
-      expect(table.attributes('aria-rowcount')).toBeUndefined()
-      expect(table.findAll('tr').every(row => row.attributes('aria-rowindex') === undefined)).toBe(true)
+      expect(table.attributes('aria-rowcount')).toBe('4')
+      expect(table.findAll('tbody tr').map(row => row.attributes('aria-rowindex'))).toEqual(['3', '4'])
       expect(table.text()).not.toContain('Details')
     } finally { wrapper.unmount() }
   })

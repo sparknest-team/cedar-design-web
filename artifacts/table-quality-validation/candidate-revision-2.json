@@ -1,0 +1,13 @@
+{
+  "createdAt": "2026-11-20T04:49:00.436Z",
+  "candidateRoot": "/private/tmp/cedar-quality-frozen-4_u_kjcl/cedar-design-web",
+  "sourceFingerprint": "66ced0d7a4df5da1b17c7e2f2799e8be8e9002e7bbadcdf30770bbb3dc5f8bd7",
+  "productionFingerprint": "39849758f3f52d7906986330318a385cae02c10d96a13f993e912ef7a3e9159e",
+  "command": "pnpm quality",
+  "log": "/private/tmp/cedar-table-frozen-quality-02.log",
+  "changesSinceInitialSnapshot": [
+    "Registered existing Maple Section demos and normalized its gallery/docs grouping",
+    "Registered 47 authored English translations, corrected parameter-table heading translation, regenerated two English documents"
+  ],
+  "productionComponentCodeChanged": false
+}

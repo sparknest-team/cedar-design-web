@@ -15,7 +15,7 @@ Inherits the nearest `dir="ltr|rtl"`. Horizontal text start/end follows reading 
 
 Separate adjacent content sections.
 
-<demo src="./__demos__/basic.vue"></demo>
+<demo src="./__demos__/basic.en-US.vue"></demo>
 
 ## Layout and arrangement
 
@@ -74,13 +74,13 @@ Customize the line using `color`, `thickness` and `opacity`. Zero opacity preser
 
 </details>
 
-<demo src="./__demos__/line-appearance-comparison.vue"></demo>
+<demo src="./__demos__/line-appearance-comparison.en-US.vue"></demo>
 
 ### With Text
 
 Use `description` and `text-align` to position text at the start, center or end. Toggle RTL to inspect logical start/end alignment.
 
-<demo src="./__demos__/with-text.vue"></demo>
+<demo src="./__demos__/with-text.en-US.vue"></demo>
 
 ## Customization and slots
 
@@ -98,7 +98,7 @@ Use `description` and `text-align` to position text at the start, center or end.
 
 The default slot takes priority over `description`. Provide padding for custom content in the caller.
 
-<demo src="./__demos__/custom.vue"></demo>
+<demo src="./__demos__/custom.en-US.vue"></demo>
 
 ## Interaction and control
 
@@ -130,7 +130,7 @@ Explicit thickness accepts finite numbers greater than or equal to 1. hairline s
 
 Multiline descriptions and custom content occupy their full height, including spacing=0. Subsequent content stays below the divider.
 
-<demo src="./__demos__/content-flow.vue"></demo>
+<demo src="./__demos__/content-flow.en-US.vue"></demo>
 
 ## Usage notes
 

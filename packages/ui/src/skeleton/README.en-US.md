@@ -35,7 +35,7 @@ Preview configuration: `:loading="loading"`.
 
 Compare text-row placeholders with avatar and card shapes according to the final content layout.
 
-<demo src="./__demos__/content-comparison.vue"></demo>
+<demo src="./__demos__/content-comparison.en-US.vue"></demo>
 
 ### Animation
 

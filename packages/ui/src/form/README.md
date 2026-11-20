@@ -9,15 +9,17 @@ permalink: /components/form/
 
 ## 字段名称
 
-客户端挂载后，默认标签会关联内容区中唯一的文本输入框、文本域或下拉框。点击标签可聚焦该字段。增加第二个独立控件时，内容区使用可见标签作为分组名称，各控件应分别提供自己的名称。显式设置 `label-attrs.for` 与字段 `id` 可在服务端首屏就建立关联，也适用于需要指定目标的复合字段。同时传入 `for` 和 `htmlFor` 时优先使用 `for`；只读展示会清除该目标。
+客户端挂载后，默认标签会关联内容区中唯一的文本输入框、文本域或下拉框。点击标签可聚焦该字段。增加第二个独立控件时，内容区使用可见标签作为分组名称，各控件应分别提供自己的名称。显式设置 `label-attrs.for` 与字段 `id` 可在服务端首屏就建立关联，也适用于需要指定目标的复合字段。同时传入 `for` 和 `htmlFor` 时优先使用 `for`；只读展示会清除该目标。 流式渲染时，标签可能先于异步子组件的字段送达浏览器。需要首屏即可点击标签时，在父组件中确定稳定 ID，通过子组件传给实际输入元素；列表中的每一行使用各自的 ID。
 
 显式 `validate-status="error"` 且没有自动校验错误时，字段会通过 `aria-describedby` 关联可见的 `help` 文案或插槽；业务已有的描述会保留。自动错误出现时优先关联自动错误。
 
 在 Vue 3.2.47 的 SSR 场景中，如果多个异步表单项在服务端和客户端的完成顺序相反，后续单独更新某一项时，自动错误描述可能重复 ID 或指向其他字段。仅为 Input 设置稳定 `id` 不能避免此问题；Vue 3.5.45 的同场景对照正常。
 
-在 Shadow DOM 中使用延迟编辑 Slider 时，若弹层传送到 `body`，浏览器可能无法通过 ID 将弹层内控件与 Shadow DOM 中的提示或错误关联。可设置 `:popup-container="false"`，或将 `popup-container` 设为同一 ShadowRoot 内的元素，使弹层与提示留在同一根节点；仍需为控件提供清晰名称。容器元素需要由应用提供，并考虑样式、定位和裁剪。
+在 Shadow DOM 中使用延迟编辑 Slider 时，即使将弹层传送到 `body`，滑块和数字输入也能关联当前表单校验错误，或显式错误状态下的纯文本 `help`。若使用 `#help` 插槽或原 ShadowRoot 内的业务提示，可设置 `:popup-container="false"`，或将同一根内的元素传给 `popup-container`。
 
 嵌套的 `no-style` 字段进入 `read-pretty` 展示后，该字段的校验反馈会隐藏。此时用 `setFields` 更新它的错误，父项的错误描述只保留其他可编辑字段仍需展示的错误。
+
+用 `KeepAlive` 缓存嵌套的 `no-style` 字段时，字段停用期间父项会撤下它的错误说明。重新激活后，父项会展示该字段当前的错误，包括停用期间通过 `setFields` 更新的消息。
 
 FormItem 中只有一个延迟编辑的 Input 时，可见标签在关闭状态下关联触发按钮，打开后关联原生输入框。加入第二个输入框时，请分别提供字段名称，FormItem 标签用于命名整组。
 
@@ -32,6 +34,26 @@ FormItem 中只有一个延迟编辑的 Input 时，可见标签在关闭状态�
 ### 动态切换无样式
 
 `no-style` 在组件生命周期内保持不变时，字段可以正常编辑和校验。当前动态切换某个 FormItem 的 `no-style` 会重新挂载其后代字段，可能丢失焦点、未提交的内部草稿和校验状态，并改变后代字段的重置基准。需要保留这些状态时，请保持该属性稳定，在字段外部调整布局；切换前也可以先提交或保存草稿。
+
+单字段只需保留重置初值时，可将 `field` 与 `:no-style` 放在同一个 FormItem 上。这样切换布局后，`resetFields()` 仍使用该字段挂载时的值。
+
+用 `v-model` 将输入绑定到表单模型，可以在节点重建后显示已经写入模型的值。切换时浏览器仍可能触发 `change` 和失焦事件，字段的校验规则会按配置执行。需要保留输入焦点和选区时，使用下方的稳定布局写法。
+
+在已绑定 `model` 的 Form 中，编辑时可用 `compact` 联动外层 FormItem 的 `layout` 与 `hide-label`。内层字段保持挂载，隐藏外层标签时，输入框仍需有可访问名称。
+
+```vue
+<template>
+  <c-form-item
+    label="账户"
+    :layout="compact ? 'vertical' : 'horizontal'"
+    :hide-label="compact"
+  >
+    <c-form-item field="account" no-style>
+      <c-input v-model="model.account" aria-label="账户" />
+    </c-form-item>
+  </c-form-item>
+</template>
+```
 
 ### 同一标签下的多个控件
 
@@ -116,7 +138,7 @@ import type { FormProps } from "@cedar-design/ui-vue";
 
 ### 局部表单分区
 
-仅将现场处置 SOP、安全须知和处置要点放入分区，底部结束线区分后续未分组字段。 在表单上方切换分隔线、仅标题、边框卡片三种风格，已填内容保持不变；也可切换标题标记和底部结束线。卡片以外框表示范围，不重复显示结束线。CSection 自动适配父 Form 的布局。组内字段直接从父 Form 获取标签宽度、禁用状态和校验规则；布局通过 Form / FormItem 的既有属性设置。请提供 title 或 title 插槽。当前不提供折叠与分区级布局覆盖。
+仅将现场处置 SOP、安全须知和处置要点放入分区，页面使用 Divider 分隔后续字段。切换标题线、仅标题、描边分区三种风格或切换标题标记时，已填内容会保留。CSection 自动适配父 Form 的布局。组内字段直接从父 Form 获取标签宽度、禁用状态和校验规则；布局通过 Form / FormItem 的既有属性设置。请提供 title 或 title 插槽。当前不提供折叠与分区级布局覆盖。
 
 <demo src="./__demos__/section.vue"></demo>
 
@@ -547,6 +569,8 @@ Form / FormItem 通过 `empty-values` 提供空值识别策略；字段自己的
 | label-attrs       | 标签原生属性；for 指向控件真实 id                                                                       | `object`                                              |       `-`        |
 
 ### FormItem Slots
+
+在服务端渲染默认插槽中的输入列表时，使用 `v-for` 并为每项提供稳定的 `:key`。同一节点叠加 `v-memo` 可能导致首屏 HTML 缺少这些输入框。两种 `no-style` 设置下都会出现这个问题。需要保留 `v-memo` 时，可将列表模板放到独立的 `FieldList.vue` 中，在插槽内使用 `<FieldList :rows="rows" />`。把 `v-for`、`:key` 和 `v-memo` 都写在子组件的列表项上。
 
 | 插槽名 |   描述   | 参数 |
 | ------ | :------: | ---- |

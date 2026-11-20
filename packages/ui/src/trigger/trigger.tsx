@@ -1,9 +1,11 @@
+import { useVisualSurface } from '../_utils/visual-surface'
 import {
   Comment,
   Fragment,
   Teleport,
   Text,
   cloneVNode,
+  isVNode,
   computed,
   defineComponent,
   h,
@@ -26,19 +28,20 @@ import { usePopupMoveFocus } from './popup-move-focus'
 
 import { isTriggerReferenceListener, useTriggerReferenceListeners } from './reference-listeners'
 
-function mergeFirstReferenceClass(nodes: VNode[], value: unknown): VNode[] {
-  if (!value) return nodes
+function bindFirstReference(nodes: VNode[], value: unknown, bindAttrs?: (node: VNode) => VNode): VNode[] {
+  if (!value && !bindAttrs) return nodes
   let merged = false
   const visit = (items: VNode[]): VNode[] =>
     items.map((node) => {
-      if (merged) return node
+      if (merged || !isVNode(node)) return node
       if (node.type === Fragment && Array.isArray(node.children)) {
         const children = visit(node.children as VNode[])
         return h(Fragment, node.props, children)
       }
       if (typeof node.type === 'string' || typeof node.type === 'object' || typeof node.type === 'function') {
         merged = true
-        return cloneVNode(node, { class: value }, true)
+        const reference = value ? cloneVNode(node, { class: value }, true) : node
+        return bindAttrs && typeof node.type === 'string' ? bindAttrs(reference) : reference
       }
       return node
     })
@@ -87,7 +90,7 @@ export default defineComponent({
         : props.referenceAttrs
       return value ?? {}
     })
-    useTriggerReferenceAttrs(reference, referenceAttrs)
+    const bindReferenceAttrs = useTriggerReferenceAttrs(reference, referenceAttrs)
     const platform = useTriggerPlatform(visible, () => popup.value?.ownerDocument ?? reference.value?.ownerDocument)
     const popupTarget = usePopupContainer(() => props.popupContainer)
     const positionContainer = computed(() => props.popupContainer === false ? false : popupTarget.value)
@@ -99,6 +102,7 @@ export default defineComponent({
       else emit('closed')
     })
 
+    useVisualSurface(() => renderState.displayed.value ? popup.value : undefined, () => platform.zIndex.value)
     const positioner = useTriggerPositioner(props, {
       direction: dir,
       container: positionContainer,
@@ -142,9 +146,9 @@ export default defineComponent({
     })
 
     return () => {
-      const referenceNodes = mergeFirstReferenceClass(slots.default?.() ?? [], visible.value ? props.openedClass : undefined)
       const contentNodes = renderState.rendered.value ? (slots.content?.() ?? []) : []
       const hiddenByEmpty = props.hideEmpty && isEmptyContent(contentNodes)
+      const referenceNodes = bindFirstReference(slots.default?.() ?? [], visible.value ? props.openedClass : undefined, props.reference == null && Object.keys(referenceAttrs.value).length ? bindReferenceAttrs : undefined)
       nodes.value = referenceNodes
 
       return (

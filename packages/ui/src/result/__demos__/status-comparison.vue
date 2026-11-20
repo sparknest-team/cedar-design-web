@@ -1,15 +1,10 @@
-<script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("resultStatusComparison");
-</script>
-
 <template>
   <div class="demo-comparison">
     <section
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="success"
     >
-      <h4>{{ demoCopy.success }}</h4>
+      <h4>成功状态</h4>
       <c-result status="success" title="This is title content">
         <template #subtitle> This is subtitle content </template>
         <template #extra>
@@ -24,7 +19,7 @@ const demoCopy = useDemoLocale("resultStatusComparison");
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="warning"
     >
-      <h4>{{ demoCopy.warning }}</h4>
+      <h4>警告状态</h4>
       <c-result status="warning" title="This is title content">
         <template #subtitle> This is subtitle content </template>
 
@@ -40,7 +35,7 @@ const demoCopy = useDemoLocale("resultStatusComparison");
       class="demo-comparison-case demo-comparison-case--3"
       data-comparison-scene="error"
     >
-      <h4>{{ demoCopy.error }}</h4>
+      <h4>错误状态</h4>
       <c-result status="danger" title="This is title content">
         <template #subtitle> This is subtitle content </template>
 

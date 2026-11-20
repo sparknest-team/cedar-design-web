@@ -31,7 +31,7 @@ Preview configuration: `:time="2 * 60 * 60 * 1000"`.
 
 Compare unit formats, milliseconds and custom time fragments, independently of playback controls.
 
-<demo src="./__demos__/format-comparison.vue"></demo>
+<demo src="./__demos__/format-comparison.en-US.vue"></demo>
 
 ### Statistic
 

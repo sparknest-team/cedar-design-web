@@ -11,11 +11,35 @@ Group a heading, description, actions and content in a page, drawer or card. Out
 
 ### Plain section
 
-<demo src="./__demos__/plain.vue"></demo>
+<demo src="./__demos__/plain.en-US.vue"></demo>
 
 ### Section with a line
 
-<demo src="./__demos__/line.vue"></demo>
+<demo src="./__demos__/line.en-US.vue"></demo>
+
+### Outlined section with a custom heading
+
+Use the title and description slots for the section header. `show-marker` adds an accent before the heading, and `heading-level` sets its HTML level.
+
+<demo src="./__demos__/outline.en-US.vue"></demo>
+
+### Section sizes
+
+Both headings are level 4. The compact section uses a 14px title and the default section uses a 16px title.
+
+<demo src="./__demos__/sizes.en-US.vue"></demo>
+
+### With or without a heading
+
+Switch between plain, heading-line, tonal and outline, then toggle the heading and description independently. The example starts with just the body. Enable the marker to mark the entire section. When the heading is visible, you can choose either placement. With both the heading and description off, Section omits the header, including the line in the heading-line variant.
+
+<demo src="./__demos__/heading-options.en-US.vue"></demo>
+
+### Grouping inline form fields
+
+Inside Form, Section defaults to heading-line with a heading marker. The fields follow the inline layout and wrap when space is limited. Use Divider between sections when needed.
+
+<demo src="./__demos__/inline-form.en-US.vue"></demo>
 
 ## API
 
@@ -26,10 +50,12 @@ Group a heading, description, actions and content in a page, drawer or card. Out
 | id | Section anchor | Automatically generated |
 | title | Heading text | Empty |
 | description | Supporting text below the heading | Empty |
-| variant | Appearance, plain, line or card | line inside Form, otherwise plain |
+| size | Visual size (sm / md), independent of heading level | md |
+| variant | Appearance, plain, heading-line, tonal or outline | heading-line inside Form, otherwise plain |
+| status | Status colors the marker, tonal fill and outline (default / info / success / warning / danger) | — |
 | heading-level | HTML heading level from 1 to 6 | 3 inside Form, otherwise 2 |
-| show-marker | Show a heading marker | Enabled inside Form |
-| show-end-divider | Draw a trailing line in plain and line variants | false |
+| show-marker | Show the marker | Enabled inside Form |
+| marker-placement | Marker placement (`title` or `section`) | `title` |
 
 ### Section Slots
 
@@ -57,13 +83,17 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-section-description-size` | `13px` | `font-size` |
 | `--c-section-divider-color` | `var(--c-sys-color-border-default)` | `border`, `border-block-start` |
 | `--c-section-divider-width` | `1px` | `border`, `border-block-start` |
-| `--c-section-end-divider-gap` | `24px` | `margin-block-start` |
 | `--c-section-header-gap` | `20px` | `margin-block-end` |
 | `--c-section-heading-gap` | `16px` | `margin-inline-start` |
-| `--c-section-marker-gap` | `8px` | `margin-inline-end`, `row-gap` |
+| `--c-section-marker-gap` | `12px` | `padding-inline-end`, `padding-inline-start`, `row-gap` |
 | `--c-section-marker-height` | `16px` | `height` |
 | `--c-section-marker-radius` | `2px` | `border-radius` |
-| `--c-section-marker-width` | `3px` | `width` |
+| `--c-section-marker-width` | `3px` | `width`, `padding-inline-start` |
+| `--c-section-size-sm-card-padding` | `12px` | `padding` |
+| `--c-section-size-sm-header-gap` | `12px` | `margin-block-end` |
+| `--c-section-size-sm-marker-height` | `14px` | `height` |
+| `--c-section-size-sm-title-line-height` | `20px` | `line-height` |
+| `--c-section-size-sm-title-size` | `14px` | `font-size` |
 | `--c-section-title-color` | `var(--c-sys-color-content-primary)` | `color` |
 | `--c-section-title-line-height` | `24px` | `line-height` |
 | `--c-section-title-size` | `16px` | `font-size` |

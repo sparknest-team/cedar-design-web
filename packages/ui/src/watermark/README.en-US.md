@@ -13,7 +13,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Preview configuration: `:content="content"`, `:font="{ color: dark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.25)' }"`.
 
-<demo src="./__demos__/basic.vue"></demo>
+<demo src="./__demos__/basic.en-US.vue"></demo>
 
 ## Content and presentation
 
@@ -42,7 +42,7 @@ Preview configuration: `:content="['Cedar Design', dayjs().format('YYYY-MM-DD')]
 - `width`: Sets the configured width.
 - `height`: Constrains the component height.
 
-<demo src="./__demos__/image.vue"></demo>
+<demo src="./__demos__/image.en-US.vue"></demo>
 
 ### Fullscreen
 

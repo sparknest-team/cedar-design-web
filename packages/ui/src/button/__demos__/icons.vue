@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("buttonIconsInline");
+const inlineCopy = {
+  iconOnly: "纯图标",
+  iconAndText: "横排图文",
+  stacked: "上下堆叠"
+};
 
 import { ref } from "vue";
 

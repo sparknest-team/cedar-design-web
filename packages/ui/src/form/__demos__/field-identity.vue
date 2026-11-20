@@ -1,6 +1,4 @@
 <script setup>
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("formFieldIdentityInline");
 
 import { reactive, ref, useId } from "vue";
 const id = useId();
@@ -19,17 +17,11 @@ function submitted(data) {
 </script>
 <template>
   <section>
-    <p>{{ inlineCopy.theSameItemRetainsA }}</p>
+    <p>同一个 FormItem 切换 A/B：编辑后重置，各自回到第一次绑定时的初值。</p>
     <c-space wrap>
-      <c-button :disabled="field === 'a'" @click="field = 'a'">{{
-        inlineCopy.bindA
-      }}</c-button>
-      <c-button :disabled="field === 'b'" @click="field = 'b'">{{
-        inlineCopy.bindB
-      }}</c-button>
-      <c-button :disabled="!field" @click="field = ''">{{
-        inlineCopy.unbind
-      }}</c-button>
+      <c-button :disabled="field === 'a'" @click="field = 'a'">绑定 A</c-button>
+      <c-button :disabled="field === 'b'" @click="field = 'b'">绑定 B</c-button>
+      <c-button :disabled="!field" @click="field = ''">取消绑定</c-button>
     </c-space>
     <c-form ref="form" :model="model" edit-mode="direct" @submit="submitted">
       <c-form-item
@@ -46,15 +38,11 @@ function submitted(data) {
           v-model="model[field]"
           edit-mode="direct"
         />
-        <span v-else>{{ inlineCopy.noBoundField }}</span>
+        <span v-else>尚未绑定字段</span>
       </c-form-item>
       <c-space>
-        <c-button html-type="button" :disabled="!field" @click="reset">{{
-          inlineCopy.resetCurrent
-        }}</c-button>
-        <c-button html-type="submit" :disabled="!field">{{
-          inlineCopy.validateAndSubmit
-        }}</c-button>
+        <c-button html-type="button" :disabled="!field" @click="reset">重置当前字段</c-button>
+        <c-button html-type="submit" :disabled="!field">校验并提交</c-button>
       </c-space>
     </c-form>
     <p role="status">

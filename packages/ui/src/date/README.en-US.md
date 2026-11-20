@@ -50,11 +50,11 @@ Toggle disabled, read-only and error states, then interact with the same instanc
 
 Choose a dimension to compare all its values side by side while keeping other settings and content identical. Change the other settings to inspect combinations; input specimens share one model.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ### Control Sizes
 
-<demo src="../field-decorator/__demos__/control-sizes.vue"></demo>
+<demo src="../field-decorator/__demos__/control-sizes.en-US.vue"></demo>
 
 ### Type
 
@@ -162,7 +162,7 @@ Choose a dimension to compare all its values side by side while keeping other se
 
 ### Entry Boundary
 
-<demo src="./picker/__demos__/entry-boundary.vue"></demo>
+<demo src="./picker/__demos__/entry-boundary.en-US.vue"></demo>
 
 ### Passthrough Options
 

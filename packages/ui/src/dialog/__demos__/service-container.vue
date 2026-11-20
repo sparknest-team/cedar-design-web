@@ -1,6 +1,16 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("dialogServiceContainerInline");
+const inlineCopy = {
+  notOpened: "尚未打开",
+  currentTarget: "当前挂载区域",
+  serviceDraft: "服务草稿",
+  moveToA: "移动到 A",
+  moveToB: "移动到 B",
+  serviceTarget: "服务挂载区域",
+  opened: "已打开",
+  openInA: "打开区域 A",
+  targetA: "挂载区域 A",
+  targetB: "挂载区域 B"
+};
 
 import {
   computed,
@@ -18,10 +28,10 @@ const first = ref<HTMLElement>();
 const second = ref<HTMLElement>();
 const active = shallowRef<ReturnType<typeof Dialog.open>>();
 const context = getCurrentInstance()?.appContext;
-const resultKey = ref<keyof typeof inlineCopy.value | undefined>("notOpened");
+const resultKey = ref<keyof typeof inlineCopy | undefined>("notOpened");
 const rawResult = ref("");
 const result = computed(() =>
-  resultKey.value ? inlineCopy.value[resultKey.value] : rawResult.value,
+  resultKey.value ? inlineCopy[resultKey.value] : rawResult.value,
 );
 function openSample() {
   if (!first.value) return;
@@ -39,9 +49,9 @@ function openSample() {
       }
       return () =>
         h("div", [
-          h("p", inlineCopy.value.currentTarget + location.value),
+          h("p", inlineCopy.currentTarget + location.value),
           h(Input, {
-            "aria-label": inlineCopy.value.serviceDraft,
+            "aria-label": inlineCopy.serviceDraft,
             editMode: "direct",
             modelValue: draft.value,
             "onUpdate:modelValue": (value: string | null) => {
@@ -55,19 +65,19 @@ function openSample() {
           h(
             Button,
             { onClick: () => move("A") },
-            () => inlineCopy.value.moveToA,
+            () => inlineCopy.moveToA,
           ),
           h(
             Button,
             { onClick: () => move("B") },
-            () => inlineCopy.value.moveToB,
+            () => inlineCopy.moveToB,
           ),
         ]);
     },
   });
   const owned: ReturnType<typeof Dialog.open> = Dialog.open(
     {
-      title: inlineCopy.value.serviceTarget,
+      title: inlineCopy.serviceTarget,
       popupContainer: first.value,
       content: () => h(Content),
     },
@@ -90,20 +100,20 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <c-space direction="column" :size="16">
-    <c-button @click="openSample">{{ inlineCopy.openInA }}</c-button>
+    <c-button @click="openSample">打开区域 A</c-button>
     <div
       ref="first"
       data-service-target="A"
       style="min-height: 64px; border: 1px dashed currentColor; padding: 12px"
     >
-      {{ inlineCopy.targetA }}
+      挂载区域 A
     </div>
     <div
       ref="second"
       data-service-target="B"
       style="min-height: 64px; border: 1px dashed currentColor; padding: 12px"
     >
-      {{ inlineCopy.targetB }}
+      挂载区域 B
     </div>
     <p role="status">{{ result }}</p>
   </c-space>

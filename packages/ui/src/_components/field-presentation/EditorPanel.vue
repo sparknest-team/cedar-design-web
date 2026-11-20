@@ -24,7 +24,8 @@
     <p v-if="count !== undefined" role="status">
       {{ texts.selected.value }} {{ count }}{{ limit ? ` / ${limit}` : '' }}
     </p>
-    <p v-if="error" role="alert" :class="n('error')">{{ error }}</p>
+    <p v-if="error" :id="localError && localError === error ? localId : undefined" role="alert" :class="n('error')">{{ error }}</p>
+    <span v-if="localError && localError !== error" :id="localId" hidden>{{ localError }}</span>
     <footer v-if="needConfirm || auxiliaryActions || compact" :class="n('footer')">
       <div :class="n('auxiliary')">
         <component :is="auxiliaryActions" v-if="auxiliaryActions" />
@@ -72,10 +73,12 @@ import Button from '../../button/base'
 import { useI18n } from '../../locale'
 import { fieldEditorBoundary, fieldEditorEnterSubmits, fieldEditorPanel } from './context'
 import { editorAuxiliaryActions } from './editor-actions'
+import { provideEditorErrorDescription } from '../../form/error-description'
 import { isolateEditorForm } from './form-bridge'
 import { useFieldTexts } from './texts'
 
 const props = defineProps<{
+  popupContainer?: string | HTMLElement | false
   clearable?: boolean
   compact?: boolean
   deferEscape?: boolean
@@ -117,6 +120,7 @@ const texts = useFieldTexts()
 const closeText = texts.close
 const clearText = texts.clear
 const panelElement = ref<HTMLElement>()
+const { localId, text: localError } = provideEditorErrorDescription(() => panelElement.value, () => props.popupContainer)
 const bodyElement = ref<HTMLElement>()
 defineExpose({
   focus: () => {
@@ -129,7 +133,7 @@ defineExpose({
   },
   blur: () => {
     const panel = panelElement.value
-    const active = panel?.ownerDocument.activeElement
+    const active = (panel?.getRootNode() as Document | ShadowRoot | undefined)?.activeElement
     if (active && panel?.contains(active)) (active as HTMLElement).blur?.()
   },
 })

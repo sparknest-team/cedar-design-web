@@ -1,0 +1,35 @@
+<script setup>
+
+import { ref } from "vue";
+const current = ref(1);
+const accept = ref(true);
+const proposal = ref(1);
+function update(value) {
+  proposal.value = value;
+  if (accept.value) current.value = value;
+}
+</script>
+<template>
+  <c-checkbox v-model="accept"> Accept changes</c-checkbox>
+  <p>Current: {{ current }} · Proposal: {{ proposal }}</p>
+  <c-carousel
+    :model-value="current"
+    height="180px"
+    keyboard
+    draggable
+    @update:modelValue="update"
+  >
+    <c-carousel-item v-for="item in 4" :key="item"
+      ><div class="carousel-demo-panel">Slide {{ item }}</div></c-carousel-item
+    >
+  </c-carousel>
+</template>
+<style scoped>
+.carousel-demo-panel {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+</style>

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "library": "cedar",
+  "scope": [
+    "TableCore",
+    "Table summary/virtual composition"
+  ],
+  "status": "pending",
+  "artifactSha256": "219e0a19974e07e9b8c48f1cbae9340982737397d9b479aca26f3aa871c8e435",
+  "generatedAt": "2026-11-20T04:42:34.894827+00:00",
+  "physicalDeviceAcceptance": false,
+  "automatedMatrixIsNotDeviceEvidence": true,
+  "devices": [],
+  "requiredMetadata": [
+    "device model",
+    "OS version",
+    "browser or host and actual engine version",
+    "tester",
+    "testedAt",
+    "artifactSha256",
+    "screenshots/video/logs"
+  ],
+  "cases": {
+    "touch-horizontal-scroll-and-frozen-columns": "pending",
+    "grouped-sticky-headers": "pending",
+    "auto-fixed-resize-content-and-font-changes": "pending",
+    "nested-scroll-inertia-and-boundaries": "pending",
+    "orientation-viewport-address-bar-and-zoom": "pending",
+    "rtl-reading-offset-preservation": "pending",
+    "summary-pagination-filter-sort-consistency": "pending",
+    "virtual-ranges-lazy-details-and-state-retention": "pending",
+    "cell-input-focus-and-native-keyboard": "pending",
+    "voiceover-talkback-native-aria-name-and-header-associations": "pending",
+    "light-dark-theme-and-system-text-size": "pending"
+  },
+  "notes": [
+    "No physical devices were operated in this task.",
+    "Latest-two-version desktop browser acceptance is tracked separately in native-acceptance.pending.json.",
+    "This record does not claim Maple integration or native mobile certification."
+  ],
+  "validationCandidate": "/private/tmp/cedar-quality-frozen-4_u_kjcl/cedar-design-web"
+}

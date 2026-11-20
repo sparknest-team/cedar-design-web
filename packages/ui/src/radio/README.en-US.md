@@ -37,7 +37,7 @@ Radio groups inherit source dir. Horizontal keys follow visible direction in RTL
 
 Compare child and options declarations, then select items to inspect the group model.
 
-<demo src="./__demos__/group-declaration-comparison.vue"></demo>
+<demo src="./__demos__/group-declaration-comparison.en-US.vue"></demo>
 
 ### Group Direction
 
@@ -164,7 +164,7 @@ Preview configuration: `default-value="1"`, `value="1"`, `:model-value="checked"
 
 Preview configuration: `edit-mode="direct"`, `:options="options"`.
 
-<demo src="./__demos__/async-options.vue"></demo>
+<demo src="./__demos__/async-options.en-US.vue"></demo>
 
 ## Native input attributes and keyboard cancellation
 

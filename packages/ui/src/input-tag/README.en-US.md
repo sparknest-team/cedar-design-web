@@ -41,7 +41,7 @@ Tags follow reading order while their source array stays unchanged. With empty i
 
 Compare sizes and disabled, read-only or error appearance while keeping the empty-value protocol separate.
 
-<demo src="./__demos__/appearance-state-comparison.vue"></demo>
+<demo src="./__demos__/appearance-state-comparison.en-US.vue"></demo>
 
 ## Content and presentation
 
@@ -74,7 +74,7 @@ Compare sizes and disabled, read-only or error appearance while keeping the empt
 
 Type or paste at least two characters to search; a sole enabled result is committed automatically and multiple results require selection.
 
-<demo src="./__demos__/search-options.vue"></demo>
+<demo src="./__demos__/search-options.en-US.vue"></demo>
 
 When `options` is supplied, typing or pasting searches only after `min-search-length` is reached. Arrays filter locally by label; loaders receive the query and `{ signal }`, and remote results are not filtered again. Composition completes before searching; shortening the query or blurring cancels pending work. Enter selects a highlighted candidate, or creates the typed value when a completed search returns no candidates. Loading, failed searches, and disabled matches never create a tag. `auto-commit-single` defaults to false and commits only the sole enabled result of the current search. Selected values are saved in the model. Resolve labels from current `options`, then `fallback-option`, the instance cache, and finally the raw value. Use `options` or `fallback-option` to restore labels after remounting.
 
@@ -82,7 +82,7 @@ Selected tags display their label by default. Use `format-label` to format the t
 
 ### Customize selected content
 
-<demo src="./__demos__/format-label.vue"></demo>
+<demo src="./__demos__/format-label.en-US.vue"></demo>
 
 ## Loading and waiting
 
@@ -95,13 +95,13 @@ Selected tags display their label by default. Use `format-label` to format the t
 
 Set loading explicitly to display feedback. Ordinary event return values do not drive loading. Before hooks retain their documented pending behavior.
 
-<demo src="./__demos__/loading.vue"></demo>
+<demo src="./__demos__/loading.en-US.vue"></demo>
 
 ### Paste a link and fetch its title
 
 Paste a URL or type one and press Enter to simulate fetching its title. The input displays a loading state while waiting. The model contains only URLs; `fallback-option` reads titles from reactive application data. Submit displays the URL data without sending a request.
 
-<demo src="./__demos__/link-title.vue"></demo>
+<demo src="./__demos__/link-title.en-US.vue"></demo>
 
 ### Field state and native input
 
@@ -115,13 +115,13 @@ Manual loading supports loading-mode="default" (default) or "line" and keeps the
 
 Use `fallback-option` to synchronously read application-managed display data. The model contains only URLs; clicking the button simulates labels arriving without changing the model.
 
-<demo src="./__demos__/fallback-option.vue"></demo>
+<demo src="./__demos__/fallback-option.en-US.vue"></demo>
 
 ### Restore saved values asynchronously
 
 This example simulates saving the ID array in memory, remounts the component, then loads names asynchronously. IDs appear while loading; the synchronous `fallback-option` resolves names when data arrives without changing the saved values. Applications own persistence and fetching display data by ID.
 
-<demo src="./__demos__/async-fallback-restore.vue"></demo>
+<demo src="./__demos__/async-fallback-restore.en-US.vue"></demo>
 
 ## Usage notes
 

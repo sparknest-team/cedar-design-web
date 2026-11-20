@@ -46,7 +46,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Choose an axis to compare its available values with the same content and model. Other settings remain unchanged while comparing.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ## Content and presentation
 
@@ -90,7 +90,7 @@ Preview configuration: `v-model:open="open"`, `label="保存草稿"`, `value="dr
 
 `click` is a notification event. The component does not process listener return values or automatically change its loading state. Business code controls `button-props.loading`; for asynchronous operations, reset it in `finally`. Disabled or loading links have no effective `href`.
 
-<demo src="./__demos__/async-action.vue"></demo>
+<demo src="./__demos__/async-action.en-US.vue"></demo>
 
 ## Reading direction
 

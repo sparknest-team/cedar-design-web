@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("scrollbarThumbLifecycleInline");
 
 import { ref } from "vue";
 const active = ref(true);
@@ -9,13 +7,11 @@ const scrolls = ref(0);
 </script>
 <template>
   <div>
-    <c-button @click="active = !active">{{ inlineCopy.activate }}</c-button>
-    <c-button @click="mounted = !mounted">{{ inlineCopy.mount }}</c-button>
-    <c-button @mouseenter="active = false">{{
-      inlineCopy.hoverWhileDraggingToDeactivate
-    }}</c-button>
+    <c-button @click="active = !active">停用与激活</c-button>
+    <c-button @click="mounted = !mounted">卸载与挂载</c-button>
+    <c-button @mouseenter="active = false">拖动时移入停用</c-button>
     <p>
-      {{ inlineCopy.scrollNotifications }} {{ scrolls }}. Drag a thumb, release,
+      滚动通知: {{ scrolls }}. Drag a thumb, release,
       open context menu or blur the window; later movement must not replay.
       Fresh activation requires a fresh press.
     </p>
@@ -26,7 +22,7 @@ const scrolls = ref(0);
         @scroll="scrolls++"
       >
         <div style="height: 800px; width: 700px">
-          {{ inlineCopy.dragTheHorizontalVerticalThumb }}
+          拖动横向或纵向滑块
         </div>
       </c-scrollbar>
     </KeepAlive>

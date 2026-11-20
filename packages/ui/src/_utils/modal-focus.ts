@@ -1,26 +1,8 @@
 import { nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, watch } from 'vue'
-import { isEditable } from '../_utils/is-editable'
+import { canRestoreFocus, isTabStop } from './focusable'
 
 const selector = 'a[href],button,input,select,textarea,[tabindex], [contenteditable]'
 const focusOrigins = new WeakMap<HTMLElement, HTMLElement[]>()
-function restorable(element: HTMLElement) {
-  if (!element.isConnected || element.matches(':disabled') || element.closest('[hidden],[inert],[aria-hidden="true"]')) return false
-  const view = element.ownerDocument.defaultView
-  for (let node: HTMLElement | null = element; node; node = node.parentElement) {
-    const style = view?.getComputedStyle(node)
-    if (style?.display === 'none' || style?.visibility === 'hidden') return false
-  }
-  return true
-}
-function available(element: HTMLElement) {
-  const parent = element.parentElement
-  const tabIndexAttribute = element.getAttribute('tabindex')
-  const hasValidTabIndex = tabIndexAttribute !== null && /^[ \t\n\f\r]*[+-]?\d/.test(tabIndexAttribute)
-  const editableHost = element.hasAttribute('contenteditable') && !hasValidTabIndex &&
-    isEditable(element) && (!parent || !isEditable(parent))
-  return (element.tabIndex >= 0 || editableHost) && restorable(element)
-}
-
 /** Modal ownership follows the popup stack, including teleported child Triggers. */
 export function useModalFocus(root: () => HTMLElement | undefined, active: () => boolean,
   isTop: (event?: Event) => boolean, lockScroll: () => boolean = () => true,
@@ -71,7 +53,7 @@ export function useModalFocus(root: () => HTMLElement | undefined, active: () =>
     const target = root()
     if (!mounted || suspended || !active() || !target || !isTop()) return
     element = target
-    if (!target.contains(target.ownerDocument.activeElement)) target.focus({ preventScroll: true })
+    if (!target.contains((target.getRootNode() as Document | ShadowRoot).activeElement)) target.focus({ preventScroll: true })
   }
   function focusAfterEnter() {
     const doc = root()?.ownerDocument
@@ -83,7 +65,7 @@ export function useModalFocus(root: () => HTMLElement | undefined, active: () =>
   }
   function restore() {
     const focused = owner?.activeElement
-    const target = previous.find(restorable)
+    const target = previous.find(canRestoreFocus)
     if (target && ownsFocusChain() && (!focused || focused === owner?.body || element?.contains(focused))) target.focus({ preventScroll: true })
     if (element) {
       focusOrigins.delete(element)
@@ -116,7 +98,7 @@ export function useModalFocus(root: () => HTMLElement | undefined, active: () =>
   function trap(event: KeyboardEvent) {
     const target = root()
     if (event.key !== 'Tab' || event.defaultPrevented || !active() || suspended || !target || !isTop(event)) return
-    const items = Array.from(target.querySelectorAll<HTMLElement>(selector)).filter(available)
+    const items = Array.from(target.querySelectorAll<HTMLElement>(selector)).filter(isTabStop)
     // Positive tabindex precedes the natural/zero order; equal values retain DOM order.
     items.sort((left, right) => {
       const a = left.tabIndex > 0 ? left.tabIndex : 0

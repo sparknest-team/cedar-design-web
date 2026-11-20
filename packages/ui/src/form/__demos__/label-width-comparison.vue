@@ -1,7 +1,20 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
 import { computed, reactive, ref } from "vue";
-const copy = useDemoLocale("labelWidthComparison");
+const copy = {
+  labels: {
+    strategy: "标签宽度方案",
+    auto: "自动测量",
+    columns: "响应式栅格",
+    fixed: "固定宽度",
+    name: "姓名",
+    department: "部门",
+    contact: "联系方式",
+    extra: "显示额外字段",
+    edit: "修改最长标签",
+    hint: "切换标签宽度方案，输入数据保持不变。栅格在 576px 以下上下排列；固定标签为 6rem，联系方式一项覆盖为 8rem。",
+    model: "当前数据"
+  }
+};
 const mode = ref<"auto" | "columns" | "fixed">("auto");
 const showExtra = ref(true);
 const customLabel = ref("");
@@ -9,7 +22,7 @@ const model = reactive({ name: "", department: "", contact: "" });
 
 const choices = computed(() =>
   (["auto", "columns", "fixed"] as const).map((value) => ({
-    label: copy.value.labels[value],
+    label: copy.labels[value],
     value,
   })),
 );
@@ -19,13 +32,12 @@ const choices = computed(() =>
     <c-radio-group
       v-model="mode"
       :options="choices"
-      :aria-label="copy.labels.strategy"
+      aria-label="标签宽度方案"
     />
-    <p>{{ copy.labels.hint }}</p>
-    <c-checkbox v-model="showExtra">{{ copy.labels.extra }}</c-checkbox>
+    <p>切换标签宽度方案，输入数据保持不变。栅格在 576px 以下上下排列；固定标签为 6rem，联系方式一项覆盖为 8rem。</p>
+    <c-checkbox v-model="showExtra">显示额外字段</c-checkbox>
     <label
-      >{{ copy.labels.edit
-      }}<c-input v-model="customLabel" :placeholder="copy.labels.contact"
+      >修改最长标签<c-input v-model="customLabel" placeholder="联系方式"
     /></label>
     <c-form
       :model="model"
@@ -40,10 +52,10 @@ const choices = computed(() =>
         mode === 'columns' ? { span: 18, xs: 24, sm: 18 } : undefined
       "
     >
-      <c-form-item field="name" :label="copy.labels.name"
+      <c-form-item field="name" label="姓名"
         ><c-input v-model="model.name"
       /></c-form-item>
-      <c-form-item field="department" :label="copy.labels.department"
+      <c-form-item field="department" label="部门"
         ><c-input v-model="model.department"
       /></c-form-item>
       <c-form-item
@@ -54,7 +66,7 @@ const choices = computed(() =>
         ><c-input v-model="model.contact"
       /></c-form-item>
     </c-form>
-    <p role="status">{{ copy.labels.model }}: {{ JSON.stringify(model) }}</p>
+    <p role="status">当前数据: {{ JSON.stringify(model) }}</p>
   </div>
 </template>
 <style scoped>

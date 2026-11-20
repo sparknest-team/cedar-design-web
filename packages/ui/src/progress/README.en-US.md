@@ -34,7 +34,7 @@ Preview configuration: `:percent="20"`, `:percent="30"`.
 
 Compare sizes and semantic states independently of circular, stepped and indeterminate models.
 
-<demo src="./__demos__/appearance-comparison.vue"></demo>
+<demo src="./__demos__/appearance-comparison.en-US.vue"></demo>
 
 ## Content and presentation
 

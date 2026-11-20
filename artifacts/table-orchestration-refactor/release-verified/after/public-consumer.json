@@ -1,0 +1,8 @@
+{
+  "strictTypes": true,
+  "featureFormats": [
+    "esm",
+    "cjs"
+  ],
+  "packageExports": true
+}

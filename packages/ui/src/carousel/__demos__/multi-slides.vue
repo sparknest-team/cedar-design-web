@@ -1,6 +1,4 @@
 <script setup>
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("carouselMultiSlidesInline");
 
 import { ref } from "vue";
 const current = ref(1);
@@ -16,8 +14,8 @@ function update(value) {
 
 <template>
   <section class="multi-slides-demo">
-    <c-checkbox v-model="accept"> {{ inlineCopy.acceptChanges }}</c-checkbox>
-    <c-checkbox v-model="loop"> {{ inlineCopy.loop }}</c-checkbox>
+    <c-checkbox v-model="accept"> 接受切换</c-checkbox>
+    <c-checkbox v-model="loop"> 循环</c-checkbox>
     <p role="status">
       Current: {{ current }} · Proposal: {{ proposal }} · Changes: {{ changes }}
     </p>

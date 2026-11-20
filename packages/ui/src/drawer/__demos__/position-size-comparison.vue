@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("drawerPositionSizeComparison");
 import { ref } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -76,7 +74,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="size"
     >
-      <h4>{{ demoCopy.size }}</h4>
+      <h4>自定义宽度</h4>
       <c-space>
         <c-button status="primary" @click="scene1.handleClickSmall"
           >sm Drawer</c-button
@@ -133,7 +131,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="location"
     >
-      <h4>{{ demoCopy.location }}</h4>
+      <h4>抽屉位置</h4>
       <c-radio-group v-model="scene2.position">
         <c-radio value="top">Top</c-radio>
         <c-radio value="right">Right</c-radio>

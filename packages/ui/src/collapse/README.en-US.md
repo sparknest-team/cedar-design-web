@@ -81,7 +81,7 @@ Preview configuration: `:default-value="[1]"`, `accordion`, `title="Beijing Tout
 
 Compare outer borders and separators between panels, including their appearance while expanded.
 
-<demo src="./__demos__/border-comparison.vue"></demo>
+<demo src="./__demos__/border-comparison.en-US.vue"></demo>
 
 ### Extra
 

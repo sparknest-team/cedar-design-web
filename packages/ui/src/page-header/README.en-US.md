@@ -36,7 +36,7 @@ Displays the current page title, context and related actions. Use `class` / `sty
 
 Compare breadcrumb navigation and title hierarchy on transparent surfaces.
 
-<demo src="./__demos__/surface-comparison.vue"></demo>
+<demo src="./__demos__/surface-comparison.en-US.vue"></demo>
 
 ### Content
 

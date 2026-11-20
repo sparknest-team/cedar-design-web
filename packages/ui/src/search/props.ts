@@ -10,7 +10,7 @@ import type { ButtonProps } from "../button";
 import { inputProps } from "../input/props";
 
 export type SearchShape = "square" | "round";
-export type SearchEditMode = "direct" | "popup";
+export type { FieldEditMode as SearchEditMode } from "../_components/field-presentation/context";
 export type SearchActionType = "cancel" | "search";
 
 export interface SearchField {
@@ -50,13 +50,8 @@ export const searchProps = {
     type: Number,
     default: 5,
   },
-  /** 行内搜索与历史菜单，或全屏搜索弹层。 */
-  /** 搜索编辑模式；direct 为直接编辑，popup 为全屏弹层。 */
-  editMode: {
-    type: String as PropType<SearchEditMode>,
-    default: "direct",
-    validator: (value: string) => ["direct", "popup"].includes(value),
-  },
+  /** 关键词编辑模式，未指定时继承 FormItem/Form。 */
+  editMode: inputProps.editMode,
   /** 搜索字段可选项 */
   fields: {
     type: Array as PropType<SearchField[]>,

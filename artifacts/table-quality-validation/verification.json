@@ -1,0 +1,355 @@
+{
+  "schemaVersion": 1,
+  "library": "cedar",
+  "completedAt": "2026-11-20T07:26:18.125949+00:00",
+  "validationScope": "Frozen candidate; later concurrent workspace changes are not included",
+  "candidate": {
+    "completedAt": "2026-11-20T07:24:47.891Z",
+    "candidateRoot": "/private/tmp/cedar-quality-frozen-4_u_kjcl/cedar-design-web",
+    "node": "v26.13.1",
+    "sourceFingerprint": "66ced0d7a4df5da1b17c7e2f2799e8be8e9002e7bbadcdf30770bbb3dc5f8bd7",
+    "productionFingerprint": "1c956da3ed47e3ef858935363c54c1b39698e3cdcc51ea3eba149d3beac73796",
+    "buildIndexHash": "69e6c505eb94c329988b898b89a3df0fa44432265076408ee02f0ba874973284",
+    "artifactSha256": "219e0a19974e07e9b8c48f1cbae9340982737397d9b479aca26f3aa871c8e435",
+    "harness": {
+      "actions": "ec68b92fe80f321ea95df160313e565377e11a53df3944ba501c565afb333262",
+      "runner": "ce2a55045dbf5eba497880ac982b6b5fc75745b3ef1587df0ff90858a6ec8a2f",
+      "contracts": "0a2929899b80881948a8b48ae12253be20e0086a957c9ee9d93872f8ff438b89",
+      "table-capabilities": "37eb2c2dca9e4e1fd2baf7fac98e9f9e574afdc33fd3a2c53ef57979a6634af5",
+      "navigation-gate": "686f10470c1e7ff36ac0e710e893dcbfaf1519be636ff66fee2e7980a6afbe96",
+      "snapshot": "8241e7b7ea5c8057e23a7b7de513a1464b274a8ec4578da1b10884d387aff552"
+    },
+    "workspaceSourceFingerprint": "c3fd9a931b0f0f4a7d597a4d2db711946fa6597da2cc66276f7c18bf1543af23",
+    "workspaceProductionFingerprint": "c377689f1d730f04f38faf1eb76ae8df4d48a7c4dc446890f4f07d62a1d471a2",
+    "nativeDeviceAcceptance": false
+  },
+  "quality": {
+    "mode": "complete-gates-after-browser-repair",
+    "allGatesPassed": true,
+    "initialFullRun": {
+      "command": "pnpm quality",
+      "exitCode": 1,
+      "log": "logs/quality-02-browser-gate-failed.log",
+      "prefixGatesPassed": 22,
+      "failedGate": "check:compatibility",
+      "reason": "Browser harness pointer targeting, source loading, and navigation preparation; retained failed evidence"
+    },
+    "repairedBrowserGates": {
+      "command": "DOCS_BROWSER_CONCURRENCY=1 pnpm check:compatibility",
+      "exitCode": 0,
+      "log": "logs/browser-gates-repaired-passed.log",
+      "covers": [
+        "check:docs-components",
+        "check:compatibility"
+      ],
+      "explanation": "The full Chromium profile executes the same complete component test file as check:docs-components, with the additional engine capability gate; Firefox and WebKit execute the same complete inventory."
+    },
+    "unchangedFrozenProductionInputs": true,
+    "gates": [
+      {
+        "name": "check:demo-i18n",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:install-patches",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:packages",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:shared",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:runtime-dependencies",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:vue-compat:source",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "build:lib",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:vue-compat",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "spec:check",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:style-vars",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "lint",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "typecheck",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "test",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:direction",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:cli",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:resolver",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:doc-pipeline",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "build:doc",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "package:check",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:published-environment",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:docs-theme",
+        "passed": true,
+        "evidence": "initial full quality run prefix"
+      },
+      {
+        "name": "check:docs-components",
+        "passed": true,
+        "evidence": "final complete three-engine matrix"
+      },
+      {
+        "name": "check:compatibility",
+        "passed": true,
+        "evidence": "final complete three-engine matrix"
+      }
+    ]
+  },
+  "componentUnitTests": {
+    "files": 1143,
+    "tests": 6976,
+    "passed": true
+  },
+  "documentationUnitTests": {
+    "files": 21,
+    "tests": 53,
+    "passed": true
+  },
+  "engineMatrix": {
+    "complete": true,
+    "components": 100,
+    "engines": [
+      {
+        "name": "chromium",
+        "version": "151.0.7922.34",
+        "componentCases": 200,
+        "guideCases": 14,
+        "navigationCases": 4,
+        "tableThemesPassed": [
+          "lightTheme",
+          "darkTheme"
+        ],
+        "passed": true
+      },
+      {
+        "name": "firefox",
+        "version": "153.0",
+        "componentCases": 200,
+        "guideCases": 14,
+        "navigationCases": 4,
+        "tableThemesPassed": [
+          "lightTheme",
+          "darkTheme"
+        ],
+        "passed": true
+      },
+      {
+        "name": "webkit",
+        "version": "26.5",
+        "componentCases": 200,
+        "guideCases": 14,
+        "navigationCases": 4,
+        "tableThemesPassed": [
+          "lightTheme",
+          "darkTheme"
+        ],
+        "passed": true
+      }
+    ]
+  },
+  "tableContract": {
+    "nodeContractTests": 19,
+    "summaryVirtualSsrCasesPerFormat": 13,
+    "comparison": {
+      "originalManifestSha256": "84724c45a19959961623f5da4a893d3bd0c1826ac92e9f275702cba253a170a1",
+      "contextSha256": "de28cdc36ad2a96868f726922b4290785564282a96ce1c3749d105acef7c8a80",
+      "comparison": "passed",
+      "summaryAndVirtualSsrCasesPerFormat": 13,
+      "bundles": {
+        "full": {
+          "before": 122080,
+          "after": 123263,
+          "css": 30943
+        },
+        "basicProps": {
+          "before": 122078,
+          "after": 123259,
+          "css": 30943
+        },
+        "frozenProps": {
+          "before": 122090,
+          "after": 123270,
+          "css": 30943
+        },
+        "summaryProps": {
+          "before": 122074,
+          "after": 123255,
+          "css": 30943
+        },
+        "virtualProps": {
+          "before": 122098,
+          "after": 123279,
+          "css": 30943
+        },
+        "core": {
+          "before": 13462,
+          "after": 13462,
+          "css": 5681
+        },
+        "coreFrozen": {
+          "before": 13506,
+          "after": 13506,
+          "css": 5681
+        },
+        "coreFilterState": {
+          "before": 14059,
+          "after": 14059,
+          "css": 5681
+        },
+        "coreLocalFilter": {
+          "before": 14187,
+          "after": 14187,
+          "css": 5681
+        },
+        "coreSortState": {
+          "before": 14076,
+          "after": 14076,
+          "css": 5681
+        },
+        "coreLocalSort": {
+          "before": 14273,
+          "after": 14273,
+          "css": 5681
+        }
+      }
+    },
+    "currentInputCheck": {
+      "productionContextFiles": 1507,
+      "changedProductionContext": [],
+      "changedTableProductionCode": [],
+      "documentationOnlyDelta": [
+        "table/README.en-US.md"
+      ],
+      "passed": true
+    }
+  },
+  "nativeDeviceAcceptance": false,
+  "latestTwoVersionsAccepted": false,
+  "nativePending": {
+    "browserTargets": 12,
+    "physicalTableCases": 11,
+    "status": "pending",
+    "artifactSha256": "219e0a19974e07e9b8c48f1cbae9340982737397d9b479aca26f3aa871c8e435"
+  },
+  "workspaceAtCollection": {
+    "sourceFingerprint": "c3fd9a931b0f0f4a7d597a4d2db711946fa6597da2cc66276f7c18bf1543af23",
+    "productionFingerprint": "c377689f1d730f04f38faf1eb76ae8df4d48a7c4dc446890f4f07d62a1d471a2",
+    "matchesCandidate": false,
+    "changedProductionContextFiles": [
+      "_components/field-presentation/with-field-presentation.ts",
+      "_components/virtual-list-v2/VirtualList.vue",
+      "_components/virtual-list-v2/virtual-list-item.tsx",
+      "filter-form/style/index.less",
+      "filter-form/style/token.less",
+      "form/FormItem.vue",
+      "list/list.vue",
+      "search/HistoryContent.vue",
+      "search/history-presentation.vue",
+      "search/props.ts",
+      "search/search.vue",
+      "search/style/index.less",
+      "search/style/index.ts",
+      "search/use-search-control.ts",
+      "search/use-search-input.ts"
+    ],
+    "changedTableProductionCode": [
+      "table/table.tsx"
+    ]
+  },
+  "resolvedIssues": [
+    "Stale theme-contract values differed from existing Cedar and Maple defaults; metadata aligned without style changes",
+    "Missing demo groups and stale generated CSS-variable documentation",
+    "Stale multi-select Cascader role assertion; now checks menuitemcheckbox and selected state",
+    "Missing Maple Section group/gallery normalization",
+    "47 existing English translations missing from generation dictionary; parameter table heading translation corrected",
+    "Selection checks used globally visible options instead of the owning combobox popup",
+    "Source controls needed instant centered positioning and scroll/geometry settlement clear of fixed headers; ordinary navigation now has a separate bounded load budget",
+    "Demo and popup-option positions now settle before real pointer actions; final matrix uses the supported single-concurrency setting without reducing coverage",
+    "Outage server disk contention removed by preloading the actual immutable production bytes; the original 5000ms budget, 1200ms local image delay, and permanent external stalling are retained"
+  ],
+  "notes": [
+    "A diagnostic early browser run passed Chromium and was intentionally stopped during Firefox to reduce resource contention. Final engine evidence comes from the complete repaired browser-gate rerun. The full quality prefix passed on identical production inputs; the initial full command exited 1 at its browser gate.",
+    "No component production code was changed in this quality completion step. New bilingual demo, browser assertions and test/doc/tooling fixes were added.",
+    "Frozen Table/source-harness snapshot and four exact published package archives are retained; no publication or real-device acceptance was performed."
+  ],
+  "sourceArchive": {
+    "scope": "Frozen Table sources/tests/demos/docs, locale dictionaries, quality/browser harness and relevant configuration; full published runtime packages are retained separately in release/",
+    "archive": "table-source-and-harness.tar.gz",
+    "sha256": "b34fd8574b4a133c7b6b3f431395e45e37b419d53658a24ea8a1e23f05e3e57e",
+    "bytes": 1036847
+  },
+  "browserToolingTests": {
+    "contractAndSnapshotTests": 26,
+    "pointerAndSnapshotFinalTests": 12,
+    "focusedFirefoxTests": 14,
+    "passed": true
+  }
+}

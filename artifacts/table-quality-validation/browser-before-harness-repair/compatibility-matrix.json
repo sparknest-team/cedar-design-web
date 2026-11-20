@@ -1,0 +1,55 @@
+{
+  "library": "cedar",
+  "generatedAt": "2026-11-20T05:38:31.151Z",
+  "nativeDeviceAcceptance": false,
+  "latestTwoVersionsAccepted": false,
+  "completeEngineMatrix": false,
+  "evidenceOnly": false,
+  "results": [
+    {
+      "name": "chromium",
+      "startedAt": "2026-11-20T05:20:36.305Z",
+      "completedAt": "2026-11-20T05:23:58.766Z",
+      "passed": true,
+      "exitCode": 0,
+      "evidence": "/private/tmp/cedar-quality-frozen-4_u_kjcl/cedar-design-web/artifacts/docs-components/cedar/chromium",
+      "verified": {
+        "browser": {
+          "name": "chromium",
+          "engine": "chromium",
+          "launchOptions": {},
+          "version": "151.0.7922.34",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "recordedAt": "2026-11-20T05:23:55.345Z",
+          "evidenceType": "automated-engine-regression",
+          "nativeDeviceAcceptance": false,
+          "userAgentEmulation": "device routing preset; not evidence of an actual OS/browser version",
+          "gestureInput": "CDP touch injection"
+        },
+        "componentCases": 200,
+        "guideCases": 14,
+        "navigationCases": 4,
+        "passed": true
+      }
+    },
+    {
+      "name": "firefox",
+      "startedAt": "2026-11-20T05:23:58.766Z",
+      "completedAt": "2026-11-20T05:31:51.851Z",
+      "passed": false,
+      "exitCode": 1,
+      "evidence": "/private/tmp/cedar-quality-frozen-4_u_kjcl/cedar-design-web/artifacts/docs-components/cedar/firefox",
+      "error": "Error: ENOENT: no such file or directory, open '/private/tmp/cedar-quality-frozen-4_u_kjcl/cedar-design-web/artifacts/docs-components/cedar/firefox/coverage.json'"
+    },
+    {
+      "name": "webkit",
+      "startedAt": "2026-11-20T05:31:51.851Z",
+      "completedAt": "2026-11-20T05:38:31.151Z",
+      "passed": false,
+      "exitCode": 1,
+      "evidence": "/private/tmp/cedar-quality-frozen-4_u_kjcl/cedar-design-web/artifacts/docs-components/cedar/webkit",
+      "error": "AssertionError [ERR_ASSERTION]: component/guide failure"
+    }
+  ]
+}

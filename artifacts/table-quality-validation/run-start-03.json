@@ -1,0 +1,9 @@
+{
+  "startedAt": "2026-11-20T04:00:03.120Z",
+  "node": "v26.13.1",
+  "sourceFingerprint": "5084885c1a0869b254ed16c157dabcefaedc0af6e54e2c49699fe0926f732925",
+  "productionFingerprint": "b849a9ee7dd449d65f0af11ffce126b3d4bc6952333d4a96de80ae731e9919d9",
+  "command": "pnpm quality",
+  "log": "/private/tmp/cedar-table-full-quality-03.log",
+  "nativeDeviceAcceptance": false
+}

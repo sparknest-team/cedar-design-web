@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("checkboxGroupDeclarationComparison");
 import { ref } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -28,7 +26,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="checkbox-group"
     >
-      <h4>{{ demoCopy.checkboxGroup }}</h4>
+      <h4>复选框组</h4>
       <c-space direction="column" size="lg">
         <c-checkbox-group :default-value="['1']">
           <c-checkbox value="1">Option 1</c-checkbox>
@@ -47,7 +45,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="checkbox-group-options"
     >
-      <h4>{{ demoCopy.checkboxGroupOptions }}</h4>
+      <h4>复选框组选项</h4>
       <c-space direction="column" size="lg">
         <c-checkbox-group
           v-model="scene2.value1"

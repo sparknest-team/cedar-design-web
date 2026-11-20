@@ -1,0 +1,534 @@
+{
+  "status": "design-time inventory; not a passing runtime verification",
+  "capturedOn": "2026-11-19",
+  "scope": "Cedar Vue Table; relative paths are under packages/ui/src/table",
+  "props": [
+    {
+      "name": "columns",
+      "declaration": "columns: {\n      type: Array as PropType<TableColumnData[]>,\n      default: () => [],\n    }"
+    },
+    {
+      "name": "data",
+      "declaration": "data: {\n      type: Array as PropType<TableData[]>,\n      default: () => [],\n    }"
+    },
+    {
+      "name": "bordered",
+      "declaration": "bordered: {\n      type: [Boolean, Object] as PropType<boolean | TableBorder>,\n      default: true,\n    }"
+    },
+    {
+      "name": "hoverable",
+      "declaration": "hoverable: {\n      type: Boolean,\n      default: true,\n    }"
+    },
+    {
+      "name": "stripe",
+      "declaration": "stripe: {\n      type: Boolean,\n      default: false,\n    }"
+    },
+    {
+      "name": "size",
+      "declaration": "size: {\n      type: String as PropType<ComponentSize>,\n      default: \"md\",\n    }"
+    },
+    {
+      "name": "tableLayout",
+      "declaration": "tableLayout: {\n      type: String as PropType<\"fixed\" | \"auto\">,\n      default: \"fixed\",\n    }"
+    },
+    {
+      "name": "loading",
+      "declaration": "loading: {\n      type: [Boolean, Object],\n      default: false,\n    }"
+    },
+    {
+      "name": "rowSelection",
+      "declaration": "rowSelection: {\n      type: Object as PropType<TableRowSelection>,\n    }"
+    },
+    {
+      "name": "expandable",
+      "declaration": "expandable: {\n      type: Object as PropType<TableExpandable>,\n    }"
+    },
+    {
+      "name": "height",
+      "declaration": "height: {\n      type: [Number, String] as PropType<number | string>,\n    }"
+    },
+    {
+      "name": "maxHeight",
+      "declaration": "maxHeight: {\n      type: [Number, String] as PropType<number | string>,\n    }"
+    },
+    {
+      "name": "fit",
+      "declaration": "fit: {\n      type: Boolean,\n      default: true,\n    }"
+    },
+    {
+      "name": "pagination",
+      "declaration": "pagination: {\n      type: [Boolean, Object] as PropType<boolean | TablePaginationConfig>,\n      default: true,\n    }"
+    },
+    {
+      "name": "pagePosition",
+      "declaration": "pagePosition: {\n      type: String as PropType<TablePagePosition>,\n      default: \"br\",\n    }"
+    },
+    {
+      "name": "indentSize",
+      "declaration": "indentSize: {\n      type: Number,\n      default: 16,\n    }"
+    },
+    {
+      "name": "rowKey",
+      "declaration": "rowKey: {\n      type: String,\n      default: \"key\",\n    }"
+    },
+    {
+      "name": "showHeader",
+      "declaration": "showHeader: {\n      type: Boolean,\n      default: true,\n    }"
+    },
+    {
+      "name": "virtualListProps",
+      "declaration": "virtualListProps: {\n      type: Object as PropType<VirtualListProps>,\n    }"
+    },
+    {
+      "name": "spanMethod",
+      "declaration": "spanMethod: {\n      type: Function as PropType<\n        (data: {\n          record: TableData;\n          column: TableColumnData | TableOperationColumn;\n          rowIndex: number;\n          columnIndex: number;\n        }) => { rowspan?: number; colspan?: number } | void\n      >,\n    }"
+    },
+    {
+      "name": "spanAll",
+      "declaration": "spanAll: {\n      type: Boolean,\n      default: false,\n    }"
+    },
+    {
+      "name": "components",
+      "declaration": "components: {\n      type: Object as PropType<TableComponents>,\n    }"
+    },
+    {
+      "name": "loadMore",
+      "declaration": "loadMore: {\n      type: Function as PropType<\n        (record: TableData, done: (children?: TableData[]) => void) => void\n      >,\n    }"
+    },
+    {
+      "name": "filterIconAlignLeft",
+      "declaration": "filterIconAlignLeft: {\n      type: Boolean,\n      default: false,\n    }"
+    },
+    {
+      "name": "hideExpandButtonOnEmpty",
+      "declaration": "hideExpandButtonOnEmpty: {\n      type: Boolean,\n      default: false,\n    }"
+    },
+    {
+      "name": "rowClass",
+      "declaration": "rowClass: {\n      type: [String, Array, Object, Function] as PropType<\n        | string\n        | any[]\n        | Record<string, any>\n        | ((record: TableData, rowIndex: number) => any)\n      >,\n    }"
+    },
+    {
+      "name": "draggable",
+      "declaration": "draggable: {\n      type: Object as PropType<TableDraggable>,\n    }"
+    },
+    {
+      "name": "rowNumber",
+      "declaration": "rowNumber: {\n      type: [Boolean, Object],\n    }"
+    },
+    {
+      "name": "columnResizable",
+      "declaration": "columnResizable: {\n      type: Boolean,\n    }"
+    },
+    {
+      "name": "summary",
+      "declaration": "summary: {\n      type: [Boolean, Function] as PropType<\n        | boolean\n        | ((params: {\n            columns: TableColumnData[];\n            data: TableData[];\n          }) => TableData[])\n      >,\n    }"
+    },
+    {
+      "name": "summaryText",
+      "declaration": "summaryText: {\n      type: String,\n      default: \"Summary\",\n    }"
+    },
+    {
+      "name": "summarySpanMethod",
+      "declaration": "summarySpanMethod: {\n      type: Function as PropType<\n        (data: {\n          record: TableData;\n          column: TableColumnData | TableOperationColumn;\n          rowIndex: number;\n          columnIndex: number;\n        }) => { rowspan?: number; colspan?: number } | void\n      >,\n    }"
+    },
+    {
+      "name": "selectedKeys",
+      "declaration": "selectedKeys: {\n      type: Array as PropType<(string | number)[]>,\n    }"
+    },
+    {
+      "name": "defaultSelectedKeys",
+      "declaration": "defaultSelectedKeys: {\n      type: Array as PropType<(string | number)[]>,\n    }"
+    },
+    {
+      "name": "expandedKeys",
+      "declaration": "expandedKeys: {\n      type: Array as PropType<(string | number)[]>,\n    }"
+    },
+    {
+      "name": "defaultExpandedKeys",
+      "declaration": "defaultExpandedKeys: {\n      type: Array as PropType<(string | number)[]>,\n    }"
+    },
+    {
+      "name": "defaultExpandAllRows",
+      "declaration": "defaultExpandAllRows: {\n      type: Boolean,\n      default: false,\n    }"
+    },
+    {
+      "name": "stickyHeader",
+      "declaration": "stickyHeader: {\n      type: [Boolean, Number],\n      default: false,\n    }"
+    },
+    {
+      "name": "stickyPagination",
+      "declaration": "stickyPagination: {\n      type: [Boolean, Number],\n      default: false,\n    }"
+    },
+    {
+      "name": "scrollbar",
+      "declaration": "scrollbar: {\n      type: [Object, Boolean] as PropType<boolean | ScrollbarProps>,\n      default: true,\n    }"
+    },
+    {
+      "name": "showEmptyTree",
+      "declaration": "showEmptyTree: {\n      type: Boolean,\n      default: false,\n    }"
+    },
+    {
+      "name": "extraColumn",
+      "declaration": "extraColumn: {\n      type: [Boolean, Object] as PropType<boolean | TableExtraColumnConfig>,\n      default: false,\n    }"
+    }
+  ],
+  "emits": [
+    {
+      "name": "update:selectedKeys",
+      "declaration": "\"update:selectedKeys\": (rowKeys: (string | number)[]) => true"
+    },
+    {
+      "name": "update:expandedKeys",
+      "declaration": "\"update:expandedKeys\": (rowKeys: (string | number)[]) => true"
+    },
+    {
+      "name": "update:columns",
+      "declaration": "\"update:columns\": (columns: TableColumnData[]) => true"
+    },
+    {
+      "name": "expand",
+      "declaration": "expand: (rowKey: string | number, record: TableData) => true"
+    },
+    {
+      "name": "expanded-change",
+      "declaration": "\"expanded-change\": (rowKeys: (string | number)[]) => true"
+    },
+    {
+      "name": "select",
+      "declaration": "select: (\n      rowKeys: (string | number)[],\n      rowKey: string | number,\n      record: TableData,\n    ) => true"
+    },
+    {
+      "name": "select-all",
+      "declaration": "\"select-all\": (checked: boolean) => true"
+    },
+    {
+      "name": "selection-change",
+      "declaration": "\"selection-change\": (rowKeys: (string | number)[]) => true"
+    },
+    {
+      "name": "sorter-change",
+      "declaration": "\"sorter-change\": (dataIndex: string, direction: string) => true"
+    },
+    {
+      "name": "filter-change",
+      "declaration": "\"filter-change\": (dataIndex: string, filteredValues: string[]) => true"
+    },
+    {
+      "name": "page-change",
+      "declaration": "\"page-change\": (page: number) => true"
+    },
+    {
+      "name": "page-size-change",
+      "declaration": "\"page-size-change\": (pageSize: number) => true"
+    },
+    {
+      "name": "change",
+      "declaration": "change: (\n      data: TableData[],\n      extra: TableChangeExtra,\n      currentData: TableData[],\n    ) => true"
+    },
+    {
+      "name": "cell-mouse-enter",
+      "declaration": "\"cell-mouse-enter\": (record: TableData, column: TableColumnData, ev: Event) =>\n      true"
+    },
+    {
+      "name": "cell-mouse-leave",
+      "declaration": "\"cell-mouse-leave\": (record: TableData, column: TableColumnData, ev: Event) =>\n      true"
+    },
+    {
+      "name": "cell-click",
+      "declaration": "\"cell-click\": (record: TableData, column: TableColumnData, ev: Event) => true"
+    },
+    {
+      "name": "row-click",
+      "declaration": "\"row-click\": (record: TableData, ev: Event) => true"
+    },
+    {
+      "name": "header-click",
+      "declaration": "\"header-click\": (column: TableColumnData, ev: Event) => true"
+    },
+    {
+      "name": "column-resize",
+      "declaration": "\"column-resize\": (dataIndex: string, width: number) => true"
+    },
+    {
+      "name": "row-dblclick",
+      "declaration": "\"row-dblclick\": (record: TableData, ev: Event) => true"
+    },
+    {
+      "name": "cell-dblclick",
+      "declaration": "\"cell-dblclick\": (record: TableData, column: TableColumnData, ev: Event) =>\n      true"
+    },
+    {
+      "name": "row-contextmenu",
+      "declaration": "\"row-contextmenu\": (record: TableData, ev: Event) => true"
+    },
+    {
+      "name": "cell-contextmenu",
+      "declaration": "\"cell-contextmenu\": (record: TableData, column: TableColumnData, ev: Event) =>\n      true"
+    }
+  ],
+  "methods": [
+    {
+      "name": "selectAll",
+      "parameters": [
+        "checked?: boolean"
+      ],
+      "implementation": "{\n      return this.selfSelectAll(checked);\n    }"
+    },
+    {
+      "name": "select",
+      "parameters": [
+        "rowKey: string | number | (string | number)[]",
+        "checked?: boolean"
+      ],
+      "implementation": "{\n      return this.selfSelect(rowKey, checked);\n    }"
+    },
+    {
+      "name": "expandAll",
+      "parameters": [
+        "checked?: boolean"
+      ],
+      "implementation": "{\n      return this.selfExpandAll(checked);\n    }"
+    },
+    {
+      "name": "expand",
+      "parameters": [
+        "rowKey: string | number | (string | number)[]",
+        "checked?: boolean"
+      ],
+      "implementation": "{\n      return this.selfExpand(rowKey, checked);\n    }"
+    },
+    {
+      "name": "resetFilters",
+      "parameters": [
+        "dataIndex?: string | string[]"
+      ],
+      "implementation": "{\n      return this.selfResetFilters(dataIndex);\n    }"
+    },
+    {
+      "name": "clearFilters",
+      "parameters": [
+        "dataIndex?: string | string[]"
+      ],
+      "implementation": "{\n      return this.selfClearFilters(dataIndex);\n    }"
+    },
+    {
+      "name": "resetSorters",
+      "parameters": [],
+      "implementation": "{\n      return this.selfResetSorters();\n    }"
+    },
+    {
+      "name": "clearSorters",
+      "parameters": [],
+      "implementation": "{\n      return this.selfClearSorters();\n    }"
+    }
+  ],
+  "documentedSlots": [
+    "columns",
+    "expand-icon",
+    "expand-row",
+    "footer",
+    "drag-handle-icon",
+    "tbody",
+    "tr",
+    "td",
+    "pagination",
+    "pagination-left",
+    "pagination-right",
+    "summary-cell",
+    "empty",
+    "thead",
+    "th",
+    "extra-column-header",
+    "extra-column-cell",
+    "header-cell-actions"
+  ],
+  "exports": [
+    {
+      "file": "index.ts",
+      "declarations": [
+        "export type TableInstance = InstanceType<typeof _Table>",
+        "export type TheadInstance = InstanceType<typeof _Thead>",
+        "export type TbodyInstance = InstanceType<typeof _Tbody>",
+        "export type TrInstance = InstanceType<typeof _Tr>",
+        "export type ThInstance = InstanceType<typeof _Th>",
+        "export type TdInstance = InstanceType<typeof _Td>",
+        "export type TableColumnInstance = InstanceType<typeof _Column>",
+        "export type {\n  TablePaginationConfig,\n  TablePaginationScope,\n  TableData,\n  TableSortable,\n  TableFilterData,\n  TableFilterable,\n  TableColumnData,\n  TableBorder,\n  TableRowSelection,\n  TableExpandable,\n  TableDraggable,\n  TableComponents,\n  TableOperationColumn,\n  TableChangeExtra,\n} from './types'",
+        "export type { TableExtraColumnConfig } from './extra-column'",
+        "export { TABLE_EXTRA_COLUMN_KEY, resolveExtraColumnConfig, getExtraColumnWidth, DEFAULT_EXTRA_COLUMN_WIDTH } from './extra-column'",
+        "export { _Thead as Thead, _Tbody as Tbody, _Tr as Tr, _Th as Th, _Td as Td, _Column as TableColumn }",
+        "export const _TableComponent: typeof Table = Table",
+        "export const _TheadComponent: typeof _Thead = _Thead",
+        "export const _TbodyComponent: typeof _Tbody = _Tbody",
+        "export const _TrComponent: typeof _Tr = _Tr",
+        "export const _ThComponent: typeof _Th = _Th",
+        "export const _TdComponent: typeof _Td = _Td",
+        "export const _TableColumnComponent: typeof _Column = _Column",
+        "export { Table }",
+        "export { tableProps }",
+        "export default Table",
+        "export type TableProps = import('../_utils/public-props').CompatiblePublicProps<typeof import('./props').tableProps>",
+        "export { defineTableConfig } from './typed-config'",
+        "export type { TableDataPath, TypedTableRow, TypedTableRowKey, TypedTableColumn, TypedTableSortable, TypedTableFilterable, TypedTableExpandable, TypedTableConfig } from './typed-config'"
+      ]
+    },
+    {
+      "file": "types.ts",
+      "declarations": [
+        "export type TablePaginationConfig = Omit<PaginationProps, 'total'> & { total?: number; container?: string | HTMLElement }",
+        "export interface TablePaginationScope {\n  page: number\n  pageSize: number\n  total: number\n  onChange: (page: number) => void\n  onPageSizeChange: (pageSize: number) => void\n}",
+        "export const TABLE_PAGE_POSITION = ['tl', 'top', 'tr', 'bl', 'bottom', 'br'] as const",
+        "export type TablePagePosition = (typeof TABLE_PAGE_POSITION)[number]",
+        "export interface TableData {\n  /**\n   * @zh 数据行的key\n   * @en The key of the data row\n   */\n  key?: string\n  /**\n   * @zh 扩展行内容\n   * @en Expand row content\n   */\n  expand?: string | RenderFunction\n  /**\n   * @zh 子数据\n   * @en Sub data\n   */\n  children?: TableData[]\n  /**\n   * @zh 是否禁用行选择器\n   * @en Whether to disable the row selector\n   */\n  disabled?: boolean\n  /**\n   * @zh 是否是叶子节点\n   * @en Whether it is a leaf node\n   */\n  isLeaf?: boolean\n\n  [name: string]: any\n}",
+        "export interface TableDataWithRaw {\n  raw: TableData\n  key: string\n  disabled?: boolean\n  expand?: string | RenderFunction\n  children?: TableDataWithRaw[]\n  isLeaf?: boolean\n  hasSubtree?: boolean\n}",
+        "export interface TableSortable {\n  /**\n   * @zh 支持的排序方向\n   * @en Supported sort direction\n   */\n  sortDirections: ('ascend' | 'descend')[]\n  /**\n   * @zh 排序函数需根据 `extra.direction` 自行处理升降序，组件不会再次反转结果。设置为 `true` 可关闭内部排序。\n   * @en The comparator must handle `extra.direction` itself; the table does not reverse its result. Set to `true` to disable internal sorting.\n   */\n  sorter?:\n    | ((a: TableData, b: TableData, extra: { dataIndex: string; direction: 'ascend' | 'descend' }) => number)\n    | boolean\n  /**\n   * @zh 排序方向\n   * @en Sort direction\n   */\n  sortOrder?: 'ascend' | 'descend' | ''\n  /**\n   * @zh 默认排序方向（非受控模式）\n   * @en Default sort direction (uncontrolled mode)\n   */\n  defaultSortOrder?: 'ascend' | 'descend' | ''\n}",
+        "export interface TableFilterData {\n  /**\n   * @zh 筛选数据选项的内容\n   * @en Filter the content of the data option\n   */\n  text: string | RenderFunction\n  /**\n   * @zh 筛选数据选项的值\n   * @en Filter the value of the data option\n   */\n  value: string\n}",
+        "export interface TableFilterable {\n  /**\n   * @zh 筛选数据\n   * @en Filter data\n   */\n  filters?: TableFilterData[]\n  /**\n   * @zh 筛选函数\n   * @en Filter function\n   */\n  filter: (filteredValue: string[], record: TableData) => boolean\n  /**\n   * @zh 是否支持多选\n   * @en Whether to support multiple selection\n   */\n  multiple?: boolean\n  /**\n   * @zh 筛选项\n   * @en Filter value\n   */\n  filteredValue?: string[]\n  /**\n   * @zh 默认筛选项\n   * @en Default filter value\n   */\n  defaultFilteredValue?: string[]\n  /**\n   * @zh 筛选框的内容\n   * @en The content of filter box\n   */\n  renderContent?: (data: {\n    filterValue: string[]\n    setFilterValue: (filterValue: string[]) => void\n    handleFilterConfirm: (event: Event) => void\n    handleFilterReset: (event: Event) => void\n  }) => VNodeChild\n  /**\n   * @zh 筛选按钮的图标\n   * @en Filter icon for button\n   */\n  icon?: RenderFunction\n  /**\n   * @zh 筛选框的弹出框配置\n   * @en Pop-up box configuration of filter box\n   */\n  triggerProps?: TriggerProps\n  /**\n   * @zh 筛选图标是否左对齐\n   * @en Whether the filter icon is aligned to the left\n   */\n  alignLeft?: boolean\n\n  slotName?: string\n}",
+        "export interface TableColumnData {\n  /**\n   * @zh 列信息的标识，对应 `TableData` 中的数据\n   * @en The identifier of the column information, corresponding to the data in `TableData`\n   */\n  dataIndex?: string\n  /**\n   * @zh 列标题\n   * @en Column header\n   */\n  title?: string | RenderFunction\n  /**\n   * @zh 列宽度。设置后为固定列宽，不参与剩余空间分配\n   * @en Column width. Fixed width when set; does not participate in remaining space distribution\n   */\n  width?: number\n  /**\n   * @zh 最小列宽。未设置 `width` 的列按 `minWidth` 比例分配剩余空间；默认 80\n   * @en Minimum column width. Columns without `width` share remaining space by `minWidth` ratio; defaults to 80\n   */\n  minWidth?: number\n  /**\n   * @zh 对齐方向\n   * @en Alignment direction\n   */\n  align?: 'left' | 'center' | 'right'\n  /**\n   * @zh 固定位置\n   * @en Fixed position\n   */\n  fixed?: 'left' | 'right'\n  /**\n   * @zh 是否显示省略号\n   * @en Whether to show ellipsis\n   */\n  ellipsis?: boolean\n  /**\n   * @zh 是否在显示省略号时显示文本提示。可填入 tooltip 组件属性\n   * @en Whether to show a text hint when an ellipsis is displayed. Can be filled in tooltip component properties\n   */\n  tooltip?: boolean | Record<string, any>\n  /**\n   * @zh 排序相关选项\n   * @en Sorting related options\n   */\n  sortable?: TableSortable\n  /**\n   * @zh 过滤相关选项\n   * @en Filter related options\n   */\n  filterable?: TableFilterable\n  /**\n   * @zh 表头子数据，用于表头分组\n   * @en Header sub-data, used for header grouping\n   */\n  children?: TableColumnData[]\n  /**\n   * @zh 自定义单元格类名\n   * @en Custom cell class\n   */\n  cellClass?: ClassName\n  /**\n   * @zh 自定义表头单元格类名\n   * @en Custom header cell class\n   */\n  headerCellClass?: ClassName\n  /**\n   * @zh 自定义内容单元格类名\n   * @en Custom body cell class\n   */\n  bodyCellClass?: ClassName | ((record: TableData) => ClassName)\n  /**\n   * @zh 自定义总结栏单元格类名\n   * @en Custom body cell class\n   */\n  summaryCellClass?: ClassName | ((record: TableData) => ClassName)\n  /**\n   * @zh 自定义单元格样式\n   * @en Custom cell style\n   */\n  cellStyle?: CSSProperties\n  /**\n   * @zh 自定义表头单元格样式\n   * @en Custom header cell style\n   */\n  headerCellStyle?: CSSProperties\n  /**\n   * @zh 自定义内容单元格样式\n   * @en Custom body cell style\n   */\n  bodyCellStyle?: CSSProperties | ((record: TableData) => CSSProperties)\n  /**\n   * @zh 自定义总结栏单元格样式\n   * @en Custom summary cell style\n   */\n  summaryCellStyle?: CSSProperties | ((record: TableData) => CSSProperties)\n  /**\n   * @zh 自定义列单元格的渲染\n   * @en Customize the rendering of column cells\n   */\n  render?: (data: { record: TableData; column: TableColumnData; rowIndex: number }) => VNodeChild\n  /**\n   * @zh 设置当前列的渲染插槽的名字。插槽参数同 #cell\n   * @en Sets the name of the render slot for the current column. Slot parameters are the same as #cell\n   */\n  slotName?: string\n  /**\n   * @zh 设置当前列的标题的渲染插槽的名字\n   * @en Set the name of the render slot for the header of the current column\n   */\n  titleSlotName?: string\n\n  // private\n  slots?: Slots\n  isLastLeftFixed?: boolean\n  isFirstRightFixed?: boolean\n  colSpan?: number\n  rowSpan?: number\n  index?: number\n  parent?: TableColumnData\n  _resizeWidth?: number\n  /** 布局计算后的最终列宽 */\n  _realWidth?: number\n}",
+        "export interface TableBorder {\n  /**\n   * @zh 是否展示外边框\n   * @en TWhether to display the outer border\n   */\n  wrapper?: boolean\n  /**\n   * @zh 是否展示单元格边框（表头+主体）\n   * @en Whether to display the cell border (header + body)\n   */\n  cell?: boolean\n  /**\n   * @zh 是否展示表头单元格边框\n   * @en Whether to display the header cell border\n   */\n  headerCell?: boolean\n  /**\n   * @zh 是否展示主体单元格边框\n   * @en Whether to display the body cell border\n   */\n  bodyCell?: boolean\n}",
+        "export interface TableRowSelection {\n  /**\n   * @zh 行选择器的类型\n   * @en The type of row selector\n   */\n  type?: 'checkbox' | 'radio'\n  /**\n   * @zh 已选择的行（受控模式）\n   * @en Selected row (controlled mode)\n   */\n  selectedRowKeys?: BaseType[]\n  /**\n   * @zh 默认已选择的行（非受控模式）\n   * @en The selected row by default (uncontrolled mode)\n   */\n  defaultSelectedRowKeys?: BaseType[]\n  /**\n   * @zh 是否显示全选选择器\n   * @en Whether to show the select all selector\n   */\n  showCheckedAll?: boolean\n  // crossPage?: boolean;\n  /**\n   * @zh 列标题\n   * @en Column title\n   */\n  title?: string\n  /**\n   * @zh 列宽度\n   * @en Column width\n   */\n  width?: number\n  /**\n   * @zh 是否固定\n   * @en Is it fixed\n   */\n  fixed?: boolean\n  /**\n   * @zh 是否开启严格选择模式\n   * @en Whether to enable strict selection mode\n   * @default-value true\n   */\n  checkStrictly?: boolean\n  /**\n   * @zh 是否仅展示当前页的 keys（切换分页时清空 keys）\n   * @en Whether to display only the keys of the current page (clear keys when switching paging)\n   */\n  onlyCurrent?: boolean\n}",
+        "export interface TableExpandable {\n  /**\n   * @zh 显示的展开行（受控模式）\n   * @en Displayed Expanded Row (Controlled Mode)\n   */\n  expandedRowKeys?: BaseType[]\n  /**\n   * @zh 默认显示的展开行（非受控模式）\n   * @en Expand row displayed by default (Uncontrolled mode)\n   */\n  defaultExpandedRowKeys?: BaseType[]\n  /**\n   * @zh 是否默认展开所有的行\n   * @en Whether to expand all rows by default\n   */\n  defaultExpandAllRows?: boolean\n  /**\n   * @zh 自定义展开行内容\n   * @en Customize expanded row content\n   */\n  expandedRowRender?: (record: TableData) => VNodeChild\n  /**\n   * @zh 展开图标\n   * @en Expand icon\n   */\n  icon?: (expanded: boolean, record: TableData) => VNodeChild\n  /**\n   * @zh 列标题\n   * @en Column title\n   */\n  title?: string\n  /**\n   * @zh 列宽度\n   * @en Column width\n   */\n  width?: number\n  /**\n   * @zh 是否固定\n   * @en Is it fixed\n   */\n  fixed?: boolean\n}",
+        "export interface TableDraggable {\n  /**\n   * @zh 拖拽类型\n   * @en drag type\n   */\n  type?: 'row' | 'handle'\n  /**\n   * @zh 列标题\n   * @en Column title\n   */\n  title?: string\n  /**\n   * @zh 列宽度\n   * @en Column width\n   */\n  width?: number\n  /**\n   * @zh 是否固定\n   * @en Is it fixed\n   */\n  fixed?: boolean\n}",
+        "export type OperationName = 'selection-checkbox' | 'selection-radio' | 'expand' | 'drag-handle'",
+        "export interface TableOperationColumn {\n  name: OperationName | string\n  title?: string | RenderFunction\n  width?: number\n  fixed?: boolean\n  render?: (record: TableData) => VNodeChild\n  isLastLeftFixed?: boolean\n  /** auto 布局下渲染后测量回写的真实宽度，用于冻结偏移计算 */\n  _realWidth?: number\n}",
+        "export interface TableComponents {\n  operations: (operations: {\n    dragHandle?: TableOperationColumn\n    expand?: TableOperationColumn\n    selection?: TableOperationColumn\n  }) => TableOperationColumn[]\n}",
+        "export interface TableChangeExtra {\n  /**\n   * @zh 触发类型\n   * @en Trigger type\n   */\n  type: 'pagination' | 'sorter' | 'filter' | 'drag'\n  /**\n   * @zh 页码\n   * @en page number\n   */\n  page?: number\n  /**\n   * @zh 每页数据数\n   * @en number per page\n   */\n  pageSize?: number\n  /**\n   * @zh 排序信息\n   * @en Sort information\n   */\n  sorter?: Sorter\n  /**\n   * @zh 筛选信息\n   * @en Filter information\n   */\n  filters?: Filters\n  /**\n   * @zh 拖拽信息\n   * @en Drag and drop information\n   */\n  dragTarget?: TableData\n}",
+        "export interface TableProps {\n  columns: TableColumnData[]\n  data: TableData[]\n  bordered?: boolean | TableBorder\n  rowSelection?: TableRowSelection\n  expandable?: TableExpandable\n  pagination?: boolean | Data\n  pagePosition?: string\n}",
+        "export type Sorter = { field: string; direction: 'ascend' | 'descend' }",
+        "export type Filters = Record<string, string[]>"
+      ]
+    },
+    {
+      "file": "typed-config.ts",
+      "declarations": [
+        "export type TableDataPath<Row extends TableData> = RowPath<Row>",
+        "export type TypedTableRow<Row extends TableData> = Row & { children?: TypedTableRow<Row>[] }",
+        "export type TypedTableRowKey<Row extends TableData> = {\n  [Key in Extract<keyof Row, string>]-?: NonNullable<Row[Key]> extends BaseType ? Key : never\n}[Extract<keyof Row, string>]",
+        "export type TypedTableSortable<Row extends TableData> = Omit<TableSortable, 'sorter'> & {\n  sorter?: boolean | ((a: Row, b: Row, extra: { dataIndex: TableDataPath<Row>; direction: 'ascend' | 'descend' }) => number)\n}",
+        "export type TypedTableFilterable<Row extends TableData> = Omit<TableFilterable, 'filter'> & {\n  filter: (filteredValue: string[], record: Row) => boolean\n}",
+        "export type TypedTableColumn<Row extends TableData> = Omit<TableColumnData, ColumnOwnedKey> & {\n  dataIndex?: TableDataPath<Row>\n  render?: (data: { record: Row; column: TypedTableColumn<Row>; rowIndex: number }) => VNodeChild\n  sortable?: TypedTableSortable<Row>\n  filterable?: TypedTableFilterable<Row>\n  children?: TypedTableColumn<Row>[]\n  parent?: TypedTableColumn<Row>\n  bodyCellClass?: ClassName | ((record: Row) => ClassName)\n  summaryCellClass?: ClassName | ((record: Row) => ClassName)\n  bodyCellStyle?: CSSProperties | ((record: Row) => CSSProperties)\n  summaryCellStyle?: CSSProperties | ((record: Row) => CSSProperties)\n}",
+        "export type TypedTableExpandable<Row extends TableData> = Omit<TableExpandable, 'expandedRowRender' | 'icon'> & {\n  expandedRowRender?: (record: Row) => VNodeChild\n  icon?: (expanded: boolean, record: Row) => VNodeChild\n}",
+        "export type TypedTableConfig<Row extends TableData> = Omit<TableProps, ConfigOwnedKey> & {\n  data: TypedTableRow<Row>[]\n  columns: TypedTableColumn<Row>[]\n  rowKey: TypedTableRowKey<Row>\n  expandable?: TypedTableExpandable<Row>\n  loadMore?: (record: Row, done: (children?: TypedTableRow<Row>[]) => void) => void\n  spanMethod?: TypedSpanMethod<Row>\n  summarySpanMethod?: TypedSpanMethod<Row>\n  rowClass?: ClassName | ((record: Row, rowIndex: number) => ClassName)\n  summary?: false | ((params: { columns: TypedTableColumn<Row>[]; data: Row[] }) => TypedTableRow<Row>[])\n}",
+        "export function defineTableConfig<Row extends TableData>(config: TypedTableConfig<Row>): TableProps {\n  return config as unknown as TableProps\n}"
+      ]
+    },
+    {
+      "file": "extra-column.ts",
+      "declarations": [
+        "export const TABLE_EXTRA_COLUMN_KEY = \"__cedar_table_extra__\";",
+        "export const TABLE_EXTRA_COLUMN_MARKER = Symbol('table-extra-column');",
+        "export function markTableExtraColumn<T extends object>(column: T): T {\n  return Object.assign(column, { [TABLE_EXTRA_COLUMN_MARKER]: true });\n}",
+        "export function isTableExtraColumn(column: object | undefined): boolean {\n  return Boolean((column as { [TABLE_EXTRA_COLUMN_MARKER]?: boolean } | undefined)?.[TABLE_EXTRA_COLUMN_MARKER]);\n}",
+        "export function setExtraColumnLayoutKey(column: object, key: string): void {\n  Object.assign(column, { [TABLE_EXTRA_COLUMN_LAYOUT_KEY]: key });\n}",
+        "export function getColumnLayoutKey(column: { dataIndex?: string }): string | undefined {\n  return (column as { [TABLE_EXTRA_COLUMN_LAYOUT_KEY]?: string })[TABLE_EXTRA_COLUMN_LAYOUT_KEY] ?? column.dataIndex;\n}",
+        "export type TableExtraColumnConfig = {\n  /** 列宽。未传时默认 28px */\n  width?: number;\n  fixed?: \"left\" | \"right\";\n  align?: \"left\" | \"center\" | \"right\";\n  dataIndex?: string;\n};",
+        "export const DEFAULT_EXTRA_COLUMN_WIDTH = 28;",
+        "export function resolveExtraColumnConfig(\n  extraColumn?: boolean | TableExtraColumnConfig,\n): {\n  enabled: boolean;\n  width?: number;\n  fixed: \"left\" | \"right\";\n  align: \"left\" | \"center\" | \"right\";\n  dataIndex: string;\n} {\n  if (!extraColumn) {\n    return {\n      enabled: false,\n      fixed: \"right\",\n      align: \"center\",\n      dataIndex: TABLE_EXTRA_COLUMN_KEY,\n    };\n  }\n  const conf = extraColumn === true ? {} : extraColumn;\n  return {\n    enabled: true,\n    width: conf.width,\n    fixed: conf.fixed ?? \"right\",\n    align: conf.align ?? \"center\",\n    dataIndex: conf.dataIndex ?? TABLE_EXTRA_COLUMN_KEY,\n  };\n}",
+        "export function getExtraColumnWidth(\n  size?: ComponentSize | string,\n  customWidth?: number,\n): number {\n  if (customWidth != null) return customWidth;\n  return DEFAULT_EXTRA_COLUMN_WIDTH;\n}"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "file": "index.ts",
+      "sha256": "723fc930057365f001dd6209d86d4510939223efa2553c7d432d7c53289e05c7"
+    },
+    {
+      "file": "props.ts",
+      "sha256": "df40c74962f0ef14758beb14543f064f3b8817da18db2cf7c465cf3a119d1b89"
+    },
+    {
+      "file": "types.ts",
+      "sha256": "66a1788eb39c883d7aecfc57b6c573d8acb3aa2191a2045d1c288d1e9507d2ff"
+    },
+    {
+      "file": "typed-config.ts",
+      "sha256": "f71715b3db99201d46d938be67f492974cf95c553d68a9d55eb217b8a523061b"
+    },
+    {
+      "file": "table.tsx",
+      "sha256": "bbf1bb57afbafc044a67c6aa85814e5dc5cbf99981f3d91f034659a2b19c8f31"
+    },
+    {
+      "file": "context.ts",
+      "sha256": "5fcfbdb0e008f30772d7e84ffbc45e5835f79e5ef437120d1225ee4ae5642614"
+    },
+    {
+      "file": "utils.ts",
+      "sha256": "fab72e348fdf9ecbe447b6640fffa5419be443a799cd4c29d68a9550707d086a"
+    },
+    {
+      "file": "hooks/use-columns-layout.ts",
+      "sha256": "506f346435426f98422d623338d35c41c07d8087704e808d774ae0562739e7cf"
+    },
+    {
+      "file": "extra-column.ts",
+      "sha256": "33968c1759407df155eca5103a8f2b3af1818e3b97c7f7db342904605a7316ed"
+    },
+    {
+      "file": "style/index.ts",
+      "sha256": "e09d2ab140a3af54491704a4f5dc5a6eecc42457e2e65d885ba5a16429a25e1e"
+    },
+    {
+      "file": "style/index.less",
+      "sha256": "b486ffc6639d484a315b7178e703ad4fb14c8f5b8fa42bf0b43809562fa458c3"
+    },
+    {
+      "file": "style/token.less",
+      "sha256": "9793fdf2f490ac7fd21130b8d8637c86df78f01e08210b297b942e50a7e7ae7f"
+    }
+  ],
+  "existingTests": [
+    "column-content-priority.spec.ts",
+    "column-style-property-removal.spec.ts",
+    "content-slots-ssr.test.ts",
+    "direction-early-ssr.spec.ts",
+    "dynamic-content-slot.spec.ts",
+    "dynamic-structural-slot.spec.ts",
+    "dynamic-th-presence.spec.ts",
+    "empty-viewport.spec.ts",
+    "expand-instance.spec.ts",
+    "expand-locale.spec.ts",
+    "extra-column-slots-ssr.test.ts",
+    "extra-column-slots.spec.ts",
+    "extra-slots-ssr.test.ts",
+    "filter-content-priority.spec.ts",
+    "filter-reset-isolation.spec.ts",
+    "header-association.spec.ts",
+    "header-idref-non-ascii.spec.ts",
+    "inline-pagination-ssr.spec.ts",
+    "lazy-ownership.spec.ts",
+    "memo-loop-reorder-structural.spec.ts",
+    "memo-structural-slot.spec.ts",
+    "native-loading.spec.ts",
+    "operation-only-header.spec.ts",
+    "pagination-config.test.ts",
+    "pagination-container.spec.ts",
+    "pagination-model-value.test.ts",
+    "pagination-slot.spec.ts",
+    "pagination-target-compat.spec.ts",
+    "pagination-target-timing.spec.ts",
+    "radio-instance.spec.ts",
+    "reading-direction.spec.ts",
+    "row-identity.spec.ts",
+    "selection-accessibility.spec.ts",
+    "slot-reconstruction-regression.test.ts",
+    "sort-accessibility.spec.ts",
+    "sort-stability.spec.ts",
+    "split-header-association.spec.ts",
+    "split-sort-association.spec.ts",
+    "sticky-scrollbar.spec.ts",
+    "table-auto-fixed-width.test.ts",
+    "table-col-group.test.ts",
+    "table-column-registration.test.ts",
+    "table-delete-column-width.test.ts",
+    "table-dynamic-width.test.ts",
+    "table-lazy-expand.test.ts",
+    "table-without-scroll-x.spec.ts",
+    "typed-config-demo.spec.ts",
+    "typed-config.spec.ts",
+    "virtual-expanded-rows.spec.ts",
+    "virtual-lazy-row-positions.spec.ts",
+    "virtual-row-positions.spec.ts"
+  ]
+}

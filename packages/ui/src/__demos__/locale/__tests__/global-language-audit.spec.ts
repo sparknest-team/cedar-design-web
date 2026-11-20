@@ -24,7 +24,63 @@ function bilingual(value: string) {
 }
 const languageName = /^(?:english|isEnglish|isEn|lang|language|locale)$/i;
 
+const siteLanguages = new Set(["zh-CN", "en-US"]);
+const equalityOperators = new Set<ts.SyntaxKind>([
+  ts.SyntaxKind.EqualsEqualsToken,
+  ts.SyntaxKind.EqualsEqualsEqualsToken,
+  ts.SyntaxKind.ExclamationEqualsToken,
+  ts.SyntaxKind.ExclamationEqualsEqualsToken,
+]);
+
+function inspectScript(code: string, report: (reason: string) => void) {
+  const tree = ts.createSourceFile(
+    "demo.tsx",
+    code,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+  function script(node: ts.Node) {
+    if (ts.isIdentifier(node) && node.text === "useDemoLocale")
+      report("private demo language helper: the document route selects the localized example");
+    if (
+      (ts.isStringLiteral(node) ||
+        ts.isNoSubstitutionTemplateLiteral(node)) &&
+      bilingual(node.text)
+    )
+      report("mixed bilingual literal");
+    if (ts.isIdentifier(node) && languageName.test(node.text))
+      report(`local language identifier ${node.text}`);
+    if (
+      ts.isCallExpression(node) &&
+      ts.isIdentifier(node.expression) &&
+      ["useLocale", "addI18nMessages"].includes(node.expression.text)
+    )
+      report("local language mutation");
+    if (
+      ts.isBinaryExpression(node) &&
+      equalityOperators.has(node.operatorToken.kind) &&
+      [node.left, node.right].some(
+        (operand) => ts.isStringLiteralLike(operand) && siteLanguages.has(operand.text),
+      )
+    )
+      report("local language comparison: the site selects the language");
+    ts.forEachChild(node, script);
+  }
+  script(tree);
+}
+
 describe("all component demos follow the global language", () => {
+  it.each([
+    "english.value = language === 'en-US'",
+    "watch(getLocale, (next) => { active.value = next === 'en-US' })",
+    "'zh-CN' !== getLocale() ? first : second",
+  ])("rejects a local language comparison in %s", (code) => {
+    const reasons: string[] = [];
+    inspectScript(code, (reason) => reasons.push(reason));
+    expect(reasons).toContain("local language comparison: the site selects the language");
+  });
+
   it("contains no local language selectors, bilingual DOM, or browser-dependent formatting", () => {
     const violations: string[] = [];
     const files = globSync("src/**/__demos__/**/*.vue", { cwd: root });
@@ -35,11 +91,13 @@ describe("all component demos follow the global language", () => {
       function report(reason: string) {
         violations.push(`${file}: ${reason}`);
       }
+      if (/from\s*["'][^"']*__demos__\/locale(?:\/[^"']*)?["']/.test(source))
+        report("copyable demo imports a private documentation language module");
       for (const style of descriptor.styles) {
         if (/\[lang\s*[=|]/.test(style.content)) report("CSS language branch");
       }
       function template(node: any) {
-        if (node.type === 5) inspectScript(node.content.content);
+        if (node.type === 5) inspectScript(node.content.content, report);
         if (
           node.type === 2 &&
           (bilingual(node.content) ||
@@ -47,7 +105,7 @@ describe("all component demos follow the global language", () => {
         )
           report("mixed bilingual text");
         for (const prop of node.props ?? []) {
-          if (prop.type === 7 && prop.exp) inspectScript(prop.exp.content);
+          if (prop.type === 7 && prop.exp) inspectScript(prop.exp.content, report);
           const name = prop.type === 6 ? prop.name : prop.arg?.content;
           if (prop.type === 6 && prop.value && bilingual(prop.value.content))
             report("mixed bilingual attribute");
@@ -61,55 +119,62 @@ describe("all component demos follow the global language", () => {
         }
         for (const child of node.children ?? []) template(child);
       }
-      if (descriptor.template)
-        template(parseTemplate(descriptor.template.content));
-      function inspectScript(code: string) {
-        const tree = ts.createSourceFile(
-          file + ".ts",
-          code,
-          ts.ScriptTarget.Latest,
-          true,
-          ts.ScriptKind.TSX,
-        );
-        function script(node: ts.Node) {
-          if (
-            (ts.isStringLiteral(node) ||
-              ts.isNoSubstitutionTemplateLiteral(node)) &&
-            bilingual(node.text)
-          )
-            report("mixed bilingual literal");
-          if (ts.isIdentifier(node) && languageName.test(node.text))
-            report(`local language identifier ${node.text}`);
-          if (
-            ts.isCallExpression(node) &&
-            ts.isIdentifier(node.expression) &&
-            ["useLocale", "addI18nMessages"].includes(node.expression.text)
-          )
-            report("local language mutation");
-          ts.forEachChild(node, script);
-        }
-        script(tree);
+      if (descriptor.template) {
+        const tree = parseTemplate(descriptor.template.content);
+        template(tree);
       }
       for (const block of [descriptor.scriptSetup, descriptor.script])
-        if (block) inspectScript(block.content);
-      if (/\.toLocale(?:DateString|TimeString|String)\s*\(/.test(source))
+        if (block) inspectScript(block.content, report);
+      if (/\.toLocale(?:DateString|TimeString|String)\s*\((?!\s*getLocale\(\))/.test(source))
         report("formatting bypasses the global locale");
     }
     expect(violations).toEqual([]);
   }, 120_000);
 
-  it.each(normalizedDemos)("compiles the migrated example %s", (file) => {
+  it("rejects a static demo that imports the private dictionary under an alias", () => {
+    const reasons: string[] = [];
+    inspectScript("import { useDemoLocale as messages } from '../../__demos__/locale'", reason => reasons.push(reason));
+    expect(reasons).toContain("private demo language helper: the document route selects the localized example");
+  });
+
+  it("keeps each Section example independent of the private language dictionary", () => {
+    for (const example of ["plain", "card", "line", "inline-form", "heading-options"]) {
+      for (const [readme, suffix] of [["README.md", ""], ["README.en-US.md", ".en-US"]]) {
+        const demo = `./__demos__/${example}${suffix}.vue`;
+        const directory = resolve(root, "src/section");
+        expect(readFileSync(resolve(directory, readme), "utf8")).toContain(`<demo src="${demo}">`);
+        const source = readFileSync(resolve(directory, demo), "utf8");
+        const { descriptor, errors } = parse(source);
+        expect(errors).toEqual([]);
+        expect(source, demo).not.toContain("__demos__/locale");
+        expect(compileTemplate({ source: descriptor.template!.content, filename: demo, id: demo }).errors).toEqual([]);
+      }
+    }
+  });
+
+  it("uses the localized source on every English component page", () => {
+    const localized = new Set(globSync("src/**/__demos__/**/*.en-US.vue", { cwd: root }).map(file => resolve(root, file)));
+    for (const doc of globSync("src/**/*.en-US.md", { cwd: root })) {
+      const content = readFileSync(resolve(root, doc), "utf8");
+      for (const [, ref] of content.matchAll(/<demo\s+src="([^"]+\.vue)"/g)) {
+        const file = resolve(root, doc, "..", ref);
+        expect(localized.has(file.replace(/\.vue$/, ".en-US.vue")), doc + ": " + ref).toBe(false);
+      }
+    }
+  });
+
+  it.each([...new Set([...normalizedDemos, ...globSync("src/**/__demos__/**/*.en-US.vue", { cwd: root })])])("compiles the migrated example %s", (file) => {
     const { descriptor, errors } = parse(
       readFileSync(resolve(root, file), "utf8"),
       { filename: file },
     );
     expect(errors).toEqual([]);
-    const script = compileScript(descriptor, { id: file });
+    const script = descriptor.scriptSetup || descriptor.script ? compileScript(descriptor, { id: file }) : undefined;
     const template = compileTemplate({
       source: descriptor.template!.content,
       filename: file,
       id: file,
-      compilerOptions: { bindingMetadata: script.bindings },
+      compilerOptions: { bindingMetadata: script?.bindings },
     });
     expect(template.errors).toEqual([]);
   });

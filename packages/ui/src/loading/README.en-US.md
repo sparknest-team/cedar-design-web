@@ -32,7 +32,7 @@ Preview configuration: `tip="加载中"`.
 
 Compare the shape, size and color of loading indicators. Container masks and directives remain separate.
 
-<demo src="./__demos__/appearance-comparison.vue"></demo>
+<demo src="./__demos__/appearance-comparison.en-US.vue"></demo>
 
 ## Layout and arrangement
 

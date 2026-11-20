@@ -8,7 +8,6 @@ import type {
   TableDraggable,
   TableExpandable,
   TableOperationColumn,
-  TablePagePosition,
   TablePaginationConfig,
   TableRowSelection,
 } from "./types";
@@ -127,15 +126,6 @@ export const tableProps = {
     pagination: {
       type: [Boolean, Object] as PropType<boolean | TablePaginationConfig>,
       default: true,
-    },
-    /**
-     * @zh 分页选择器的位置
-     * @en The position of the page selector
-     * @values 'tl','top',tr','bl','bottom','br'
-     */
-    pagePosition: {
-      type: String as PropType<TablePagePosition>,
-      default: "br",
     },
     /**
      * @zh 树形表格的缩进距离

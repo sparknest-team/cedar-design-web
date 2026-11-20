@@ -1,0 +1,140 @@
+{
+  "mode": "complete-gates-after-browser-repair",
+  "allGatesPassed": true,
+  "initialFullRun": {
+    "command": "pnpm quality",
+    "exitCode": 1,
+    "log": "logs/quality-02-browser-gate-failed.log",
+    "prefixGatesPassed": 22,
+    "failedGate": "check:compatibility",
+    "reason": "Browser harness pointer targeting, source loading, and navigation preparation; retained failed evidence"
+  },
+  "repairedBrowserGates": {
+    "command": "DOCS_BROWSER_CONCURRENCY=1 pnpm check:compatibility",
+    "exitCode": 0,
+    "log": "logs/browser-gates-repaired-passed.log",
+    "covers": [
+      "check:docs-components",
+      "check:compatibility"
+    ],
+    "explanation": "The full Chromium profile executes the same complete component test file as check:docs-components, with the additional engine capability gate; Firefox and WebKit execute the same complete inventory."
+  },
+  "unchangedFrozenProductionInputs": true,
+  "gates": [
+    {
+      "name": "check:demo-i18n",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:install-patches",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:packages",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:shared",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:runtime-dependencies",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:vue-compat:source",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "build:lib",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:vue-compat",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "spec:check",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:style-vars",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "lint",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "typecheck",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "test",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:direction",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:cli",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:resolver",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:doc-pipeline",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "build:doc",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "package:check",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:published-environment",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:docs-theme",
+      "passed": true,
+      "evidence": "initial full quality run prefix"
+    },
+    {
+      "name": "check:docs-components",
+      "passed": true,
+      "evidence": "final complete three-engine matrix"
+    },
+    {
+      "name": "check:compatibility",
+      "passed": true,
+      "evidence": "final complete three-engine matrix"
+    }
+  ]
+}

@@ -1,7 +1,8 @@
 import { computed, defineComponent, inject, ref } from "vue";
 import { selectionEditorSurface } from "../_components/selected-options/context";
 import { useFormItem } from "../_hooks/use-form-item";
-import Select, { type SelectInstance } from "../select";
+import type { SelectInstance } from "../select";
+import Select from "../select/select";
 import { peopleSelectEmits } from "./emits";
 import { peopleText } from "./selection";
 import type { PeopleSelectValue } from "./types";

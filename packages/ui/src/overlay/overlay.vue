@@ -30,6 +30,7 @@
 </template>
 
 <script setup lang="ts">
+import { useVisualSurface } from '../_utils/visual-surface'
 import { useThemeScope } from '../theme-provider/context'
 import { useDirection } from '../_utils/direction'
 import { mergeProps,  useAttrs, computed, onActivated, onDeactivated, ref } from 'vue'
@@ -96,6 +97,7 @@ const scrollLockTarget = computed(() => {
 const layerActive = () => mergedOpen.value && !teleportDisabled.value
 const { zIndex } = useZIndex(layerActive, 3)
 const mergedZIndex = computed(() => props.zIndex ?? zIndex.value)
+useVisualSurface(() => mergedOpen.value || transition.leaving.value ? overlayRoot.value : undefined, () => mergedZIndex.value)
 const { onStackTop } = usePopupLayer(
   layerActive,
   mergedZIndex,

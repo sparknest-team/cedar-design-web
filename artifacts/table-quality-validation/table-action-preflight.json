@@ -1,0 +1,20 @@
+{
+  "scope": "standalone Table demo preflight; not the full documentation matrix",
+  "results": [
+    {
+      "engine": "chromium",
+      "version": "151.0.7922.34",
+      "passed": true
+    },
+    {
+      "engine": "firefox",
+      "version": "153.0",
+      "passed": true
+    },
+    {
+      "engine": "webkit",
+      "version": "26.5",
+      "passed": true
+    }
+  ]
+}

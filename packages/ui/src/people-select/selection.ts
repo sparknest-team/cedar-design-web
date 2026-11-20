@@ -7,6 +7,12 @@ export function personIds(value: PeopleSelectValue): string[] {
   return Array.isArray(value) ? value : value == null ? [] : [value]
 }
 
+function unmatchedLabel(id: string, props: PeopleSelectProps): string {
+  const placeholder = props.defaultText ?? '-'
+  if (props.fallbackOption === false) return placeholder
+  return (!props.multiple && props.label) || id || placeholder
+}
+
 /** Keep selected names while remote searches replace the candidate list. */
 export function useSelectedPeople(
   props: PeopleSelectProps,
@@ -31,7 +37,7 @@ export function useSelectedPeople(
       const cached = cache.value.get(id)
       if (cached) return cached
     }
-    return { value: id, label: props.fallbackOption === false ? (props.defaultText ?? '-') : (!props.multiple && props.label) || id || (props.defaultText ?? '-') }
+    return { value: id, label: unmatchedLabel(id, props) }
   }
   return {
     people: computed(() => personIds(value.value).map(resolve)),
@@ -45,6 +51,6 @@ export function peopleText(value: PeopleSelectValue, props: PeopleSelectProps): 
     const option = Array.isArray(props.options) ? props.options.find((person) => person.value === id) : undefined
     if (option) return option.label
     if (typeof props.fallbackOption === 'function') return props.fallbackOption(id).label
-    return (!props.multiple && props.label) || id || (props.defaultText ?? '-')
+    return unmatchedLabel(id, props)
   }).join(', ')
 }

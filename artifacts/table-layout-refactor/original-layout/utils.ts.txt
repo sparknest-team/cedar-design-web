@@ -1,0 +1,452 @@
+import type { CSSProperties, VNode } from 'vue'
+import { TableColumnData, TableDataWithRaw, TableOperationColumn } from './types'
+import { isArray, isNull, isUndefined } from '../_utils/is'
+import { resolveProps, isNamedComponent, isSlotsChildren, isArrayChildren } from '../_utils/vue-utils'
+import { BaseType } from '../_utils/types'
+import { getColumnLayoutKey, isTableExtraColumn, setExtraColumnLayoutKey } from './extra-column'
+
+const getDataColumnsNumber = (columns: TableColumnData[]): number => {
+  let count = 0
+
+  const travelColumns = (columns: TableColumnData[]) => {
+    if (isArray(columns) && columns.length > 0) {
+      for (const item of columns) {
+        if (!item.children) {
+          count += 1
+        } else {
+          travelColumns(item.children)
+        }
+      }
+    }
+  }
+  travelColumns(columns)
+
+  return count
+}
+
+// Get the total number of rows in the header
+const getTotalHeaderRows = (columns: TableColumnData[]): number => {
+  let count = 0
+  if (isArray(columns) && columns.length > 0) {
+    count = 1
+    for (const item of columns) {
+      if (item.children) {
+        const depth = getTotalHeaderRows(item.children)
+        if (depth > 0) {
+          count = Math.max(count, depth + 1)
+        }
+      }
+    }
+  }
+  return count
+}
+
+const setParentFixed = (column: TableColumnData, fixed: 'left' | 'right') => {
+  let { parent } = column
+  while (parent) {
+    if (parent.fixed === fixed) {
+      if (fixed === 'left') {
+        parent.isLastLeftFixed = true
+      } else {
+        parent.isFirstRightFixed = true
+      }
+    }
+    parent = parent.parent
+  }
+}
+
+/** 若分组下所有叶子 fixed 一致，返回该值；否则 undefined */
+const getUniformLeafFixed = (column: TableColumnData): 'left' | 'right' | undefined => {
+  const leaves: TableColumnData[] = []
+  const walk = (cols: TableColumnData[]) => {
+    cols.forEach((col) => {
+      if (isArray(col.children) && col.children.length) {
+        walk(col.children)
+      } else {
+        leaves.push(col)
+      }
+    })
+  }
+  if (isArray(column.children) && column.children.length) {
+    walk(column.children)
+  }
+  if (!leaves.length) return undefined
+  const first = leaves[0].fixed
+  if (first !== 'left' && first !== 'right') return undefined
+  return leaves.every((leaf) => leaf.fixed === first) ? first : undefined
+}
+
+// Get the grouped header row data
+export const getGroupColumns = (
+  columns: TableColumnData[],
+  columnMap: Map<string, TableColumnData>,
+  columnWidth: Record<string, number>,
+  dir: 'ltr' | 'rtl' = 'ltr',
+) => {
+  const totalHeaderRows = getTotalHeaderRows(columns)
+
+  columnMap.clear()
+  const dataColumns: TableColumnData[] = []
+  const groupColumns: TableColumnData[][] = [...Array(totalHeaderRows)].map(() => [])
+
+  // For recording
+  let lastLeftFixedIndex: number | undefined
+  let firstRightFixedIndex: number | undefined
+  let firstLeftFixedIndex: number | undefined
+  let lastRightFixedIndex: number | undefined
+
+  const travelColumns = (
+    columns: TableColumnData[],
+    {
+      level = 0,
+      parent,
+      fixed,
+    }: {
+      level?: number
+      parent?: TableColumnData
+      fixed?: 'left' | 'right'
+    } = {},
+  ) => {
+    for (const item of columns) {
+      const cell: TableColumnData = { ...item, parent }
+      if (isArray(cell.children)) {
+        const colSpan = getDataColumnsNumber(cell.children)
+        if (colSpan > 1) {
+          cell.colSpan = colSpan
+        }
+        // 子列全部同侧冻结时，分组表头也要带上 fixed，否则横滚时表头不会跟着固定
+        if (!cell.fixed) {
+          const uniformFixed = getUniformLeafFixed(cell)
+          if (uniformFixed) {
+            cell.fixed = uniformFixed
+          }
+        }
+        groupColumns[level].push(cell)
+        travelColumns(cell.children, {
+          level: level + 1,
+          parent: cell,
+          fixed: cell.fixed,
+        })
+      } else {
+        // Minimum header
+        const rowSpan = totalHeaderRows - level
+        if (rowSpan > 1) {
+          cell.rowSpan = rowSpan
+        }
+        if (fixed || cell.fixed) {
+          cell.fixed = cell.fixed ?? fixed
+          if (cell.fixed === 'left') {
+            lastLeftFixedIndex = dataColumns.length
+            firstLeftFixedIndex ??= dataColumns.length
+          } else if (isUndefined(firstRightFixedIndex)) {
+            firstRightFixedIndex = dataColumns.length
+          }
+        }
+
+        if (cell.fixed === 'right') lastRightFixedIndex = dataColumns.length
+        if (isUndefined(cell.dataIndex) || isNull(cell.dataIndex)) {
+          cell.dataIndex = `__arco_data_index_${dataColumns.length}`
+        }
+
+        if (isTableExtraColumn(cell) && columnMap.has(cell.dataIndex)) {
+          let layoutKey = `@cedar-extra:${cell.dataIndex}`
+          while (columnMap.has(layoutKey)) layoutKey += '@'
+          setExtraColumnLayoutKey(cell, layoutKey)
+        }
+        const layoutKey = getColumnLayoutKey(cell)!
+        if (columnWidth[layoutKey]) {
+          cell._resizeWidth = columnWidth[layoutKey]
+        }
+
+        // dataColumns和groupColumns公用一个cell的引用
+        if (!isTableExtraColumn(cell) || !columnMap.has(cell.dataIndex)) {
+          columnMap.set(cell.dataIndex, cell)
+        }
+        dataColumns.push(cell)
+        groupColumns[level].push(cell)
+      }
+    }
+  }
+
+  travelColumns(columns)
+
+  if (dir === 'rtl') { lastLeftFixedIndex = firstLeftFixedIndex; firstRightFixedIndex = lastRightFixedIndex }
+  if (!isUndefined(lastLeftFixedIndex)) {
+    dataColumns[lastLeftFixedIndex].isLastLeftFixed = true
+    setParentFixed(dataColumns[lastLeftFixedIndex], 'left')
+  }
+  if (!isUndefined(firstRightFixedIndex)) {
+    dataColumns[firstRightFixedIndex].isFirstRightFixed = true
+    setParentFixed(dataColumns[firstRightFixedIndex], 'right')
+  }
+
+  // A group that crosses physical frozen sides cannot remain one contiguous
+  // colspan after the RTL view is partitioned. Project it into one header cell
+  // per physical section, preserving leaf identity and business source indexes.
+  const visualGroups = dir === 'rtl' ? groupColumns.map(row => row.flatMap(cell => {
+    if (!cell.children?.length) return [cell]
+    const belongs = (leaf: TableColumnData) => {
+      let parent = leaf.parent
+      while (parent) { if (parent === cell) return true; parent = parent.parent }
+      return false
+    }
+    const leaves = dataColumns.filter(belongs)
+    return (['right', undefined, 'left'] as const).flatMap(side => {
+      const section = leaves.filter(leaf => leaf.fixed === side)
+      if (!section.length) return []
+      return [{ ...cell, children: section, colSpan: section.length, fixed: side,
+        isLastLeftFixed: side === 'left' && section.some(leaf => leaf.isLastLeftFixed),
+        isFirstRightFixed: side === 'right' && section.some(leaf => leaf.isFirstRightFixed),
+      }]
+    })
+  })) : groupColumns
+  return { dataColumns, groupColumns: visualGroups }
+}
+
+const getOperationColumnIndex = (operations: TableOperationColumn[], name: string) => {
+  for (let i = 0; i < operations.length; i++) {
+    if (operations[i].name === name) {
+      return i
+    }
+  }
+  return -1
+}
+
+export const getOperationFixedNumber = (column: TableOperationColumn, operations: TableOperationColumn[]) => {
+  const index = getOperationColumnIndex(operations, column.name)
+  if (index <= 0) {
+    return 0
+  }
+  let count = 0
+  const _operations = operations.slice(0, index)
+  for (const item of _operations) {
+    count += item._realWidth ?? item.width ?? 0
+  }
+
+  return count
+}
+
+const getFirstDataColumn = (column: TableColumnData): TableColumnData => {
+  if (column.children && column.children.length > 0) return getFirstDataColumn(column.children[0])
+  return column
+}
+
+const getLastDataColumn = (column: TableColumnData): TableColumnData => {
+  if (column.children && column.children.length > 0)
+    return getLastDataColumn(column.children[column.children.length - 1])
+  return column
+}
+
+// Get the location data of a fixed column
+export const getFixedNumber = (
+  column: TableColumnData,
+  {
+    dataColumns,
+    operations,
+  }: {
+    dataColumns: TableColumnData[]
+    operations: TableOperationColumn[]
+  },
+  tableLayout?: 'fixed' | 'auto',
+  dir: 'ltr' | 'rtl' = 'ltr',
+) => {
+  // auto 布局下浏览器按内容分配列宽，不执行拖拽写入的 _resizeWidth，
+  // 偏移必须以渲染后测量回写的 _realWidth 为准，否则 sticky 错位
+  const widthOf = (item: TableColumnData) =>
+    tableLayout === 'auto'
+      ? item._realWidth ?? item.width ?? 0
+      : item._resizeWidth ?? item._realWidth ?? item.width ?? 0
+
+  let count = 0
+  if (dir === 'rtl') {
+    const boundary = column.fixed === 'left' ? getLastDataColumn(column) : getFirstDataColumn(column)
+    const index = dataColumns.findIndex(item => getColumnLayoutKey(item) === getColumnLayoutKey(boundary))
+    const outside = column.fixed === 'left' ? dataColumns.slice(index + 1) : dataColumns.slice(0, index)
+    return outside.filter(item => item.fixed === column.fixed).reduce((total, item) => total + widthOf(item), 0)
+  }
+
+  if (column.fixed === 'left') {
+    for (const item of operations) {
+      // auto 布局下渲染后回写的真实宽度优先（见 table.tsx syncAutoLayoutRealWidths）
+      count += item._realWidth ?? item.width ?? 40
+    }
+    const first = getFirstDataColumn(column)
+    for (const item of dataColumns) {
+      if (getColumnLayoutKey(first) === getColumnLayoutKey(item)) {
+        break
+      }
+      count += widthOf(item)
+    }
+    return count
+  }
+
+  const last = getLastDataColumn(column)
+  for (let i = dataColumns.length - 1; i >= 0; i--) {
+    const item = dataColumns[i]
+    if (getColumnLayoutKey(last) === getColumnLayoutKey(item)) {
+      break
+    }
+
+    if (item.fixed === 'right') {
+      count += widthOf(item)
+    }
+  }
+  return count
+}
+
+export const getOperationFixedCls = (prefixCls: string, column: TableOperationColumn): any[] => {
+  if (column.fixed) {
+    return [
+      `${prefixCls}-col-fixed-left`,
+      {
+        [`${prefixCls}-col-fixed-left-last`]: column.isLastLeftFixed,
+      },
+    ]
+  }
+  return []
+}
+
+export const getFixedCls = (
+  prefixCls: string,
+  column: Pick<TableColumnData, 'fixed' | 'isLastLeftFixed' | 'isFirstRightFixed'>,
+  hideLeftBoundary = false,
+): any[] => {
+  if (column.fixed === 'left') {
+    return [
+      `${prefixCls}-col-fixed-left`,
+      {
+        [`${prefixCls}-col-fixed-left-last`]: column.isLastLeftFixed && !hideLeftBoundary,
+      },
+    ]
+  }
+  if (column.fixed === 'right') {
+    return [
+      `${prefixCls}-col-fixed-right`,
+      {
+        [`${prefixCls}-col-fixed-right-first`]: column.isFirstRightFixed,
+      },
+    ]
+  }
+  return []
+}
+
+export const getStyle = (
+  column: TableColumnData,
+  {
+    dataColumns,
+    operations,
+  }: {
+    dataColumns: TableColumnData[]
+    operations: TableOperationColumn[]
+  },
+  tableLayout?: 'fixed' | 'auto',
+  dir: 'ltr' | 'rtl' = 'ltr',
+): CSSProperties => {
+  if (column.fixed) {
+    const offset = `${getFixedNumber(column, { dataColumns, operations }, tableLayout, dir)}px`
+    if (column.fixed === 'left') {
+      return {
+        left: offset,
+      }
+    }
+    return {
+      right: offset,
+    }
+  }
+  return {}
+}
+
+export const getOperationStyle = (column: TableOperationColumn, operations: TableOperationColumn[], dir: 'ltr' | 'rtl' = 'ltr', dataColumns: TableColumnData[] = [], tableLayout?: 'fixed' | 'auto') => {
+  if (column.fixed) {
+    return {
+      left: `${dir === 'rtl'
+        ? operations.slice(operations.indexOf(column) + 1).filter(item => item.fixed).reduce((sum, item) => sum + (item._realWidth ?? item.width ?? 40), 0) + dataColumns.filter(item => item.fixed === 'left').reduce((sum, item) => sum + (tableLayout === 'auto' ? item._realWidth ?? item.width ?? 0 : item._resizeWidth ?? item._realWidth ?? item.width ?? 0), 0)
+        : getOperationFixedNumber(column, operations)}px`,
+    }
+  }
+  return {}
+}
+
+/**
+ * Obtain table column data through the <TableColumnData> component
+ * @param {VNode[]} vns
+ */
+export const getColumnsFromSlot = (vns: VNode[]) => {
+  const columns: TableColumnData[] = []
+  for (const vn of vns) {
+    if (isNamedComponent(vn, 'TableColumn')) {
+      const column = resolveProps(vn) as TableColumnData
+      if (isSlotsChildren(vn, vn.children)) {
+        if (vn.children.default) {
+          column.children = getColumnsFromSlot(vn.children.default())
+        }
+        if (vn.children.cell) {
+          // @ts-ignore
+          column.render = vn.children.cell
+        }
+        if (vn.children.title) {
+          // @ts-ignore
+          column.title = vn.children.title
+        }
+      }
+      columns.push(column)
+    } else if (isArrayChildren(vn, vn.children)) {
+      columns.push(...getColumnsFromSlot(vn.children))
+    } else if (isArray(vn)) {
+      columns.push(...getColumnsFromSlot(vn))
+    }
+  }
+  return columns
+}
+
+export function mapArrayWithChildren<T extends Array<{ [key: string]: any; children?: T }>>(arr: T): T {
+  return arr.map((item) => {
+    const newItem = { ...item }
+    if (newItem.children) {
+      newItem.children = mapArrayWithChildren(newItem.children)
+    }
+    return newItem
+  }) as T
+}
+
+export function mapRawTableData<T extends TableDataWithRaw[]>(arr: T): TableDataWithRaw['raw'][] {
+  return arr.map((item) => {
+    const rawItem = item.raw
+    if (item.children && rawItem.children) {
+      rawItem.children = mapRawTableData(item.children)
+    }
+    return item.raw
+  })
+}
+
+export const getLeafKeys = (record: TableDataWithRaw) => {
+  const keys: BaseType[] = []
+  if (record.children) {
+    for (const item of record.children) {
+      if (item.isLeaf) {
+        keys.push(item.key)
+      } else {
+        keys.push(...getLeafKeys(item))
+      }
+    }
+  }
+  return keys
+}
+
+export const getSelectionStatus = (selectedRowKeys: BaseType[], leafKeys: BaseType[]) => {
+  let checked = false
+  let indeterminate = false
+  const selectedLeafKeys = leafKeys.filter((key) => selectedRowKeys.includes(key))
+  if (selectedLeafKeys.length > 0) {
+    if (selectedLeafKeys.length >= leafKeys.length) {
+      checked = true
+    } else {
+      indeterminate = true
+    }
+  }
+
+  return {
+    checked,
+    indeterminate,
+  }
+}

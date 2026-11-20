@@ -94,7 +94,7 @@ Preview configuration: `show-tooltip="always"`, `aria-label="Always visible"`, `
 
 Every accepted pointer `start` has one `end`, including cancellation by disabling/readonly, bounds/step/orientation/range changes, capture loss, owner-window blur, KeepAlive deactivation, or unmount. `end` carries the last proposal from that gesture, or its initial value if it never proposed a change; changing range mode does not convert the old gesture's payload shape. Cancellation ends interaction, does not roll back earlier `change` proposals, and does not manufacture another model update. The parent still controls whether to accept proposals. A late pointerup/move cannot end the same gesture twice. Notification return Promises are not awaited.
 
-<demo src="./__demos__/interaction-session.vue"></demo>
+<demo src="./__demos__/interaction-session.en-US.vue"></demo>
 
 ## Usage notes
 

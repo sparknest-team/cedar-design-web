@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("carouselSchedulerLifecycleInline");
 
 import { ref } from "vue";
 const active = ref(true);
@@ -11,11 +9,11 @@ const moves = ref(0);
 </script>
 <template>
   <div>
-    <c-button @click="playing = !playing">{{ inlineCopy.autoplay }}</c-button>
-    <c-button @click="active = !active">{{ inlineCopy.activate }}</c-button>
-    <c-button @click="mounted = !mounted">{{ inlineCopy.mount }}</c-button>
+    <c-button @click="playing = !playing">自动播放</c-button>
+    <c-button @click="active = !active">停用与激活</c-button>
+    <c-button @click="mounted = !mounted">卸载与挂载</c-button>
     <p>
-      {{ inlineCopy.current }} {{ current }}{{ inlineCopy.changes }}
+      当前: {{ current }}通知:
       {{ moves }}. Suspend during autoplay or loop settlement, then activate.
       Old work must not replay.
     </p>
@@ -31,7 +29,7 @@ const moves = ref(0);
         @change="moves++"
       >
         <c-carousel-item v-for="item in 3" :key="item"
-          >{{ inlineCopy.slide }} {{ item }}</c-carousel-item
+          >幻灯片 {{ item }}</c-carousel-item
         >
       </c-carousel>
     </KeepAlive>

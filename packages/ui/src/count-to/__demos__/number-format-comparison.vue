@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("countToNumberFormatComparison");
 import { proxyRefs as demoProxyRefs } from "vue";
 
 const scene3 = demoProxyRefs(
@@ -17,7 +15,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="precision"
     >
-      <h4>{{ demoCopy.precision }}</h4>
+      <h4>精度</h4>
       <c-count-to :to="123456" :precision="2" />
     </section>
 
@@ -25,7 +23,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="duration"
     >
-      <h4>{{ demoCopy.duration }}</h4>
+      <h4>自定义时长</h4>
       <c-count-to :to="123456" :duration="10000" />
     </section>
 
@@ -33,7 +31,7 @@ const scene3 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--3"
       data-comparison-scene="timing-function"
     >
-      <h4>{{ demoCopy.timingFunction }}</h4>
+      <h4>自定义动画曲线</h4>
       <c-count-to :to="123456" :timing-function="scene3.easeOutCubic" />
     </section>
   </div>

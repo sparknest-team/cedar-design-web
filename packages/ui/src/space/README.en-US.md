@@ -92,7 +92,7 @@ Start with the basic example, then compare related settings before moving to con
 
 Change wrapping, direction and order after typing a draft. A separator stays with its preceding item and may appear at a line end.
 
-<demo src="./__demos__/split-wrapping.vue"></demo>
+<demo src="./__demos__/split-wrapping.en-US.vue"></demo>
 
 ## Reading direction
 

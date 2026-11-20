@@ -1,18 +1,13 @@
-<script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("countdownFormatComparison");
-</script>
-
 <template>
   <div class="demo-comparison">
     <section
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="format"
     >
-      <h4>{{ demoCopy.format }}</h4>
+      <h4>自定义格式</h4>
       <c-countdown
         :time="4 * 24 * 60 * 60 * 1000"
-        :format="demoCopy.dayFormat"
+        format="DD 天 HH 时 mm 分 ss 秒"
       />
     </section>
 
@@ -20,7 +15,7 @@ const demoCopy = useDemoLocale("countdownFormatComparison");
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="millisecond"
     >
-      <h4>{{ demoCopy.millisecond }}</h4>
+      <h4>显示毫秒</h4>
       <c-countdown :time="2 * 60 * 60 * 1000" format="HH:mm:ss.SSS" />
     </section>
 
@@ -28,7 +23,7 @@ const demoCopy = useDemoLocale("countdownFormatComparison");
       class="demo-comparison-case demo-comparison-case--3"
       data-comparison-scene="custom"
     >
-      <h4>{{ demoCopy.custom }}</h4>
+      <h4>自定义样式</h4>
       <c-countdown :time="108000000">
         <template #default="{ hours, minutes, seconds }">
           <span class="countdown-block">{{ hours }}</span>

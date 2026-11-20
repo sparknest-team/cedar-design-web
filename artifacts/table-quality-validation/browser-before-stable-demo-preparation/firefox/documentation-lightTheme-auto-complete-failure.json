@@ -1,0 +1,394 @@
+{
+  "failures": [],
+  "diagnostic": {
+    "url": "http://127.0.0.1:52517/components/auto-complete/#%E5%9F%BA%E7%A1%80%E8%BE%93%E5%85%A5%E4%B8%8E%E9%80%89%E6%8B%A9",
+    "text": " 显示为空，不会把普通输入的空字符串自动转成 null。确认式弹出编辑中，清空先修改草稿并在确认后提交；无需确认时清空会直接提交。\n\n公共 focus/blur 从首次挂载即可调用。focus 会打开可编辑的延迟编辑器，等待其就绪后定位；禁用、只读或纯阅读时不因此打开。blur 只失焦当前目标，不重新打开。保存的方法不会绑定旧编辑器，关闭、切换模式、停用或卸载会取消排队调用。\n\nrefresh 可在编辑器未打开时重试组件自有的异步选项读取，沿用既有 AbortSignal、loading 和 load-error 协议，不自动打开编辑器；静态数组不产生额外请求。\n\n后续验收（尚未完成）：使用真实读屏器（如 VoiceOver、NVDA）及受支持的浏览器，检查输入框名称、候选加载与导航、选择、关闭及表单错误的实际播报。\n\nCSS Variables\n\n通过以下变量定制组件外观。默认值随表中注明的主题或选择器条件变化；变量仅在对应的尺寸、变体和交互状态下生效。\n\n变量\t默认值／条件\t影响的样式\n--c-auto-complete-option-bg-default\tvar(--c-select-popup-option-bg)\tbackground-color\n--c-auto-complete-option-bg-disabled\tvar(--c-select-popup-option-bg-disabled)\tbackground-color\n--c-auto-complete-option-bg-hover\tvar(--c-select-popup-option-bg-hover)\tbackground-color\n--c-auto-complete-option-bg-selected\tvar(--c-select-popup-option-bg-selected)\tbackground-color\n--c-auto-complete-option-font-weight-selected\tvar(--c-select-popup-option-font-weight-selected)\tfont-weight\n--c-auto-complete-option-height\tvar(--c-select-popup-option-height)\tline-height\n--c-auto-complete-option-padding-horizontal\tvar(--c-select-popup-option-padding-horizontal)\tpadding-inline\n--c-auto-complete-option-text-color-default\tvar(--c-select-popup-option-text-color)\tcolor\n--c-auto-complete-option-text-color-disabled\tvar(--c-select-popup-option-text-color-disabled)\tcolor\n--c-auto-complete-option-text-color-hover\tvar(--c-select-popup-option-text-color-hover)\tcolor\n--c-auto-complete-option-text-color-selected\tvar(--c-select-popup-option-text-color-selected)\tcolor\n--c-auto-complete-popup-bg\tvar(--c-select-popup-bg)\tbackground-color\n--c-auto-complete-popup-border-color\tvar(--c-select-popup-border-color)\tborder\n--c-auto-complete-popup-border-radius\tvar(--c-select-popup-border-radius)\tborder-radius\n--c-auto-complete-popup-box-shadow\tvar(--c-select-popup-box-shadow)\tbox-shadow\n--c-auto-complete-popup-font-size\tvar(--c-select-popup-font-size)\tfont-size\n--c-auto-complete-popup-max-height\tvar(--c-select-popup-max-height)\tmax-height\n--c-auto-complete-popup-padding-vertical\tvar(--c-select-popup-padding-vertical)\tpadding-block\n\n将覆盖设置在组件实际根节点或弹层真实挂载祖先上。例如给该元素添加下列 class，再按需替换变量值：\n\n.component-theme {\n  --c-auto-complete-option-padding-horizontal: var(--c-select-popup-option-padding-horizontal);\n}\n\n\n显式行内样式及直接写入同一 CSS 属性的 Props 优先于样式表默认值。Teleport 后，普通 CSS 变量按实际挂载位置继承；使用 ThemeProvider 时，请遵循其局部主题与弹层配置规则。局部定制请直接覆盖组件变量；仅修改后代的 system 变量不会重新计算从根继承的组件别名。内部变量不属于公共 API。\n\n编辑此页",
+    "numericSteps": [],
+    "overflow": [],
+    "previews": [
+      "<div class=\"vmi-previewer-example\" style=\"\" data-v-a1d6c6fd=\"\"><div class=\"c-auto-complete\" style=\"width: 100%; max-width: 320px;\"><div class=\"c-input\"><div class=\"c-field-decorator c-field-decorator--size-md c-field-decorator--variant-outline c-field-decorator--focus\" style=\"--c-internal-field-content-offset: 12px; --c-internal-field-content-width: 272px;\"><!----><span class=\"c-field-decorator__middle\"><input role=\"combobox\" aria-autocomplete=\"list\" aria-expanded=\"false\" autocomplete=\"off\" id=\"v-1\" class=\"c-input__inner\" type=\"text\" placeholder=\"输入或选择城市\" value=\"Bei\"></span><!----><span class=\"c-field-decorator__suffix\"><button type=\"button\" class=\"c-field-decorator__clear-btn\" aria-label=\"清空\"><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 48 48\" width=\"1em\" height=\"1em\" class=\"c-icon c-icon-close-circle-fill\" stroke-width=\"4\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" aria-hidden=\"true\" role=\"img\"><!--v-if--><path fill=\"currentColor\" fill-rule=\"evenodd\" stroke=\"none\" d=\"M24 44c11.046 0 20-8.954 20-20S35.046 4 24 4 4 12.954 4 24s8.954 20 20 20m4.955-27.771-4.95 4.95-4.95-4.95a1 1 0 0 0-1.414 0l-1.414 1.414a1 1 0 0 0 0 1.414l4.95 4.95-4.95 4.95a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l4.95-4.95 4.95 4.95a1 1 0 0 0 1.414 0l1.414-1.414a1 1 0 0 0 0-1.414l-4.95-4.95 4.95-4.95a1 1 0 0 0 0-1.414l-1.414-1.414a1 1 0 0 0-1.414 0\" clip-rule=\"evenodd\"></path></svg></button><!----></span><!----><span class=\"c-field-decorator__border\" aria-hidden=\"true\"></span><span class=\"c-field-decorator__border-state\" aria-hidden=\"true\"></span></div></div><!----></div><p>当前值：Bei</p></div>",
+      "<div class=\"vmi-previewer-example\" style=\"\" data-v-a1d6c6fd=\"\"><div><p>选择候选项会立即提交；输入自定义内容后点击确认。</p><span class=\"c-field-presentation__anchor\"><span class=\"c-field-presentation__reference-group\" title=\"单击编辑\"><button type=\"button\" class=\"c-field-presentation__reference\" aria-expanded=\"false\" aria-haspopup=\"dialog\"><span>—</span></button><!----><button type=\"button\" class=\"c-field-presentation__edit\" aria-label=\"编辑\" title=\"编辑\"><!----><svg xmlns=\"http://www.w3.org/2000/svg\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 48 48\" width=\"1em\" height=\"1em\" class=\"c-icon c-icon-edit\" stroke-width=\"4\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" aria-hidden=\"true\" role=\"img\"><!--v-if--><path d=\"m30.48 19.038 5.733-5.734a1 1 0 0 0 0-1.414l-5.586-5.586a1 1 0 0 0-1.414 0l-5.734 5.734m7 7L15.763 33.754a1 1 0 0 1-.59.286l-6.048.708a1 1 0 0 1-1.113-1.069l.477-6.31a1 1 0 0 1 .29-.631l14.7-14.7m7 7-7-7M6 42h36\"></path></svg></button></span></span><!----><p>已提交: —</p></div></div>"
+    ],
+    "controls": [
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "切换到 RTL / Switch to right-to-left",
+        "class": "docs-direction-toggle"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "默认亮色✓",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "默认暗色",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "中文✓",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "English",
+        "class": ""
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "清空",
+        "class": "c-field-decorator__clear-btn"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "—",
+        "class": "c-field-presentation__reference"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "编辑",
+        "class": "c-field-presentation__edit"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "DIV",
+        "role": "radiogroup",
+        "label": "variant",
+        "class": "c-radio-group c-radio-group--horizontal c-radio-group--size-sm c-radio-group--button"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-radio__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-radio__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-radio__input"
+      },
+      {
+        "tag": "DIV",
+        "role": "radiogroup",
+        "label": "size",
+        "class": "c-radio-group c-radio-group--horizontal c-radio-group--size-sm c-radio-group--button"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-radio__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-radio__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-radio__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-radio__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-radio__input"
+      },
+      {
+        "tag": "DIV",
+        "role": "radiogroup",
+        "label": "对比配置",
+        "class": "c-radio-group c-radio-group--horizontal c-radio-group--size-md"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-radio__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-radio__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "清空",
+        "class": "c-field-decorator__clear-btn"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "清空",
+        "class": "c-field-decorator__clear-btn"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "清空",
+        "class": "c-field-decorator__clear-btn"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-checkbox__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-checkbox__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-checkbox__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-checkbox__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": null,
+        "label": "",
+        "class": "c-checkbox__input"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "清空",
+        "class": "c-field-decorator__clear-btn"
+      },
+      {
+        "tag": "svg",
+        "role": "img",
+        "label": "",
+        "class": {}
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "禁用输入",
+        "class": "c-button c-button--size-md c-button--status-default c-button--variant-outline"
+      },
+      {
+        "tag": "INPUT",
+        "role": "combobox",
+        "label": "透传配置示例",
+        "class": "c-input__inner"
+      },
+      {
+        "tag": "P",
+        "role": "status",
+        "label": "顶层 disabled：false；聚焦输入框查看向上展开的候选。",
+        "class": ""
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "复制代码",
+        "class": "vp-copy-code-button"
+      },
+      {
+        "tag": "BUTTON",
+        "role": null,
+        "label": "返回顶部",
+        "class": "vp-back-to-top-button"
+      },
+      {
+        "tag": "SPAN",
+        "role": "progressbar",
+        "label": "",
+        "class": "vp-scroll-progress"
+      }
+    ]
+  },
+  "error": "AssertionError [ERR_ASSERTION]: chosen item \"Beijing\" from c-auto-complete-listbox-v-0 appears in the actual field; last observed: \"当前值：Bei Bei\""
+}

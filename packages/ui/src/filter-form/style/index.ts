@@ -1,4 +1,5 @@
 import '../../style/index.less'
+import '../../link/style'
 import '../../form/style'
 import '../../grid/style'
 import './index.less'

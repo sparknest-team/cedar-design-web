@@ -1,6 +1,4 @@
 <script setup>
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("formChangeSourceInline");
 
 import { reactive, ref } from "vue";
 const model = reactive({
@@ -20,7 +18,7 @@ function record(field, value, event) {
 </script>
 <template>
   <section>
-    <p>{{ inlineCopy.openAFieldEditAnd }}</p>
+    <p>打开字段、修改并保存，下方显示真实确认事件。</p>
     <c-input
       v-model="model.input"
       edit-mode="click"

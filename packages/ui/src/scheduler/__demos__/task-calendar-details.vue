@@ -103,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatDemoDateTime } from "../../__demos__/locale";
+import { getLocale } from "@cedar-design/ui-vue";
 import { computed, ref } from "vue";
 import type {
   SchedulerEditorRequest,
@@ -268,7 +268,7 @@ function timeRange(event: SchedulerEvent) {
 function displayTime(value?: string | number | Date) {
   return value == null
     ? "未记录"
-    : formatDemoDateTime(new Date(value), {
+    : new Date(value).toLocaleString(getLocale(), {
         month: "numeric",
         day: "numeric",
         hour: "2-digit",

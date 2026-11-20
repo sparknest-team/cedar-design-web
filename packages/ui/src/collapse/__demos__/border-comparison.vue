@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("collapseBorderComparison");
 import { ref } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -18,7 +16,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="border-less"
     >
-      <h4>{{ demoCopy.borderLess }}</h4>
+      <h4>无边框模式</h4>
       <c-collapse :default-value="['1']" :bordered="false">
         <c-collapse-item title="Beijing Toutiao Technology Co., Ltd." name="1">
           <div>Beijing Toutiao Technology Co., Ltd.</div>
@@ -40,7 +38,7 @@ const scene2 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="divider"
     >
-      <h4>{{ demoCopy.divider }}</h4>
+      <h4>分割线</h4>
       <c-space
         direction="column"
         :style="{

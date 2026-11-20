@@ -1,15 +1,10 @@
-<script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("alertContentComparison");
-</script>
-
 <template>
   <div class="demo-comparison">
     <section
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="title"
     >
-      <h4>{{ demoCopy.title }}</h4>
+      <h4>提示标题</h4>
       <c-row :gutter="[40, 20]">
         <c-col :span="12">
           <c-alert title="Info">This is an info alert.</c-alert>
@@ -38,7 +33,7 @@ const demoCopy = useDemoLocale("alertContentComparison");
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="center"
     >
-      <h4>{{ demoCopy.center }}</h4>
+      <h4>居中</h4>
       <c-alert center>This is a centered alert.</c-alert>
     </section>
 
@@ -46,7 +41,7 @@ const demoCopy = useDemoLocale("alertContentComparison");
       class="demo-comparison-case demo-comparison-case--3"
       data-comparison-scene="banner"
     >
-      <h4>{{ demoCopy.banner }}</h4>
+      <h4>顶部公告</h4>
       <c-alert banner>This is a banner alert.</c-alert>
     </section>
   </div>

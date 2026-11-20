@@ -25,11 +25,11 @@ Start with the basic example, then compare related settings before moving to con
 
 ### Thumb Lifecycle
 
-<demo src="./__demos__/thumb-lifecycle.vue"></demo>
+<demo src="./__demos__/thumb-lifecycle.en-US.vue"></demo>
 
 ### Lifecycle
 
-<demo src="./__demos__/lifecycle.vue"></demo>
+<demo src="./__demos__/lifecycle.en-US.vue"></demo>
 
 ## API
 

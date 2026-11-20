@@ -1,0 +1,294 @@
+{
+  "scope": "Vitest src/table; pre-refactor baseline excludes the subsequently added compatibility/kernel tests",
+  "success": true,
+  "total": 353,
+  "passed": 353,
+  "failed": 0,
+  "files": [
+    {
+      "file": "packages/ui/src/table/__tests__/column-content-priority.spec.ts",
+      "status": "passed",
+      "tests": 6
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/column-style-property-removal.spec.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/content-slots-ssr.test.ts",
+      "status": "passed",
+      "tests": 8
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/direction-early-ssr.spec.ts",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/dynamic-content-slot.spec.ts",
+      "status": "passed",
+      "tests": 21
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/dynamic-structural-slot.spec.ts",
+      "status": "passed",
+      "tests": 36
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/dynamic-th-presence.spec.ts",
+      "status": "passed",
+      "tests": 4
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/empty-viewport.spec.ts",
+      "status": "passed",
+      "tests": 7
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/expand-instance.spec.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/expand-locale.spec.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/extra-column-slots-ssr.test.ts",
+      "status": "passed",
+      "tests": 6
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/extra-column-slots.spec.ts",
+      "status": "passed",
+      "tests": 12
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/extra-slots-ssr.test.ts",
+      "status": "passed",
+      "tests": 34
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/filter-content-priority.spec.ts",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/filter-reset-isolation.spec.ts",
+      "status": "passed",
+      "tests": 4
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/header-association.spec.ts",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/header-idref-non-ascii.spec.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/inline-pagination-ssr.spec.ts",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/lazy-ownership.spec.ts",
+      "status": "passed",
+      "tests": 10
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/memo-loop-reorder-structural.spec.ts",
+      "status": "passed",
+      "tests": 10
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/memo-structural-slot.spec.ts",
+      "status": "passed",
+      "tests": 20
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/native-loading.spec.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/operation-only-header.spec.ts",
+      "status": "passed",
+      "tests": 10
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/pagination-config.test.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/pagination-container.spec.ts",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/pagination-model-value.test.ts",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/pagination-slot.spec.ts",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/pagination-target-compat.spec.ts",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/pagination-target-timing.spec.ts",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/radio-instance.spec.ts",
+      "status": "passed",
+      "tests": 4
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/reading-direction.spec.ts",
+      "status": "passed",
+      "tests": 5
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/row-identity.spec.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/selection-accessibility.spec.ts",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/slot-reconstruction-regression.test.ts",
+      "status": "passed",
+      "tests": 5
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/sort-accessibility.spec.ts",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/sort-stability.spec.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/split-header-association.spec.ts",
+      "status": "passed",
+      "tests": 13
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/split-sort-association.spec.ts",
+      "status": "passed",
+      "tests": 4
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/sticky-scrollbar.spec.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/table-auto-fixed-width.test.ts",
+      "status": "passed",
+      "tests": 4
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/table-col-group.test.ts",
+      "status": "passed",
+      "tests": 6
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/table-column-registration.test.ts",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/table-delete-column-width.test.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/table-dynamic-width.test.ts",
+      "status": "passed",
+      "tests": 6
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/table-lazy-expand.test.ts",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/table-without-scroll-x.spec.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/typed-config-demo.spec.ts",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/typed-config.spec.ts",
+      "status": "passed",
+      "tests": 6
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/virtual-expanded-rows.spec.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/virtual-lazy-row-positions.spec.ts",
+      "status": "passed",
+      "tests": 2
+    },
+    {
+      "file": "packages/ui/src/table/__tests__/virtual-row-positions.spec.ts",
+      "status": "passed",
+      "tests": 20
+    },
+    {
+      "file": "packages/ui/src/table-column-manager/__tests__/async-ownership.spec.ts",
+      "status": "passed",
+      "tests": 15
+    },
+    {
+      "file": "packages/ui/src/table-column-manager/__tests__/explicit-components.spec.ts",
+      "status": "passed",
+      "tests": 1
+    },
+    {
+      "file": "packages/ui/src/table-column-manager/__tests__/extra-column-width.spec.ts",
+      "status": "passed",
+      "tests": 5
+    },
+    {
+      "file": "packages/ui/src/table-column-manager/__tests__/state.spec.ts",
+      "status": "passed",
+      "tests": 4
+    },
+    {
+      "file": "packages/ui/src/table-column-manager/__tests__/table-column-manager.spec.ts",
+      "status": "passed",
+      "tests": 3
+    },
+    {
+      "file": "packages/ui/src/table-column-manager/__tests__/use-table-column-manager.spec.ts",
+      "status": "passed",
+      "tests": 10
+    }
+  ]
+}

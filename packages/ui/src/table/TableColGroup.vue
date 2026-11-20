@@ -61,7 +61,12 @@ export default defineComponent({
     };
 
     const orderedColumns = computed(() => orderPhysicalColumns([
-      ...props.operations.map(item => ({ key: `operation-${item.name}`, class: `${prefixCls}-${item.name}-col`, width: item.width ?? DEFAULT_OPERATION_WIDTH, fixed: item.fixed ? 'left' as const : undefined })),
+      ...props.operations.map(item => ({
+        key: `operation-${item.name}`,
+        class: [`${prefixCls}-${item.name}-col`, { [`${prefixCls}-col-default-width`]: item.width == null }],
+        width: item.width ?? DEFAULT_OPERATION_WIDTH,
+        fixed: item.fixed ? 'left' as const : undefined,
+      })),
       ...props.dataColumns.map(item => ({ key: `data-${getColumnLayoutKey(item)}`, class: undefined, width: getColWidth(item), fixed: item.fixed })),
     ], item => item.fixed, context?.readingDirection));
     return {

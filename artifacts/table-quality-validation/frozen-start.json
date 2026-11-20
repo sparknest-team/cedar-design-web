@@ -1,0 +1,12 @@
+{
+  "createdAt": "2026-11-20T04:20:15.954Z",
+  "candidateRoot": "/private/tmp/cedar-quality-frozen-4_u_kjcl/cedar-design-web",
+  "node": "v26.13.1",
+  "sourceFingerprint": "ad3c1ba3cb273474687f7596b159f08c3722f8b111506e6321c58ba055a68e5f",
+  "productionFingerprint": "6ca6f68d68ba898dec3c2f91680cbb2ef6467b842a7d9e13e6af7bfcdf6d6e1b",
+  "sourceMatchesWorkspaceAtCheckpoint": true,
+  "productionMatchesWorkspaceAtCheckpoint": true,
+  "command": "pnpm quality",
+  "log": "/private/tmp/cedar-table-frozen-quality-01.log",
+  "nativeDeviceAcceptance": false
+}

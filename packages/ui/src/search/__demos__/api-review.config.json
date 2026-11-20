@@ -69,13 +69,14 @@
     },
     {
       "name": "edit-mode",
-      "description": "搜索展示方式：direct 行内历史菜单，popup 全屏搜索",
-      "type": "'direct' | 'popup'",
+      "description": "关键词编辑方式，继承 FormItem/Form",
+      "type": "'direct' | 'click' | 'dblclick'",
       "defaultValue": "'direct'",
       "kind": "enum",
       "options": [
         "direct",
-        "popup"
+        "click",
+        "dblclick"
       ],
       "initial": "direct"
     },

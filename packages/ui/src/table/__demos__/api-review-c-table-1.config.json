@@ -116,22 +116,6 @@
       "initial": "{}"
     },
     {
-      "name": "page-position",
-      "description": "分页选择器的位置",
-      "type": "\"tl\" | \"top\" | \"tr\" | \"bl\" | \"bottom\" | \"br\"",
-      "defaultValue": "\"br\"",
-      "kind": "enum",
-      "options": [
-        "tl",
-        "top",
-        "tr",
-        "bl",
-        "bottom",
-        "br"
-      ],
-      "initial": "br"
-    },
-    {
       "name": "indent-size",
       "description": "树形表格的缩进距离",
       "type": "number",

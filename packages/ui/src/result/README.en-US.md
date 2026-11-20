@@ -32,13 +32,13 @@ Start with the basic example, then compare related settings before moving to con
 
 Compare how semantic states affect the icon, title and actions. HTTP statuses and custom artwork remain separate.
 
-<demo src="./__demos__/status-comparison.vue"></demo>
+<demo src="./__demos__/status-comparison.en-US.vue"></demo>
 
 ### HTTP result states
 
 Compare permission, missing-resource and server-error content, with recovery actions appropriate to each case.
 
-<demo src="./__demos__/http-status-comparison.vue"></demo>
+<demo src="./__demos__/http-status-comparison.en-US.vue"></demo>
 
 ### All
 

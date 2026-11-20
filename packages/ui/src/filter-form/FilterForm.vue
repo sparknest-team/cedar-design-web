@@ -33,17 +33,24 @@
       <GridItem v-if="showSuffixItem" #="{ overflow }" suffix :span="responsiveCols <= 2 ? 2 : actionSpan">
         <FormItem hide-label :class="classes(n('action-item'))">
           <div ref="actionsRef" :class="classes(n('actions'))">
-            <button
+            <Link
               v-if="collapsible && (overflow || !collapsed_)"
-              type="button"
+              role="button"
+              tabindex="0"
+              size="sm"
               :aria-expanded="!collapsed_"
               :class="classes(n('collapse'))"
               @click="toggleCollapsed"
+              @keydown.enter.prevent="toggleCollapsed"
+              @keydown.space.prevent
+              @keyup.space.prevent="toggleCollapsed"
             >
-              <IconDownCircle v-if="collapsed_" />
-              <IconUpCircle v-else />
+              <template #icon>
+                <IconDownCircle v-if="collapsed_" />
+                <IconUpCircle v-else />
+              </template>
               {{ collapsed_ ? t('filterForm.expandMore') : t('filterForm.collapseMore') }}
-            </button>
+            </Link>
             <div v-if="$slots.actions" :class="classes(n('action-slot'))">
               <slot name="actions" />
             </div>
@@ -67,6 +74,7 @@ import Grid, { GridItem } from '../grid'
 import { useResponsiveState } from '../grid/hook/use-responsive-state'
 import type { ResponsiveValue } from '../grid/types'
 import { resolveGridCols } from '../grid/validation'
+import Link from '../link'
 import { useI18n } from '../locale'
 import { filterFormProps } from './props'
 import {

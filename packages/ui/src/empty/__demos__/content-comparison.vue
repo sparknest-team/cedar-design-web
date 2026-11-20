@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("emptyContentComparison");
 import { ref } from "vue";
 import { proxyRefs as demoProxyRefs } from "vue";
 
@@ -18,7 +16,7 @@ const scene1 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="extra"
     >
-      <h4>{{ demoCopy.extra }}</h4>
+      <h4>操作按钮</h4>
       <c-empty
         :description="
           scene1.attempts
@@ -41,7 +39,7 @@ const scene1 = demoProxyRefs(
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="user-define"
     >
-      <h4>{{ demoCopy.userDefine }}</h4>
+      <h4>自定义图片和文案</h4>
       <c-space direction="column">
         <c-empty>
           <template #image>

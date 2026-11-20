@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("resultHttpStatusComparison");
+const demoCopy = {
+  "403": "HTTP状态码 403",
+  "404": "HTTP状态码 404",
+  "500": "HTTP状态码 500"
+};
 </script>
 
 <template>

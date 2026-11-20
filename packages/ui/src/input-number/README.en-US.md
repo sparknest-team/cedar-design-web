@@ -40,14 +40,14 @@ The numeric input inherits its source `dir`; step buttons follow reading order. 
 - `min`: Sets the lower bound.
 - `max`: Sets the upper bound.
 
-<demo src="./__demos__/appearance-lab.vue"></demo>
+<demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
 ### Control Sizes
 
 - `size`: Controls the component size.
 - `variant`: Selects the visual variant.
 
-<demo src="../field-decorator/__demos__/control-sizes.vue"></demo>
+<demo src="../field-decorator/__demos__/control-sizes.en-US.vue"></demo>
 
 ### Field Modes
 
@@ -85,7 +85,7 @@ The numeric input inherits its source `dir`; step buttons follow reading order. 
 - `step`: Controls the allowed increment.
 - `disabled`: Prevents user interaction.
 
-<demo src="./__demos__/quantity-controls.vue"></demo>
+<demo src="./__demos__/quantity-controls.en-US.vue"></demo>
 
 ### Format Slots
 

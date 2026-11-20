@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("inputLoadingInline");
 
 import { ref } from "vue";
 const busy = ref(true);
@@ -9,24 +7,24 @@ const value = ref("加载时仍可编辑");
 <template>
   <c-space direction="column" :size="16" style="width: 100%">
     <c-form layout="vertical">
-      <c-form-item :label="inlineCopy.loading"
+      <c-form-item label="加载状态"
         ><c-switch v-model="busy"
       /></c-form-item>
-      <c-form-item :label="inlineCopy.default"
+      <c-form-item label="默认指示器"
         ><c-input
           v-model="value"
           :loading="busy"
-          :placeholder="inlineCopy.editableWhileLoading"
+          placeholder="加载时仍可编辑"
           loading-mode="default"
       /></c-form-item>
-      <c-form-item :label="inlineCopy.line"
+      <c-form-item label="底部加载线"
         ><c-input
           v-model="value"
           :loading="busy"
-          :placeholder="inlineCopy.editableWhileLoading"
+          placeholder="加载时仍可编辑"
           loading-mode="line"
       /></c-form-item>
     </c-form>
-    <p>{{ inlineCopy.loadingKeepsTheInputEditable }}</p>
+    <p>切换加载状态；加载时仍可输入和清空。</p>
   </c-space>
 </template>

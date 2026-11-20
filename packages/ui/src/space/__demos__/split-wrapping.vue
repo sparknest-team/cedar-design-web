@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("spaceSplitWrappingInline");
 
 import { ref } from "vue";
 
@@ -10,19 +8,15 @@ const items = ref(["A", "B", "C"]);
 </script>
 <template>
   <c-space wrap :size="8">
-    <c-button data-space-toggle-wrap @click="wrap = !wrap">{{
-      inlineCopy.wrap
-    }}</c-button>
+    <c-button data-space-toggle-wrap @click="wrap = !wrap">换行</c-button>
     <c-button
       data-space-toggle-direction
       @click="direction = direction === 'row' ? 'column' : 'row'"
-      >{{ inlineCopy.direction }}</c-button
+      >方向</c-button
     >
-    <c-button data-space-reorder @click="items = [...items].reverse()">{{
-      inlineCopy.reorder
-    }}</c-button>
+    <c-button data-space-reorder @click="items = [...items].reverse()">重排</c-button>
   </c-space>
-  <p>{{ inlineCopy.draftsStayWithTheirItems }}</p>
+  <p>输入草稿后切换布局或重排，文字仍跟随对应项。</p>
   <div style="max-width: 100%; overflow: auto">
     <c-space
       data-space-split-demo
@@ -37,14 +31,14 @@ const items = ref(["A", "B", "C"]);
           <c-input
             edit-mode="direct"
             :aria-label="'Draft ' + item"
-            :placeholder="inlineCopy.draft"
+            placeholder="草稿"
           />
         </label>
       </template>
       <template #split><span aria-hidden="true">/</span></template>
     </c-space>
   </div>
-  <p>{{ inlineCopy.separatorsStayWithThePreceding }}</p>
+  <p>分隔符跟随前项，允许位于行尾。</p>
 </template>
 <style scoped>
 .space-split-field {

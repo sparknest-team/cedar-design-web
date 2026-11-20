@@ -72,7 +72,7 @@ Keyboard and pointer rating selection.
 
 Compare rating totals and clearing the current selection, separately from half steps, keyboards and controlled values.
 
-<demo src="./__demos__/value-rules-comparison.vue"></demo>
+<demo src="./__demos__/value-rules-comparison.en-US.vue"></demo>
 
 ### Grading
 

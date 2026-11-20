@@ -87,7 +87,7 @@ Compare the same columns by switching layout, fit, grouped headers, resizing and
 
 An explicit `width` stays exact with flexible columns and `fit=true`. If every column has a width, or `fit=false`, proportional expansion still fills the container.
 
-<demo src="./__demos__/column-sizing-playground.vue"></demo>
+<demo src="./__demos__/column-sizing-playground.en-US.vue"></demo>
 
 ### Automatic scrolling and height
 
@@ -422,6 +422,10 @@ Column headings use the Table named slot identified by `titleSlotName`, then the
 - `row-selection`: Table row selector configuration
 - `virtual-list-props`: Pass the virtual list attribute, pass in this parameter to turn on virtual scrolling [VirtualListProps](#VirtualListProps)
 
+Accessible row positions include expanded tree nodes and details in the default virtual row structure. The table uses the same callback result for a rendered detail and its row position. It reports the exact total when all expanded callback details are in the rendered window. An offscreen expanded callback makes the total unknown (`aria-rowcount="-1"`). If it precedes the window, the table also omits row indices because its result affects every subsequent row.
+
+Store editable cell drafts by a stable row key. For example, bind the input in the cell slot with `v-model="drafts[record.key]"` and define the reactive `drafts` object outside the table. When a row scrolls out of the rendered range, its input unmounts. The new input reads the saved value when the row returns.
+
 <demo src="./__demos__/virtual-list-props.vue"></demo>
 
 ## Business workflows
@@ -461,6 +465,12 @@ Column headings use the Table named slot identified by `titleSlotName`, then the
 
 <demo src="./__demos__/form-attribute.vue"></demo>
 
+### Lightweight entry and capability composition
+
+Compose Core, current-page summaries and virtual rows independently. Toggle layout, paging, reading direction or data while each table retains its own state and viewport.
+
+<demo src="./__demos__/capability-composition.en-US.vue"></demo>
+
 ## Loading and waiting
 
 ### Manual loading
@@ -471,7 +481,102 @@ With the default slot, Table renders the supplied native table content and `foot
 
 <demo src="./__demos__/loading.vue"></demo>
 
+## Lightweight entry and optional features
+
+The existing `Table`, `tableProps`, instance methods and `table/style` retain their complete behavior and defaults. Explicitly import `TableCore` for flat data rendering, grouped headers, adaptive column widths, frozen columns and native scrolling. It has an independent stylesheet and does not change the existing Table resolver.
+
+```ts
+import TableCore from '@cedar-design/ui-vue/table/core'
+import '@cedar-design/ui-vue/table/core/style'
+import type { TableCoreColumn } from '@cedar-design/ui-vue/table/core'
+
+const columns: TableCoreColumn[] = [
+  { dataIndex: 'name', title: 'Name', fixed: 'left', width: 120 },
+  { dataIndex: 'description', title: 'Description', minWidth: 180 },
+]
+```
+
+Pass prepared flat `data` to `TableCore`. Filtering, sorting, pagination, tree expansion and virtualization are external compositions. `tableLayout="auto"` measures native content widths for frozen offsets; the default `fixed` mode uses the column width kernel. `fixed: 'left' | 'right'` denotes physical sides, including with `dir="rtl"`. The focusable viewport supports arrow keys, Home and End.
+
+Filter and sort state have independent entries. For remote `data`, import state only and request new rows in the callback. Controlled column values remain authoritative; callbacks provide both the user request and the effective state. Clear/reset callbacks run separately for each affected field.
+
+```ts
+import { computed, ref } from 'vue'
+import { useTableFilters } from '@cedar-design/ui-vue/table/features/filter'
+import type { TableFilterColumn } from '@cedar-design/ui-vue/table/features/filter'
+
+const filterColumns = ref<TableFilterColumn[]>([
+  { dataIndex: 'status', filterable: { defaultFilteredValue: [] } },
+])
+const { filters, setFilter, resetFilters, clearFilters } = useTableFilters({
+  columns: filterColumns,
+  onChange(field, requested, effective) {
+    // Request remote data using requested, then update TableCore data.
+  },
+})
+```
+
+Explicitly add client processing when needed. These functions process flat arrays without mutating the input array and preserve row identity. Use the existing `TableColumnData` configuration: `filterable.filter` / `sortable.sorter`. `sortable.sorter: true` keeps remote sorting semantics and does not reorder rows locally.
+
+```ts
+import { filterTableData } from '@cedar-design/ui-vue/table/features/filter/client'
+import { useTableSorting } from '@cedar-design/ui-vue/table/features/sort'
+import { sortTableData } from '@cedar-design/ui-vue/table/features/sort/client'
+
+const { sorter, setSorter, resetSorters, clearSorters } = useTableSorting({
+  columns: localColumns, // Ref<TableColumnData[]>
+  onChange(field, direction, effective) {},
+})
+const visibleData = computed(() => sortTableData(
+  filterTableData(rows.value, filters.value, localColumns.value),
+  sorter.value,
+  localColumns.value,
+))
+```
+
+Compose your own filter panel, mobile actions and pagination controls. The complete `Table` continues using its existing desktop interactions.
+
 ## API
+
+### TableCore Props
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| columns | `TableCoreColumn[]` | `[]` | Data and grouped columns |
+| data | `TableCoreData[]` | `[]` | Prepared flat data |
+| row-key | `string` | `'key'` | Row identity field, falling back to current index |
+| size | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Base size |
+| table-layout | `'fixed' \| 'auto'` | `'fixed'` | Allocated or native content layout |
+| fit | `boolean` | `true` | Flexible columns absorb remaining width |
+| height / max-height | `number \| string` | — | Viewport height / maximum height; numeric values use px |
+| sticky-header / show-header | `boolean` | `true` | Sticky viewport headers / visible headers |
+| bordered / hoverable | `boolean` | `true` | Borders / row hover |
+| stripe / loading | `boolean` | `false` | Stripes / aria-busy state; loading preserves rows |
+
+### TableCore Events
+
+| Name | Arguments | Description |
+| --- | --- | --- |
+| row-click | `(record, event)` | Data row click |
+| cell-click | `(record, column, event)` | Data cell click |
+| header-click | `(column, event)` | Header click |
+
+### TableCore Slots
+
+| Name | Arguments | Description |
+| --- | --- | --- |
+| header | `{ column }` | Header content, before titleSlotName/title |
+| cell | `{ record, column, rowIndex }` | Cell content, before column render/slotName |
+| empty / footer | — | Empty content / footer outside the viewport |
+| Column titleSlotName / slotName | Corresponding header / cell scope | Named column content |
+
+### TableCore Methods
+
+| Name | Arguments | Description |
+| --- | --- | --- |
+| scrollTo | `ScrollToOptions` | Native physical scrolling coordinates, including HTMLElement.scrollTo RTL behavior |
+
+`TableCoreColumn` supports `dataIndex`, `title`, `children`, `width`, `minWidth`, `fixed`, `align`, `ellipsis`, `render`, `slotName`, `titleSlotName`, and header/cell class/style. `render` receives `{ record, column, rowIndex }` with the original row object. Ellipsis uses CSS without importing a desktop Tooltip.
 
 ### Table Props
 
@@ -491,7 +596,6 @@ With the default slot, Table renders the supplied native table content and `foot
 | max-height | Maximum table height; shrinks for short content and scrolls the body on overflow. Numbers are px | `number \| string` | `-` |
 | fit | Remaining-space allocation; the table always fills at least its parent `width`. `true` assigns it to flexible columns without `width`; `false` expands columns proportionally to their base widths | `boolean` | `true` |
 | pagination | Pagination properties configuration | `boolean \| TablePaginationConfig` | `true` |
-| page-position | Pagination region inside the table, currently tl/top/tr/bl/bottom/br; not the page-size dropdown placement | `'tl' \| 'top' \| tr' \| 'bl' \| 'bottom' \| 'br'` | `'br'` |
 | indent-size | The indentation distance of the tree table | `number` | `16` |
 | row-key | Value field of table row `key` | `string` | `'key'` |
 | show-header | Whether to show the header | `boolean` | `true` |
@@ -625,9 +729,9 @@ The state argument of `select`, `selectAll`, `expand`, and `expandAll` defaults 
 
 `Thead` and `Tbody` render the header and body, respectively, with content from the default slot; their named slots customize the corresponding elements. `Tr`, `Th`, and `Td` are low-level renderers that depend on Table context, not standalone data tables. Usually, customize elements through the Table `tr`, `th`, and `td` slots.
 
-Title and cell named slots, column `title`, `cell`, `filter-icon` and `filter-content`, `empty`, `footer`, `expand-row`, `expand-icon`, pagination slots, `summary-cell`, `drag-handle-icon`, extra-column header/cell slots, and `header-cell-actions` support `v-for` with `v-memo` in their content.
+During client rendering, list items in content and structural slots can combine `v-for`, `:key`, and `v-memo`.
 
-During server-side rendering, combining `v-for` and `v-memo` inside custom `thead`, `tbody`, `tr`, `th`, or `td` structural slots currently causes a rendering error, even when the array is empty. In the tested Vue versions from 3.2.47 through 3.5.45, directly invoking a compiled slot and rendering it with `h()` also reproduces the error; a minimal template `<slot>` forwarding case works. For SSR, temporarily remove `v-memo` from these structural slots.
+**Server rendering** with the Vue 3.5.45 template compiler can generate a slot function in the application’s server bundle that references an undeclared `_cache`, leaving content out of the initial HTML. The published Table entry reproduces this for titles, cells, filter icons and panels, empty states, footers, expanded rows and icons, pagination, summary cells, drag handles, extra columns, and header actions. Custom `thead`, `tbody`, `tr`, `th`, and `td` slots are also affected, even when the list is empty. For SSR, keep `v-for` and a stable `:key` on the list item and remove `v-memo` from that node.
 
 `TableColumn` entries declared in `#columns`, including grouped and dynamic columns, render their headers and data cells on the server. Columns can also be defined with the `columns` prop.
 
@@ -651,7 +755,9 @@ For `Tr`, `expand`, `empty`, and `checked` describe row state; `rowIndex` and `r
 
 ### Pagination configuration type
 
-`TablePaginationConfig = Omit<PaginationProps, 'total'> & { total?: number }`. When `pagination.total` is omitted, Table derives it from the effective data count. Remote pagination can still provide `total` explicitly. Existing `PaginationProps` objects remain accepted by Table; standalone `Pagination` still requires `total`. `TablePaginationConfig` is exported from root/table entries.
+`pagination.align` accepts `start` or `end`. The default is the inline end (right in LTR, left in RTL). Use `:pagination="{ align: 'start' }"` to align the bar to the inline start. The pagination bar appears below the table.
+
+`TablePaginationConfig = Omit<PaginationProps, 'total'> & { total?: number; container?: string | HTMLElement; align?: 'start' | 'end' }`. When `pagination.total` is omitted, Table derives it from the effective data count. Remote pagination can still provide `total` explicitly. Existing `PaginationProps` objects remain accepted by Table; standalone `Pagination` still requires `total`. `TablePaginationConfig` is exported from root/table entries.
 
 ### Forwarded configuration precedence
 
@@ -861,15 +967,15 @@ Use these variables to customize the component. Defaults may vary by the selecto
 
 | Variable | Default / condition | Affected styles |
 | --- | --- | --- |
-| `--c-table-body-bg` | `var(--c-color-bg-2)` | `background-color` |
+| `--c-table-body-bg` | `var(--c-color-bg-2)` | `background`, `background-color` |
 | `--c-table-body-cell-bg` | `var(--c-color-bg-2)` | `background-color` |
 | `--c-table-body-cell-text-color` | `rgb(var(--c-gray-10))` | `color` |
 | `--c-table-body-min-height` | `40px` | `min-height` |
 | `--c-table-body-row-active-bg` | `var(--c-color-fill-1)` | `background-color` |
 | `--c-table-body-row-active-dark-bg` | `var(--c-color-neutral-2)` | `background-color` |
-| `--c-table-body-row-hover-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-body-row-hover-bg` | `var(--c-color-fill-1)` | `background`, `background-color` |
 | `--c-table-body-sorted-cell-bg` | `var(--c-color-fill-1)` | `background-color` |
-| `--c-table-body-stripe-row-bg` | `var(--c-color-fill-1)` | `background-color` |
+| `--c-table-body-stripe-row-bg` | `var(--c-color-fill-1)` | `background`, `background-color` |
 | `--c-table-border-color` | `var(--c-color-neutral-3)` | `border`, `border-bottom`, `border-left`, `border-right`, `border-top`, `box-shadow` |
 | `--c-table-border-radius` | `var(--c-border-radius-md)` | `border-radius`, `border-top-left-radius`, `border-top-right-radius` |
 | `--c-table-border-style` | `solid` | `border`, `border-bottom`, `border-left`, `border-right`, `border-top` |
@@ -933,7 +1039,7 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-table-header-cell-action-color` | `var(--c-color-text-3)` | `color` |
 | `--c-table-header-cell-action-hover-color` | `var(--c-color-text-1)` | `color` |
 | `--c-table-header-cell-action-margin-left` | `2px` | `margin-inline-start` |
-| `--c-table-header-cell-bg` | `var(--c-color-neutral-2)` | `background-color` |
+| `--c-table-header-cell-bg` | `var(--c-color-neutral-2)` | `background`, `background-color` |
 | `--c-table-header-cell-text-color` | `rgb(var(--c-gray-10))` | `color` |
 | `--c-table-header-filters-icon-active-color` | `var(--c-sys-color-action-primary)` | `color` |
 | `--c-table-header-filters-icon-color` | `var(--c-color-text-2)` | `color` |
@@ -965,25 +1071,25 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-table-size-lg-font-size` | `var(--c-table-size-md-font-size)` | `font-size` |
 | `--c-table-size-lg-header-font-size` | `var(--c-table-size-md-header-font-size)` | `font-size` |
 | `--c-table-size-lg-padding-horizontal` | `var(--c-table-size-md-padding-horizontal)` | `margin`, `padding` |
-| `--c-table-size-lg-padding-vertical` | `var(--c-table-size-md-padding-vertical)` | `margin`, `padding` |
+| `--c-table-size-lg-padding-vertical` | `var(--c-table-size-md-padding-vertical)` | `margin`, `padding`, `padding-block` |
 | `--c-table-size-md-extra-icon-font-size` | `16px` | `font-size` |
 | `--c-table-size-md-extra-padding-horizontal` | `var(--c-spacing-2)` | `padding` |
 | `--c-table-size-md-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-table-size-md-header-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-table-size-md-padding-horizontal` | `var(--c-spacing-7)` | `margin`, `padding` |
-| `--c-table-size-md-padding-vertical` | `9px` | `margin`, `padding` |
+| `--c-table-size-md-padding-vertical` | `9px` | `margin`, `padding`, `padding-block` |
 | `--c-table-size-sm-extra-icon-font-size` | `14px` | `font-size` |
 | `--c-table-size-sm-extra-padding-horizontal` | `var(--c-spacing-1)` | `padding` |
 | `--c-table-size-sm-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-table-size-sm-header-font-size` | `var(--c-font-size-body-3)` | `font-size` |
 | `--c-table-size-sm-padding-horizontal` | `var(--c-spacing-7)` | `margin`, `padding` |
-| `--c-table-size-sm-padding-vertical` | `5px` | `margin`, `padding` |
+| `--c-table-size-sm-padding-vertical` | `5px` | `margin`, `padding`, `padding-block` |
 | `--c-table-size-xs-extra-icon-font-size` | `14px` | `font-size` |
 | `--c-table-size-xs-extra-padding-horizontal` | `var(--c-spacing-1)` | `padding` |
 | `--c-table-size-xs-font-size` | `var(--c-font-size-body-1)` | `font-size` |
 | `--c-table-size-xs-header-font-size` | `var(--c-font-size-body-1)` | `font-size` |
 | `--c-table-size-xs-padding-horizontal` | `var(--c-spacing-7)` | `margin`, `padding` |
-| `--c-table-size-xs-padding-vertical` | `2px` | `margin`, `padding` |
+| `--c-table-size-xs-padding-vertical` | `2px` | `margin`, `padding`, `padding-block` |
 | `--c-table-sticky-scrollbar-height` | `16px` | `height` |
 | `--c-table-sticky-scrollbar-opacity` | `0.8` | `opacity` |
 | `--c-table-tfoot-bg` | `var(--c-color-neutral-2)` | `background-color` |

@@ -1,3 +1,11 @@
+import { useSummaryData } from './features/summary/use-summary-data'
+import { useSummaryRender } from './features/summary/use-summary-render'
+import type { VirtualRowPositions as VirtualPositions } from './features/virtual/row-plan'
+import { createVirtualBody } from './features/virtual/render-body'
+import { useLazyData } from './features/expansion/use-lazy-data'
+import { matchesRecord, filterTableRows } from './features/filter/compute'
+import { sortRecords } from './features/sort/compute'
+import { pageTableRows } from './features/pagination/compute'
 import { useI18n } from '../locale'
 import { useThemeScope } from '../theme-provider/context'
 import { useElementResize } from '../_utils/resize-observer'
@@ -10,13 +18,13 @@ import { Fragment, Teleport, cloneVNode, isVNode, computed, defineComponent, get
 import { useId } from '../_utils/vue-compat'
 import { getPrefixCls, createNamespace } from "../_utils/global-config"
 import type { ComponentSize } from "../_utils/constant"
-import { isArray, isFunction, isNull, isNumber, isObject, isString, isUndefined } from "../_utils/is"
+import { isArray, isFunction, isNumber, isObject, isString, isUndefined } from "../_utils/is"
 import { debounce } from "../_utils/debounce"
-import type { TableBorder, TableChangeExtra, TableColumnData, TableComponents, TableData, TableDataWithRaw, TableDraggable, TableExpandable, TableOperationColumn, TablePagePosition, TableRowSelection } from "./types"
+import type { TableBorder, TableChangeExtra, TableColumnData, TableComponents, TableData, TableDataWithRaw, TableDraggable, TableExpandable, TableOperationColumn, TableRowSelection } from "./types"
 import { getGroupColumns, mapArrayWithChildren, mapRawTableData } from "./utils"
-import { useRowSelection } from "./hooks/use-row-selection"
-import { useExpand } from "./hooks/use-expand"
-import { usePagination } from "./hooks/use-pagination"
+import { useRowSelection } from "./features/selection/state"
+import { useExpand } from "./features/expansion/state"
+import { usePagination } from "./features/pagination/state"
 import { updateColumnsWidth } from "./hooks/use-columns-layout"
 import { IconPlus } from "@cedar-design/icons-vue/icon-plus"
 import { IconMinus } from "@cedar-design/icons-vue/icon-minus"
@@ -35,25 +43,25 @@ import Th from "./table-th"
 import Td from "./table-td"
 import OperationTh from "./table-operation-th"
 import OperationTd from "./table-operation-td"
-import VirtualList from "../_components/virtual-list-v2"
 import ResizeObserver from "../_components/resize-observer"
+// Keep the existing published declaration binding for virtualListProps.
 import { VirtualListProps } from "../_components/virtual-list-v2/interface"
 import { omit } from "../_utils/omit"
 import { configProviderInjectionKey } from "../config-provider/context"
-import { useDrag } from "./hooks/use-drag"
-import { useColumnResize } from "./hooks/use-column-resize"
+import { useDrag } from "./features/drag/use-drag"
+import { useColumnResize } from "./features/resize/use-column-resize"
 import { tableInjectionKey } from "./context"
-import { useFilter } from "./hooks/use-filter"
-import { useSorter } from "./hooks/use-sorter"
+import { useFilter } from "./features/filter/state"
+import { useSorter } from "./features/sort/state"
 import ClientOnly from "../_components/client-only"
-import { useSpan } from "./hooks/use-span"
+import { useSpan } from "./features/span/use-span"
 import { getComponentsFromVNode } from "../_utils/vue-utils"
 import { useChildrenComponents } from "../_hooks/use-children-components"
 import Scrollbar, { ScrollbarProps } from "../scrollbar"
 import { useComponentRef } from "../_hooks/use-component-ref"
 import type { BaseType } from "../_utils/types"
 import { useScrollbar } from "../_hooks/use-scrollbar"
-import { getValueByPath, setValueByPath } from "../_utils/get-value-by-path"
+import { getValueByPath } from "../_utils/get-value-by-path"
 import { resolveExtraColumnConfig, getExtraColumnWidth, getColumnLayoutKey, isTableExtraColumn, markTableExtraColumn, type TableExtraColumnConfig } from "./extra-column"
 import { buildHeaderAssociations } from './header-association'
 
@@ -577,10 +585,6 @@ export default defineComponent({
       { immediate: true, deep: true, flush: "sync" },
     );
 
-    const isPaginationTop = computed(() =>
-      ["tl", "top", "tr"].includes(props.pagePosition),
-    );
-
     const hasLeftFixedColumn = ref(false);
     const hasRightFixedColumn = ref(false);
     const hasLeftFixedDataColumns = ref(false);
@@ -762,57 +766,9 @@ export default defineComponent({
       emit,
     });
 
-    const lazyLoadRevision = ref(0);
-    let lazyLoadData = new WeakMap<TableData, { key: string; children: TableData[] }>();
-    let lazyActive = true;
-    onActivated(() => { lazyActive = true; });
-    onDeactivated(() => { lazyActive = false; });
-    onBeforeUnmount(() => { lazyActive = false; lazyLoadData = new WeakMap(); });
-    watch([() => props.loadMore, () => props.rowKey], () => {
-      lazyLoadData = new WeakMap();
-      lazyLoadRevision.value++;
-    }, { flush: 'sync' });
-    const getLazyChildren = (record: TableData) => {
-      const cached = lazyLoadData.get(toRaw(record));
-      return cached && cached.key === record[props.rowKey] ? cached.children : undefined;
-    };
-    const ownsLazyRecord = (record: TableDataWithRaw) => {
-      const expected = toRaw(record.raw);
-      if (expected[props.rowKey] !== record.key) return false;
-      const seen = new Set<TableData>();
-      const contains = (data: TableData[]): boolean => {
-        for (const item of data) {
-          const raw = toRaw(item);
-          if (seen.has(raw)) continue;
-          seen.add(raw);
-          if (raw === expected) return true;
-          const children = item.children ?? getLazyChildren(item);
-          if (children && contains(children)) return true;
-        }
-        return false;
-      };
-      return contains(props.data ?? []);
-    };
-    const addLazyLoadData = (children: TableData[] | undefined, record: TableDataWithRaw) => {
-      if (lazyActive && children && ownsLazyRecord(record)) {
-        lazyLoadData.set(toRaw(record.raw), { key: record.key, children });
-        lazyLoadRevision.value++;
-      }
-    };
+    const { lazyLoadRevision, getLazyChildren, addLazyLoadData } = useLazyData(props);
 
-    const isValidRecord = (record: TableDataWithRaw) => {
-      for (const field of Object.keys(computedFilters.value)) {
-        const filteredValues = computedFilters.value[field];
-        const column = dataColumnMap.get(field);
-        if (column && column.filterable?.filter && filteredValues.length > 0) {
-          const result = column.filterable?.filter(filteredValues, record.raw);
-          if (!result) {
-            return result;
-          }
-        }
-      }
-      return true;
-    };
+    const isValidRecord = (record: TableDataWithRaw) => matchesRecord(record.raw, () => computedFilters.value, field => dataColumnMap.get(field));
 
     const {
       dragType,
@@ -864,49 +820,14 @@ export default defineComponent({
       return travel(props.data ?? []);
     });
 
-    const validData = computed(() => {
-      const travel = (data: TableDataWithRaw[]) =>
-        data.filter((record) => {
-          if (isValidRecord(record)) {
-            if (record.children) {
-              record.children = travel(record.children);
-            }
-            return true;
-          }
-          return false;
-        });
-
-      return Object.keys(computedFilters.value).length > 0
-        ? travel(processedData.value)
-        : processedData.value;
-    });
+    const validData = computed(() => Object.keys(computedFilters.value).length > 0
+      ? filterTableRows(processedData.value, isValidRecord)
+      : processedData.value);
 
     const sortedData = computed(() => {
       const data = mapArrayWithChildren(validData.value);
       if (data.length > 0) {
-        if (computedSorter.value?.field) {
-          const column = dataColumnMap.get(computedSorter.value.field);
-          if (column && column.sortable?.sorter !== true) {
-            const { field, direction } = computedSorter.value;
-            data.sort((a, b) => {
-              const valueA = getValueByPath(a.raw, field);
-              const valueB = getValueByPath(b.raw, field);
-
-              if (
-                column.sortable?.sorter &&
-                isFunction(column.sortable.sorter)
-              ) {
-                return column.sortable.sorter(a.raw, b.raw, {
-                  dataIndex: field,
-                  direction,
-                });
-              }
-
-              const result = valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
-              return direction === "descend" ? -result : result;
-            });
-          }
-        }
+        sortRecords(data, computedSorter.value, dataColumnMap.get(computedSorter.value?.field ?? ''), record => record.raw);
 
         const { sourcePath, targetPath } = dragState;
         // drag row to another row
@@ -960,77 +881,11 @@ export default defineComponent({
       }
     });
 
-    const flattenData = computed(() => {
-      if (props.pagination && sortedData.value.length > pageSize.value) {
-        return sortedData.value.slice(
-          (page.value - 1) * pageSize.value,
-          page.value * pageSize.value,
-        );
-      }
-      return sortedData.value;
-    });
+    const flattenData = computed(() => pageTableRows(sortedData.value, props.pagination, page.value, pageSize.value));
 
     const flattenRawData = computed(() => mapRawTableData(flattenData.value));
 
-    const getSummaryData = () => {
-      return dataColumns.value.reduce(
-        (per, column, index) => {
-          if (column.dataIndex) {
-            if (index === 0) {
-              setValueByPath(per, column.dataIndex, props.summaryText, {
-                addPath: true,
-              });
-            } else {
-              let count = 0;
-              let isNotNumber = false;
-              flattenData.value.forEach((data) => {
-                if (column.dataIndex) {
-                  const _number = getValueByPath(data.raw, column.dataIndex);
-                  if (isNumber(_number)) {
-                    count += _number;
-                  } else if (!isUndefined(_number) && !isNull(_number)) {
-                    isNotNumber = true;
-                  }
-                }
-              });
-              setValueByPath(per, column.dataIndex, isNotNumber ? "" : count, {
-                addPath: true,
-              });
-            }
-          }
-
-          return per;
-        },
-        {} as Record<string, any>,
-      );
-    };
-
-    const getTableDataWithRaw = (data?: TableData[]): TableDataWithRaw[] => {
-      if (data && data.length > 0) {
-        return data.map((raw) => {
-          return {
-            raw,
-            key: raw[props.rowKey],
-          };
-        });
-      }
-      return [];
-    };
-
-    const summaryData = computed(() => {
-      if (props.summary) {
-        if (isFunction(props.summary)) {
-          return getTableDataWithRaw(
-            props.summary({
-              columns: dataColumns.value,
-              data: flattenRawData.value,
-            }),
-          );
-        }
-        return getTableDataWithRaw([getSummaryData()]);
-      }
-      return [];
-    });
+    const summaryData = useSummaryData({ props, dataColumns, flattenData, flattenRawData });
 
     const containerScrollLeft = ref(0);
     let readingOffset = 0;
@@ -1443,18 +1298,13 @@ export default defineComponent({
       },
     ]);
 
-    const paginationCls = computed(() => [
-      `${prefixCls}-pagination`,
-      {
-        [`${prefixCls}-pagination-left`]:
-          props.pagePosition === "tl" || props.pagePosition === "bl",
-        [`${prefixCls}-pagination-center`]:
-          props.pagePosition === "top" || props.pagePosition === "bottom",
-        [`${prefixCls}-pagination-right`]:
-          props.pagePosition === "tr" || props.pagePosition === "br",
-        [`${prefixCls}-pagination-top`]: isPaginationTop.value,
-      },
-    ]);
+    const paginationCls = computed(() => {
+      const align = isObject(props.pagination) ? props.pagination.align : undefined;
+      return [
+        `${prefixCls}-pagination`,
+        `${prefixCls}-pagination-${align === "start" ? "left" : "right"}`,
+      ];
+    });
 
     const tableCls = computed(() => {
       const cls = getTableFixedCls();
@@ -1471,7 +1321,7 @@ export default defineComponent({
       return cls;
     });
 
-    const isVirtualList = computed(() => Boolean(props.virtualListProps));
+    const isVirtualList = computed(() => Boolean(props.virtualListProps as VirtualListProps | undefined));
 
     const thWidth = ref<Record<string, number>>({});
 
@@ -1578,40 +1428,7 @@ export default defineComponent({
       const map = surface === 'body' ? bodyHeaderMap.value : summaryHeaderMap.value;
       return map.headersForSpan(start, span).join(' ') || undefined;
     };
-    // Account for each visible tree or detail row, not merely virtual items.
-    const calculateVirtualRowPositions = () => {
-      const virtual = props.virtualListProps as (VirtualListProps & { listAttrs?: unknown }) | undefined;
-      if (!virtual || !flattenData.value.length || slots.tr || slots.tbody ||
-        virtual.data !== undefined || virtual.component !== undefined || virtual.listAttrs !== undefined ||
-        (virtual.threshold && flattenData.value.length <= virtual.threshold)) return undefined;
-      const headerRows = props.showHeader ? displayHeaderRows.value.length : 0;
-      const expanded = new Set(expandedRowKeys.value);
-      // Server rendering may recompute normalized record objects between
-      // virtual items, so use their stable keys rather than object identity.
-      const indices = new Map<TableDataWithRaw['key'], number>();
-      const extraIndices = new Map<TableDataWithRaw['key'], number>();
-      let rowCount = headerRows;
-      const visit = (records: TableDataWithRaw[]): boolean => {
-        for (const record of records) {
-          if (indices.has(record.key)) return false;
-          indices.set(record.key, ++rowCount);
-          if (!expanded.has(record.key)) continue;
-          if (record.hasSubtree) {
-            if (record.children?.length === 0 && showEmptyTree.value) extraIndices.set(record.key, ++rowCount);
-            else if (record.children && !visit(record.children)) return false;
-          } else if (record.expand && !isFunction(record.expand)) {
-            extraIndices.set(record.key, ++rowCount);
-          } else if (record.expand || (!slots['expand-row'] && props.expandable?.expandedRowRender)) {
-            // A user callback can return no content, so its row count is unknown
-            // without evaluating it for records outside the virtual window.
-            return false;
-          } else if (slots['expand-row']) extraIndices.set(record.key, ++rowCount);
-        }
-        return true;
-      };
-      return visit(flattenData.value) ? { indices, extraIndices, rowCount } : undefined;
-    };
-    type VirtualRowPositions = NonNullable<ReturnType<typeof calculateVirtualRowPositions>>;
+    type VirtualRowPositions = VirtualPositions<ReturnType<typeof renderExpandContent>>;
     const renderSemanticHeader = (surface: 'body' | 'summary', positions?: VirtualRowPositions) => props.showHeader && (
       <thead style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clipPath: 'inset(50%)' }}>
         {semanticRows(surface).map((row, rowIndex) => (
@@ -1632,13 +1449,6 @@ export default defineComponent({
       columns: spanColumns,
     });
 
-    const { tableSpan: tableSummarySpan, removedCells: removedSummaryCells } =
-      useSpan({
-        spanMethod: summarySpanMethod,
-        data: summaryData,
-        columns: allColumns,
-      });
-
     const getVirtualColumnStyle = (name: string | undefined) => {
       if (!isVirtualList.value || !name || !thWidth.value[name]) {
         return undefined;
@@ -1647,107 +1457,23 @@ export default defineComponent({
       return { width: `${thWidth.value[name]}px` };
     };
 
-    const renderSummaryRow = (record: TableDataWithRaw, rowIndex: number) => {
-      return (
-        <Tr
-          v-slots={{
-            tr: slots.tr,
-          }}
-          key={`table-summary-${rowIndex}`}
-          class={[
-            `${prefixCls}-tr-summary`,
-            isFunction(props.rowClass)
-              ? props.rowClass(record.raw, rowIndex)
-              : props.rowClass,
-          ]}
-          // @ts-ignore
-          onClick={(ev: Event) => handleRowClick(record, ev)}
-        >
-          {operations.value.map((operation, index) => {
-            const cellId = `${rowIndex}-${index}-${record.key}`;
-            const [rowspan, colspan] = tableSummarySpan.value[cellId] ?? [1, 1];
-
-            if (removedSummaryCells.value.includes(cellId)) {
-              return null;
-            }
-
-            const style = getVirtualColumnStyle(operation.name);
-
-            return (
-              <OperationTd
-                headers={cellHeaders('summary', index, colspan)}
-                style={style}
-                operationColumn={operation}
-                operations={operations.value}
-                record={record}
-                rowSpan={rowspan}
-                colSpan={colspan}
-                summary
-              />
-            );
-          })}
-          {dataColumns.value.map((column, index) => {
-            const cellId = `${rowIndex}-${operations.value.length + index}-${record.key}`;
-            const [rowspan, colspan] = tableSummarySpan.value[cellId] ?? [1, 1];
-
-            if (removedSummaryCells.value.includes(cellId)) {
-              return null;
-            }
-
-            const style = getVirtualColumnStyle(getColumnLayoutKey(column));
-
-            return (
-              <Td
-                headers={cellHeaders('summary', operations.value.length + index, colspan)}
-                v-slots={{
-                  td: slots.td,
-                  cell: slots["summary-cell"],
-                  // Preserve the compiled SSR slot while forwarding it to Td.
-                  _: 2,
-                }}
-                key={`td-${cellId}`}
-                style={style}
-                rowIndex={rowIndex}
-                record={record}
-                column={column}
-                operations={operations.value}
-                dataColumns={dataColumns.value}
-                rowSpan={rowspan}
-                colSpan={colspan}
-                summary
-                // @ts-ignore
-                onClick={(ev: Event) => handleCellClick(record, column, ev)}
-                onDblclick={(ev: Event) =>
-                  handleCellDblclick(record, column, ev)
-                }
-                onMouseenter={(ev: Event) =>
-                  handleCellMouseEnter(record, column, ev)
-                }
-                onMouseleave={(ev: Event) =>
-                  handleCellMouseLeave(record, column, ev)
-                }
-                onContextmenu={(ev: Event) =>
-                  handleCellContextmenu(record, column, ev)
-                }
-              />
-            );
-          })}
-        </Tr>
-      );
-    };
-
-    const renderSummary = () => {
-      if (summaryData.value && summaryData.value.length > 0) {
-        return (
-          <tfoot>
-            {summaryData.value.map((data, index) =>
-              renderSummaryRow(data, index),
-            )}
-          </tfoot>
-        );
-      }
-      return null;
-    };
+    const renderColGroup = () => (
+      <ColGroup dataColumns={dataColumns.value} operations={operations.value}
+        columnWidth={columnWidth} columnRealWidth={columnRealWidth}
+        tableLayout={resolvedTableLayout.value} />
+    );
+    const cellEvents = (record: TableDataWithRaw, column: TableColumnData) => ({
+      onClick: (ev: Event) => handleCellClick(record, column, ev),
+      onDblclick: (ev: Event) => handleCellDblclick(record, column, ev),
+      onMouseenter: (ev: Event) => handleCellMouseEnter(record, column, ev),
+      onMouseleave: (ev: Event) => handleCellMouseLeave(record, column, ev),
+      onContextmenu: (ev: Event) => handleCellContextmenu(record, column, ev),
+    });
+    const summaryView = useSummaryRender({
+      props, slots, prefixCls, summaryData, dataColumns, operations, allColumns,
+      summarySpanMethod, getVirtualColumnStyle, cellHeaders, handleRowClick,
+      summaryRef, hasScrollBar, contentStyle, renderSemanticHeader,
+    }, cellEvents, renderColGroup);
 
     const renderExpandBtn = (
       record: TableDataWithRaw,
@@ -1847,7 +1573,8 @@ export default defineComponent({
     ): JSX.Element => {
       const currentKey = record.key;
       const currentPath = (indexPath ?? []).concat(rowIndex);
-      const expandContent = renderExpandContent(record);
+      const expandContent = positions?.details.has(record.key)
+        ? positions.details.get(record.key) : renderExpandContent(record);
       const showExpand = expandedRowKeys.value.includes(currentKey);
 
       const isDragTarget = dragState.sourceKey === record.key;
@@ -1984,20 +1711,7 @@ export default defineComponent({
                   renderExpandBtn={renderExpandBtn}
                   colSpan={colspan}
                   {...extraProps}
-                  // @ts-ignore
-                  onClick={(ev: Event) => handleCellClick(record, column, ev)}
-                  onDblclick={(ev: Event) =>
-                    handleCellDblclick(record, column, ev)
-                  }
-                  onMouseenter={(ev: Event) =>
-                    handleCellMouseEnter(record, column, ev)
-                  }
-                  onMouseleave={(ev: Event) =>
-                    handleCellMouseLeave(record, column, ev)
-                  }
-                  onContextmenu={(ev: Event) =>
-                    handleCellContextmenu(record, column, ev)
-                  }
+                  {...cellEvents(record, column)}
                 />
               );
             })}
@@ -2099,11 +1813,17 @@ export default defineComponent({
       </Thead>
     );
 
+    const virtualBody = createVirtualBody({
+      props, slots, prefixCls, flattenData, tbodyComRef, contentStyle,
+      displayHeaderRows, expandedRowKeys, showEmptyTree, renderExpandContent,
+      renderSemanticHeader, renderRecord, onTbodyScroll,
+    });
+
     const managedStickyFooter = computed(() => props.pagination !== false && props.stickyPagination !== false && (flattenData.value.length > 0 || sortedData.value.length > 0));
     const renderContent = () => {
       // Slots can change without invalidating a computed value. Capture once
       // per render so slot changes are observed without per-row scans in SSR.
-      const positions = calculateVirtualRowPositions();
+      const { positions, prepareRange } = virtualBody.plan() ?? {};
       if (splitTable.value) {
         const stickyTop = isNumber(props.stickyHeader)
           ? `${props.stickyHeader}px`
@@ -2132,13 +1852,7 @@ export default defineComponent({
               cellpadding={0}
               cellspacing={0}
             >
-              <ColGroup
-                dataColumns={dataColumns.value}
-                operations={operations.value}
-                columnWidth={columnWidth}
-                columnRealWidth={columnRealWidth}
-                tableLayout={resolvedTableLayout.value}
-              />
+              {renderColGroup()}
               {renderHeader()}
             </table>
           </Component>
@@ -2186,35 +1900,7 @@ export default defineComponent({
                   </div>
                 </div>
               ) : isVirtualList.value ? (
-                <VirtualList
-                  v-slots={{
-                    'list-prefix': () => renderSemanticHeader('body', positions),
-                    item: ({
-                      item,
-                      index,
-                    }: {
-                      item: TableDataWithRaw;
-                      index: number;
-                    }) => renderRecord(item, index, { positions }),
-                  }}
-                  ref={tbodyComRef}
-                  class={`${prefixCls}-body`}
-                  data={flattenData.value as any}
-                  itemKey="_key"
-                  component={{
-                    list: "table",
-                    content: props.virtualListProps?.component === undefined ? firstStructuralNode(slots.tbody?.()) ?? "tbody" : "tbody",
-                  }}
-                  listAttrs={{
-                    class: `${prefixCls}-element`,
-                    style: contentStyle.value,
-                    'aria-rowcount': positions?.rowCount,
-                  }}
-                  paddingPosition="list"
-                  height="auto"
-                  {...props.virtualListProps}
-                  onScroll={onTbodyScroll}
-                />
+                virtualBody.render(positions, prepareRange)
               ) : (
                 <Component
                   ref={tbodyComRef}
@@ -2237,47 +1923,14 @@ export default defineComponent({
                     cellpadding={0}
                     cellspacing={0}
                   >
-                    {flattenData.value.length !== 0 && (
-                      <ColGroup
-                        dataColumns={dataColumns.value}
-                        operations={operations.value}
-                        columnWidth={columnWidth}
-                        columnRealWidth={columnRealWidth}
-                        tableLayout={resolvedTableLayout.value}
-                      />
-                    )}
+                    {flattenData.value.length !== 0 && renderColGroup()}
                     {renderSemanticHeader('body')}
                     {renderBody()}
                   </table>
                 </Component>
               )}
             </ResizeObserver>
-            {summaryData.value && summaryData.value.length > 0 && (
-              <div
-                ref={summaryRef}
-                class={`${prefixCls}-tfoot`}
-                style={{
-                  overflowY: hasScrollBar.value ? "scroll" : "hidden",
-                }}
-              >
-                <table
-                  class={`${prefixCls}-element`}
-                  style={contentStyle.value}
-                  cellpadding={0}
-                  cellspacing={0}
-                >
-                  <ColGroup
-                    dataColumns={dataColumns.value}
-                    operations={operations.value}
-                    columnWidth={columnWidth}
-                    columnRealWidth={columnRealWidth}
-                    tableLayout={resolvedTableLayout.value}
-                  />
-                  {renderSemanticHeader('summary')}
-                  {renderSummary()}
-                </table>
-              </div>
-            )}
+            {summaryView.panel()}
           </>
         );
       }
@@ -2290,18 +1943,12 @@ export default defineComponent({
             cellspacing={0}
             style={contentStyle.value}
           >
-            <ColGroup
-              dataColumns={dataColumns.value}
-              operations={operations.value}
-              columnWidth={columnWidth}
-              columnRealWidth={columnRealWidth}
-              tableLayout={resolvedTableLayout.value}
-            />
+            {renderColGroup()}
             {props.showHeader && renderHeader()}
             {renderBody()}
             {summaryData.value &&
               summaryData.value.length > 0 &&
-              renderSummary()}
+              summaryView.render()}
           </table>
         </ResizeObserver>
       );
@@ -2360,6 +2007,7 @@ export default defineComponent({
       const paginationProps: Partial<TablePaginationConfig> = isObject(props.pagination)
         ? omit(props.pagination, [
             "container",
+            "align",
             "modelValue",
             "pageSize",
             "defaultValue",
@@ -2416,12 +2064,16 @@ export default defineComponent({
     };
 
     const paginationTarget = computed(() => isObject(props.pagination) ? props.pagination.container : undefined);
-    const readyPaginationTarget = shallowRef<string | HTMLElement>();
+    const readyPaginationTarget = shallowRef<string | HTMLElement | null>();
+    // Give the disabled Teleport a table-local destination for its empty anchors.
+    // The visible inline content stays at the Teleport's source, including during SSR.
+    const inlinePaginationId = encodeURIComponent(semanticId);
+    const inlinePaginationSelector = `[data-pagination-anchor="${inlinePaginationId}"]`;
     let paginationTargetEpoch = 0;
     watch(paginationTarget, (target) => {
       const epoch = ++paginationTargetEpoch;
       if (!target || typeof target !== 'string' || typeof document === 'undefined') {
-        readyPaginationTarget.value = target;
+        readyPaginationTarget.value = target || null;
         return;
       }
       const resolve = () => {
@@ -2449,7 +2101,13 @@ export default defineComponent({
         </div>
       ) : renderPagination();
       const target = readyPaginationTarget.value;
-      return target ? <Teleport to={target}>{content}</Teleport> : paginationTarget.value ? null : content;
+      if (target === undefined) return null;
+      return (
+        <Fragment>
+          <span hidden data-pagination-anchor={inlinePaginationId} />
+          <Teleport to={target ?? inlinePaginationSelector} disabled={!target}>{content}</Teleport>
+        </Fragment>
+      );
     };
 
     const style = computed<CSSProperties | undefined>(() => {
@@ -2544,15 +2202,10 @@ export default defineComponent({
           <div class={cls.value} style={style.value} aria-busy={loadingProps.value.loading || undefined} {...tableInteractionEvents}>
             {children.value}
             <Loading {...loadingProps.value}>
-              {props.pagination !== false &&
-                (flattenData.value.length > 0 || sortedData.value.length > 0) &&
-                isPaginationTop.value &&
-                renderPaginationArea()}
               <DeferredTable rowSlotState={(slots.tr ? 1 : 0) | (slots['expand-row'] ? 2 : 0)}
                 slotSnapshot={snapshot} />
               {props.pagination !== false &&
                 (flattenData.value.length > 0 || sortedData.value.length > 0) &&
-                !isPaginationTop.value &&
                 renderPaginationArea()}
             </Loading>
           </div>

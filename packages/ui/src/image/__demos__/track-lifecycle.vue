@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("imageTrackLifecycleInline");
 
 import { ImagePreviewAction as CImagePreviewAction } from "../index";
 
@@ -16,12 +14,12 @@ function replaceImages() {
 </script>
 <template>
   <div>
-    <c-button @click="open = true">{{ inlineCopy.open }}</c-button>
-    <c-button @click="active = !active">{{ inlineCopy.activate }}</c-button>
-    <c-button @click="loop = !loop">{{ inlineCopy.loop }}</c-button>
-    <c-button @click="replaceImages">{{ inlineCopy.replaceImages }}</c-button>
+    <c-button @click="open = true">打开</c-button>
+    <c-button @click="active = !active">停用与激活</c-button>
+    <c-button @click="loop = !loop">循环</c-button>
+    <c-button @click="replaceImages">等长换图</c-button>
     <p>
-      {{ inlineCopy.current }} {{ current }}. Navigate across the loop edge;
+      当前: {{ current }}. Navigate across the loop edge;
       deactivate, close or replace images. Old work must not replay.
     </p>
     <KeepAlive>
@@ -34,12 +32,12 @@ function replaceImages() {
       >
         <template #actions>
           <c-image-preview-action
-            :name="inlineCopy.replaceImages2"
+            name="换图"
             @click="replaceImages"
             >换图</c-image-preview-action
           >
           <c-image-preview-action
-            :name="inlineCopy.deactivate"
+            name="停用"
             @click="active = false"
             >停用</c-image-preview-action
           >

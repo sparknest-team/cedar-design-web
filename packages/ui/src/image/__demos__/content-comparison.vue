@@ -1,15 +1,10 @@
-<script setup lang="ts">
-import { useDemoLocale } from "../../__demos__/locale";
-const demoCopy = useDemoLocale("imageContentComparison");
-</script>
-
 <template>
   <div class="demo-comparison">
     <section
       class="demo-comparison-case demo-comparison-case--1"
       data-comparison-scene="caption"
     >
-      <h4>{{ demoCopy.caption }}</h4>
+      <h4>标题与描述</h4>
       <c-space :size="24" wrap>
         <c-image
           width="200"
@@ -31,7 +26,7 @@ const demoCopy = useDemoLocale("imageContentComparison");
       class="demo-comparison-case demo-comparison-case--2"
       data-comparison-scene="extra"
     >
-      <h4>{{ demoCopy.extra }}</h4>
+      <h4>底部额外内容</h4>
       <c-space :size="24" wrap>
         <c-image
           width="200"

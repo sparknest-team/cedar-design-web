@@ -11,4 +11,3 @@
 
 - Updated dependencies [[`6620155`](https://github.com/loca-spirit/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14)]:
   - @cedar-design/shared-vue@1.2.0
-

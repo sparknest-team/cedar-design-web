@@ -7,18 +7,16 @@
       :timing-function="curve"
     />
     <c-space>
-      <c-button @click="cubic = !cubic">{{ inlineCopy.changeCurve }}</c-button>
-      <c-button @click="replay">{{ inlineCopy.replay }}</c-button>
+      <c-button @click="cubic = !cubic">切换曲线</c-button>
+      <c-button @click="replay">重新播放</c-button>
     </c-space>
     <p role="status">
       Next: {{ cubic ? "ease-out cubic" : "linear" }}; current: {{ applied }}.
     </p>
-    <p>{{ inlineCopy.changingTheCurveAppliesOn }}</p>
+    <p>切换曲线在下次播放生效；点击重新播放查看效果。</p>
   </c-space>
 </template>
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("countToEasingReplayInline");
 
 import { computed, ref } from "vue";
 import type { CountToInstance } from "@cedar-design/ui-vue";

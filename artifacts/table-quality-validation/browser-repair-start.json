@@ -1,0 +1,17 @@
+{
+  "startedAt": "2026-11-20T05:55:35.920Z",
+  "sourceFingerprint": "66ced0d7a4df5da1b17c7e2f2799e8be8e9002e7bbadcdf30770bbb3dc5f8bd7",
+  "productionFingerprint": "1c956da3ed47e3ef858935363c54c1b39698e3cdcc51ea3eba149d3beac73796",
+  "buildIndexHash": "69e6c505eb94c329988b898b89a3df0fa44432265076408ee02f0ba874973284",
+  "harness": {
+    "actions": "ca36d90465387e201a219b8a756e77735b3109ecadad2848b8488cfcdaa9d585",
+    "runner": "80110647045126b39a0c727dd916771ed57061e1fa90818ec6c93c2c7c5e187f",
+    "contracts": "0a2929899b80881948a8b48ae12253be20e0086a957c9ee9d93872f8ff438b89",
+    "table-capabilities": "37eb2c2dca9e4e1fd2baf7fac98e9f9e574afdc33fd3a2c53ef57979a6634af5",
+    "navigation-gate": "fa3886fd3d718e197edbce0fca48117c6a5a8132670a537bb39c753d79568598"
+  },
+  "command": "pnpm check:docs-components && pnpm check:compatibility",
+  "outageBudgetMs": 5000,
+  "logoDelayMs": 1200,
+  "localAssets": "preloaded immutable production snapshot"
+}

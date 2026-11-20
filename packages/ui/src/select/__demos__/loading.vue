@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { useDemoLocale as useInlineDemoLocale } from "../../__demos__/locale";
-const inlineCopy = useInlineDemoLocale("selectLoadingInline");
+const inlineCopy = {
+  beijing: "北京",
+  shanghai: "上海",
+  guangzhou: "广州"
+};
 
 import { ref } from "vue";
 
@@ -10,19 +13,19 @@ const selected = ref(["beijing"]);
 const options = [
   {
     get label() {
-      return inlineCopy.value.beijing;
+      return inlineCopy.beijing;
     },
     value: "beijing",
   },
   {
     get label() {
-      return inlineCopy.value.shanghai;
+      return inlineCopy.shanghai;
     },
     value: "shanghai",
   },
   {
     get label() {
-      return inlineCopy.value.guangzhou;
+      return inlineCopy.guangzhou;
     },
     value: "guangzhou",
   },
@@ -31,10 +34,10 @@ const options = [
 <template>
   <c-space direction="column" :size="16" style="width: 100%">
     <c-form layout="vertical">
-      <c-form-item :label="inlineCopy.loading"
+      <c-form-item label="加载状态"
         ><c-switch v-model="busy"
       /></c-form-item>
-      <c-form-item :label="inlineCopy.default"
+      <c-form-item label="默认指示器"
         ><c-select
           v-model="value"
           :loading="busy"
@@ -42,7 +45,7 @@ const options = [
           edit-mode="direct"
           loading-mode="default"
       /></c-form-item>
-      <c-form-item :label="inlineCopy.line"
+      <c-form-item label="底部加载线"
         ><c-select
           v-model="value"
           :loading="busy"
@@ -50,7 +53,7 @@ const options = [
           edit-mode="direct"
           loading-mode="line"
       /></c-form-item>
-      <c-form-item :label="inlineCopy.multipleActions"
+      <c-form-item label="多选动作"
         ><c-select
           v-model="selected"
           :loading="busy"
@@ -61,6 +64,6 @@ const options = [
           edit-mode="direct"
       /></c-form-item>
     </c-form>
-    <p>{{ inlineCopy.loadingPausesSelectionClearingAnd }}</p>
+    <p>加载时保留选择，暂停选择、清空和移除；搜索仍可输入，关闭加载后恢复。</p>
   </c-space>
 </template>
