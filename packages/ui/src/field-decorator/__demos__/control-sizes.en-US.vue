@@ -67,12 +67,14 @@ function resetSelections() {
       </div>
       <div data-control="Select">
         <p>Select</p>
-        <c-select
-          :size="size"
-          :variant="variant"
-          :options="options"
-          placeholder="Select"
-        />
+        <c-form-item layout="vertical" hide-label>
+          <c-select
+            :size="size"
+            :variant="variant"
+            :options="options"
+            placeholder="Select"
+          />
+        </c-form-item>
       </div>
       <div data-control="Date">
         <p>Date</p>
@@ -148,14 +150,16 @@ function resetSelections() {
         </div>
         <div data-control="SelectValue">
           <p>Select · clearable</p>
-          <c-select
-            v-model="selectValue"
-            :size="size"
-            :variant="variant"
-            :options="selectedOptions"
-            clearable
-            placeholder="Select value"
-          />
+          <c-form-item layout="vertical" hide-label>
+            <c-select
+              v-model="selectValue"
+              :size="size"
+              :variant="variant"
+              :options="selectedOptions"
+              clearable
+              placeholder="Select value"
+            />
+          </c-form-item>
         </div>
         <div data-control="CascaderValue">
           <p>Cascader · clearable</p>
@@ -170,16 +174,18 @@ function resetSelections() {
         </div>
         <div data-control="SelectMultiple">
           <p>Select · multiple / nowrap</p>
-          <c-select
-            v-model="selectMultiple"
-            :size="size"
-            :variant="variant"
-            :options="selectedOptions"
-            multiple
-            tag-nowrap
-            clearable
-            placeholder="Select multiple"
-          />
+          <c-form-item layout="vertical" hide-label>
+            <c-select
+              v-model="selectMultiple"
+              :size="size"
+              :variant="variant"
+              :options="selectedOptions"
+              multiple
+              tag-nowrap
+              clearable
+              placeholder="Select multiple"
+            />
+          </c-form-item>
         </div>
         <div data-control="CascaderMultiple">
           <p>Cascader · multiple / nowrap</p>
@@ -196,17 +202,19 @@ function resetSelections() {
         </div>
         <div data-control="SelectOverflow">
           <p>Select · long values / nowrap</p>
-          <c-select
-            v-model="selectOverflow"
-            edit-mode="direct"
-            :size="size"
-            :variant="variant"
-            :options="selectedOptions"
-            multiple
-            tag-nowrap
-            clearable
-            placeholder="Select long values"
-          />
+          <c-form-item layout="vertical" hide-label>
+            <c-select
+              v-model="selectOverflow"
+              edit-mode="direct"
+              :size="size"
+              :variant="variant"
+              :options="selectedOptions"
+              multiple
+              tag-nowrap
+              clearable
+              placeholder="Select long values"
+            />
+          </c-form-item>
         </div>
         <div data-control="CascaderOverflow">
           <p>Cascader · long values / nowrap</p>
