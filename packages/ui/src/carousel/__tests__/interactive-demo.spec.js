@@ -24,8 +24,9 @@ test("editable keys and pointer gestures stay local while background drags updat
     });
     wrapper.findComponent(Carousel).vm.resize();
     await flushPromises();
-    const status = () => wrapper.get("[role=status]").text();
-    const input = wrapper.get('input[aria-label="Slide1"]');
+    const status = () =>
+      wrapper.get("[role=status]").text().replace(/\s+/g, " ").trim();
+    const input = wrapper.get('input[aria-label="幻灯片1"]');
     await input.setValue("local-177");
     for (const key of ["ArrowLeft", "ArrowRight", "Home", "End"]) {
       await input.trigger("keydown", { key });
@@ -49,23 +50,23 @@ test("editable keys and pointer gestures stay local while background drags updat
       await flushPromises();
     };
     await drag(input.element, 450, 250);
-    expect(status()).toBe("Current: 1 · Changes: 0");
+    expect(status()).toBe("当前页: 1 · 切换次数: 0");
     await drag(viewport, 450, 250);
-    expect(status()).toBe("Current: 2 · Changes: 1");
-    await wrapper.get('input[aria-label="Slide2"]').setValue("second-177");
+    expect(status()).toBe("当前页: 2 · 切换次数: 1");
+    await wrapper.get('input[aria-label="幻灯片2"]').setValue("second-177");
     await wrapper
-      .get('input[aria-label="Slide2"]')
+      .get('input[aria-label="幻灯片2"]')
       .trigger("keydown", { key: "ArrowLeft" });
-    expect(status()).toBe("Current: 2 · Changes: 1");
+    expect(status()).toBe("当前页: 2 · 切换次数: 1");
     await drag(viewport, 250, 450);
-    expect(status()).toBe("Current: 1 · Changes: 2");
+    expect(status()).toBe("当前页: 1 · 切换次数: 2");
     expect(input.element.value).toBe("local-177");
     await wrapper
       .get(".carousel-interactive-demo")
       .trigger("keydown", { key: "ArrowRight" });
-    expect(status()).toBe("Current: 2 · Changes: 3");
+    expect(status()).toBe("当前页: 2 · 切换次数: 3");
     expect(wrapper.findComponent(Carousel).props("modelValue")).toBe(2);
-    expect(wrapper.get('input[aria-label="Slide2"]').element.value).toBe(
+    expect(wrapper.get('input[aria-label="幻灯片2"]').element.value).toBe(
       "second-177",
     );
   } finally {
