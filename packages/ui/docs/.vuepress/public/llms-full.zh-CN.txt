@@ -6051,7 +6051,7 @@ const __demoAppearance = __demoReactive({ variant: "default", size: "md" });
 import { computed as demoComputed, ref as demoRef } from "vue";
 const demoCompareFields = [
   { name: "variant", values: ["default", "outline", "tonal"] },
-  { name: "size", values: ["sm", "md"] },
+  { name: "size", values: ["xs", "sm", "md", "lg", "xl"] },
 ];
 const demoCompareAxis = demoRef("variant");
 const demoComparedOptions = demoComputed(
@@ -6084,8 +6084,11 @@ demoCompareFields.push({ name: "elevation", values: [0, 2, 6] });
           v-model="__demoAppearance['size']"
           aria-label="size"
           :options="[
+            { label: 'xs', value: 'xs' },
             { label: 'sm', value: 'sm' },
             { label: 'md', value: 'md' },
+            { label: 'lg', value: 'lg' },
+            { label: 'xl', value: 'xl' },
           ]"
           variant="button"
           size="sm"
@@ -6143,6 +6146,88 @@ demoCompareFields.push({ name: "elevation", values: [0, 2, 6] });
   margin: 0 0 8px;
 }
 </style>
+```
+
+### 尺寸与标题层级
+
+切换 Card 尺寸、标题层级和页脚对齐，或调整内嵌 Section 的变体，实时查看组合效果。Card 说明文字保持 15px，Section 说明文字保持 13px。Card 尺寸会改变说明文字周围的间距。
+
+| 尺寸 | h1 | h2 | h3 | h4 | h5 | h6 | 正文水平内边距 | 说明上方间距 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `xs` | 25px | 21px | 19px | 17px | 15px | 13px | 8px | 6px |
+| `sm` | 26px | 22px | 20px | 18px | 16px | 14px | 12px | 8px |
+| `md` | 30px | 26px | 24px | 22px | 20px | 18px | 16px | 20px |
+| `lg` | 34px | 30px | 28px | 26px | 24px | 22px | 20px | 20px |
+| `xl` | 38px | 34px | 32px | 30px | 28px | 26px | 24px | 24px |
+
+Example source: src/card/__demos__/sizes-and-headings.vue
+
+```vue
+<script setup lang="ts">
+import { reactive } from 'vue'
+
+const footerAlignments = ['start', 'center', 'end'] as const
+const sectionVariants = ['heading-line', 'plain', 'tonal', 'outline'] as const
+const headingLevels = [1, 2, 3, 4, 5, 6] as const
+const model = reactive<{
+  size: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  headingLevel: (typeof headingLevels)[number]
+  footerAlign: (typeof footerAlignments)[number]
+  sectionVariant: (typeof sectionVariants)[number]
+}>({
+  size: 'md',
+  headingLevel: 4,
+  footerAlign: 'end',
+  sectionVariant: 'heading-line',
+})
+</script>
+
+<template>
+  <c-space direction="column" align="stretch">
+    <c-form :model="model" layout="vertical" edit-mode="direct">
+      <c-form-item field="size" label="卡片尺寸">
+        <c-radio-group v-model="model.size" aria-label="卡片尺寸">
+          <c-radio value="xs">超紧凑 (xs)</c-radio>
+          <c-radio value="sm">紧凑 (sm)</c-radio>
+          <c-radio value="md">默认 (md)</c-radio>
+          <c-radio value="lg">宽松 (lg)</c-radio>
+          <c-radio value="xl">超宽松 (xl)</c-radio>
+        </c-radio-group>
+      </c-form-item>
+      <c-form-item field="headingLevel" label="标题层级">
+        <c-radio-group v-model="model.headingLevel" aria-label="标题层级">
+          <c-radio v-for="level in headingLevels" :key="level" :value="level">h{{ level }}</c-radio>
+        </c-radio-group>
+      </c-form-item>
+      <c-form-item field="footerAlign" label="页脚对齐">
+        <c-radio-group v-model="model.footerAlign" aria-label="页脚对齐">
+          <c-radio v-for="value in footerAlignments" :key="value" :value="value">{{ value }}</c-radio>
+        </c-radio-group>
+      </c-form-item>
+      <c-form-item field="sectionVariant" label="分区变体">
+        <c-radio-group v-model="model.sectionVariant" aria-label="分区变体">
+          <c-radio v-for="value in sectionVariants" :key="value" :value="value">{{ value }}</c-radio>
+        </c-radio-group>
+      </c-form-item>
+    </c-form>
+    <output>渲染标签 <code>&lt;h{{ model.headingLevel }}&gt;</code></output>
+
+    <c-card
+      :size="model.size"
+      :heading-level="model.headingLevel"
+      :footer-align="model.footerAlign"
+      title="项目概览"
+      description="项目设置适用于整个团队。"
+      top-divider
+      bottom-divider
+    >
+      <c-section :size="model.size" :heading-level="model.headingLevel" :variant="model.sectionVariant" title="成员权限" description="权限按成员角色分组。">
+        管理员可邀请成员。
+      </c-section>
+      <template #footer>最近更新于今天</template>
+    </c-card>
+  </c-space>
+</template>
 ```
 
 ### 悬浮样式
@@ -6210,7 +6295,7 @@ const directions = ['column', 'row', 'row-reverse'] as const
 
 分组标题复用 TypographyTitle，通过 heading 设置标题层级。
 
-通过 Card、Tabs 和纵向 Space 组合内容。内层使用紧凑描边卡片，宽表格在自己的容器内横向滚动；产业链面板使用普通分组标题，避免额外嵌套卡片。
+外层 Card 承载报告，Tabs 切换分析维度，内层 Section 组织各组内容。产业链面板用更深一级的 Section 标题区分上下游，宽表格在自己的容器内横向滚动。
 
 Example source: src/card/__demos__/nested-tabs.vue
 
@@ -6234,39 +6319,37 @@ const data = rows.map(([quarter, revenue, growth, margin, profit]) => ({
 </script>
 
 <template>
-  <c-card title="三季报前瞻" class="nested-card-demo" :elevation="false">
+  <c-card title="三季报前瞻" :heading-level="2" class="nested-card-demo" :elevation="false">
     <template #title-action><span class="report-date">2026-08</span></template>
     <c-tabs default-value="performance" :item-style="{ padding: '16px 0 0' }" tab-list-aria-label="分析维度">
       <c-tab-pane name="industry" title="产业链">
-        <c-card title="产业链观察" size="sm" variant="outline" :elevation="false">
-          <c-space direction="column" size="lg">
-            <section>
-              <c-typography-title :heading="5" class="group-title">上游 · 原材料</c-typography-title>
+        <c-section title="产业链观察" size="sm" :heading-level="3">
+          <c-space direction="column" size="lg" align="stretch">
+            <c-section title="上游 · 原材料" size="sm" :heading-level="4" variant="plain" show-marker>
               <p>关注铜、钢材与塑料采购成本变化。</p>
-            </section>
-            <section>
-              <c-typography-title :heading="5" class="group-title">下游 · 终端渠道</c-typography-title>
+            </c-section>
+            <c-section title="下游 · 终端渠道" size="sm" :heading-level="4" variant="plain" show-marker>
               <p>关注渠道库存、促销节奏与新品销售表现。</p>
-            </section>
+            </c-section>
           </c-space>
-        </c-card>
+        </c-section>
       </c-tab-pane>
       <c-tab-pane name="performance" title="业绩">
-        <c-space direction="column" size="lg">
-          <c-card title="单季还原（累计相减）" size="sm" variant="outline" :elevation="false">
+        <c-space direction="column" size="lg" align="stretch">
+          <c-section title="单季还原（累计相减）" size="sm" :heading-level="3">
             <c-table :columns="columns" :data="data" :pagination="false" />
             <p class="report-note">示例数据 · 单位：亿元</p>
-          </c-card>
-          <c-card title="经营摘要" size="sm" variant="outline" :elevation="false">
+          </c-section>
+          <c-section title="经营摘要" size="sm" :heading-level="3">
             <p>本季营收 16.77 亿元，毛利率 25.1%。</p>
-          </c-card>
+          </c-section>
         </c-space>
       </c-tab-pane>
       <c-tab-pane name="capital" title="筹码·资金">
-        <c-card title="资金观察" size="sm" variant="outline" :elevation="false">本期机构持仓数据尚未披露。</c-card>
+        <c-section title="资金观察" size="sm" :heading-level="3">本期机构持仓数据尚未披露。</c-section>
       </c-tab-pane>
       <c-tab-pane name="technical" title="技术">
-        <c-card title="技术观察" size="sm" variant="outline" :elevation="false">暂无技术分析数据。</c-card>
+        <c-section title="技术观察" size="sm" :heading-level="3">暂无技术分析数据。</c-section>
       </c-tab-pane>
     </c-tabs>
   </c-card>
@@ -6274,10 +6357,6 @@ const data = rows.map(([quarter, revenue, growth, margin, profit]) => ({
 
 <style scoped>
 .nested-card-demo { inline-size: 100%; min-inline-size: 0; }
-.group-title {
-  --c-typography-font-size-h5: var(--c-font-size-body-3);
-  --c-typography-heading-margin-bottom: 8px;
-}
 .report-date { white-space: nowrap; font-size: 12px; }
 .report-note { margin-block-start: 8px; }
 p { margin: 0; }
@@ -6509,15 +6588,17 @@ Card 展开时保留原有 DOM 位置和表单归属。支持 Popover API 的浏
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | variant | 卡片外观 | `default / outline / tonal` | `outline` |
-| size | 内容密度；省略时按平台规则回退，见下方说明 | `sm / md` | `undefined` |
+| size | 内容密度；省略时按平台规则回退，见下方说明 | `xs / sm / md / lg / xl` | `undefined` |
+| heading-level | 标题语义层级，同时调整标题字号 | `1 / 2 / 3 / 4 / 5 / 6` | `undefined` |
+| footer-align | 页脚内容对齐，start 和 end 随阅读方向 | `start / center / end` | `end` |
 | direction | 封面与正文的排列顺序，默认 column；支持 row、column、row-reverse，不表示卡片自身位置 | `row / column / row-reverse` | `column` |
 | hoverable | 悬浮样式 | `boolean` | `false` |
 | title-style | 标题行样式 | `CSSProperties` | `undefined` |
 | title | 标题 | `string` | `undefined` |
 | subtitle | 副标题 | `string` | `undefined` |
 | description | 描述 | `string` | `undefined` |
-| top-divider | 上分割线 | `boolean` | `false` |
-| bottom-divider | 下分割线 | `boolean` | `false` |
+| top-divider | 上分割线，左右与内容区对齐 | `boolean` | `false` |
+| bottom-divider | 下分割线，左右与内容区对齐 | `boolean` | `false` |
 | image-src | 封面图片地址；cover 插槽优先 | `string` | `undefined` |
 | image-fit | 封面图片填充方式 | `fill / contain / cover / none / scale-down` | `cover` |
 | image-height | 封面图片高度，数字单位为 px | `string / number` | `undefined` |
@@ -6548,7 +6629,7 @@ Card 展开时保留原有 DOM 位置和表单归属。支持 Popover API 的浏
 | title | 标题 | `{ slotClass: string }` |
 | title-action | 标题右侧操作 | — |
 | subtitle | 副标题 | `{ slotClass: string }` |
-| description | 描述 | `{ slotClass: string }` |
+| description | 自定义说明内容，沿用 Card 的说明容器和间距 | `{ slotClass: string }` |
 | footer | 底部操作 | — |
 | floating-content | 浮动展开内容，仅 column 布局渲染 | — |
 | close-button | 自定义关闭按钮；需自行更新 floating | — |
@@ -6571,7 +6652,7 @@ Card 通过 Loading 指令组合加载遮罩。
 import type { CardProps } from '@cedar-design/ui-vue'
 ```
 
-尺寸只支持文档列出的档位，不支持全部 ComponentSize 值。
+
 
 ## CSS Variables
 
@@ -6595,23 +6676,23 @@ import type { CardProps } from '@cedar-design/ui-vue'
 | `--c-card-close-button-size` | `56px` | `height`, `width` |
 | `--c-card-close-button-text-color` | `var(--c-sys-color-content-on-dark)` | `color` |
 | `--c-card-content-color` | `var(--c-sys-color-content-tertiary)` | `color` |
-| `--c-card-content-font-size` | `14px` | `font-size` |
+| `--c-card-content-font-size` | `15px` | `font-size` |
 | `--c-card-content-margin` | `16px 0 0 0` | `margin` |
 | `--c-card-content-padding` | `0 16px` | `padding` |
 | `--c-card-content-row-margin` | `16px 0 0 0` | `margin` |
 | `--c-card-description-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-card-description-font-size` | `14px` | `font-size` |
+| `--c-card-description-font-size` | `15px` | `font-size` |
 | `--c-card-description-margin` | `20px 0 0 0` | `margin` |
-| `--c-card-description-padding` | `0 13px` | `padding` |
+| `--c-card-description-padding` | `0 16px` | `padding` |
 | `--c-card-filled-background` | `var(--c-sys-color-surface-muted)` | `background-color` |
 | `--c-card-floating-buttons-bottom` | `16px` | `bottom` |
 | `--c-card-floating-buttons-color` | `var(--c-sys-color-content-primary)` | `color` |
 | `--c-card-floating-buttons-right` | `16px` | `inset-inline-end` |
 | `--c-card-footer-bottom` | `9px` | `bottom` |
 | `--c-card-footer-margin` | `30px 0 0 0` | `margin` |
-| `--c-card-footer-padding` | `0 12px` | `padding` |
+| `--c-card-footer-padding` | `0 16px` | `padding` |
 | `--c-card-footer-right` | `13px` | `inset-inline-end` |
-| `--c-card-hover-shadow` | `0 4px 12px rgba(0, 0, 0, 0.12)` | `box-shadow` |
+| `--c-card-hover-shadow` | 海拔 1 | `box-shadow` |
 | `--c-card-image-height` | `200px` | `height` |
 | `--c-card-image-width` | `100%` | `width` |
 | `--c-card-line-height` | `22px` | `line-height` |
@@ -6620,18 +6701,28 @@ import type { CardProps } from '@cedar-design/ui-vue'
 | `--c-card-row-height` | `140px` | `min-height` |
 | `--c-card-row-image-width` | `140px` | `width` |
 | `--c-card-row-line-height` | `1.5` | `line-height` |
+| `--c-card-heading-size-step` | `1px` | `font-size` |
+| `--c-card-size-xs-title-font-size` | `15px` | `font-size` |
+| `--c-card-size-xs-section-margin` | `6px 0 0` | `margin` |
+| `--c-card-size-xs-section-padding` | `0 8px` | `padding` |
+| `--c-card-size-lg-title-font-size` | `24px` | `font-size` |
+| `--c-card-size-lg-section-margin` | `20px 0 0` | `margin` |
+| `--c-card-size-lg-section-padding` | `0 20px` | `padding` |
+| `--c-card-size-xl-title-font-size` | `28px` | `font-size` |
+| `--c-card-size-xl-section-margin` | `24px 0 0` | `margin` |
+| `--c-card-size-xl-section-padding` | `0 24px` | `padding` |
 | `--c-card-size-sm-section-margin` | `8px 0 0` | `margin` |
 | `--c-card-size-sm-section-padding` | `0 12px` | `padding` |
 | `--c-card-size-sm-title-font-size` | `16px` | `font-size` |
 | `--c-card-subtitle-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-card-subtitle-font-size` | `14px` | `font-size` |
+| `--c-card-subtitle-font-size` | `15px` | `font-size` |
 | `--c-card-subtitle-margin` | `10px 0 0 0` | `margin` |
-| `--c-card-subtitle-padding` | `0 12px` | `padding` |
+| `--c-card-subtitle-padding` | `0 16px` | `padding` |
 | `--c-card-subtitle-row-margin` | `-8px 0 0 0` | `margin` |
 | `--c-card-title-color` | `var(--c-sys-color-content-primary)` | `color` |
 | `--c-card-title-font-size` | `20px` | `font-size` |
 | `--c-card-title-margin` | `15px 0 0 0` | `margin` |
-| `--c-card-title-padding` | `0 12px` | `padding` |
+| `--c-card-title-padding` | `0 16px` | `padding` |
 | `--c-card-title-row-margin` | `12px 0` | `margin` |
 
 </div>
@@ -6650,7 +6741,7 @@ import type { CardProps } from '@cedar-design/ui-vue'
 
 ### 尺寸与动效
 
-横向内容区的间距由 `--c-card-content-row-margin` 控制。Card 只支持 sm / md 两档尺寸。动效时长 `--c-card-animation-duration` 默认为 `var(--c-sys-motion-duration-slow)`，曲线 `--c-card-animation-easing` 默认为 `var(--c-sys-motion-easing-standard)`；启用减少动态效果时关闭 Card 的过渡。
+横向内容区的间距由 `--c-card-content-row-margin` 控制。动效时长 `--c-card-animation-duration` 默认为 `var(--c-sys-motion-duration-slow)`，曲线 `--c-card-animation-easing` 默认为 `var(--c-sys-motion-easing-standard)`；启用减少动态效果时关闭 Card 的过渡。
 
 ---
 
@@ -47831,13 +47922,13 @@ Document: llms/zh-CN/components/section.md
 
 ### 普通分区
 
-默认使用 plain，可直接放入已有容器。
+设置 `variant="plain"` 可隐藏标题分隔线。
 
 Example source: src/section/__demos__/plain.vue
 
 ```vue
 <template>
-  <c-section title="成员权限" description="权限变更将应用到所有项目成员。">
+  <c-section variant="plain" title="成员权限" description="权限变更将应用到所有项目成员。">
     <dl>
       <dt>管理员</dt>
       <dd>管理成员、修改项目设置</dd>
@@ -47850,13 +47941,15 @@ Example source: src/section/__demos__/plain.vue
 
 ### 带线分区
 
+`heading-line` 是默认外观。
+
 heading-line 在标题后绘制装饰线，操作放入 extra 插槽。
 
 Example source: src/section/__demos__/line.vue
 
 ```vue
 <template>
-  <c-section title="发布记录" variant="heading-line">
+  <c-section title="发布记录">
     <template #extra>
       <c-button :aria-expanded="expanded" @click="expanded = !expanded">
         {{ expanded ? '只看最新' : '查看全部' }}
@@ -47895,21 +47988,61 @@ Example source: src/section/__demos__/outline.vue
 
 ### 分区尺寸
 
-两个标题都是四级标题。上方紧凑分区的标题为 14px，下方默认分区的标题为 16px。
+切换尺寸和标题层级即可实时预览。表中 h1 到 h6 各列是默认标题字号，虚线框标出内容区域。
+
+| 尺寸 | h1 | h2 | h3 | h4 | h5 | h6 | 卡片内边距 | 标题与内容间距 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `xs` | 24px | 20px | 18px | 16px | 14px | 12px | 8px | 8px |
+| `sm` | 24px | 20px | 18px | 16px | 14px | 12px | 12px | 12px |
+| `md` | 26px | 22px | 20px | 18px | 16px | 14px | 16px | 20px |
+| `lg` | 30px | 26px | 24px | 22px | 20px | 18px | 20px | 24px |
+| `xl` | 34px | 30px | 28px | 26px | 24px | 22px | 24px | 28px |
 
 Example source: src/section/__demos__/sizes.vue
 
 ```vue
+<script setup lang="ts">
+import { reactive } from 'vue'
+
+const headingLevels = [1, 2, 3, 4, 5, 6] as const
+const model = reactive<{ size: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; headingLevel: (typeof headingLevels)[number] }>({
+  size: 'md',
+  headingLevel: 4,
+})
+</script>
+
 <template>
   <c-space direction="column" align="stretch">
-    <c-section size="sm" variant="outline" show-marker :heading-level="4" title="成员权限">
-      管理员可邀请成员并修改项目设置。
-    </c-section>
-    <c-section size="md" variant="outline" show-marker :heading-level="4" title="成员权限">
-      管理员可邀请成员并修改项目设置。
+    <c-form :model="model" layout="vertical" edit-mode="direct">
+      <c-form-item field="size" label="分区尺寸">
+        <c-radio-group v-model="model.size" aria-label="分区尺寸">
+          <c-radio value="xs">超紧凑 (xs)</c-radio>
+          <c-radio value="sm">紧凑 (sm)</c-radio>
+          <c-radio value="md">默认 (md)</c-radio>
+          <c-radio value="lg">宽松 (lg)</c-radio>
+          <c-radio value="xl">超宽松 (xl)</c-radio>
+        </c-radio-group>
+      </c-form-item>
+      <c-form-item field="headingLevel" label="标题层级">
+        <c-radio-group v-model="model.headingLevel" aria-label="标题层级">
+          <c-radio v-for="level in headingLevels" :key="level" :value="level">h{{ level }}</c-radio>
+        </c-radio-group>
+      </c-form-item>
+    </c-form>
+    <output>渲染标签 <code>&lt;h{{ model.headingLevel }}&gt;</code></output>
+
+    <c-section :size="model.size" variant="outline" show-marker :heading-level="model.headingLevel" title="成员权限">
+      <div class="section-size-content">管理员可邀请成员并修改项目设置。</div>
     </c-section>
   </c-space>
 </template>
+
+<style scoped>
+.section-size-content {
+  border: 1px dashed currentColor;
+  padding: 8px;
+}
+</style>
 ```
 
 ### 有标题、仅说明与纯正文
@@ -48018,8 +48151,8 @@ const model = reactive({ name: '', department: '' })
 | id | 分区锚点 | 自动生成 |
 | title | 标题文本 | 空 |
 | description | 标题下方的说明 | 空 |
-| size | 视觉尺寸（sm / md），独立于标题层级 | md |
-| variant | 外观，可选 plain、heading-line、tonal、outline | 表单内 heading-line，其他场景 plain |
+| size | 视觉尺寸（xs / sm / md / lg / xl） | md |
+| variant | 外观，可选 plain、heading-line、tonal、outline | heading-line |
 | status | 状态决定色条、tonal 浅色背景和 outline 描边的颜色（default / info / success / warning / danger） | — |
 | heading-level | 标题层级，取值 1 至 6 | 表单内 3，其他场景 2 |
 | show-marker | 显示色条 | 表单内开启 |
@@ -48045,6 +48178,7 @@ const model = reactive({ name: '', department: '' })
 | `--c-section-card-background` | `var(--c-sys-color-surface-default)` | `background` |
 | `--c-section-card-padding` | `16px` | `padding` |
 | `--c-section-card-radius` | `6px` | `border-radius` |
+| `--c-section-content-size` | `14px` | `font-size` |
 | `--c-section-description-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-section-description-gap` | `4px` | `margin-block-start` |
 | `--c-section-description-line-height` | `20px` | `line-height` |
@@ -48057,6 +48191,22 @@ const model = reactive({ name: '', department: '' })
 | `--c-section-marker-height` | `16px` | `height` |
 | `--c-section-marker-radius` | `2px` | `border-radius` |
 | `--c-section-marker-width` | `3px` | `width`, `padding-inline-start` |
+| `--c-section-heading-size-step` | `1px` | 标题字号与行高的层级步长 |
+| `--c-section-size-lg-card-padding` | `20px` | `padding` |
+| `--c-section-size-lg-header-gap` | `24px` | `margin-block-end` |
+| `--c-section-size-lg-marker-height` | `20px` | `height` |
+| `--c-section-size-lg-title-line-height` | `28px` | `line-height` |
+| `--c-section-size-lg-title-size` | `20px` | `font-size` |
+| `--c-section-size-xs-card-padding` | `8px` | `padding` |
+| `--c-section-size-xs-header-gap` | `8px` | `margin-block-end` |
+| `--c-section-size-xs-marker-height` | `12px` | `height` |
+| `--c-section-size-xs-title-line-height` | `18px` | `line-height` |
+| `--c-section-size-xs-title-size` | `14px` | `font-size` |
+| `--c-section-size-xl-card-padding` | `24px` | `padding` |
+| `--c-section-size-xl-header-gap` | `28px` | `margin-block-end` |
+| `--c-section-size-xl-marker-height` | `24px` | `height` |
+| `--c-section-size-xl-title-line-height` | `32px` | `line-height` |
+| `--c-section-size-xl-title-size` | `24px` | `font-size` |
 | `--c-section-size-sm-card-padding` | `12px` | `padding` |
 | `--c-section-size-sm-header-gap` | `12px` | `margin-block-end` |
 | `--c-section-size-sm-marker-height` | `14px` | `height` |
@@ -74925,7 +75075,7 @@ Document: llms/zh-CN/guide/design-token-reference.md
 | `--c-card-footer-margin` | 公开 | `30px 0 0 0` | 本组件 CSS<br>`margin` |
 | `--c-card-footer-padding` | 公开 | `0 12px` | 本组件 CSS<br>`padding` |
 | `--c-card-footer-right` | 公开 | `13px` | 本组件 CSS<br>`inset-inline-end` |
-| `--c-card-hover-shadow` | 公开 | `0 4px 12px rgba(0, 0, 0, 0.12)` | 本组件 CSS<br>`box-shadow` |
+| `--c-card-hover-shadow` | 公开 | 海拔 1 | 本组件 CSS<br>`box-shadow` |
 | `--c-card-image-height` | 公开 | `200px` | 本组件 CSS<br>`height` |
 | `--c-card-image-width` | 公开 | `100%` | 本组件 CSS<br>`width` |
 | `--c-card-line-height` | 公开 | `22px` | 本组件 CSS<br>`line-height` |
