@@ -1,5 +1,7 @@
 # @cedar-design/shared-vue
 
+## 1.4.2
+
 ## 1.2.0
 
 ### Minor Changes

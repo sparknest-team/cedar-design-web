@@ -1,5 +1,7 @@
 # @cedar-design/cli-vue
 
+## 1.4.2
+
 ## 1.4.0
 
 ### Minor Changes

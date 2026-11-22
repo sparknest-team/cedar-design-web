@@ -7,7 +7,18 @@
     }
   ],
   "commit": false,
-  "fixed": [],
+  "fixed": [
+    [
+      "@cedar-design/cli-vue",
+      "@cedar-design/icons-vue",
+      "@cedar-design/preset-tailwindcss-vue",
+      "@cedar-design/preset-unocss-vue",
+      "@cedar-design/resolver-vue",
+      "@cedar-design/shared-vue",
+      "@cedar-design/ui-vue",
+      "@cedar-design/use-vue"
+    ]
+  ],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
