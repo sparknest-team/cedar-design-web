@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { globSync, readFileSync } from "node:fs";
+import { globSync, readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import { parse as parseTemplate } from "@vue/compiler-dom";
@@ -138,7 +138,14 @@ describe("all component demos follow the global language", () => {
   });
 
   it("keeps each Section example independent of the private language dictionary", () => {
-    for (const example of ["plain", "card", "line", "inline-form", "heading-options"]) {
+    // 从目录取真实示例：Section 改版会增删示例（card 已换成 outline/sizes），
+    // 硬编码清单只会把审计变成一次性快照，改名后就失效。
+    const examples = readdirSync(resolve(root, "src/section/__demos__"))
+      .filter((file: string) => file.endsWith(".vue") && !file.endsWith(".en-US.vue"))
+      .map((file: string) => file.slice(0, -".vue".length))
+      .sort();
+    expect(examples.length).toBeGreaterThan(0);
+    for (const example of examples) {
       for (const [readme, suffix] of [["README.md", ""], ["README.en-US.md", ".en-US"]]) {
         const demo = `./__demos__/${example}${suffix}.vue`;
         const directory = resolve(root, "src/section");
