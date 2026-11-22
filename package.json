@@ -65,7 +65,7 @@
     "check:pr-workflow": "node --test ../design-ui/bin/pr-workflow.test.mjs",
     "check:install-patches": "node --test scripts/quality/source-map-patch.test.mjs"
   },
-  "packageManager": "pnpm@9.6.0",
+  "packageManager": "pnpm@10.23.0+sha512.21c4e5698002ade97e4efe8b8b4a89a8de3c85a37919f957e7a0f30f38fbc5bbdd05980ffe29179b2fb6e6e691242e098d945d1601772cad0fef5fb6411e2a4b",
   "devDependencies": {
     "@cedar-design/cli-vue": "workspace:*",
     "@sparknest/theme-contract-vue": "link:../design-ui/packages/theme-contract",
@@ -82,23 +82,11 @@
     "picomatch": "4.0.4"
   },
   "engines": {
-    "pnpm": ">=9.6.0",
+    "pnpm": ">=10.23.0",
     "node": ">=26.13.1"
-  },
-  "pnpm": {
-    "overrides": {
-      "@sparknest/ui-build-vue": "link:../design-ui/packages/ui-build",
-      "@sparknest/ui-doc-preview-vue": "link:../design-ui/packages/ui-doc-preview",
-      "@sparknest/ui-icons-vue": "link:../design-ui/packages/ui-icons",
-      "@sparknest/theme-contract-vue": "link:../design-ui/packages/theme-contract"
-    },
-    "patchedDependencies": {
-      "@vuepress/plugin-slimsearch@2.0.0-rc.63": "patches/@vuepress__plugin-slimsearch@2.0.0-rc.63.patch",
-      "source-map-js@1.2.2": "patches/source-map-js@1.2.2.patch"
-    }
   },
   "volta": {
     "node": "26.13.1",
-    "pnpm": "9.6.0"
+    "pnpm": "10.23.0"
   }
 }

@@ -36,7 +36,7 @@ src/<component>/
 
 ## 开发命令
 
-工具链：Node 26.13.1（`.nvmrc` / `.node-version` / Volta；pnpm 通过 `.npmrc` 固定脚本和子进程运行时），pnpm 9.6.0，Vitest / UI / V8 coverage 5.1.0，Vite 8.3.8。仓库根目录执行下列命令。
+工具链：Node 26.13.1（`.nvmrc` / `.node-version` / Volta；pnpm 通过 `.npmrc` 固定脚本和子进程运行时），pnpm 10.23.0，Vitest / UI / V8 coverage 5.1.0，Vite 8.3.8。仓库根目录执行下列命令。
 
 | 用途 | 命令 |
 | --- | --- |

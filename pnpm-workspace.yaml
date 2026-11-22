@@ -12,6 +12,10 @@ catalog:
   '@types/node': ^26.0.0
 
 overrides:
+  '@sparknest/ui-build-vue': link:../design-ui/packages/ui-build
+  '@sparknest/ui-doc-preview-vue': link:../design-ui/packages/ui-doc-preview
+  '@sparknest/ui-icons-vue': link:../design-ui/packages/ui-icons
+  '@sparknest/theme-contract-vue': link:../design-ui/packages/theme-contract
   '@vueuse/core': 12.8.2
   '@vueuse/shared': 12.8.2
   '@vuepress/helper': 2.0.0-rc.63
@@ -47,4 +51,13 @@ overrides:
   '@vuepress/plugin-theme-data': 2.0.0-rc.64
   '@vuepress/plugin-watermark': 2.0.0-rc.63
 
+patchedDependencies:
+  '@vuepress/plugin-slimsearch@2.0.0-rc.63': patches/@vuepress__plugin-slimsearch@2.0.0-rc.63.patch
+  'source-map-js@1.2.2': patches/source-map-js@1.2.2.patch
 
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - core-js
+  - esbuild
+  - loca-boot-common
+  - loca-boot-core
