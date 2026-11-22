@@ -292,6 +292,7 @@ describe("demo locales", () => {
     vi.setSystemTime(date);
     const wrapper = await render("calendar");
     const options = { year: "numeric", month: "long", day: "numeric", weekday: "long" } as const;
+    // 包名在测试里由 vitest 别名指向源码入口，所以这里不需要构建产物。
     const runtime = await import("@cedar-design/ui-vue");
     const previous = runtime.getLocale();
     runtime.addI18nMessages({ "en-US": cedarEnUS });
