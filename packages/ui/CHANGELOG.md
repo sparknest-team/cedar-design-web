@@ -1,5 +1,16 @@
 # @cedar-design/ui-vue
 
+## 1.4.0
+
+### Minor Changes
+
+- [`3fdee8b`](https://github.com/sparknest-team/cedar-design-web/commit/3fdee8b656ca0f6ba0feadb722b56f4de82d4ac0) - 构建工具链统一到 Node 26 / pnpm 10，与 Maple、design-ui 保持同一套运行时：
+
+  - `engines.node` 下限 20 → `>=26.13.1`，`.nvmrc` / `.node-version` / `.npmrc use-node-version` / Volta 全部固定 26.13.1
+  - pnpm `9.6.0` → `10.23.0`：pnpm 10 不再读 `package.json` 的 `pnpm` 字段，`pnpm.overrides` 与 `patchedDependencies` 全部迁到 `pnpm-workspace.yaml`；否则 `@sparknest/*` 的 `link:` 覆盖会静默失效、VuePress 补丁不再应用
+  - 新增 `onlyBuiltDependencies`（`@parcel/watcher` / `core-js` / `esbuild` / `loca-boot-*`）：pnpm 10 默认拦截依赖的安装脚本，需显式放行
+  - `pnpm-lock.yaml` 按 pnpm 10 重新归一化：`overrides` 段补齐工作区级覆盖、`patchedDependencies` 哈希改为 sha256；解析结果与版本号不变
+
 ## 1.3.0
 
 ### Minor Changes
@@ -31,8 +42,6 @@
 
 - [#1](https://github.com/sparknest-team/cedar-design-web/pull/1) [`38eb17b`](https://github.com/sparknest-team/cedar-design-web/commit/38eb17b7aeb14ce04638b3e51c8286d7dab5787d) Thanks [@sparknest-team](https://github.com/sparknest-team)! - Replace CFormSection and Form.Section with CSection. Import Section and its types from the Section entry and rename c-form-section CSS overrides to c-section. Inside Form, Section retains the previous field layout and appearance.
 
-
-
 - [`c3b76e0`](https://github.com/sparknest-team/cedar-design-web/commit/c3b76e0d3578aecf4b446e527400d2ce12a78618) - Develop with Vue 3.5.45 while supporting consumers on Vue 3.2.47 and later Vue 3 releases. Preserve compatible component IDs and public declarations, and gate releases on packed runtime and type compatibility checks.
 
   The peer minimum is explicitly Vue 3.2.47. Consumers on Vue 3.2.0–3.2.46 must update to 3.2.47 or later in the Vue 3 line. No release is performed by this change.
@@ -40,8 +49,6 @@
 ### Patch Changes
 
 - [#6](https://github.com/sparknest-team/cedar-design-web/pull/6) [`6620155`](https://github.com/sparknest-team/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14) Thanks [@sparknest-team](https://github.com/sparknest-team)! - Keep a standard Textarea without a suffix within the field's width.
-
-
 
 - [#6](https://github.com/sparknest-team/cedar-design-web/pull/6) [`6620155`](https://github.com/sparknest-team/cedar-design-web/commit/6620155abe7d3bb91703996e62a3fe8eeb518b14) Thanks [@sparknest-team](https://github.com/sparknest-team)! - Fix keyboard listener types in Trigger while preserving Escape handling and listener cleanup across document windows.
 
@@ -52,11 +59,7 @@
 
 - [#5](https://github.com/sparknest-team/cedar-design-web/pull/5) [`60c9c1a`](https://github.com/sparknest-team/cedar-design-web/commit/60c9c1a504108fde2acfde47e84554770e57835b) Thanks [@sparknest-team](https://github.com/sparknest-team)! - Fix native form label targeting and nested field feedback, Cascader keyboard and search ownership, popup reference motion tracking, and inherited reading direction. Align Checkbox and Radio theme tokens and refresh their documentation.
 
-
-
 - [#1](https://github.com/sparknest-team/cedar-design-web/pull/1) [`38eb17b`](https://github.com/sparknest-team/cedar-design-web/commit/38eb17b7aeb14ce04638b3e51c8286d7dab5787d) Thanks [@sparknest-team](https://github.com/sparknest-team)! - Close an open menu branch when another menu is opened from the keyboard.
-
-
 
 - [#1](https://github.com/sparknest-team/cedar-design-web/pull/1) [`38eb17b`](https://github.com/sparknest-team/cedar-design-web/commit/38eb17b7aeb14ce04638b3e51c8286d7dab5787d) Thanks [@sparknest-team](https://github.com/sparknest-team)! - Remove patch-package from the published component library's runtime dependencies. Documentation-only dependency patches are managed by pnpm during development installation.
 
