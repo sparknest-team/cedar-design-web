@@ -1,5 +1,16 @@
 # @cedar-design/ui-vue
 
+## 1.4.1
+
+### Patch Changes
+
+- [#12](https://github.com/sparknest-team/cedar-design-web/pull/12) [`c631d6b`](https://github.com/sparknest-team/cedar-design-web/commit/c631d6be8846674e0bf220358b6c436945ad65cb) Thanks [@sparknest-team](https://github.com/sparknest-team)! - 重生成 token 参考表，并按 demo 控制项策略规范化 3 个示例。
+
+  - `docs/guide/design-token-reference.md` 由 `renderCatalog` 编译生成，此前落后于当前 token 声明；
+    design-ui 的 `check:token-reference` 会断言生成物与声明一致。
+  - `field-decorator/control-sizes.en-US`、`theme-provider/local-theme`（中英）的 Select
+    作为配置项必须包在 `form-item` 内，此前未规范化。
+
 ## 1.4.0
 
 ### Minor Changes
