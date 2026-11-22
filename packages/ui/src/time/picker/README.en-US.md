@@ -147,7 +147,7 @@ Complete properties, events, slots and instance boundaries match the standalone-
 
 ### TimePicker Slots
 
-| Slot | Prop |
+| Slot | Arguments |
 | --- | --- |
 | `extra` | `()` |
 | `actions` | `{ confirm: () => boolean; canConfirm: boolean; value: TimeValue \| Array<TimeValue \| undefined> \| undefined }` |

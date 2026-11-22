@@ -211,7 +211,7 @@ The default close button uses the current locale's close label; override it with
 
 ### Card Slots
 
-| Slot | Description | Prop |
+| Slot | Description | Arguments |
 | --- | --- | --- |
 | default | Body | — |
 | cover | Cover content; overrides the image-src image | — |
@@ -241,6 +241,7 @@ The component exports the following types
 ```ts
 import type { CardProps } from '@cedar-design/ui-vue'
 ```
+
 
 
 ## CSS Variables
@@ -280,8 +281,9 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-card-footer-bottom` | `9px` | `bottom` |
 | `--c-card-footer-margin` | `30px 0 0 0` | `margin` |
 | `--c-card-footer-padding` | `0 16px` | `padding` |
-| `--c-card-footer-right` | `13px` | `inset-inline-end` |
-| `--c-card-hover-shadow` | Elevation 1 | `box-shadow` |
+| `--c-card-footer-right` | `13px` | `inset-inline-end`, `inset-inline-start` |
+| `--c-card-heading-size-step` | `1px` | `font-size` |
+| `--c-card-hover-shadow` | `0 2px 1px -1px var(--c-shadow-key-umbra-opacity), 0 1px 1px 0 var(--c-shadow-key-penumbra-opacity), 0 1px 3px 0 var(--c-shadow-key-ambient-opacity)` | `box-shadow` |
 | `--c-card-image-height` | `200px` | `height` |
 | `--c-card-image-width` | `100%` | `width` |
 | `--c-card-line-height` | `22px` | `line-height` |
@@ -290,19 +292,18 @@ Use these variables to customize the component. Defaults may vary by the selecto
 | `--c-card-row-height` | `140px` | `min-height` |
 | `--c-card-row-image-width` | `140px` | `width` |
 | `--c-card-row-line-height` | `1.5` | `line-height` |
-| `--c-card-heading-size-step` | `1px` | `font-size` |
-| `--c-card-size-xs-title-font-size` | `15px` | `font-size` |
-| `--c-card-size-xs-section-margin` | `6px 0 0` | `margin` |
-| `--c-card-size-xs-section-padding` | `0 8px` | `padding` |
-| `--c-card-size-lg-title-font-size` | `24px` | `font-size` |
 | `--c-card-size-lg-section-margin` | `20px 0 0` | `margin` |
 | `--c-card-size-lg-section-padding` | `0 20px` | `padding` |
-| `--c-card-size-xl-title-font-size` | `28px` | `font-size` |
-| `--c-card-size-xl-section-margin` | `24px 0 0` | `margin` |
-| `--c-card-size-xl-section-padding` | `0 24px` | `padding` |
+| `--c-card-size-lg-title-font-size` | `24px` | `font-size` |
 | `--c-card-size-sm-section-margin` | `8px 0 0` | `margin` |
 | `--c-card-size-sm-section-padding` | `0 12px` | `padding` |
 | `--c-card-size-sm-title-font-size` | `16px` | `font-size` |
+| `--c-card-size-xl-section-margin` | `24px 0 0` | `margin` |
+| `--c-card-size-xl-section-padding` | `0 24px` | `padding` |
+| `--c-card-size-xl-title-font-size` | `28px` | `font-size` |
+| `--c-card-size-xs-section-margin` | `6px 0 0` | `margin` |
+| `--c-card-size-xs-section-padding` | `0 8px` | `padding` |
+| `--c-card-size-xs-title-font-size` | `15px` | `font-size` |
 | `--c-card-subtitle-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-card-subtitle-font-size` | `15px` | `font-size` |
 | `--c-card-subtitle-margin` | `10px 0 0 0` | `margin` |

@@ -493,7 +493,7 @@ With controlled model-value, the component proposes data and waits for parent ac
 
 ### Scheduler Slots
 
-| Slot | Prop | Description |
+| Slot | Arguments | Description |
 | ----------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | event | { event } | Event-button content |
 | sidebar | { startDrag, cancelDrag, disabled, unscheduled } | Replace the entire sidebar, e.g. with a resource tree/task pool; hidden when show-sidebar=false |

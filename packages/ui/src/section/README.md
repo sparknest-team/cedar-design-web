@@ -84,10 +84,10 @@ heading-line 在标题后绘制装饰线，操作放入 extra 插槽。
 
 | 变量 | 默认值／条件 | 影响的样式 |
 | --- | --- | --- |
-| `--c-section-accent-color` | `var(--c-sys-color-action-primary)` | `background` |
+| `--c-section-accent-color` | `var(--c-sys-color-action-primary)` | `background`, `background-color`, `border` |
 | `--c-section-after-gap` | `24px` | `margin-block`, `padding-block-start` |
 | `--c-section-before-gap` | `32px` | `padding-block-start` |
-| `--c-section-card-background` | `var(--c-sys-color-surface-default)` | `background` |
+| `--c-section-card-background` | `var(--c-sys-color-surface-default)` | `background-color` |
 | `--c-section-card-padding` | `16px` | `padding` |
 | `--c-section-card-radius` | `6px` | `border-radius` |
 | `--c-section-content-size` | `14px` | `font-size` |
@@ -95,39 +95,41 @@ heading-line 在标题后绘制装饰线，操作放入 extra 插槽。
 | `--c-section-description-gap` | `4px` | `margin-block-start` |
 | `--c-section-description-line-height` | `20px` | `line-height` |
 | `--c-section-description-size` | `13px` | `font-size` |
-| `--c-section-divider-color` | `var(--c-sys-color-border-default)` | `border`, `border-block-start` |
+| `--c-section-divider-color` | `var(--c-sys-color-border-default)` | `border-block-start` |
 | `--c-section-divider-width` | `1px` | `border`, `border-block-start` |
 | `--c-section-header-gap` | `20px` | `margin-block-end` |
 | `--c-section-heading-gap` | `16px` | `margin-inline-start` |
+| `--c-section-heading-size-step` | `1px` | `font-size`, `line-height` |
 | `--c-section-marker-gap` | `12px` | `padding-inline-end`, `padding-inline-start`, `row-gap` |
 | `--c-section-marker-height` | `16px` | `height` |
 | `--c-section-marker-radius` | `2px` | `border-radius` |
-| `--c-section-marker-width` | `3px` | `width`, `padding-inline-start` |
-| `--c-section-heading-size-step` | `1px` | 标题字号与行高的层级步长 |
+| `--c-section-marker-width` | `3px` | `padding-inline-start`, `width` |
+| `--c-section-outline-color` | `var(--c-sys-color-border-default)` | `border` |
 | `--c-section-size-lg-card-padding` | `20px` | `padding` |
 | `--c-section-size-lg-header-gap` | `24px` | `margin-block-end` |
 | `--c-section-size-lg-marker-height` | `20px` | `height` |
 | `--c-section-size-lg-title-line-height` | `28px` | `line-height` |
 | `--c-section-size-lg-title-size` | `20px` | `font-size` |
-| `--c-section-size-xs-card-padding` | `8px` | `padding` |
-| `--c-section-size-xs-header-gap` | `8px` | `margin-block-end` |
-| `--c-section-size-xs-marker-height` | `12px` | `height` |
-| `--c-section-size-xs-title-line-height` | `18px` | `line-height` |
-| `--c-section-size-xs-title-size` | `14px` | `font-size` |
-| `--c-section-size-xl-card-padding` | `24px` | `padding` |
-| `--c-section-size-xl-header-gap` | `28px` | `margin-block-end` |
-| `--c-section-size-xl-marker-height` | `24px` | `height` |
-| `--c-section-size-xl-title-line-height` | `32px` | `line-height` |
-| `--c-section-size-xl-title-size` | `24px` | `font-size` |
 | `--c-section-size-sm-card-padding` | `12px` | `padding` |
 | `--c-section-size-sm-header-gap` | `12px` | `margin-block-end` |
 | `--c-section-size-sm-marker-height` | `14px` | `height` |
 | `--c-section-size-sm-title-line-height` | `20px` | `line-height` |
 | `--c-section-size-sm-title-size` | `14px` | `font-size` |
+| `--c-section-size-xl-card-padding` | `24px` | `padding` |
+| `--c-section-size-xl-header-gap` | `28px` | `margin-block-end` |
+| `--c-section-size-xl-marker-height` | `24px` | `height` |
+| `--c-section-size-xl-title-line-height` | `32px` | `line-height` |
+| `--c-section-size-xl-title-size` | `24px` | `font-size` |
+| `--c-section-size-xs-card-padding` | `8px` | `padding` |
+| `--c-section-size-xs-header-gap` | `8px` | `margin-block-end` |
+| `--c-section-size-xs-marker-height` | `12px` | `height` |
+| `--c-section-size-xs-title-line-height` | `18px` | `line-height` |
+| `--c-section-size-xs-title-size` | `14px` | `font-size` |
 | `--c-section-title-color` | `var(--c-sys-color-content-primary)` | `color` |
 | `--c-section-title-line-height` | `24px` | `line-height` |
 | `--c-section-title-size` | `16px` | `font-size` |
 | `--c-section-title-weight` | `600` | `font-weight` |
+| `--c-section-tonal-background` | `var(--c-sys-color-surface-muted)` | `background-color` |
 
 </div>
 

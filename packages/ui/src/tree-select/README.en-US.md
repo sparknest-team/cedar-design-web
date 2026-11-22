@@ -157,7 +157,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 ### TreeSelect Slots
 
-| Slot | Prop | Description |
+| Slot | Arguments | Description |
 | --- | --- | --- |
 | trigger | — | Replace the default field trigger content. |
 | read | TreeSelectReadScope | Common reading { value, text }; text is the formatted value and is empty for empty values; empty-text affects default reading only. |

@@ -408,7 +408,7 @@ Single/multiple options both use popup-option-padding-horizontal. There is no im
 
 ### Option Slots
 
-| Slot | Description | Prop |
+| Slot | Description | Arguments |
 | ------- | -------------- | --------------------- |
 | default | Custom option content | { selected: boolean } |
 | icon | Option icon | - |
@@ -422,14 +422,14 @@ Single/multiple options both use popup-option-padding-horizontal. There is no im
 
 ### Optgroup Slots
 
-| Slot | Description | Prop |
+| Slot | Description | Arguments |
 | ------- | ---------------------- | ---- |
 | label | Option group title | - |
 | default | Option children inside a group | - |
 
 ### Select Slots
 
-| Slot | Description | Prop |
+| Slot | Description | Arguments |
 | ------------ | ------------------------ | --------------- |
 | default | Option / Optgroup children | - |
 | option | Custom option content | { data } |

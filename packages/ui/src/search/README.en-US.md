@@ -66,7 +66,6 @@ Enter a keyword and press Enter. The first example has one input and one submitt
 
 <!-- demo-config-notes:end -->
 
-
 <demo src="./__demos__/en-US/presentation.vue"></demo>
 
 ## Interaction and control
@@ -192,7 +191,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 ### Search Slots
 
-| Name | Description | Prop |
+| Name | Description | Arguments |
 | ---------------- | ------------------------------------ | ----------- |
 | `prefix` | Input prefix; replaces the default search icon | `-` |
 | `suffix` | Input suffix | `-` |

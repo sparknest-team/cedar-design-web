@@ -82,7 +82,7 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 ### Color Slots
 
-| Slot | Description | Prop |
+| Slot | Description | Arguments |
 | --- | --- | --- |
 | `default` | Custom color picker trigger | — |
 | `read` | Custom reading content | `{ value, text }` |

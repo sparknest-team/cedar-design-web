@@ -202,7 +202,7 @@ Inherits the nearest `dir="ltr|rtl"`, including runtime changes and local overri
 
 ### Button Slots
 
-| Slot | Description | Prop |
+| Slot | Description | Arguments |
 | ------- | -------------------------------- | ---- |
 | default | Button label; retained while loading | — |
 | icon | Leading icon; above label when stacked | — |
@@ -236,7 +236,7 @@ No custom events. `@click` forwards a native root event and may receive descenda
 
 ### ButtonGroup Slots
 
-| Slot | Description | Prop |
+| Slot | Description | Arguments |
 | --- | --- | --- |
 | default | Joined styling supports directly adjacent Button DOM nodes under the group root | — |
 
