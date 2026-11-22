@@ -627,23 +627,24 @@ permalink: /guide/design-token-reference/
 | `--c-card-close-button-size` | 公开 | `56px` | 本组件 CSS<br>`height`, `width` |
 | `--c-card-close-button-text-color` | 公开 | `var(--c-sys-color-content-on-dark)` | 本组件 CSS<br>`color` |
 | `--c-card-content-color` | 公开 | `var(--c-sys-color-content-tertiary)` | 本组件 CSS<br>`color` |
-| `--c-card-content-font-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
+| `--c-card-content-font-size` | 公开 | `15px` | 本组件 CSS<br>`font-size` |
 | `--c-card-content-margin` | 公开 | `16px 0 0 0` | 本组件 CSS<br>`margin` |
 | `--c-card-content-padding` | 公开 | `0 16px` | 本组件 CSS<br>`padding` |
 | `--c-card-content-row-margin` | 公开 | `16px 0 0 0` | 本组件 CSS<br>`margin` |
 | `--c-card-description-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
-| `--c-card-description-font-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
+| `--c-card-description-font-size` | 公开 | `15px` | 本组件 CSS<br>`font-size` |
 | `--c-card-description-margin` | 公开 | `20px 0 0 0` | 本组件 CSS<br>`margin` |
-| `--c-card-description-padding` | 公开 | `0 13px` | 本组件 CSS<br>`padding` |
+| `--c-card-description-padding` | 公开 | `0 16px` | 本组件 CSS<br>`padding` |
 | `--c-card-filled-background` | 公开 | `var(--c-sys-color-surface-muted)` | 本组件 CSS<br>`background-color` |
 | `--c-card-floating-buttons-bottom` | 公开 | `16px` | 本组件 CSS<br>`bottom` |
 | `--c-card-floating-buttons-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
 | `--c-card-floating-buttons-right` | 公开 | `16px` | 本组件 CSS<br>`inset-inline-end` |
 | `--c-card-footer-bottom` | 公开 | `9px` | 本组件 CSS<br>`bottom` |
 | `--c-card-footer-margin` | 公开 | `30px 0 0 0` | 本组件 CSS<br>`margin` |
-| `--c-card-footer-padding` | 公开 | `0 12px` | 本组件 CSS<br>`padding` |
-| `--c-card-footer-right` | 公开 | `13px` | 本组件 CSS<br>`inset-inline-end` |
-| `--c-card-hover-shadow` | 公开 | 海拔 1 | 本组件 CSS<br>`box-shadow` |
+| `--c-card-footer-padding` | 公开 | `0 16px` | 本组件 CSS<br>`padding` |
+| `--c-card-footer-right` | 公开 | `13px` | 本组件 CSS<br>`inset-inline-end`, `inset-inline-start` |
+| `--c-card-heading-size-step` | 公开 | `1px` | 本组件 CSS<br>`font-size` |
+| `--c-card-hover-shadow` | 公开 | `0 2px 1px -1px var(--c-shadow-key-umbra-opacity), 0 1px 1px 0 var(--c-shadow-key-penumbra-opacity), 0 1px 3px 0 var(--c-shadow-key-ambient-opacity)` | 本组件 CSS<br>`box-shadow` |
 | `--c-card-image-height` | 公开 | `200px` | 本组件 CSS<br>`height` |
 | `--c-card-image-width` | 公开 | `100%` | 本组件 CSS<br>`width` |
 | `--c-card-line-height` | 公开 | `22px` | 本组件 CSS<br>`line-height` |
@@ -652,18 +653,27 @@ permalink: /guide/design-token-reference/
 | `--c-card-row-height` | 公开 | `140px` | 本组件 CSS<br>`min-height` |
 | `--c-card-row-image-width` | 公开 | `140px` | 本组件 CSS<br>`width` |
 | `--c-card-row-line-height` | 公开 | `1.5` | 本组件 CSS<br>`line-height` |
+| `--c-card-size-lg-section-margin` | 公开 | `20px 0 0` | 本组件 CSS<br>`margin` |
+| `--c-card-size-lg-section-padding` | 公开 | `0 20px` | 本组件 CSS<br>`padding` |
+| `--c-card-size-lg-title-font-size` | 公开 | `24px` | 本组件 CSS<br>`font-size` |
 | `--c-card-size-sm-section-margin` | 公开 | `8px 0 0` | 本组件 CSS<br>`margin` |
 | `--c-card-size-sm-section-padding` | 公开 | `0 12px` | 本组件 CSS<br>`padding` |
 | `--c-card-size-sm-title-font-size` | 公开 | `16px` | 本组件 CSS<br>`font-size` |
+| `--c-card-size-xl-section-margin` | 公开 | `24px 0 0` | 本组件 CSS<br>`margin` |
+| `--c-card-size-xl-section-padding` | 公开 | `0 24px` | 本组件 CSS<br>`padding` |
+| `--c-card-size-xl-title-font-size` | 公开 | `28px` | 本组件 CSS<br>`font-size` |
+| `--c-card-size-xs-section-margin` | 公开 | `6px 0 0` | 本组件 CSS<br>`margin` |
+| `--c-card-size-xs-section-padding` | 公开 | `0 8px` | 本组件 CSS<br>`padding` |
+| `--c-card-size-xs-title-font-size` | 公开 | `15px` | 本组件 CSS<br>`font-size` |
 | `--c-card-subtitle-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
-| `--c-card-subtitle-font-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
+| `--c-card-subtitle-font-size` | 公开 | `15px` | 本组件 CSS<br>`font-size` |
 | `--c-card-subtitle-margin` | 公开 | `10px 0 0 0` | 本组件 CSS<br>`margin` |
-| `--c-card-subtitle-padding` | 公开 | `0 12px` | 本组件 CSS<br>`padding` |
+| `--c-card-subtitle-padding` | 公开 | `0 16px` | 本组件 CSS<br>`padding` |
 | `--c-card-subtitle-row-margin` | 公开 | `-8px 0 0 0` | 本组件 CSS<br>`margin` |
 | `--c-card-title-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
 | `--c-card-title-font-size` | 公开 | `20px` | 本组件 CSS<br>`font-size` |
 | `--c-card-title-margin` | 公开 | `15px 0 0 0` | 本组件 CSS<br>`margin` |
-| `--c-card-title-padding` | 公开 | `0 12px` | 本组件 CSS<br>`padding` |
+| `--c-card-title-padding` | 公开 | `0 16px` | 本组件 CSS<br>`padding` |
 | `--c-card-title-row-margin` | 公开 | `12px 0` | 本组件 CSS<br>`margin` |
 
 </div>
@@ -757,7 +767,7 @@ permalink: /guide/design-token-reference/
 | `--c-checkbox-animation-duration` | 公开 | `var(--c-transition-duration-3)` | 本组件 CSS<br>`transition` |
 | `--c-checkbox-control-border-radius` | 公开 | `2px` | 本组件 CSS<br>`border-radius` |
 | `--c-checkbox-control-color` | 公开 | `var(--c-sys-color-border-default)` | 本组件 CSS<br>`color` |
-| `--c-checkbox-control-color-checked` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color`, `outline` |
+| `--c-checkbox-control-color-checked` | 公开 | `var(--c-sys-color-action-primary)` | 本组件 CSS<br>`color` |
 | `--c-checkbox-control-color-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 | `--c-checkbox-control-color-error` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`color` |
 | `--c-checkbox-control-size` | 公开 | `14px` | 本组件 CSS<br>`height`, `width` |
@@ -773,7 +783,6 @@ permalink: /guide/design-token-reference/
 | `--c-internal-checkbox-border-radius` | 内部 | `var(--c-checkbox-control-border-radius)` | 本组件 CSS<br>`border-radius` |
 | `--c-internal-checkbox-border-width` | 内部 | `1px` | 本组件 CSS<br>`border` |
 | `--c-internal-checkbox-focus-width` | 内部 | `2px` | 本组件 CSS<br>`box-shadow` |
-| `--c-internal-checkbox-hover-background` | 内部 | `var(--c-sys-color-state-hover)` | 本组件 CSS<br>`background-color` |
 | `--c-internal-checkbox-mark-color` | 内部 | `var(--c-checkbox-mark-color)` | 本组件 CSS<br>`background-color`, `color` |
 | `--c-internal-checkbox-mark-height` | 内部 | `2px` | 本组件 CSS<br>`height` |
 | `--c-internal-checkbox-mark-radius` | 内部 | `1px` | 本组件 CSS<br>`border-radius` |
@@ -2317,7 +2326,7 @@ permalink: /guide/design-token-reference/
 | `--c-radio-action-padding` | 公开 | `calc((var(--c-internal-radio-mask-height) / 2) - (var(--c-radio-control-size) / 2))` | 本组件 CSS<br>`padding` |
 | `--c-radio-animation-duration` | 公开 | `var(--c-transition-duration-3)` | 本组件 CSS<br>`transition` |
 | `--c-radio-control-color` | 公开 | `var(--c-sys-color-border-default)` | 本组件 CSS<br>`color` |
-| `--c-radio-control-color-checked` | 公开 | `var(--c-sys-color-content-brand)` | 本组件 CSS<br>`color`, `outline` |
+| `--c-radio-control-color-checked` | 公开 | `var(--c-sys-color-action-primary)` | 本组件 CSS<br>`color` |
 | `--c-radio-control-color-disabled` | 公开 | `var(--c-sys-color-content-disabled)` | 本组件 CSS<br>`color` |
 | `--c-radio-control-color-error` | 公开 | `var(--c-sys-color-content-danger)` | 本组件 CSS<br>`box-shadow`, `color` |
 | `--c-radio-control-size` | 公开 | `14px` | 本组件 CSS<br>`font-size`, `height`, `padding`, `width` |
@@ -2556,33 +2565,52 @@ expand-duration／fade-duration 消费到 transform／opacity 过渡；运行时
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
-| `--c-section-accent-color` | 公开 | `var(--c-sys-color-action-primary)` | 本组件 CSS<br>`background` |
+| `--c-section-accent-color` | 公开 | `var(--c-sys-color-action-primary)` | 本组件 CSS<br>`background`, `background-color`, `border` |
 | `--c-section-after-gap` | 公开 | `24px` | 本组件 CSS<br>`margin-block`, `padding-block-start` |
 | `--c-section-before-gap` | 公开 | `32px` | 本组件 CSS<br>`padding-block-start` |
-| `--c-section-card-background` | 公开 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background` |
+| `--c-section-card-background` | 公开 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background-color` |
 | `--c-section-card-padding` | 公开 | `16px` | 本组件 CSS<br>`padding` |
 | `--c-section-card-radius` | 公开 | `6px` | 本组件 CSS<br>`border-radius` |
+| `--c-section-content-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
 | `--c-section-description-color` | 公开 | `var(--c-sys-color-content-secondary)` | 本组件 CSS<br>`color` |
 | `--c-section-description-gap` | 公开 | `4px` | 本组件 CSS<br>`margin-block-start` |
 | `--c-section-description-line-height` | 公开 | `20px` | 本组件 CSS<br>`line-height` |
 | `--c-section-description-size` | 公开 | `13px` | 本组件 CSS<br>`font-size` |
-| `--c-section-divider-color` | 公开 | `var(--c-sys-color-border-default)` | 本组件 CSS<br>`border`, `border-block-start` |
+| `--c-section-divider-color` | 公开 | `var(--c-sys-color-border-default)` | 本组件 CSS<br>`border-block-start` |
 | `--c-section-divider-width` | 公开 | `1px` | 本组件 CSS<br>`border`, `border-block-start` |
 | `--c-section-header-gap` | 公开 | `20px` | 本组件 CSS<br>`margin-block-end` |
 | `--c-section-heading-gap` | 公开 | `16px` | 本组件 CSS<br>`margin-inline-start` |
-| `--c-section-marker-gap` | 公开 | `12px` | 本组件 CSS<br>`padding-inline-end`, `row-gap` |
+| `--c-section-heading-size-step` | 公开 | `1px` | 本组件 CSS<br>`font-size`, `line-height` |
+| `--c-section-marker-gap` | 公开 | `12px` | 本组件 CSS<br>`padding-inline-end`, `padding-inline-start`, `row-gap` |
 | `--c-section-marker-height` | 公开 | `16px` | 本组件 CSS<br>`height` |
 | `--c-section-marker-radius` | 公开 | `2px` | 本组件 CSS<br>`border-radius` |
-| `--c-section-marker-width` | 公开 | `3px` | 本组件 CSS<br>`width` |
+| `--c-section-marker-width` | 公开 | `3px` | 本组件 CSS<br>`padding-inline-start`, `width` |
+| `--c-section-outline-color` | 公开 | `var(--c-sys-color-border-default)` | 本组件 CSS<br>`border` |
+| `--c-section-size-lg-card-padding` | 公开 | `20px` | 本组件 CSS<br>`padding` |
+| `--c-section-size-lg-header-gap` | 公开 | `24px` | 本组件 CSS<br>`margin-block-end` |
+| `--c-section-size-lg-marker-height` | 公开 | `20px` | 本组件 CSS<br>`height` |
+| `--c-section-size-lg-title-line-height` | 公开 | `28px` | 本组件 CSS<br>`line-height` |
+| `--c-section-size-lg-title-size` | 公开 | `20px` | 本组件 CSS<br>`font-size` |
 | `--c-section-size-sm-card-padding` | 公开 | `12px` | 本组件 CSS<br>`padding` |
 | `--c-section-size-sm-header-gap` | 公开 | `12px` | 本组件 CSS<br>`margin-block-end` |
 | `--c-section-size-sm-marker-height` | 公开 | `14px` | 本组件 CSS<br>`height` |
 | `--c-section-size-sm-title-line-height` | 公开 | `20px` | 本组件 CSS<br>`line-height` |
 | `--c-section-size-sm-title-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
+| `--c-section-size-xl-card-padding` | 公开 | `24px` | 本组件 CSS<br>`padding` |
+| `--c-section-size-xl-header-gap` | 公开 | `28px` | 本组件 CSS<br>`margin-block-end` |
+| `--c-section-size-xl-marker-height` | 公开 | `24px` | 本组件 CSS<br>`height` |
+| `--c-section-size-xl-title-line-height` | 公开 | `32px` | 本组件 CSS<br>`line-height` |
+| `--c-section-size-xl-title-size` | 公开 | `24px` | 本组件 CSS<br>`font-size` |
+| `--c-section-size-xs-card-padding` | 公开 | `8px` | 本组件 CSS<br>`padding` |
+| `--c-section-size-xs-header-gap` | 公开 | `8px` | 本组件 CSS<br>`margin-block-end` |
+| `--c-section-size-xs-marker-height` | 公开 | `12px` | 本组件 CSS<br>`height` |
+| `--c-section-size-xs-title-line-height` | 公开 | `18px` | 本组件 CSS<br>`line-height` |
+| `--c-section-size-xs-title-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
 | `--c-section-title-color` | 公开 | `var(--c-sys-color-content-primary)` | 本组件 CSS<br>`color` |
 | `--c-section-title-line-height` | 公开 | `24px` | 本组件 CSS<br>`line-height` |
 | `--c-section-title-size` | 公开 | `16px` | 本组件 CSS<br>`font-size` |
 | `--c-section-title-weight` | 公开 | `600` | 本组件 CSS<br>`font-weight` |
+| `--c-section-tonal-background` | 公开 | `var(--c-sys-color-surface-muted)` | 本组件 CSS<br>`background-color` |
 
 </div>
 
@@ -2966,6 +2994,17 @@ expand-duration／fade-duration 消费到 transform／opacity 过渡；运行时
 
 </div>
 
+## table/core
+
+声明来源: `src/table/core/style/token.less`
+
+<div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
+
+| 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
+| --- | --- | --- | --- |
+
+</div>
+
 ## table
 
 声明来源: `src/table/style/token.less`
@@ -2974,15 +3013,15 @@ expand-duration／fade-duration 消费到 transform／opacity 过渡；运行时
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
-| `--c-table-body-bg` | 公开 | `var(--c-color-bg-2)` | 本组件 CSS<br>`background-color` |
+| `--c-table-body-bg` | 公开 | `var(--c-color-bg-2)` | 本组件 CSS<br>`background`, `background-color` |
 | `--c-table-body-cell-bg` | 公开 | `var(--c-color-bg-2)` | 本组件 CSS<br>`background-color` |
 | `--c-table-body-cell-text-color` | 公开 | `rgb(var(--c-gray-10))` | 本组件 CSS<br>`color` |
 | `--c-table-body-min-height` | 公开 | `40px` | 本组件 CSS<br>`min-height` |
 | `--c-table-body-row-active-bg` | 公开 | `var(--c-color-fill-1)` | 本组件 CSS<br>`background-color` |
 | `--c-table-body-row-active-dark-bg` | 公开 | `var(--c-color-neutral-2)` | 本组件 CSS<br>`background-color` |
-| `--c-table-body-row-hover-bg` | 公开 | `var(--c-color-fill-1)` | 本组件 CSS<br>`background-color` |
+| `--c-table-body-row-hover-bg` | 公开 | `var(--c-color-fill-1)` | 本组件 CSS<br>`background`, `background-color` |
 | `--c-table-body-sorted-cell-bg` | 公开 | `var(--c-color-fill-1)` | 本组件 CSS<br>`background-color` |
-| `--c-table-body-stripe-row-bg` | 公开 | `var(--c-color-fill-1)` | 本组件 CSS<br>`background-color` |
+| `--c-table-body-stripe-row-bg` | 公开 | `var(--c-color-fill-1)` | 本组件 CSS<br>`background`, `background-color` |
 | `--c-table-border-color` | 公开 | `var(--c-color-neutral-3)` | 本组件 CSS<br>`border`, `border-bottom`, `border-left`, `border-right`, `border-top`, `box-shadow` |
 | `--c-table-border-radius` | 公开 | `var(--c-border-radius-md)` | 本组件 CSS<br>`border-radius`, `border-top-left-radius`, `border-top-right-radius` |
 | `--c-table-border-style` | 公开 | `solid` | 本组件 CSS<br>`border`, `border-bottom`, `border-left`, `border-right`, `border-top` |
@@ -3046,7 +3085,7 @@ expand-duration／fade-duration 消费到 transform／opacity 过渡；运行时
 | `--c-table-header-cell-action-color` | 公开 | `var(--c-color-text-3)` | 本组件 CSS<br>`color` |
 | `--c-table-header-cell-action-hover-color` | 公开 | `var(--c-color-text-1)` | 本组件 CSS<br>`color` |
 | `--c-table-header-cell-action-margin-left` | 公开 | `2px` | 本组件 CSS<br>`margin-inline-start` |
-| `--c-table-header-cell-bg` | 公开 | `var(--c-color-neutral-2)` | 本组件 CSS<br>`background-color` |
+| `--c-table-header-cell-bg` | 公开 | `var(--c-color-neutral-2)` | 本组件 CSS<br>`background`, `background-color` |
 | `--c-table-header-cell-text-color` | 公开 | `rgb(var(--c-gray-10))` | 本组件 CSS<br>`color` |
 | `--c-table-header-filters-icon-active-color` | 公开 | `var(--c-sys-color-action-primary)` | 本组件 CSS<br>`color` |
 | `--c-table-header-filters-icon-color` | 公开 | `var(--c-color-text-2)` | 本组件 CSS<br>`color` |
@@ -3078,25 +3117,25 @@ expand-duration／fade-duration 消费到 transform／opacity 过渡；运行时
 | `--c-table-size-lg-font-size` | 公开 | `var(--c-table-size-md-font-size)` | 本组件 CSS<br>`font-size` |
 | `--c-table-size-lg-header-font-size` | 公开 | `var(--c-table-size-md-header-font-size)` | 本组件 CSS<br>`font-size` |
 | `--c-table-size-lg-padding-horizontal` | 公开 | `var(--c-table-size-md-padding-horizontal)` | 本组件 CSS<br>`margin`, `padding` |
-| `--c-table-size-lg-padding-vertical` | 公开 | `var(--c-table-size-md-padding-vertical)` | 本组件 CSS<br>`margin`, `padding` |
+| `--c-table-size-lg-padding-vertical` | 公开 | `var(--c-table-size-md-padding-vertical)` | 本组件 CSS<br>`margin`, `padding`, `padding-block` |
 | `--c-table-size-md-extra-icon-font-size` | 公开 | `16px` | 本组件 CSS<br>`font-size` |
 | `--c-table-size-md-extra-padding-horizontal` | 公开 | `var(--c-spacing-2)` | 本组件 CSS<br>`padding` |
 | `--c-table-size-md-font-size` | 公开 | `var(--c-font-size-body-3)` | 本组件 CSS<br>`font-size` |
 | `--c-table-size-md-header-font-size` | 公开 | `var(--c-font-size-body-3)` | 本组件 CSS<br>`font-size` |
 | `--c-table-size-md-padding-horizontal` | 公开 | `var(--c-spacing-7)` | 本组件 CSS<br>`margin`, `padding` |
-| `--c-table-size-md-padding-vertical` | 公开 | `9px` | 本组件 CSS<br>`margin`, `padding` |
+| `--c-table-size-md-padding-vertical` | 公开 | `9px` | 本组件 CSS<br>`margin`, `padding`, `padding-block` |
 | `--c-table-size-sm-extra-icon-font-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
 | `--c-table-size-sm-extra-padding-horizontal` | 公开 | `var(--c-spacing-1)` | 本组件 CSS<br>`padding` |
 | `--c-table-size-sm-font-size` | 公开 | `var(--c-font-size-body-3)` | 本组件 CSS<br>`font-size` |
 | `--c-table-size-sm-header-font-size` | 公开 | `var(--c-font-size-body-3)` | 本组件 CSS<br>`font-size` |
 | `--c-table-size-sm-padding-horizontal` | 公开 | `var(--c-spacing-7)` | 本组件 CSS<br>`margin`, `padding` |
-| `--c-table-size-sm-padding-vertical` | 公开 | `5px` | 本组件 CSS<br>`margin`, `padding` |
+| `--c-table-size-sm-padding-vertical` | 公开 | `5px` | 本组件 CSS<br>`margin`, `padding`, `padding-block` |
 | `--c-table-size-xs-extra-icon-font-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
 | `--c-table-size-xs-extra-padding-horizontal` | 公开 | `var(--c-spacing-1)` | 本组件 CSS<br>`padding` |
 | `--c-table-size-xs-font-size` | 公开 | `var(--c-font-size-body-1)` | 本组件 CSS<br>`font-size` |
 | `--c-table-size-xs-header-font-size` | 公开 | `var(--c-font-size-body-1)` | 本组件 CSS<br>`font-size` |
 | `--c-table-size-xs-padding-horizontal` | 公开 | `var(--c-spacing-7)` | 本组件 CSS<br>`margin`, `padding` |
-| `--c-table-size-xs-padding-vertical` | 公开 | `2px` | 本组件 CSS<br>`margin`, `padding` |
+| `--c-table-size-xs-padding-vertical` | 公开 | `2px` | 本组件 CSS<br>`margin`, `padding`, `padding-block` |
 | `--c-table-sticky-scrollbar-height` | 公开 | `16px` | 本组件 CSS<br>`height` |
 | `--c-table-sticky-scrollbar-opacity` | 公开 | `0.8` | 本组件 CSS<br>`opacity` |
 | `--c-table-tfoot-bg` | 公开 | `var(--c-color-neutral-2)` | 本组件 CSS<br>`background-color` |

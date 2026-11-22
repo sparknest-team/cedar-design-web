@@ -19,7 +19,7 @@ import {
   translateRectBetweenDocuments,
 } from "./geometry";
 import { calculatePopupPosition, getSlotChangeRoots, getScrollElements, getScrollViews } from "./position";
-import { observeReferenceMotion } from './reference-motion'
+import { observeReferenceMotion, trackPopupAnchor } from './reference-motion'
 import { useTriggerResize } from "./resize";
 import type { TriggerPopupTranslate, TriggerStrategy } from "./types";
 
@@ -291,8 +291,11 @@ export function useTriggerPositioner(
 
   const motionUpdate = rafThrottle(update, () => context.popup.value?.ownerDocument.defaultView)
   let stopMotion: (() => void) | undefined
+  let stopTracking: (() => void) | undefined
 
   function unbindScroll() {
+    stopTracking?.()
+    stopTracking = undefined
     stopMotion?.()
     stopMotion = undefined
     motionUpdate.cancel()
@@ -328,6 +331,11 @@ export function useTriggerPositioner(
     const popup = context.popup.value;
     if (reference && popup && context.visible.value && !suspended && options.autoFixPosition) {
       stopMotion = observeReferenceMotion(reference, motionUpdate)
+      const updateAtScroll = options.updateAtScroll || context.globalUpdateAtScroll.value
+      const touchPoints = reference.ownerDocument.defaultView?.navigator.maxTouchPoints ?? 0
+      if (!context.point.value && (touchPoints > 0 || updateAtScroll)) {
+        stopTracking = trackPopupAnchor(reference, popup, update)
+      }
     }
     const active =
       options.updateAtScroll ||

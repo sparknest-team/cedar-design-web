@@ -7,7 +7,7 @@ const component: typeof SearchDefault = NamedSearch
 const rootComponent: typeof RootSearch = NamedSearch
 const props: SearchProps = {
   modelValue: null,
-  editMode: 'popup',
+  editMode: 'click',
   readPretty: true,
   loading: true,
   loadingMode: 'line',

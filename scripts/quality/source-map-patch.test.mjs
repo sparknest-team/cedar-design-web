@@ -43,6 +43,11 @@ test('published UI and install lifecycle do not depend on patch-package', () => 
     for (const field of ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies']) assert.equal(manifest[field]?.['patch-package'], undefined)
     assert.ok(!Object.values(manifest.scripts || {}).some(script => /\bpatch-package\b/.test(script)))
   }
-  assert.equal(rootManifest.pnpm.patchedDependencies['source-map-js@1.2.2'], 'patches/source-map-js@1.2.2.patch')
-  assert.equal(rootManifest.pnpm.patchedDependencies['@vuepress/plugin-slimsearch@2.0.0-rc.63'], 'patches/@vuepress__plugin-slimsearch@2.0.0-rc.63.patch')
+  // pnpm 10 把 patchedDependencies 从 package.json 的 pnpm 字段搬到 pnpm-workspace.yaml，
+  // 这里跟着读真源，并顺手确认旧位置确实已经空了。
+  const { parse: parseYaml } = require('yaml')
+  const workspace = parseYaml(readFileSync(join(root, 'pnpm-workspace.yaml'), 'utf8'))
+  assert.equal(workspace.pnpm?.patchedDependencies, undefined, 'patchedDependencies 必须只声明在 pnpm-workspace.yaml')
+  assert.equal(workspace.patchedDependencies['source-map-js@1.2.2'], 'patches/source-map-js@1.2.2.patch')
+  assert.equal(workspace.patchedDependencies['@vuepress/plugin-slimsearch@2.0.0-rc.63'], 'patches/@vuepress__plugin-slimsearch@2.0.0-rc.63.patch')
 })

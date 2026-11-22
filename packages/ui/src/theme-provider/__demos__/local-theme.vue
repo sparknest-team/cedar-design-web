@@ -9,10 +9,12 @@ const theme = ref<"light" | "dark">("dark");
     <c-theme-provider :theme="theme" class="theme-region">
       <p>外层主题 {{ theme }}</p>
       <c-button status="primary">主题按钮</c-button>
-      <c-select
-        :options="[{ label: 'Body popup inherits theme', value: 1 }]"
-        placeholder="打开弹层"
-      />
+      <c-form-item layout="vertical" hide-label>
+        <c-select
+          :options="[{ label: 'Body popup inherits theme', value: 1 }]"
+          placeholder="打开弹层"
+        />
+      </c-form-item>
       <c-theme-provider theme="light" class="theme-region">
         <p>嵌套亮色</p>
         <c-button variant="outline">亮色按钮</c-button>
