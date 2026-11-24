@@ -1,5 +1,20 @@
 # @cedar-design/ui-vue
 
+## 1.4.5
+
+### Patch Changes
+
+- [#27](https://github.com/sparknest-team/cedar-design-web/pull/27) [`9120382`](https://github.com/sparknest-team/cedar-design-web/commit/912038251152f8585603b2f15a52d559eef6de5a) Thanks [@sparknest-team](https://github.com/sparknest-team)! - section: `show-marker` 改为显式默认 `false`，去掉按表单上下文推断
+
+  `Section` 原来在未传 `show-marker` 时，会根据祖先是否存在 `Form` 自行决定是否显示标题色条
+  （`props.showMarker ?? !!form`），使同一份调用代码在表单内外视觉不同。现改为
+  `default: false`，需要色条时显式传入。`form` 上下文仍用于 `--form` 类名与 inline 布局。
+
+- Updated dependencies []:
+  - @cedar-design/icons-vue@1.4.5
+  - @cedar-design/shared-vue@1.4.5
+  - @cedar-design/use-vue@1.4.5
+
 ## 1.4.4
 
 ### Patch Changes
