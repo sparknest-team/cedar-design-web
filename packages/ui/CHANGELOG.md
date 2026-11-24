@@ -1,5 +1,16 @@
 # @cedar-design/ui-vue
 
+## 1.4.3
+
+### Patch Changes
+
+- [#19](https://github.com/sparknest-team/cedar-design-web/pull/19) [`7c39ab7`](https://github.com/sparknest-team/cedar-design-web/commit/7c39ab7c78e54506a9b088a57bd26fd5dbb7abac) Thanks [@sparknest-team](https://github.com/sparknest-team)! - 验证 npm Trusted Publishing（OIDC）配置：通过 GitHub Actions 真实发布一次以完成 trusted publisher 绑定验证，无功能性变更。
+  （注意：该仓库 .changeset/config.json 的 fixed 分组会把全部 8 个 @cedar-design/* 包一起抬到同一 patch 版本，这是预期行为。）
+- Updated dependencies []:
+  - @cedar-design/icons-vue@1.4.3
+  - @cedar-design/shared-vue@1.4.3
+  - @cedar-design/use-vue@1.4.3
+
 ## 1.4.2
 
 ### Patch Changes
