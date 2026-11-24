@@ -1,6 +1,11 @@
 {
   "name": "@cedar-design/preset-unocss-vue",
   "version": "1.4.3",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sparknest-team/cedar-design-web.git",
+    "directory": "packages/preset-unocss"
+  },
   "description": "UnoCSS preset for Cedar Design",
   "keywords": [
     "unocss",

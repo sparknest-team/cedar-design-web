@@ -1,6 +1,11 @@
 {
   "name": "@cedar-design/icons-vue",
   "version": "1.4.3",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sparknest-team/cedar-design-web.git",
+    "directory": "packages/icons"
+  },
   "description": "SVG icon components for Cedar",
   "license": "MIT",
   "type": "module",

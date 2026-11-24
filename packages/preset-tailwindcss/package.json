@@ -1,6 +1,11 @@
 {
   "name": "@cedar-design/preset-tailwindcss-vue",
   "version": "1.4.3",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sparknest-team/cedar-design-web.git",
+    "directory": "packages/preset-tailwindcss"
+  },
   "description": "Tailwind CSS preset for Cedar Design",
   "keywords": [
     "tailwindcss",

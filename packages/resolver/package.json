@@ -1,6 +1,11 @@
 {
   "name": "@cedar-design/resolver-vue",
   "version": "1.4.3",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sparknest-team/cedar-design-web.git",
+    "directory": "packages/resolver"
+  },
   "description": "Cedar resolver for unplugin-vue-components and unplugin-auto-import",
   "license": "MIT",
   "type": "module",
