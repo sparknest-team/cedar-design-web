@@ -12,7 +12,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sparknest-team/cedar-design-web"
+    "url": "git+https://github.com/sparknest-team/cedar-design-web.git",
+    "directory": "packages/use"
   },
   "license": "MIT",
   "author": "shuai.meng",

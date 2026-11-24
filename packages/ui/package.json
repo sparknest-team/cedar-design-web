@@ -1,6 +1,11 @@
 {
   "name": "@cedar-design/ui-vue",
   "version": "1.4.3",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sparknest-team/cedar-design-web.git",
+    "directory": "packages/ui"
+  },
   "main": "lib/index.js",
   "module": "es/index.mjs",
   "types": "types/index.d.ts",
