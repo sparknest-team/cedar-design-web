@@ -240,7 +240,7 @@ describe("demo locales", () => {
     const [{ default: Demo }, { default: Section }] = await Promise.all([load(), plugins.Section()]);
     const wrapper = mount(Demo, { global: { plugins: [Section] } });
     wrappers.push(wrapper);
-    expect(wrapper.get("section :is(h2, h3)").text()).toBe(heading);
+    expect(wrapper.get("section :is(h3, h4)").text()).toBe(heading);
   });
   it.each(Object.keys(demos))(
     "renders both languages for %s",
@@ -277,11 +277,11 @@ describe("demo locales", () => {
       expect(section.find(".c-section__label--marked").exists()).toBe(true);
       await marker.setValue(false);
       expect(section.find(".c-section__label--marked").exists()).toBe(false);
-      expect(section.get("h2").text()).toBe("成员权限");
+      expect(section.get("h4").text()).toBe("成员权限");
       await description.setValue(true);
       expect(section.get(".c-section__description").text()).toContain("权限变更");
       await title.setValue(false);
-      expect(section.find("h2").exists()).toBe(false);
+      expect(section.find("h4").exists()).toBe(false);
       expect(section.find(".c-section__description").exists()).toBe(true);
       await description.setValue(false);
     }
