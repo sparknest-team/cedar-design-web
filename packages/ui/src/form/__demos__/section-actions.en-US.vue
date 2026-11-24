@@ -82,6 +82,7 @@ function clearSection() {
       <c-section
         title="Onsite handling"
         description="Use a template to fill this section. Clearing it preserves the skill level outside the section."
+        show-marker
       >
         <template #extra>
           <c-space size="sm" wrap>
