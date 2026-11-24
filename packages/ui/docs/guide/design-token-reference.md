@@ -783,6 +783,7 @@ permalink: /guide/design-token-reference/
 | `--c-internal-checkbox-border-radius` | 内部 | `var(--c-checkbox-control-border-radius)` | 本组件 CSS<br>`border-radius` |
 | `--c-internal-checkbox-border-width` | 内部 | `1px` | 本组件 CSS<br>`border` |
 | `--c-internal-checkbox-focus-width` | 内部 | `2px` | 本组件 CSS<br>`box-shadow` |
+| `--c-internal-checkbox-hover-background` | 内部 | `var(--c-sys-color-surface-muted)` | 本组件 CSS<br>`background-color` |
 | `--c-internal-checkbox-mark-color` | 内部 | `var(--c-checkbox-mark-color)` | 本组件 CSS<br>`background-color`, `color` |
 | `--c-internal-checkbox-mark-height` | 内部 | `2px` | 本组件 CSS<br>`height` |
 | `--c-internal-checkbox-mark-radius` | 内部 | `1px` | 本组件 CSS<br>`border-radius` |
