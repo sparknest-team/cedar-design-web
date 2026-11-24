@@ -50,9 +50,9 @@ describe("Section", () => {
       const section = wrapper.get("section");
       expect(section.classes()).toContain("c-section--form");
       expect(section.get(".c-section__line").exists()).toBe(true);
-      expect(section.get("h3").text()).toBe("现场处置");
+      expect(section.get("h4").text()).toBe("现场处置");
       expect(section.attributes("aria-labelledby")).toBe(
-        section.get("h3").attributes("id"),
+        section.get("h4").attributes("id"),
       );
       expect(section.findAll("input")).toHaveLength(1);
       expect(section.element.nextElementSibling?.textContent).toContain(
@@ -212,7 +212,7 @@ describe("Section", () => {
     expect(sections[0].id).not.toBe(sections[1].id);
     for (const section of sections) {
       expect(section.getAttribute("aria-labelledby")).toBe(
-        section.querySelector("h2")?.id,
+        section.querySelector("h4")?.id,
       );
       expect(section.getAttribute("aria-describedby")).toBe(
         section.querySelector(".c-section__description")?.id,

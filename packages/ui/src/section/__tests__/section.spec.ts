@@ -3,13 +3,13 @@ import { mount } from '@vue/test-utils'
 import { expect, it } from 'vitest'
 import Section from '..'
 
-it('installs CSection and defaults to a lined h2 without a marker', () => {
+it('installs CSection and defaults to a lined h4 without a marker', () => {
   expect(createApp({}).use(Section).component('CSection')).toBe(Section)
   const wrapper = mount(Section, {
     props: { id: 'members', title: 'Members', description: 'Project access' },
   })
   expect(wrapper.classes()).toContain('c-section--heading-line')
-  expect(wrapper.get('h2').attributes('id')).toBe(wrapper.attributes('aria-labelledby'))
+  expect(wrapper.get('h4').attributes('id')).toBe(wrapper.attributes('aria-labelledby'))
   expect(wrapper.get('.c-section__description').attributes('id')).toBe(wrapper.attributes('aria-describedby'))
   expect(wrapper.find('.c-section__label--marked').exists()).toBe(false)
   expect(wrapper.find('.c-section__line').exists()).toBe(true)

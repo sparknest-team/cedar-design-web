@@ -82,7 +82,7 @@ Card contains the report, Tabs switch analysis views, and Section groups the con
 
 ### Long title and tooltip
 
-<demo src="./__demos__/tooltip.vue"></demo>
+<demo src="./__demos__/tooltip.en-US.vue"></demo>
 
 ## Customization and slots
 

@@ -33,6 +33,7 @@ export const sectionProps = {
   /** 分区标题在文档中的层级。 */
   headingLevel: {
     type: Number as PropType<SectionHeadingLevel>,
+    default: 4,
     validator: (level: number) => Number.isInteger(level) && level >= 1 && level <= 6,
   },
 }

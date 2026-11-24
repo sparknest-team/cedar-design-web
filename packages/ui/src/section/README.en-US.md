@@ -63,7 +63,7 @@ Inside Form, Section defaults to heading-line with a heading marker. The fields 
 | size | Visual size (xs / sm / md / lg / xl) | md |
 | variant | Appearance, plain, heading-line, tonal or outline | heading-line |
 | status | Status colors the marker, tonal fill and outline (default / info / success / warning / danger) | — |
-| heading-level | HTML heading level from 1 to 6 | 3 inside Form, otherwise 2 |
+| heading-level | HTML heading level from 1 to 6 | `4` |
 | show-marker | Show the marker | Enabled inside Form |
 | marker-placement | Marker placement (`title` or `section`) | `title` |
 
