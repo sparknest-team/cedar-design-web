@@ -1,6 +1,6 @@
 {
   "name": "@cedar-design/resolver-vue",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Cedar resolver for unplugin-vue-components and unplugin-auto-import",
   "license": "MIT",
   "type": "module",
