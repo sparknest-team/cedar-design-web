@@ -48,6 +48,7 @@ const normalizeMessageService = async (source) =>
   normalize(await normalizeTypeScript(source
     .replace("import { getPrefixCls } from '../_utils/global-config'\n", "")
     .replaceAll("../_utils/popup-container", "../utils/popup-container")
+    .replaceAll("../_utils/visual-surface", "../utils/visual-surface")
     .replaceAll("./Message.vue", "./message.vue")))
     .replace(
       "[getPrefixCls(message-list)`${getPrefixCls(message-list)}-${position}`]",
