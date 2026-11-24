@@ -51,9 +51,9 @@ jobs:
         working-directory: maple-design-mobile
       - run: pnpm install --frozen-lockfile
       - run: pnpm spec:check
+      - run: pnpm build:lib
       - run: pnpm lint
       - run: pnpm test
-      - run: pnpm build:lib
       - run: pnpm package:check
       # WARNING 临时放宽 2026-11-24，恢复时删除下方的 continue-on-error 即可。
       - name: Require Quality for this main commit
