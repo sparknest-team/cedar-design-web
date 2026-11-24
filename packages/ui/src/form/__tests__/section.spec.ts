@@ -220,4 +220,23 @@ describe("Section", () => {
       expect(section.querySelector("button")?.textContent).toBe("引用模板");
     }
   });
+
+  it("shows the marker inside Form only when enabled explicitly", () => {
+    const wrapper = mount(Form, {
+      slots: {
+        default: () => [
+          h(Section, { title: "Default marker" }),
+          h(Section, { title: "Enabled marker", showMarker: true }),
+        ],
+      },
+    });
+    try {
+      const [section, markedSection] = wrapper.findAll("section");
+      expect(section.classes()).toContain("c-section--form");
+      expect(section.find(".c-section__label--marked").exists()).toBe(false);
+      expect(markedSection.find(".c-section__label--marked").exists()).toBe(true);
+    } finally {
+      wrapper.unmount();
+    }
+  });
 });

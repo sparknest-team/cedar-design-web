@@ -82,6 +82,7 @@ function clearSection() {
       <c-section
         title="现场处置"
         description="引用模板填充本分区；清空后，分区外的技能等级保持不变。"
+        show-marker
       >
         <template #extra>
           <c-space size="sm" wrap>

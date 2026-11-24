@@ -6,7 +6,7 @@ const model = reactive({ name: '', department: '' })
 
 <template>
   <c-form :model="model" layout="inline" edit-mode="direct">
-    <c-section title="Member details">
+    <c-section title="Member details" show-marker>
       <c-form-item field="name" label="Name">
         <c-input v-model="model.name" />
       </c-form-item>
