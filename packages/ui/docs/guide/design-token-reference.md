@@ -2566,7 +2566,7 @@ expand-duration／fade-duration 消费到 transform／opacity 过渡；运行时
 
 | 变量 | 层级 | 声明值／条件 | 消费路径／CSS 属性 |
 | --- | --- | --- | --- |
-| `--c-section-accent-color` | 公开 | `var(--c-sys-color-action-primary)` | 本组件 CSS<br>`background`, `background-color`, `border` |
+| `--c-section-accent-color` | 公开 | `var(--c-sys-color-action-primary)` | 本组件 CSS<br>`background`, `border`, `border-inline-start` |
 | `--c-section-after-gap` | 公开 | `24px` | 本组件 CSS<br>`margin-block`, `padding-block-start` |
 | `--c-section-before-gap` | 公开 | `32px` | 本组件 CSS<br>`padding-block-start` |
 | `--c-section-card-background` | 公开 | `var(--c-sys-color-surface-default)` | 本组件 CSS<br>`background-color` |
@@ -2578,32 +2578,32 @@ expand-duration／fade-duration 消费到 transform／opacity 过渡；运行时
 | `--c-section-description-line-height` | 公开 | `20px` | 本组件 CSS<br>`line-height` |
 | `--c-section-description-size` | 公开 | `13px` | 本组件 CSS<br>`font-size` |
 | `--c-section-divider-color` | 公开 | `var(--c-sys-color-border-default)` | 本组件 CSS<br>`border-block-start` |
-| `--c-section-divider-width` | 公开 | `1px` | 本组件 CSS<br>`border`, `border-block-start` |
-| `--c-section-header-gap` | 公开 | `20px` | 本组件 CSS<br>`margin-block-end` |
+| `--c-section-divider-width` | 公开 | `1px` | 本组件 CSS<br>`border`, `border-block-start`, `border-radius` |
+| `--c-section-header-gap` | 公开 | `20px` | 本组件 CSS<br>`margin-block-start` |
 | `--c-section-heading-gap` | 公开 | `16px` | 本组件 CSS<br>`margin-inline-start` |
 | `--c-section-heading-size-step` | 公开 | `1px` | 本组件 CSS<br>`font-size`, `line-height` |
 | `--c-section-marker-gap` | 公开 | `12px` | 本组件 CSS<br>`padding-inline-end`, `padding-inline-start`, `row-gap` |
 | `--c-section-marker-height` | 公开 | `16px` | 本组件 CSS<br>`height` |
 | `--c-section-marker-radius` | 公开 | `2px` | 本组件 CSS<br>`border-radius` |
-| `--c-section-marker-width` | 公开 | `3px` | 本组件 CSS<br>`padding-inline-start`, `width` |
+| `--c-section-marker-width` | 公开 | `3px` | 本组件 CSS<br>`border-inline-start`, `padding-inline-start`, `width` |
 | `--c-section-outline-color` | 公开 | `var(--c-sys-color-border-default)` | 本组件 CSS<br>`border` |
 | `--c-section-size-lg-card-padding` | 公开 | `20px` | 本组件 CSS<br>`padding` |
-| `--c-section-size-lg-header-gap` | 公开 | `24px` | 本组件 CSS<br>`margin-block-end` |
+| `--c-section-size-lg-header-gap` | 公开 | `24px` | 本组件 CSS<br>`margin-block-start` |
 | `--c-section-size-lg-marker-height` | 公开 | `20px` | 本组件 CSS<br>`height` |
 | `--c-section-size-lg-title-line-height` | 公开 | `28px` | 本组件 CSS<br>`line-height` |
 | `--c-section-size-lg-title-size` | 公开 | `20px` | 本组件 CSS<br>`font-size` |
 | `--c-section-size-sm-card-padding` | 公开 | `12px` | 本组件 CSS<br>`padding` |
-| `--c-section-size-sm-header-gap` | 公开 | `12px` | 本组件 CSS<br>`margin-block-end` |
+| `--c-section-size-sm-header-gap` | 公开 | `12px` | 本组件 CSS<br>`margin-block-start` |
 | `--c-section-size-sm-marker-height` | 公开 | `14px` | 本组件 CSS<br>`height` |
 | `--c-section-size-sm-title-line-height` | 公开 | `20px` | 本组件 CSS<br>`line-height` |
 | `--c-section-size-sm-title-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
 | `--c-section-size-xl-card-padding` | 公开 | `24px` | 本组件 CSS<br>`padding` |
-| `--c-section-size-xl-header-gap` | 公开 | `28px` | 本组件 CSS<br>`margin-block-end` |
+| `--c-section-size-xl-header-gap` | 公开 | `28px` | 本组件 CSS<br>`margin-block-start` |
 | `--c-section-size-xl-marker-height` | 公开 | `24px` | 本组件 CSS<br>`height` |
 | `--c-section-size-xl-title-line-height` | 公开 | `32px` | 本组件 CSS<br>`line-height` |
 | `--c-section-size-xl-title-size` | 公开 | `24px` | 本组件 CSS<br>`font-size` |
 | `--c-section-size-xs-card-padding` | 公开 | `8px` | 本组件 CSS<br>`padding` |
-| `--c-section-size-xs-header-gap` | 公开 | `8px` | 本组件 CSS<br>`margin-block-end` |
+| `--c-section-size-xs-header-gap` | 公开 | `8px` | 本组件 CSS<br>`margin-block-start` |
 | `--c-section-size-xs-marker-height` | 公开 | `12px` | 本组件 CSS<br>`height` |
 | `--c-section-size-xs-title-line-height` | 公开 | `18px` | 本组件 CSS<br>`line-height` |
 | `--c-section-size-xs-title-size` | 公开 | `14px` | 本组件 CSS<br>`font-size` |
