@@ -45,6 +45,8 @@
     "prepare": "node scripts/git-hooks.mjs install",
     "preview": "pnpm --filter @cedar-design/ui-vue preview",
     "quality": "pnpm check:demo-i18n && pnpm check:install-patches && pnpm check:packages && pnpm check:publish-metadata && pnpm check:shared && pnpm check:runtime-dependencies && pnpm check:vue-compat:source && pnpm build:lib && pnpm check:vue-compat && pnpm spec:check && pnpm check:style-vars && pnpm lint && pnpm typecheck && pnpm test && pnpm check:direction && pnpm check:cli && pnpm check:resolver && pnpm check:doc-pipeline && pnpm build:doc && pnpm package:check && pnpm check:published-environment && pnpm check:docs-theme && pnpm check:docs-components && pnpm check:compatibility",
+    "quality:fast": "pnpm check:demo-i18n && pnpm check:install-patches && pnpm check:packages && pnpm check:publish-metadata && pnpm check:shared && pnpm check:runtime-dependencies && pnpm check:vue-compat:source && pnpm build:lib && pnpm check:vue-compat && pnpm spec:check && pnpm check:style-vars && pnpm lint && pnpm typecheck && pnpm test && pnpm check:direction && pnpm check:cli && pnpm check:resolver && pnpm package:check && pnpm check:published-environment",
+    "quality:slow": "pnpm build:lib && pnpm check:doc-pipeline && pnpm build:doc && pnpm check:docs-theme && pnpm check:docs-components && pnpm check:compatibility",
     "release": "node scripts/release.mjs",
     "spec:check": "node scripts/quality/spec-check.mjs",
     "test": "pnpm --filter @cedar-design/ui-vue test",
