@@ -63,11 +63,16 @@
   &--default > &__surface {
     --c-internal-section-accent: var(--c-color-border-3);
   }
-  @status-palettes: { info: blue; success: success; warning: warning; danger: danger; };
+  @status-palettes: {
+    info: blue;
+    success: success;
+    warning: warning;
+    danger: danger;
+  };
   each(@status-palettes, {
     &--@{key} > &__surface {
       --c-internal-section-accent: var(~'--c-sys-color-status-@{key}');
-      --c-internal-section-fill: color-mix(in srgb, rgb(var(~'--c-@{value}-1')) 70%, var(--c-section-card-background));
+      --c-internal-section-fill: color-mix(in srgb, rgb(var(~'--c-@{value}-1')) 45%, var(--c-section-card-background));
       --c-internal-section-outline: var(--c-internal-section-accent);
     }
   });
@@ -85,16 +90,16 @@
   &__surface--marked,
   &__label--marked {
     position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      inset-inline-start: 0;
-      width: var(--c-section-marker-width);
-      border-radius: var(--c-section-marker-radius);
-      background: var(--c-internal-section-accent);
-      pointer-events: none;
-    }
+  }
+  &__surface--marked::before,
+  &__label--marked > &__title::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: 0;
+    width: var(--c-section-marker-width);
+    border-radius: var(--c-section-marker-radius);
+    background: var(--c-internal-section-accent);
+    pointer-events: none;
   }
   &__surface--marked::before {
     inset-block: 0;
@@ -110,7 +115,7 @@
   &--outline > &__surface--marked::before {
     border-radius: max(0px, calc(var(--c-section-card-radius) - var(--c-section-divider-width)));
   }
-  &__label--marked::before {
+  &__label--marked > &__title::before {
     top: 50%;
     height: var(--c-internal-section-marker-height);
     transform: translateY(-50%);
@@ -149,7 +154,13 @@
     font-weight: var(--c-section-title-weight);
     line-height: calc(var(--c-internal-section-title-line-height) + var(--c-internal-section-heading-offset, 0px));
   }
-  @heading-offsets: 10, 6, 4, 2, 0, -2;
+  @heading-offsets:
+    10,
+    6,
+    4,
+    2,
+    0,
+    -2;
   each(@heading-offsets, {
     h@{index}&__title {
       --c-internal-section-heading-offset: calc(@value * var(--c-section-heading-size-step));
@@ -163,8 +174,7 @@
     margin-inline-start: var(--c-section-heading-gap);
   }
   &__line {
-    border-block-start: var(--c-section-divider-width) solid
-      var(--c-section-divider-color);
+    border-block-start: var(--c-section-divider-width) solid var(--c-section-divider-color);
   }
   &__extra {
     max-width: 100%;
@@ -201,11 +211,7 @@
   padding-block-start: max(
     0px,
     calc(
-      var(--c-section-before-gap) -
-        var(
-          --c-internal-form-item-margin-bottom,
-          var(--c-form-size-md-item-margin-bottom)
-        )
+      var(--c-section-before-gap) - var(--c-internal-form-item-margin-bottom, var(--c-form-size-md-item-margin-bottom))
     )
   );
 }
@@ -214,8 +220,5 @@
   padding-block-start: var(--c-section-before-gap);
 }
 .c-section--form + .c-section--form {
-  padding-block-start: max(
-    0px,
-    calc(var(--c-section-before-gap) - var(--c-section-after-gap))
-  );
+  padding-block-start: max(0px, calc(var(--c-section-before-gap) - var(--c-section-after-gap)));
 }

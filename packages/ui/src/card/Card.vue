@@ -13,7 +13,6 @@
         n(`--variant-${variant}`),
         [hoverable, n('--hoverable')],
 
-
         [variant === 'default', formatElevation(elevation, 1)],
       )
     "
@@ -62,11 +61,7 @@
       <div :class="n('container')">
         <slot name="header">
           <div v-if="title || $slots.title || $slots['title-action']" :class="n('title')" :style="titleStyle">
-            <component
-              :is="`h${headingLevel}`"
-              v-if="headingLevel && (title || $slots.title)"
-              :class="n('title-text')"
-            >
+            <component :is="`h${headingLevel}`" v-if="headingLevel && (title || $slots.title)" :class="n('title-text')">
               <slot name="title" :slot-class="n('title-text')">{{ title }}</slot>
             </component>
             <slot v-else name="title" :slot-class="n('title-text')">
@@ -84,16 +79,13 @@
         <div v-if="topDivider" :class="n('divider')">
           <BaseDivider :spacing="0" />
         </div>
-        <div v-if="$slots.default" :class="n('content')">
+        <OptionalSlotBody :class="n('content')">
           <slot />
-        </div>
+        </OptionalSlotBody>
         <div v-if="bottomDivider" :class="n('divider')">
           <BaseDivider :spacing="0" />
         </div>
-        <div
-          v-if="$slots.footer"
-          :class="classes(n('footer'), [footerAlign !== 'end', n(`footer--${footerAlign}`)])"
-        >
+        <div v-if="$slots.footer" :class="classes(n('footer'), [footerAlign !== 'end', n(`footer--${footerAlign}`)])">
           <slot name="footer" />
         </div>
         <div
@@ -125,7 +117,12 @@
         }"
       >
         <slot name="close-button">
-          <BaseButton data-card-cover :class="classes(n('close-button'), n('$-elevation--6'))" :aria-label="props.closeButtonAriaLabel ?? closeLabel" @click.stop="close">
+          <BaseButton
+            data-card-cover
+            :class="classes(n('close-button'), n('$-elevation--6'))"
+            :aria-label="props.closeButtonAriaLabel ?? closeLabel"
+            @click.stop="close"
+          >
             <BaseIcon data-card-cover :class="n('close-button-icon')"><MIconClose /></BaseIcon>
           </BaseButton>
         </slot>
@@ -144,26 +141,27 @@
 </template>
 
 <script setup lang="ts">
-import { layoutHeight, returnGeometry } from './floating-geometry'
-import { createCardLayerGroup } from './native-layer-group'
-import { useVisualSurface } from '../_utils/visual-surface'
-import { isShadowRoot } from '../_utils/is-shadow-root'
-import { computed, nextTick, ref, shallowRef, watch, onBeforeUnmount, onDeactivated, onMounted, onActivated } from 'vue'
+import { computed, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, shallowRef, watch } from 'vue'
 import { IconClose as MIconClose } from '@cedar-design/icons-vue'
 import { doubleRaf, getRect } from '@cedar-design/shared-vue'
+import OptionalSlotBody from '../_components/optional-slot-body'
+import { createNamespace, formatElevation } from '../_utils/global-config'
+import { isShadowRoot } from '../_utils/is-shadow-root'
+import { toSizeUnit } from '../_utils/maple/elements'
+import { usePopupLayer } from '../_utils/popup-layer'
+import { useVisualSurface } from '../_utils/visual-surface'
 import BaseButton from '../button/Button.vue'
 import { useLock } from '../context/lock'
 import { useZIndex } from '../context/zIndex'
+import BaseDivider from '../divider/Divider.vue'
 import BaseIcon from '../icon/Icon.vue'
 import vRipple from '../ripple'
-import { createNamespace, formatElevation } from '../_utils/global-config'
-import { usePopupLayer } from '../_utils/popup-layer'
-import { toSizeUnit } from '../_utils/maple/elements'
-import { cardProps } from './props'
 import { setCardBackgroundIsolation } from './background-isolation'
 import { watchDetachedCard } from './detached-card-monitor'
-import BaseDivider from '../divider/Divider.vue'
-import { useCardSize, useCardCloseLabel } from './platform'
+import { layoutHeight, returnGeometry } from './floating-geometry'
+import { createCardLayerGroup } from './native-layer-group'
+import { useCardCloseLabel, useCardSize } from './platform'
+import { cardProps } from './props'
 
 defineOptions({ name: createNamespace('card').name })
 const { n, classes } = createNamespace('card')
@@ -171,45 +169,47 @@ const props = defineProps(cardProps)
 const emit = defineEmits<{ click: [event: Event]; 'update:floating': [value: boolean] }>()
 const mergedSize = useCardSize(() => props.size)
 const closeLabel = useCardCloseLabel()
-const duration = computed(() => Number.isFinite(props.floatingDuration) && props.floatingDuration >= 0 ? props.floatingDuration : 250)
+const duration = computed(() =>
+  Number.isFinite(props.floatingDuration) && props.floatingDuration >= 0 ? props.floatingDuration : 250,
+)
 const RIPPLE_DELAY = 500
-    const card = ref<null | HTMLElement>(null)
-    const cardFloater = ref<null | HTMLElement>(null)
-    const floatingContent = ref<null | HTMLElement>(null)
-    const floatingButtons = ref<null | HTMLElement>(null)
-    const cardHolder = ref<HTMLElement | null>(null)
-    const holderHeight = ref('auto')
-    const floaterWidth = ref('100%')
-    const floaterHeight = ref('100%')
-    const floaterTop = ref('auto')
-    const floaterLeft = ref('auto')
-    const floaterPosition = ref<'static' | 'absolute' | 'fixed' | 'relative' | 'sticky' | undefined>(undefined)
+const card = ref<null | HTMLElement>(null)
+const cardFloater = ref<null | HTMLElement>(null)
+const floatingContent = ref<null | HTMLElement>(null)
+const floatingButtons = ref<null | HTMLElement>(null)
+const cardHolder = ref<HTMLElement | null>(null)
+const holderHeight = ref('auto')
+const floaterWidth = ref('100%')
+const floaterHeight = ref('100%')
+const floaterTop = ref('auto')
+const floaterLeft = ref('auto')
+const floaterPosition = ref<'static' | 'absolute' | 'fixed' | 'relative' | 'sticky' | undefined>(undefined)
 const expandedPanel = computed(() => floaterPosition.value === 'fixed')
-    const floaterOverflow = ref('hidden')
-    const contentHeight = ref('0px')
-    const opacity = ref('0')
-    const focusReveal = ref(false)
-    const isRow = computed(() => props.direction !== 'column')
-    const showFloatingButtons = ref(false)
-    const floated = ref(false)
-    const { zIndex } = useZIndex(() => props.floating && !isRow.value, 1)
+const floaterOverflow = ref('hidden')
+const contentHeight = ref('0px')
+const opacity = ref('0')
+const focusReveal = ref(false)
+const isRow = computed(() => props.direction !== 'column')
+const showFloatingButtons = ref(false)
+const floated = ref(false)
+const { zIndex } = useZIndex(() => props.floating && !isRow.value, 1)
 
-    let generation = 0
-    let active = true
+let generation = 0
+let active = true
 let disposed = false
-    let dropdownFloaterTop = 'auto'
-    let dropdownFloaterLeft = 'auto'
-    let dropper: ReturnType<typeof setTimeout> | undefined
-    const floater = shallowRef<ReturnType<typeof setTimeout> | null>(null)
+let dropdownFloaterTop = 'auto'
+let dropdownFloaterLeft = 'auto'
+let dropper: ReturnType<typeof setTimeout> | undefined
+const floater = shallowRef<ReturnType<typeof setTimeout> | null>(null)
 
-    const cardDocument = shallowRef<Document>()
-    const cardConnected = ref(true)
+const cardDocument = shallowRef<Document>()
+const cardConnected = ref(true)
 
-    useLock(
-      () => props.floating,
-      () => !isRow.value && cardConnected.value,
-      () => (cardDocument.value ?? card.value?.ownerDocument)?.body,
-    )
+useLock(
+  () => props.floating,
+  () => !isRow.value && cardConnected.value,
+  () => (cardDocument.value ?? card.value?.ownerDocument)?.body,
+)
 
 let previousFocusRoot: Document | ShadowRoot | undefined
 function focusedCardContext(): Element | null {
@@ -217,7 +217,12 @@ function focusedCardContext(): Element | null {
   if (!element) return null
   const root = element.getRootNode()
   if ('activeElement' in root) previousFocusRoot = root as Document | ShadowRoot
-  if (previousFocusRoot && previousFocusRoot !== element.ownerDocument && previousFocusRoot.ownerDocument !== element.ownerDocument) previousFocusRoot = undefined
+  if (
+    previousFocusRoot &&
+    previousFocusRoot !== element.ownerDocument &&
+    previousFocusRoot.ownerDocument !== element.ownerDocument
+  )
+    previousFocusRoot = undefined
   let focused = (previousFocusRoot?.activeElement ?? element.ownerDocument.activeElement) as Element | null
   while (focused?.shadowRoot?.activeElement) focused = focused.shadowRoot.activeElement
   return focused
@@ -240,21 +245,37 @@ function composedContains(container: Element | null, element: Element | null): b
   return false
 }
 
-onMounted(() => { focusedCardContext(); if (wantsFloating()) trackFocusRoot() })
+onMounted(() => {
+  focusedCardContext()
+  if (wantsFloating()) trackFocusRoot()
+})
 
 let returnFocus: HTMLElement | null = null
 function onCardFocus(event: FocusEvent) {
   // A child may focus itself while the opening animation is still waiting.
   // Reveal that content immediately so focus is not left in a clipped, transparent area.
-  if (wantsFloating() && (composedContains(floatingContent.value, event.target as Element | null) || composedContains(floatingButtons.value, event.target as Element | null))) {
+  if (
+    wantsFloating() &&
+    (composedContains(floatingContent.value, event.target as Element | null) ||
+      composedContains(floatingButtons.value, event.target as Element | null))
+  ) {
     focusReveal.value = true
     contentHeight.value = 'auto'
     opacity.value = '1'
-    floaterOverflow.value = openingWaiting && composedContains(floatingButtons.value, event.target as Element | null) ? 'visible' : 'auto'
+    floaterOverflow.value =
+      openingWaiting && composedContains(floatingButtons.value, event.target as Element | null) ? 'visible' : 'auto'
   }
   const related = event.relatedTarget as HTMLElement | null
   const document = card.value?.ownerDocument
-  if (!active && wantsFloating() && related && typeof related.focus === 'function' && !composedContains(card.value, related) && related !== document?.body && related !== document?.documentElement) {
+  if (
+    !active &&
+    wantsFloating() &&
+    related &&
+    typeof related.focus === 'function' &&
+    !composedContains(card.value, related) &&
+    related !== document?.body &&
+    related !== document?.documentElement
+  ) {
     returnFocus = related
   }
   focusedCardContext()
@@ -266,7 +287,13 @@ function trackInactiveFocus() {
   if (!document) return
   const remember = (target: EventTarget | null) => {
     const element = target as HTMLElement | null
-    if (element && typeof element.focus === 'function' && !composedContains(card.value, element) && element !== document.body && element !== document.documentElement) {
+    if (
+      element &&
+      typeof element.focus === 'function' &&
+      !composedContains(card.value, element) &&
+      element !== document.body &&
+      element !== document.documentElement
+    ) {
       returnFocus = element
     }
   }
@@ -286,18 +313,28 @@ function updateReturnFocus(open: boolean) {
   const target = returnFocus
   returnFocus = null
   const hiddenArea = closestAcrossRoots(focused, `.${n('floating-content')}, .${n('floating-buttons')}`)
-  if ((focused === cardFloater.value || (hiddenArea && cardFloater.value?.contains(hiddenArea))) && target?.isConnected && !closestAcrossRoots(target, '[inert]')) {
+  if (
+    (focused === cardFloater.value || (hiddenArea && cardFloater.value?.contains(hiddenArea))) &&
+    target?.isConnected &&
+    !closestAcrossRoots(target, '[inert]')
+  ) {
     target.focus({ preventScroll: true })
   }
 }
 
 useVisualSurface(
-  () => cardDocument.value && cardConnected.value && floaterPosition.value === 'fixed' ? cardFloater.value : undefined,
+  () =>
+    cardDocument.value && cardConnected.value && floaterPosition.value === 'fixed' ? cardFloater.value : undefined,
   () => zIndex.value,
   createCardLayerGroup,
 )
 const wantsFloating = () => props.floating && !isRow.value
-const { onStackTop, syncOwner } = usePopupLayer(() => wantsFloating() && cardConnected.value, zIndex, () => cardDocument.value ?? card.value?.ownerDocument, true)
+const { onStackTop, syncOwner } = usePopupLayer(
+  () => wantsFloating() && cardConnected.value,
+  zIndex,
+  () => cardDocument.value ?? card.value?.ownerDocument,
+  true,
+)
 const available = () => active && !disposed
 
 let focusRootObserver: MutationObserver | undefined
@@ -323,7 +360,9 @@ function trackFocusRoot() {
       stopDetachedCard?.()
       stopDetachedCard = undefined
     } else if (!stopDetachedCard) {
-      stopDetachedCard = watchDetachedCard(() => { if (element.isConnected) update() })
+      stopDetachedCard = watchDetachedCard(() => {
+        if (element.isConnected) update()
+      })
     }
     if (motionDocument !== element.ownerDocument) trackMotion(element)
     if (openingFrameDocument && openingFrameDocument !== element.ownerDocument && openingWaiting) floating(true)
@@ -399,10 +438,17 @@ function trackMotion(element: HTMLElement | null) {
     else if (!wantsFloating() && dropper !== undefined) dropdown()
   }
 }
-watch(card, (element) => {
-  if (available()) trackMotion(element)
-  if (element && wantsFloating() && available()) { updateReturnFocus(true); trackFocusRoot() }
-}, { flush: 'sync' })
+watch(
+  card,
+  (element) => {
+    if (available()) trackMotion(element)
+    if (element && wantsFloating() && available()) {
+      updateReturnFocus(true)
+      trackFocusRoot()
+    }
+  },
+  { flush: 'sync' },
+)
 function current(token: number, element: HTMLElement | null) {
   return available() && token === generation && card.value === element
 }
@@ -433,7 +479,12 @@ watch(
       consumed = true
       if (value) {
         floating()
-      } else if (floater.value !== null || floated.value || floaterPosition.value !== undefined || contentHeight.value !== '0px') {
+      } else if (
+        floater.value !== null ||
+        floated.value ||
+        floaterPosition.value !== undefined ||
+        contentHeight.value !== '0px'
+      ) {
         dropdown()
       }
     })
@@ -485,7 +536,12 @@ function floating(skipRippleDelay = false) {
       if (!reducedMotion) {
         openingFrameDocument = element.ownerDocument
         const view = element.ownerDocument.defaultView
-        if (view && typeof document !== 'undefined' && element.ownerDocument !== document && typeof view.requestAnimationFrame === 'function') {
+        if (
+          view &&
+          typeof document !== 'undefined' &&
+          element.ownerDocument !== document &&
+          typeof view.requestAnimationFrame === 'function'
+        ) {
           if (!(await waitForOwnerFrames(view))) return
         } else {
           await doubleRaf()
@@ -558,38 +614,55 @@ function dropdown() {
   focusReveal.value = false
   opacity.value = '0'
   showFloatingButtons.value = false
-  dropper = setTimeout(() => {
-    if (!current(token, element) || wantsFloating() || consumed) {
-      return
-    }
-    consumed = true
-    dropper = undefined
-    holderHeight.value = 'auto'
-    floaterWidth.value = '100%'
-    floaterHeight.value = '100%'
-    floaterTop.value = 'auto'
-    floaterLeft.value = 'auto'
-    dropdownFloaterTop = 'auto'
-    dropdownFloaterLeft = 'auto'
-    floaterOverflow.value = 'hidden'
-    floaterPosition.value = undefined
-    floated.value = false
-  }, reducedMotion ? 0 : duration.value)
+  dropper = setTimeout(
+    () => {
+      if (!current(token, element) || wantsFloating() || consumed) {
+        return
+      }
+      consumed = true
+      dropper = undefined
+      holderHeight.value = 'auto'
+      floaterWidth.value = '100%'
+      floaterHeight.value = '100%'
+      floaterTop.value = 'auto'
+      floaterLeft.value = 'auto'
+      dropdownFloaterTop = 'auto'
+      dropdownFloaterLeft = 'auto'
+      floaterOverflow.value = 'hidden'
+      floaterPosition.value = undefined
+      floated.value = false
+    },
+    reducedMotion ? 0 : duration.value,
+  )
 }
 function handleFloatingKeydown(event: KeyboardEvent) {
-  if (!available() || !wantsFloating() || event.key !== 'Escape' || event.isComposing || event.keyCode === 229 || event.defaultPrevented) return
+  if (
+    !available() ||
+    !wantsFloating() ||
+    event.key !== 'Escape' ||
+    event.isComposing ||
+    event.keyCode === 229 ||
+    event.defaultPrevented
+  )
+    return
   const path = event.composedPath()
   // A native popover can keep focus on its invoker, outside the panel.
   const owner = card.value?.ownerDocument
-  if (owner?.defaultView?.CSS?.supports('selector(:popover-open)') && path.some(target => {
-    const root = target as Document | ShadowRoot
-    return (root.nodeType === 9 || root.nodeType === 11) &&
-      Array.from(root.querySelectorAll<HTMLElement>(':popover-open')).some(panel =>
-        panel.popover === 'auto' || panel.popover === 'hint',
+  if (
+    owner?.defaultView?.CSS?.supports('selector(:popover-open)') &&
+    path.some((target) => {
+      const root = target as Document | ShadowRoot
+      return (
+        (root.nodeType === 9 || root.nodeType === 11) &&
+        Array.from(root.querySelectorAll<HTMLElement>(':popover-open')).some(
+          (panel) => panel.popover === 'auto' || panel.popover === 'hint',
+        )
       )
-  })) return
+    })
+  )
+    return
   // Let the browser dispatch cancel to a nested native dialog first.
-  const insideNativeModal = path.some(target => {
+  const insideNativeModal = path.some((target) => {
     const dialog = target as HTMLDialogElement
     if (dialog.localName !== 'dialog' || !dialog.open) return false
     if ('closedBy' in dialog && ['closerequest', 'any'].includes(String(dialog.closedBy))) return true

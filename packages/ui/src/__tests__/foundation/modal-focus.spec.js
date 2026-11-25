@@ -7,103 +7,221 @@ import { usePopupLayer } from '../../_utils/popup-layer'
 describe('modal focus contract', () => {
   test('parent-first close keeps child focus and restores the visible outer opener', async () => {
     const opener = document.createElement('button')
-    document.body.append(opener); opener.focus()
-    const parentOpen = ref(true), childOpen = ref(false)
+    document.body.append(opener)
+    opener.focus()
+    const parentOpen = ref(true),
+      childOpen = ref(false)
     let parentControls, childControls, parentRoot, childRoot
-    const Child = defineComponent({ setup() {
-      const root = ref(); childRoot = root
-      childControls = useModalFocus(() => root.value, () => childOpen.value, () => childOpen.value)
-      return () => h(Teleport, { to: document.body }, h('div', { ref: root, tabindex: -1, style: { display: childOpen.value ? '' : 'none' } }, h('button', 'child')))
-    } })
-    const Parent = defineComponent({ setup() {
-      const root = ref(); parentRoot = root
-      parentControls = useModalFocus(() => root.value, () => parentOpen.value, () => !childOpen.value)
-      return () => h('div', { ref: root, tabindex: -1, style: { display: parentOpen.value ? '' : 'none' } }, [h('button', 'child opener'), h(Child)])
-    } })
+    const Child = defineComponent({
+      setup() {
+        const root = ref()
+        childRoot = root
+        childControls = useModalFocus(
+          () => root.value,
+          () => childOpen.value,
+          () => childOpen.value,
+        )
+        return () =>
+          h(
+            Teleport,
+            { to: document.body },
+            h(
+              'div',
+              { ref: root, tabindex: -1, style: { display: childOpen.value ? '' : 'none' } },
+              h('button', 'child'),
+            ),
+          )
+      },
+    })
+    const Parent = defineComponent({
+      setup() {
+        const root = ref()
+        parentRoot = root
+        parentControls = useModalFocus(
+          () => root.value,
+          () => parentOpen.value,
+          () => !childOpen.value,
+        )
+        return () =>
+          h('div', { ref: root, tabindex: -1, style: { display: parentOpen.value ? '' : 'none' } }, [
+            h('button', 'child opener'),
+            h(Child),
+          ])
+      },
+    })
     const wrapper = mount(Parent, { attachTo: document.body })
     try {
-      await nextTick(); await nextTick()
+      await nextTick()
+      await nextTick()
       parentRoot.value.querySelector('button').focus()
-      childOpen.value = true; await nextTick(); await nextTick()
+      childOpen.value = true
+      await nextTick()
+      await nextTick()
       expect(document.activeElement).toBe(childRoot.value)
-      parentOpen.value = false; await nextTick()
+      parentOpen.value = false
+      await nextTick()
       parentControls.restore()
       expect(document.activeElement).toBe(childRoot.value)
-      childOpen.value = false; await nextTick()
+      childOpen.value = false
+      await nextTick()
       childControls.restore()
       expect(document.activeElement).toBe(opener)
-    } finally { wrapper.unmount(); opener.remove() }
+    } finally {
+      wrapper.unmount()
+      opener.remove()
+    }
   })
   test('iframe modal preserves its parent-document opener without stealing new outside focus', async () => {
     const frame = document.createElement('iframe')
-    const opener = document.createElement('button'), neighbor = document.createElement('button')
+    const opener = document.createElement('button'),
+      neighbor = document.createElement('button')
     document.body.append(frame, opener, neighbor)
     const foreign = frame.contentDocument
     const caller = foreign.createElement('div')
     foreign.body.append(caller)
     let controls
-    const root = ref(), open = ref(true)
+    const root = ref(),
+      open = ref(true)
     opener.focus()
-    const wrapper = mount({ setup() {
-      controls = useModalFocus(() => root.value, () => open.value, () => true)
-      return () => h('div', { ref: root, tabindex: -1 }, h('button', 'inner'))
-    } }, { attachTo: caller })
+    const wrapper = mount(
+      {
+        setup() {
+          controls = useModalFocus(
+            () => root.value,
+            () => open.value,
+            () => true,
+          )
+          return () => h('div', { ref: root, tabindex: -1 }, h('button', 'inner'))
+        },
+      },
+      { attachTo: caller },
+    )
     try {
-      await nextTick(); await nextTick()
+      await nextTick()
+      await nextTick()
       expect(foreign.activeElement).toBe(root.value)
       controls.restore()
       expect(document.activeElement).toBe(opener)
-      open.value = false; await nextTick()
-      opener.focus(); open.value = true; await nextTick(); await nextTick()
+      open.value = false
+      await nextTick()
+      opener.focus()
+      open.value = true
+      await nextTick()
+      await nextTick()
       neighbor.focus()
       controls.restore()
       expect(document.activeElement).toBe(neighbor)
-    } finally { wrapper.unmount(); frame.remove(); opener.remove(); neighbor.remove() }
+    } finally {
+      wrapper.unmount()
+      frame.remove()
+      opener.remove()
+      neighbor.remove()
+    }
   })
   test('Tab starts from the root, ignores hidden/disabled controls and wraps both directions', async () => {
-    const root = ref(), open = ref(true)
-    const wrapper = mount({ setup() {
-      const { onStackTop } = usePopupLayer(() => open.value, ref(1))
-      useModalFocus(() => root.value, () => open.value, onStackTop)
-      return () => h('div', { ref: root, tabindex: -1 }, [h('button', { hidden: true }, 'hidden'), h('button', { disabled: true }, 'disabled'), h('button', { id: 'first' }, 'first'), h('div', { style: 'display:none' }, h('button', 'invisible')), h('button', { id: 'last' }, 'last')])
-    } }, { attachTo: document.body })
+    const root = ref(),
+      open = ref(true)
+    const wrapper = mount(
+      {
+        setup() {
+          const { onStackTop } = usePopupLayer(() => open.value, ref(1))
+          useModalFocus(
+            () => root.value,
+            () => open.value,
+            onStackTop,
+          )
+          return () =>
+            h('div', { ref: root, tabindex: -1 }, [
+              h('button', { hidden: true }, 'hidden'),
+              h('button', { disabled: true }, 'disabled'),
+              h('button', { id: 'first' }, 'first'),
+              h('div', { style: 'display:none' }, h('button', 'invisible')),
+              h('button', { id: 'last' }, 'last'),
+            ])
+        },
+      },
+      { attachTo: document.body },
+    )
     try {
       await nextTick()
       expect(document.activeElement).toBe(root.value)
-      const tab = shiftKey => document.activeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', shiftKey, bubbles: true, cancelable: true }))
-      tab(false); expect(document.activeElement.id).toBe('first')
-      tab(true); expect(document.activeElement.id).toBe('last')
-      tab(false); expect(document.activeElement.id).toBe('first')
-    } finally { wrapper.unmount() }
+      const tab = (shiftKey) =>
+        document.activeElement.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Tab', shiftKey, bubbles: true, cancelable: true }),
+        )
+      tab(false)
+      expect(document.activeElement.id).toBe('first')
+      tab(true)
+      expect(document.activeElement.id).toBe('last')
+      tab(false)
+      expect(document.activeElement.id).toBe('first')
+    } finally {
+      wrapper.unmount()
+    }
   })
   test('nested ownership, restoration, canceled close and KeepAlive cleanup', async () => {
-    const outside = document.createElement('button'); document.body.append(outside); outside.focus()
-    const active = ref(true), showChild = ref(false), childOpen = ref(true)
+    const outside = document.createElement('button')
+    document.body.append(outside)
+    outside.focus()
+    const active = ref(true),
+      showChild = ref(false),
+      childOpen = ref(true)
     let parentRoot, childRoot, childFocus
-    const Child = defineComponent({ setup() {
-      const root = ref(); childRoot = root
-      const { onStackTop } = usePopupLayer(() => childOpen.value, ref(2))
-      childFocus = useModalFocus(() => root.value, () => childOpen.value, onStackTop)
-      return () => h('div', { ref: root, tabindex: -1 }, h('button', 'child'))
-    } })
-    const Parent = defineComponent({ setup() {
-      const root = ref(); parentRoot = root
-      const { onStackTop } = usePopupLayer(() => true, ref(1))
-      useModalFocus(() => root.value, () => true, onStackTop)
-      return () => h('div', { ref: root, tabindex: -1 }, [h('button', 'parent'), showChild.value ? h(Child) : null])
-    } })
-    const wrapper = mount({ render: () => h(KeepAlive, null, { default: () => active.value ? h(Parent) : null }) }, { attachTo: document.body })
+    const Child = defineComponent({
+      setup() {
+        const root = ref()
+        childRoot = root
+        const { onStackTop } = usePopupLayer(() => childOpen.value, ref(2))
+        childFocus = useModalFocus(
+          () => root.value,
+          () => childOpen.value,
+          onStackTop,
+        )
+        return () => h('div', { ref: root, tabindex: -1 }, h('button', 'child'))
+      },
+    })
+    const Parent = defineComponent({
+      setup() {
+        const root = ref()
+        parentRoot = root
+        const { onStackTop } = usePopupLayer(() => true, ref(1))
+        useModalFocus(
+          () => root.value,
+          () => true,
+          onStackTop,
+        )
+        return () => h('div', { ref: root, tabindex: -1 }, [h('button', 'parent'), showChild.value ? h(Child) : null])
+      },
+    })
+    const wrapper = mount(
+      { render: () => h(KeepAlive, null, { default: () => (active.value ? h(Parent) : null) }) },
+      { attachTo: document.body },
+    )
     try {
-      await nextTick(); await nextTick()
+      await nextTick()
+      await nextTick()
       expect(document.activeElement).toBe(parentRoot.value)
-      showChild.value = true; await nextTick(); await nextTick()
+      showChild.value = true
+      await nextTick()
+      await nextTick()
       expect(document.activeElement).toBe(childRoot.value)
-      childOpen.value = false; childOpen.value = true; await nextTick()
+      childOpen.value = false
+      childOpen.value = true
+      await nextTick()
       expect(document.activeElement).toBe(childRoot.value)
-      showChild.value = false; await nextTick()
+      showChild.value = false
+      await nextTick()
       expect(document.activeElement).toBe(parentRoot.value)
-      active.value = false; await nextTick(); expect(document.activeElement).toBe(outside)
-      active.value = true; await nextTick(); await nextTick(); expect(document.activeElement).toBe(parentRoot.value)
-    } finally { wrapper.unmount(); outside.remove() }
+      active.value = false
+      await nextTick()
+      expect(document.activeElement).toBe(outside)
+      active.value = true
+      await nextTick()
+      await nextTick()
+      expect(document.activeElement).toBe(parentRoot.value)
+    } finally {
+      wrapper.unmount()
+      outside.remove()
+    }
   })
 })

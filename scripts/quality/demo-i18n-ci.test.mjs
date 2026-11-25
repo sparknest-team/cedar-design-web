@@ -22,39 +22,58 @@ function assertMergeGate(workflow, scripts) {
   //   - 完整 quality 只能由「非 PR 事件」触发（即 merge_group / push main / workflow_dispatch）
   //   - fast 通道只能由 pull_request 触发，两者必须同时存在，且 demo i18n gate 在两条通道里都要有
   // 这样「被 if: false / 其它条件关闭」仍然会被下面的分支和变异测试抓到。
-  const qualitySteps = steps.filter(step => step.split('\n')[0] === 'run: pnpm quality')
+  const qualitySteps = steps.filter((step) => step.split('\n')[0] === 'run: pnpm quality')
   assert.equal(qualitySteps.length, 1, 'pnpm quality must appear exactly once as a step')
   const qualityIf = qualitySteps[0].match(/^\s*if:\s*(.+)$/m)?.[1]?.trim()
-  assert.equal(qualityIf, "github.event_name != 'pull_request'",
-    'full quality must be gated to non-PR events only (merge_queue / main / manual)')
+  assert.equal(
+    qualityIf,
+    "github.event_name != 'pull_request'",
+    'full quality must be gated to non-PR events only (merge_queue / main / manual)',
+  )
 
-  const fastSteps = steps.filter(step => step.split('\n')[0] === 'run: pnpm quality:fast')
+  const fastSteps = steps.filter((step) => step.split('\n')[0] === 'run: pnpm quality:fast')
   assert.equal(fastSteps.length, 1, 'pnpm quality:fast must appear exactly once as a step')
   const fastIf = fastSteps[0].match(/^\s*if:\s*(.+)$/m)?.[1]?.trim()
-  assert.equal(fastIf, "github.event_name == 'pull_request'",
-    'fast quality must be gated to pull_request events only')
+  assert.equal(fastIf, "github.event_name == 'pull_request'", 'fast quality must be gated to pull_request events only')
 
   // demo i18n gate 必须在两条通道里都跑到
-  assert.ok(scripts['quality:fast'].split(' && ').includes('pnpm check:demo-i18n'),
-    'fast channel must keep the demo i18n gate')
+  assert.ok(
+    scripts['quality:fast'].split(' && ').includes('pnpm check:demo-i18n'),
+    'fast channel must keep the demo i18n gate',
+  )
 
   for (const command of ['node --test scripts/quality/demo-i18n-ci.test.mjs']) {
-    const gateSteps = steps.filter(step => step.split('\n')[0] === `run: ${command}`)
+    const gateSteps = steps.filter((step) => step.split('\n')[0] === `run: ${command}`)
     assert.equal(gateSteps.length, 1, `${command} must run once as a mandatory step`)
     assert.doesNotMatch(gateSteps[0], /^\s*if:/m)
   }
   assert.equal(scripts.quality.split(' && ')[0], 'pnpm check:demo-i18n')
   const commands = scripts['check:demo-i18n'].split(' && ')
-  assert.deepEqual(commands, [
-    'node --test scripts/quality/demo-i18n-ci.test.mjs',
-    'pnpm check:test-environment',
-    'node --test ../design-ui/bin/compose-demo-comparison.test.mjs ../design-ui/bin/demo-config-comparison.test.mjs',
-    'pnpm --dir packages/ui exec vitest run src/__demos__/locale --maxWorkers=1 --no-file-parallelism',
-  ], 'gate must run CI wiring, loader regressions, generators and all locale tests without filtering or allowing failures')
-  assert.equal(scripts['check:test-environment'], 'node --test scripts/quality/test-environment.test.mjs packages/ui/scripts/testing/source-dependencies.test.mjs')
+  assert.deepEqual(
+    commands,
+    [
+      'node --test scripts/quality/demo-i18n-ci.test.mjs',
+      'pnpm check:test-environment',
+      'node --test ../design-ui/bin/compose-demo-comparison.test.mjs ../design-ui/bin/demo-config-comparison.test.mjs',
+      'pnpm --dir packages/ui exec vitest run src/__demos__/locale --maxWorkers=1 --no-file-parallelism',
+    ],
+    'gate must run CI wiring, loader regressions, generators and all locale tests without filtering or allowing failures',
+  )
+  assert.equal(
+    scripts['check:test-environment'],
+    'node --test scripts/quality/test-environment.test.mjs packages/ui/scripts/testing/source-dependencies.test.mjs',
+  )
   assert.ok(scripts.quality.split(' && ').includes('pnpm check:doc-pipeline'))
-  for (const file of ['compose-demo-comparison.test.mjs', 'demo-config-comparison.test.mjs', 'demo-content-parity.test.mjs', 'api-documentation-locales.test.mjs']) {
-    assert.ok(scripts['check:doc-pipeline'].includes(`../design-ui/bin/${file}`), `${file} must remain in the documentation gate`)
+  for (const file of [
+    'compose-demo-comparison.test.mjs',
+    'demo-config-comparison.test.mjs',
+    'demo-content-parity.test.mjs',
+    'api-documentation-locales.test.mjs',
+  ]) {
+    assert.ok(
+      scripts['check:doc-pipeline'].includes(`../design-ui/bin/${file}`),
+      `${file} must remain in the documentation gate`,
+    )
   }
 }
 
@@ -63,39 +82,63 @@ test('Demo i18n checks are mandatory in PR and merge queue quality runs', () => 
 })
 
 for (const [name, mutate] of [
-  ['PR path filter', value => value.replace('  pull_request:', '  pull_request:\n    paths: ["packages/ui/**"]')],
-  ['PR branch filter', value => value.replace('  pull_request:', '  pull_request:\n    branches: [main]')],
-  ['merge queue removed', value => value.replace('  merge_group:\n', '')],
-  ['renamed required check', value => value.replace('  quality:', '  quality:\n    name: other-quality')],
-  ['conditional quality job', value => value.replace('  quality:', '  quality:\n    if: false')],
-  ['conditional quality step', value => value.replace('- run: pnpm quality', '- if: false\n        run: pnpm quality')],
-  ['allowed failure', value => value.replace('- run: pnpm quality', '- continue-on-error: true\n        run: pnpm quality')],
-  ['removed quality command', value => value.replace('pnpm quality', 'pnpm test')],
-  ['removed independent wiring check', value => value.replace('- run: node --test scripts/quality/demo-i18n-ci.test.mjs', '- run: node --version')],
-  ['quality step disabled', value => value.replace("if: github.event_name != 'pull_request'", 'if: false')],
-  ['fast step disabled', value => value.replace("if: github.event_name == 'pull_request'", 'if: false')],
-  ['fast channel removed', value => value.replace('- run: pnpm quality:fast', '- run: pnpm quality')],
-  ['channels swapped', value => value.replace("if: github.event_name == 'pull_request'", 'if: always()')],
+  ['PR path filter', (value) => value.replace('  pull_request:', '  pull_request:\n    paths: ["packages/ui/**"]')],
+  ['PR branch filter', (value) => value.replace('  pull_request:', '  pull_request:\n    branches: [main]')],
+  ['merge queue removed', (value) => value.replace('  merge_group:\n', '')],
+  ['renamed required check', (value) => value.replace('  quality:', '  quality:\n    name: other-quality')],
+  ['conditional quality job', (value) => value.replace('  quality:', '  quality:\n    if: false')],
+  [
+    'conditional quality step',
+    (value) => value.replace('- run: pnpm quality', '- if: false\n        run: pnpm quality'),
+  ],
+  [
+    'allowed failure',
+    (value) => value.replace('- run: pnpm quality', '- continue-on-error: true\n        run: pnpm quality'),
+  ],
+  ['removed quality command', (value) => value.replace('pnpm quality', 'pnpm test')],
+  [
+    'removed independent wiring check',
+    (value) => value.replace('- run: node --test scripts/quality/demo-i18n-ci.test.mjs', '- run: node --version'),
+  ],
+  ['quality step disabled', (value) => value.replace("if: github.event_name != 'pull_request'", 'if: false')],
+  ['fast step disabled', (value) => value.replace("if: github.event_name == 'pull_request'", 'if: false')],
+  ['fast channel removed', (value) => value.replace('- run: pnpm quality:fast', '- run: pnpm quality')],
+  ['channels swapped', (value) => value.replace("if: github.event_name == 'pull_request'", 'if: always()')],
 ]) {
   test(`rejects ${name}`, () => assert.throws(() => assertMergeGate(mutate(workflow), scripts)))
 }
 
 test('rejects missing, filtered or failure-tolerant locale checks', () => {
   for (const command of scripts['check:demo-i18n'].split(' && ')) {
-    assert.throws(() => assertMergeGate(workflow, {
-      ...scripts, 'check:demo-i18n': scripts['check:demo-i18n'].replace(command, 'true'),
-    }))
+    assert.throws(() =>
+      assertMergeGate(workflow, {
+        ...scripts,
+        'check:demo-i18n': scripts['check:demo-i18n'].replace(command, 'true'),
+      }),
+    )
   }
   for (const suffix of [' --passWithNoTests', ' -t render', ' || true']) {
-    assert.throws(() => assertMergeGate(workflow, {
-      ...scripts, 'check:demo-i18n': scripts['check:demo-i18n'] + suffix,
-    }))
+    assert.throws(() =>
+      assertMergeGate(workflow, {
+        ...scripts,
+        'check:demo-i18n': scripts['check:demo-i18n'] + suffix,
+      }),
+    )
   }
   assert.throws(() => assertMergeGate(workflow, { ...scripts, quality: 'pnpm test' }))
-  assert.throws(() => assertMergeGate(workflow, {
-    ...scripts, quality: scripts.quality.replace('pnpm check:doc-pipeline', 'true'),
-  }))
-  assert.throws(() => assertMergeGate(workflow, {
-    ...scripts, 'check:doc-pipeline': scripts['check:doc-pipeline'].replace('../design-ui/bin/api-documentation-locales.test.mjs', ''),
-  }))
+  assert.throws(() =>
+    assertMergeGate(workflow, {
+      ...scripts,
+      quality: scripts.quality.replace('pnpm check:doc-pipeline', 'true'),
+    }),
+  )
+  assert.throws(() =>
+    assertMergeGate(workflow, {
+      ...scripts,
+      'check:doc-pipeline': scripts['check:doc-pipeline'].replace(
+        '../design-ui/bin/api-documentation-locales.test.mjs',
+        '',
+      ),
+    }),
+  )
 })

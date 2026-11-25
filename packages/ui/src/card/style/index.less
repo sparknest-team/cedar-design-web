@@ -3,10 +3,20 @@
 .c-card {
   box-sizing: border-box;
   position: relative;
-  &--direction-row&--direction-row-reverse &__floater { flex-direction: row-reverse; }
-  &--hoverable:hover { box-shadow: var(--c-card-hover-shadow); }
-  &--variant-outline &__floater { background: transparent; }
-  &__title { display: flex; align-items: center; justify-content: space-between; }
+  &--direction-row&--direction-row-reverse &__floater {
+    flex-direction: row-reverse;
+  }
+  &--hoverable:hover {
+    box-shadow: var(--c-card-hover-shadow);
+  }
+  &--variant-outline &__floater {
+    background: transparent;
+  }
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   &__divider {
     margin: var(--c-card-content-margin);
     padding: var(--c-card-content-padding);
@@ -14,8 +24,10 @@
   &--size-xs {
     --c-card-title-font-size: var(--c-card-size-xs-title-font-size);
     --c-card-title-margin: var(--c-card-size-xs-section-margin);
+    --c-card-title-row-margin: 8px 0 12px;
+    --c-card-content-row-margin: 8px 0 0;
     --c-card-subtitle-margin: var(--c-card-size-xs-section-margin);
-    --c-card-description-margin: var(--c-card-size-xs-section-margin);
+    --c-card-description-margin: 2px 0 0 0;
     --c-card-content-margin: var(--c-card-size-xs-section-margin);
     --c-card-footer-margin: var(--c-card-size-xs-section-margin);
     --c-card-content-padding: var(--c-card-size-xs-section-padding);
@@ -27,8 +39,10 @@
   &--size-sm {
     --c-card-title-font-size: var(--c-card-size-sm-title-font-size);
     --c-card-title-margin: var(--c-card-size-sm-section-margin);
+    --c-card-title-row-margin: 12px 0 12px;
+    --c-card-content-row-margin: 12px 0 0;
     --c-card-subtitle-margin: var(--c-card-size-sm-section-margin);
-    --c-card-description-margin: var(--c-card-size-sm-section-margin);
+    --c-card-description-margin: 4px 0 0 0;
     --c-card-content-margin: var(--c-card-size-sm-section-margin);
     --c-card-footer-margin: var(--c-card-size-sm-section-margin);
     --c-card-content-padding: var(--c-card-size-sm-section-padding);
@@ -37,11 +51,16 @@
     --c-card-description-padding: var(--c-card-size-sm-section-padding);
     --c-card-footer-padding: var(--c-card-size-sm-section-padding);
   }
+  &--size-md {
+    --c-card-description-margin: 6px 0 0 0;
+  }
   &--size-lg {
     --c-card-title-font-size: var(--c-card-size-lg-title-font-size);
     --c-card-title-margin: var(--c-card-size-lg-section-margin);
+    --c-card-title-row-margin: 20px 0 12px;
+    --c-card-content-row-margin: 20px 0 0;
     --c-card-subtitle-margin: var(--c-card-size-lg-section-margin);
-    --c-card-description-margin: var(--c-card-size-lg-section-margin);
+    --c-card-description-margin: 8px 0 0 0;
     --c-card-content-margin: var(--c-card-size-lg-section-margin);
     --c-card-footer-margin: var(--c-card-size-lg-section-margin);
     --c-card-content-padding: var(--c-card-size-lg-section-padding);
@@ -53,8 +72,10 @@
   &--size-xl {
     --c-card-title-font-size: var(--c-card-size-xl-title-font-size);
     --c-card-title-margin: var(--c-card-size-xl-section-margin);
+    --c-card-title-row-margin: 24px 0 12px;
+    --c-card-content-row-margin: 24px 0 0;
     --c-card-subtitle-margin: var(--c-card-size-xl-section-margin);
-    --c-card-description-margin: var(--c-card-size-xl-section-margin);
+    --c-card-description-margin: 10px 0 0 0;
     --c-card-content-margin: var(--c-card-size-xl-section-margin);
     --c-card-footer-margin: var(--c-card-size-xl-section-margin);
     --c-card-content-padding: var(--c-card-size-xl-section-padding);
@@ -135,7 +156,13 @@
       font-size var(--c-card-animation-duration);
   }
 
-  @heading-offsets: 10, 6, 4, 2, 0, -2;
+  @heading-offsets:
+    10,
+    6,
+    4,
+    2,
+    0,
+    -2;
   each(@heading-offsets, {
     &__title > h@{index}&__title-text {
       margin: 0;
@@ -173,6 +200,10 @@
     overflow: hidden;
   }
 
+  &--direction-row &__title:has(+ &__description) {
+    margin-bottom: 0;
+  }
+
   &__container > &__description {
     font-size: var(--c-card-description-font-size);
     color: var(--c-card-description-color);
@@ -183,6 +214,10 @@
       padding var(--c-card-animation-duration),
       margin var(--c-card-animation-duration),
       font-size var(--c-card-animation-duration);
+
+    &:first-child {
+      margin: var(--c-card-title-margin);
+    }
 
     > .c-card__description {
       margin: 0;
@@ -255,23 +290,31 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .c-card__floater, .c-card__floating-content, .c-card__floating-buttons,
-  .c-card__content, .c-card__image, .c-card__title,
-  .c-card__subtitle, .c-card__description, .c-card__footer {
+  .c-card__floater,
+  .c-card__floating-content,
+  .c-card__floating-buttons,
+  .c-card__content,
+  .c-card__image,
+  .c-card__title,
+  .c-card__subtitle,
+  .c-card__description,
+  .c-card__footer {
     transition: none !important;
   }
 }
 
 // Normalize the browser popover box while keeping the component's own layout.
-[data-card-top-layer=""][popover] {
+[data-card-top-layer=''][popover] {
   margin: 0;
   border: 0;
   padding: 0;
   box-sizing: border-box;
   color: inherit;
 }
-[trigger-placement][data-card-top-layer][popover] { inset: auto; }
-[data-card-top-layer=""][popover]:not([class$="card__floater"]):not([trigger-placement]) {
+[trigger-placement][data-card-top-layer][popover] {
+  inset: auto;
+}
+[data-card-top-layer=''][popover]:not([class$='card__floater']):not([trigger-placement]) {
   position: fixed;
   inset: 0;
   width: 100%;
@@ -280,10 +323,12 @@
   max-height: none;
   background: transparent;
 }
-[data-card-feedback-host][data-card-top-layer] { pointer-events: none; }
+[data-card-feedback-host][data-card-top-layer] {
+  pointer-events: none;
+}
 
 // Positioned feedback and editors retain the insets and dimensions set by their own styles.
-:where([data-card-top-layer="positioned"][popover]) {
+:where([data-card-top-layer='positioned'][popover]) {
   inset: auto;
   width: auto;
   height: auto;

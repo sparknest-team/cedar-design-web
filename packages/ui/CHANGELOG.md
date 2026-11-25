@@ -129,13 +129,13 @@
 
 ---
 
-[//]: # "template"
-[//]: # "## 1.1.2"
-[//]: # "#### Feature"
-[//]: # "#### Fix"
-[//]: # "#### Style"
-[//]: # "#### Breaking Change"
-[//]: # "#### Remove"
+[//]: # 'template'
+[//]: # '## 1.1.2'
+[//]: # '#### Feature'
+[//]: # '#### Fix'
+[//]: # '#### Style'
+[//]: # '#### Breaking Change'
+[//]: # '#### Remove'
 
 ## Unreleased
 
