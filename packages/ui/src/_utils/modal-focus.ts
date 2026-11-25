@@ -1,12 +1,30 @@
-import { nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, watch } from 'vue'
+import type { InjectionKey } from 'vue'
+import { inject, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, provide, watch } from 'vue'
 import { canRestoreFocus, isTabStop } from './focusable'
 
 const selector = 'a[href],button,input,select,textarea,[tabindex], [contenteditable]'
 const focusOrigins = new WeakMap<HTMLElement, HTMLElement[]>()
+type ScrollBranch = () => HTMLElement | undefined
+const scrollBranchesKey: InjectionKey<Set<ScrollBranch>> = Symbol('modal-scroll-branches')
+
+export function useModalScrollBranch(branch: ScrollBranch) {
+  const branches = inject(scrollBranchesKey, undefined)
+  if (branches) {
+    branches.add(branch)
+    onBeforeUnmount(() => branches.delete(branch))
+  }
+}
 /** Modal ownership follows the popup stack, including teleported child Triggers. */
-export function useModalFocus(root: () => HTMLElement | undefined, active: () => boolean,
-  isTop: (event?: Event) => boolean, lockScroll: () => boolean = () => true,
-  ownerDocument?: () => Document | undefined) {
+export function useModalFocus(
+  root: () => HTMLElement | undefined,
+  active: () => boolean,
+  isTop: (event?: Event) => boolean,
+  lockScroll: () => boolean = () => true,
+  ownerDocument?: () => Document | undefined,
+  isTopForScroll = isTop,
+) {
+  const scrollBranches = new Set<ScrollBranch>()
+  provide(scrollBranchesKey, scrollBranches)
   let previous: HTMLElement[] = []
   let element: HTMLElement | undefined
   let owner: Document | undefined
@@ -30,7 +48,9 @@ export function useModalFocus(root: () => HTMLElement | undefined, active: () =>
           focused = doc.activeElement as HTMLElement | null
         }
       }
-    } catch { /* Cross-origin ancestors are outside this focus contract. */ }
+    } catch {
+      /* Cross-origin ancestors are outside this focus contract. */
+    }
     return focused
   }
   function ownsFocusChain() {
@@ -46,27 +66,40 @@ export function useModalFocus(root: () => HTMLElement | undefined, active: () =>
           return false
         }
       }
-    } catch { /* Stop at the accessible document boundary. */ }
+    } catch {
+      /* Stop at the accessible document boundary. */
+    }
     return true
   }
   function focus() {
     const target = root()
-    if (!mounted || suspended || !active() || !target || !isTop()) return
+    if (!mounted || suspended || !active() || !target || !isTop()) {
+      return
+    }
     element = target
-    if (!target.contains((target.getRootNode() as Document | ShadowRoot).activeElement)) target.focus({ preventScroll: true })
+    if (!target.contains((target.getRootNode() as Document | ShadowRoot).activeElement)) {
+      target.focus({ preventScroll: true })
+    }
   }
   function focusAfterEnter() {
     const doc = root()?.ownerDocument
     const current = doc?.activeElement
     // The user may move focus while the opening transition is running.
-    if (!current || current === doc?.body || current === doc?.documentElement || previous.includes(current as HTMLElement)) {
+    if (
+      !current ||
+      current === doc?.body ||
+      current === doc?.documentElement ||
+      previous.includes(current as HTMLElement)
+    ) {
       focus()
     }
   }
   function restore() {
     const focused = owner?.activeElement
     const target = previous.find(canRestoreFocus)
-    if (target && ownsFocusChain() && (!focused || focused === owner?.body || element?.contains(focused))) target.focus({ preventScroll: true })
+    if (target && ownsFocusChain() && (!focused || focused === owner?.body || element?.contains(focused))) {
+      target.focus({ preventScroll: true })
+    }
     if (element) {
       focusOrigins.delete(element)
     }
@@ -74,7 +107,9 @@ export function useModalFocus(root: () => HTMLElement | undefined, active: () =>
     captured = false
   }
   function capture() {
-    if (!owner) return
+    if (!owner) {
+      return
+    }
     if (!captured) {
       const focused = outsideFocus()
       // Snapshot ancestor modal origins before a lower layer can close first.
@@ -97,7 +132,9 @@ export function useModalFocus(root: () => HTMLElement | undefined, active: () =>
   }
   function trap(event: KeyboardEvent) {
     const target = root()
-    if (event.key !== 'Tab' || event.defaultPrevented || !active() || suspended || !target || !isTop(event)) return
+    if (event.key !== 'Tab' || event.defaultPrevented || !active() || suspended || !target || !isTop(event)) {
+      return
+    }
     const items = Array.from(target.querySelectorAll<HTMLElement>(selector)).filter(isTabStop)
     // Positive tabindex precedes the natural/zero order; equal values retain DOM order.
     items.sort((left, right) => {
@@ -106,34 +143,62 @@ export function useModalFocus(root: () => HTMLElement | undefined, active: () =>
       return a && b ? a - b : a ? -1 : b ? 1 : 0
     })
     const focused = target.ownerDocument.activeElement
-    const first = items[0], last = items[items.length - 1]
-    if (!items.length || !target.contains(focused) || focused === target || (event.shiftKey ? focused === first : focused === last)) {
+    const first = items[0],
+      last = items[items.length - 1]
+    if (
+      !items.length ||
+      !target.contains(focused) ||
+      focused === target ||
+      (event.shiftKey ? focused === first : focused === last)
+    ) {
       event.preventDefault()
       ;(event.shiftKey ? last : first)?.focus({ preventScroll: true })
-      if (!items.length) target.focus({ preventScroll: true })
+      if (!items.length) {
+        target.focus({ preventScroll: true })
+      }
     }
   }
   function start(event: TouchEvent) {
     touch = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : undefined
   }
   function move(event: TouchEvent) {
-    if (!touch || event.touches.length !== 1 || !active() || suspended || !lockScroll() || !isTop(event)) return
-    const point = event.touches[0], dx = touch.x - point.clientX, dy = touch.y - point.clientY
+    if (!touch || event.touches.length !== 1 || !active() || suspended || !lockScroll() || !isTopForScroll(event)) {
+      return
+    }
+    const point = event.touches[0],
+      dx = touch.x - point.clientX,
+      dy = touch.y - point.clientY
     touch = { x: point.clientX, y: point.clientY }
-    if (!dx && !dy) return
-    const target = root()
-    const horizontal = Math.abs(dx) > Math.abs(dy), delta = horizontal ? dx : dy
-    let node = event.target as HTMLElement | null
-    while (target && node && target.contains(node)) {
+    if (!dx && !dy) {
+      return
+    }
+    const path = event.composedPath()
+    const modal = root()
+    // Teleported child popups keep their logical modal owner. Stop at their
+    // own root so a touch at the list boundary cannot scroll the background.
+    const target =
+      modal &&
+      (path.includes(modal)
+        ? modal
+        : [...scrollBranches].map((branch) => branch()).find((branch) => branch && path.includes(branch)))
+    const horizontal = Math.abs(dx) > Math.abs(dy),
+      delta = horizontal ? dx : dy
+    for (const entry of target ? path.slice(0, path.indexOf(target) + 1) : []) {
+      const node = entry as HTMLElement
+      if (node.nodeType !== 1) {
+        continue
+      }
       const style = node.ownerDocument.defaultView?.getComputedStyle(node)
       const overflow = horizontal ? style?.overflowX : style?.overflowY
       const offset = horizontal ? node.scrollLeft : node.scrollTop
       const maximum = horizontal ? node.scrollWidth - node.clientWidth : node.scrollHeight - node.clientHeight
-      if (/(auto|scroll)/.test(overflow ?? '') && maximum > 0 && (delta < 0 ? offset > 0 : offset < maximum - 1)) return
-      if (node === target) break
-      node = node.parentElement
+      if (/(auto|scroll)/.test(overflow ?? '') && maximum > 0 && (delta < 0 ? offset > 0 : offset < maximum - 1)) {
+        return
+      }
     }
-    if (event.cancelable) event.preventDefault()
+    if (event.cancelable) {
+      event.preventDefault()
+    }
   }
   function bind() {
     owner = root()?.ownerDocument
@@ -147,14 +212,46 @@ export function useModalFocus(root: () => HTMLElement | undefined, active: () =>
     owner?.removeEventListener('touchmove', move, true)
     touch = undefined
   }
-  watch([active, root, () => ownerDocument?.() ?? root()?.ownerDocument], ([value]) => {
-    if (!mounted || suspended) return
-    if (root()?.ownerDocument !== owner) { unbind(); bind() }
-    if (value && (!captured || root() !== element)) capture()
-  }, { flush: 'post' })
-  onMounted(() => { mounted = true; bind(); if (active()) capture() })
-  onActivated(() => { suspended = false; unbind(); bind(); if (active()) capture() })
-  onDeactivated(() => { suspended = true; unbind(); restore() })
-  onBeforeUnmount(() => { mounted = false; unbind(); restore() })
+  watch(
+    [active, root, () => ownerDocument?.() ?? root()?.ownerDocument],
+    ([value]) => {
+      if (!mounted || suspended) {
+        return
+      }
+      if (root()?.ownerDocument !== owner) {
+        unbind()
+        bind()
+      }
+      if (value && (!captured || root() !== element)) {
+        capture()
+      }
+    },
+    { flush: 'post' },
+  )
+  onMounted(() => {
+    mounted = true
+    bind()
+    if (active()) {
+      capture()
+    }
+  })
+  onActivated(() => {
+    suspended = false
+    unbind()
+    bind()
+    if (active()) {
+      capture()
+    }
+  })
+  onDeactivated(() => {
+    suspended = true
+    unbind()
+    restore()
+  })
+  onBeforeUnmount(() => {
+    mounted = false
+    unbind()
+    restore()
+  })
   return { focus, focusAfterEnter, restore, trap }
 }

@@ -18,7 +18,13 @@ export function acquireScrollLock(element: HTMLElement, options: ScrollLockOptio
   let state = locks.get(element)
   const view = element.ownerDocument.defaultView
   const remember = (state: LockState, property: string, target: HTMLElement = element) => {
-    if (!state.styles.has(property)) state.styles.set(property, [target, target.style.getPropertyValue(property), target.style.getPropertyPriority(property)])
+    if (!state.styles.has(property)) {
+      state.styles.set(property, [
+        target,
+        target.style.getPropertyValue(property),
+        target.style.getPropertyPriority(property),
+      ])
+    }
   }
   if (!state) {
     const overflow: Array<[string, string, string]> = []
@@ -33,7 +39,7 @@ export function acquireScrollLock(element: HTMLElement, options: ScrollLockOptio
     const styles = view?.getComputedStyle(element)
     const initialOverflow = styles?.overflow
     const isRoot = element === element.ownerDocument.documentElement
-    const paddingTarget = isRoot ? element.ownerDocument.body ?? element : element
+    const paddingTarget = isRoot ? (element.ownerDocument.body ?? element) : element
     const paddingStyles = view?.getComputedStyle(paddingTarget)
     const initialPaddingLeft = paddingStyles?.paddingLeft
     const initialPaddingRight = paddingStyles?.paddingRight
@@ -42,9 +48,15 @@ export function acquireScrollLock(element: HTMLElement, options: ScrollLockOptio
     const beforeLeft = metric.clientLeft
     const beforeRect = isRoot ? paddingTarget.getBoundingClientRect() : undefined
     const bothEdges = view?.getComputedStyle(metric).getPropertyValue('scrollbar-gutter').includes('both-edges')
-    const available = isRoot || element === element.ownerDocument.body
-      ? (view && beforeWidth ? view.innerWidth - beforeWidth : 0)
-      : element.offsetWidth - beforeWidth - (parseFloat(styles?.borderLeftWidth ?? '') || 0) - (parseFloat(styles?.borderRightWidth ?? '') || 0)
+    const available =
+      isRoot || element === element.ownerDocument.body
+        ? view && beforeWidth
+          ? view.innerWidth - beforeWidth
+          : 0
+        : element.offsetWidth -
+          beforeWidth -
+          (parseFloat(styles?.borderLeftWidth ?? '') || 0) -
+          (parseFloat(styles?.borderRightWidth ?? '') || 0)
     // The root owns viewport compensation until the last root or body lock ends.
     if (element === element.ownerDocument.body && metric !== element) {
       state.releaseRoot = acquireScrollLock(metric, { reserveScrollBar: options.reserveScrollBar })
@@ -78,26 +90,37 @@ export function acquireScrollLock(element: HTMLElement, options: ScrollLockOptio
         } else {
           const direction = view.getComputedStyle(metric).direction
           const onLeft = leftReleased > 0 || (beforeLeft === metric.clientLeft && direction === 'rtl')
-          reserve(onLeft ? 'padding-left' : 'padding-right', onLeft ? initialPaddingLeft : initialPaddingRight, released)
+          reserve(
+            onLeft ? 'padding-left' : 'padding-right',
+            onLeft ? initialPaddingLeft : initialPaddingRight,
+            released,
+          )
         }
       }
     }
   }
   state.count++
   if (options.className) {
-    const entry = state.classes.get(options.className) ?? { count: 0, existed: element.classList.contains(options.className) }
+    const entry = state.classes.get(options.className) ?? {
+      count: 0,
+      existed: element.classList.contains(options.className),
+    }
     entry.count++
     state.classes.set(options.className, entry)
     element.classList.add(options.className)
   }
   let released = false
   return () => {
-    if (released) return
+    if (released) {
+      return
+    }
     released = true
     if (options.className) {
       const entry = state!.classes.get(options.className)!
       if (--entry.count === 0) {
-        if (!entry.existed) element.classList.remove(options.className)
+        if (!entry.existed) {
+          element.classList.remove(options.className)
+        }
         state!.classes.delete(options.className)
       }
     }
@@ -109,8 +132,11 @@ export function acquireScrollLock(element: HTMLElement, options: ScrollLockOptio
         element.style.setProperty(property, value, priority)
       }
       for (const [property, [target, value, priority]] of state!.styles) {
-        if (value) target.style.setProperty(property, value, priority)
-        else target.style.removeProperty(property)
+        if (value) {
+          target.style.setProperty(property, value, priority)
+        } else {
+          target.style.removeProperty(property)
+        }
       }
       locks.delete(element)
       state!.releaseRoot?.()
@@ -119,21 +145,46 @@ export function acquireScrollLock(element: HTMLElement, options: ScrollLockOptio
 }
 
 /** No DOM access during SSR; rebind the actual locked target on container changes. */
-export function useScrollLock(target: () => HTMLElement | undefined, enabled: () => boolean, options: ScrollLockOptions = {}) {
+export function useScrollLock(
+  target: () => HTMLElement | undefined,
+  enabled: () => boolean,
+  options: ScrollLockOptions = {},
+) {
   let mounted = false
   let suspended = false
   let lockedTarget: HTMLElement | undefined
   let release: (() => void) | undefined
-  const clear = () => { release?.(); release = undefined; lockedTarget = undefined }
+  const clear = () => {
+    release?.()
+    release = undefined
+    lockedTarget = undefined
+  }
   const sync = () => {
     const next = mounted && !suspended && enabled() ? target() : undefined
-    if (lockedTarget === next) return
+    if (lockedTarget === next) {
+      return
+    }
     clear()
-    if (next) { lockedTarget = next; release = acquireScrollLock(next, options) }
+    if (next) {
+      lockedTarget = next
+      release = acquireScrollLock(next, options)
+    }
   }
   watch([target, enabled], sync, { flush: 'sync' })
-  onMounted(() => { mounted = true; sync() })
-  onActivated(() => { suspended = false; sync() })
-  onDeactivated(() => { suspended = true; clear() })
-  onBeforeUnmount(() => { mounted = false; clear() })
+  onMounted(() => {
+    mounted = true
+    sync()
+  })
+  onActivated(() => {
+    suspended = false
+    sync()
+  })
+  onDeactivated(() => {
+    suspended = true
+    clear()
+  })
+  onBeforeUnmount(() => {
+    mounted = false
+    clear()
+  })
 }

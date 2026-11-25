@@ -1,8 +1,8 @@
-import type { ReadingDirection } from '../_utils/direction'
 import type { CSSProperties } from 'vue'
+import type { ReadingDirection } from '../_utils/direction'
 import type { TriggerPlacement } from './contract'
-import type { TriggerPopupTranslate, TriggerStrategy } from './types'
 import { getPlacementOffset } from './geometry'
+import type { TriggerPopupTranslate, TriggerStrategy } from './types'
 
 interface RelativeRect {
   width: number
@@ -23,8 +23,10 @@ function getViewport(view: Window | null | undefined) {
   return {
     width: viewport?.width ?? view?.innerWidth ?? 0,
     height: viewport?.height ?? view?.innerHeight ?? 0,
-    left: viewport?.offsetLeft ?? 0,
-    top: viewport?.offsetTop ?? 0,
+    // Convert page coordinates to the client coordinates used by DOMRect.
+    // During keyboard panning WKWebView can include window scroll in offsetTop.
+    left: view && viewport?.pageLeft != null ? viewport.pageLeft - view.scrollX : (viewport?.offsetLeft ?? 0),
+    top: view && viewport?.pageTop != null ? viewport.pageTop - view.scrollY : (viewport?.offsetTop ?? 0),
   }
 }
 
@@ -39,8 +41,12 @@ function oppositePlacement(placement: TriggerPlacement): TriggerPlacement {
 }
 
 function resolveTranslate(placement: TriggerPlacement, translate?: TriggerPopupTranslate) {
-  if (!translate) return [0, 0] as const
-  if (Array.isArray(translate)) return translate as readonly [number, number]
+  if (!translate) {
+    return [0, 0] as const
+  }
+  if (Array.isArray(translate)) {
+    return translate as readonly [number, number]
+  }
   return (translate as Partial<Record<TriggerPlacement, readonly [number, number]>>)[placement] ?? [0, 0]
 }
 
@@ -95,16 +101,24 @@ function fitPosition(
   const finalBoundary = boundaries(offset)
   const finalSide = basePlacement(position)
   if (finalSide === 'top' || finalSide === 'bottom') {
-    if (finalBoundary.left < 0) offset.left -= finalBoundary.left
-    else if (finalBoundary.right < 0) offset.left += finalBoundary.right
+    if (finalBoundary.left < 0) {
+      offset.left -= finalBoundary.left
+    } else if (finalBoundary.right < 0) {
+      offset.left += finalBoundary.right
+    }
   } else {
-    if (finalBoundary.top < 0) offset.top -= finalBoundary.top
-    else if (finalBoundary.bottom < 0) offset.top += finalBoundary.bottom
+    if (finalBoundary.top < 0) {
+      offset.top -= finalBoundary.top
+    } else if (finalBoundary.bottom < 0) {
+      offset.top += finalBoundary.bottom
+    }
   }
   // When neither side fits, keep the main axis inside the visual viewport too.
   // Oversized popups are pinned to its start; their content owns scrolling.
   if (finalSide === 'top' || finalSide === 'bottom') {
-    offset.top = Math.max(-originTop, Math.min(offset.top, height - popup.height - originTop))
+    if (!context.keepVerticalAnchor) {
+      offset.top = Math.max(-originTop, Math.min(offset.top, height - popup.height - originTop))
+    }
   } else {
     offset.left = Math.max(-originLeft, Math.min(offset.left, width - popup.width - originLeft))
   }
@@ -118,6 +132,7 @@ export interface PositionContext {
   scaleY: number
   distance: number
   translate?: TriggerPopupTranslate
+  keepVerticalAnchor?: boolean
   autoFitPosition: boolean
   strategy: TriggerStrategy
   customStyle?: CSSProperties

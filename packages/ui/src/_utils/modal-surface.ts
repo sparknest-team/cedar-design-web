@@ -1,5 +1,4 @@
 import { computed, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch, type Ref } from 'vue'
-import { useVisualSurface } from './visual-surface'
 import { useZIndex } from '../context/zIndex'
 import { useModalFocus } from './modal-focus'
 import type { PopupContainer } from './popup-container'
@@ -7,6 +6,7 @@ import { usePopupContainer } from './popup-container'
 import { usePopupLayer } from './popup-layer'
 import { usePopupTransition } from './popup-transition'
 import { useScrollLock } from './scroll-lock'
+import { useVisualSurface } from './visual-surface'
 
 export type ModalSurfaceCloseReason = 'overlay' | 'escape' | 'route'
 
@@ -59,9 +59,10 @@ export function useModalSurface(options: ModalSurfaceOptions) {
     return typeof document === 'undefined' ? undefined : document
   })
   // Track the reactive destination: DOM adoption does not change the root ref.
-  const modalDocument = () => options.popupContainer() === false
-    ? options.root.value?.ownerDocument ?? popupDocument.value
-    : popupDocument.value
+  const modalDocument = () =>
+    options.popupContainer() === false
+      ? (options.root.value?.ownerDocument ?? popupDocument.value)
+      : popupDocument.value
   const scrollLockTarget = computed(() => {
     const target = popupContainerTarget.value
     return options.popupContainer() === false || typeof target === 'string' ? modalDocument()?.body : target
@@ -70,34 +71,35 @@ export function useModalSurface(options: ModalSurfaceOptions) {
   const { zIndex } = useZIndex(layerActive, 3)
   const mergedZIndex = computed(() => options.zIndex() ?? zIndex.value)
   useVisualSurface(
-    () => (mergedOpen.value || transition.leaving.value) && modalDocument() ? options.root.value : undefined,
+    () => ((mergedOpen.value || transition.leaving.value) && modalDocument() ? options.root.value : undefined),
     () => mergedZIndex.value,
   )
-  const { onStackTop } = usePopupLayer(
-    layerActive,
-    mergedZIndex,
-    modalDocument,
-  )
+  const { onStackTop, onModalStackTop } = usePopupLayer(layerActive, mergedZIndex, modalDocument, false, true)
   const { focus, focusAfterEnter, restore } = useModalFocus(
     () => options.root.value?.querySelector<HTMLElement>('[data-modal-focus-root]') ?? options.root.value,
     () => mergedOpen.value,
     onStackTop,
     options.lockScroll,
     modalDocument,
+    onModalStackTop,
   )
 
   // Same-document Teleport moves keep the root ref and ownerDocument, but the
   // browser can blur the moved control. Restore focus only when no control
   // retained it, including teleported children outside the modal DOM subtree.
-  watch([popupContainerTarget, () => options.popupContainer() === false], () => {
-    nextTick(() => {
+  watch(
+    [popupContainerTarget, () => options.popupContainer() === false],
+    () => {
+      nextTick(() => {
         const doc = modalDocument()
         const current = doc?.activeElement
         if (!current || current === doc?.body || current === doc?.documentElement) {
           focus()
         }
       })
-  }, { flush: 'post' })
+    },
+    { flush: 'post' },
+  )
 
   useScrollLock(
     () => scrollLockTarget.value,
@@ -130,7 +132,14 @@ export function useModalSurface(options: ModalSurfaceOptions) {
   }
 
   function handleKeydown(event: KeyboardEvent) {
-    if (!mergedOpen.value || event.defaultPrevented || event.isComposing || event.keyCode === 229 || event.key !== 'Escape' || !onStackTop(event)) {
+    if (
+      !mergedOpen.value ||
+      event.defaultPrevented ||
+      event.isComposing ||
+      event.keyCode === 229 ||
+      event.key !== 'Escape' ||
+      !onStackTop(event)
+    ) {
       return
     }
     options.emit('key-escape', event)
