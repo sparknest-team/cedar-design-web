@@ -1,37 +1,26 @@
-import type { InjectionKey } from 'vue'
-import { inject, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, provide, watch } from 'vue'
+import { nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, watch } from 'vue'
 import { canRestoreFocus, isTabStop } from './focusable'
 
 const selector = 'a[href],button,input,select,textarea,[tabindex], [contenteditable]'
 const focusOrigins = new WeakMap<HTMLElement, HTMLElement[]>()
 type ScrollBranch = () => HTMLElement | undefined
-const scrollBranchesKey: InjectionKey<Set<ScrollBranch>> = Symbol('modal-scroll-branches')
 
-export function useModalScrollBranch(branch: ScrollBranch) {
-  const branches = inject(scrollBranchesKey, undefined)
-  if (branches) {
-    branches.add(branch)
-    onBeforeUnmount(() => branches.delete(branch))
-  }
-}
+export function useModalScrollBranch(_branch: ScrollBranch) {}
 /** Modal ownership follows the popup stack, including teleported child Triggers. */
 export function useModalFocus(
   root: () => HTMLElement | undefined,
   active: () => boolean,
   isTop: (event?: Event) => boolean,
-  lockScroll: () => boolean = () => true,
+  _lockScroll: () => boolean = () => true,
   ownerDocument?: () => Document | undefined,
-  isTopForScroll = isTop,
+  _isTopForScroll = isTop,
 ) {
-  const scrollBranches = new Set<ScrollBranch>()
-  provide(scrollBranchesKey, scrollBranches)
   let previous: HTMLElement[] = []
   let element: HTMLElement | undefined
   let owner: Document | undefined
   let mounted = false
   let suspended = false
   let captured = false
-  let touch: { x: number; y: number } | undefined
   // A modal may live in an iframe while its opener lives in a same-origin
   // ancestor. Follow only accessible DOM focus chains, never global realm types.
   function outsideFocus() {
@@ -158,59 +147,12 @@ export function useModalFocus(
       }
     }
   }
-  function start(event: TouchEvent) {
-    touch = event.touches.length === 1 ? { x: event.touches[0].clientX, y: event.touches[0].clientY } : undefined
-  }
-  function move(event: TouchEvent) {
-    if (!touch || event.touches.length !== 1 || !active() || suspended || !lockScroll() || !isTopForScroll(event)) {
-      return
-    }
-    const point = event.touches[0],
-      dx = touch.x - point.clientX,
-      dy = touch.y - point.clientY
-    touch = { x: point.clientX, y: point.clientY }
-    if (!dx && !dy) {
-      return
-    }
-    const path = event.composedPath()
-    const modal = root()
-    // Teleported child popups keep their logical modal owner. Stop at their
-    // own root so a touch at the list boundary cannot scroll the background.
-    const target =
-      modal &&
-      (path.includes(modal)
-        ? modal
-        : [...scrollBranches].map((branch) => branch()).find((branch) => branch && path.includes(branch)))
-    const horizontal = Math.abs(dx) > Math.abs(dy),
-      delta = horizontal ? dx : dy
-    for (const entry of target ? path.slice(0, path.indexOf(target) + 1) : []) {
-      const node = entry as HTMLElement
-      if (node.nodeType !== 1) {
-        continue
-      }
-      const style = node.ownerDocument.defaultView?.getComputedStyle(node)
-      const overflow = horizontal ? style?.overflowX : style?.overflowY
-      const offset = horizontal ? node.scrollLeft : node.scrollTop
-      const maximum = horizontal ? node.scrollWidth - node.clientWidth : node.scrollHeight - node.clientHeight
-      if (/(auto|scroll)/.test(overflow ?? '') && maximum > 0 && (delta < 0 ? offset > 0 : offset < maximum - 1)) {
-        return
-      }
-    }
-    if (event.cancelable) {
-      event.preventDefault()
-    }
-  }
   function bind() {
     owner = root()?.ownerDocument
     owner?.addEventListener('keydown', trap, true)
-    owner?.addEventListener('touchstart', start, { passive: true, capture: true })
-    owner?.addEventListener('touchmove', move, { passive: false, capture: true })
   }
   function unbind() {
     owner?.removeEventListener('keydown', trap, true)
-    owner?.removeEventListener('touchstart', start, true)
-    owner?.removeEventListener('touchmove', move, true)
-    touch = undefined
   }
   watch(
     [active, root, () => ownerDocument?.() ?? root()?.ownerDocument],
