@@ -42,16 +42,28 @@ FormItem 中只有一个延迟编辑的 Input 时，可见标签在关闭状态�
 在已绑定 `model` 的 Form 中，编辑时可用 `compact` 联动外层 FormItem 的 `layout` 与 `hide-label`。内层字段保持挂载，隐藏外层标签时，输入框仍需有可访问名称。
 
 ```vue
+<script setup>
+import { reactive, ref } from 'vue'
+import { Form as CForm, FormItem as CFormItem, Input as CInput } from '@cedar-design/ui-vue'
+import '@cedar-design/ui-vue/style'
+
+const compact = ref(false)
+const model = reactive({ account: '' })
+</script>
+
 <template>
-  <c-form-item
-    label="账户"
-    :layout="compact ? 'vertical' : 'horizontal'"
-    :hide-label="compact"
-  >
-    <c-form-item field="account" no-style>
-      <c-input v-model="model.account" aria-label="账户" />
-    </c-form-item>
-  </c-form-item>
+  <label><input v-model="compact" type="checkbox" /> 紧凑布局</label>
+  <CForm :model="model" edit-mode="direct">
+    <CFormItem
+      label="账户"
+      :layout="compact ? 'vertical' : 'horizontal'"
+      :hide-label="compact"
+    >
+      <CFormItem field="account" no-style>
+        <CInput v-model="model.account" aria-label="账户" />
+      </CFormItem>
+    </CFormItem>
+  </CForm>
 </template>
 ```
 
@@ -537,7 +549,7 @@ Form / FormItem 通过 `empty-values` 提供空值识别策略；字段自己的
 | label             | 标签的文本                                                                                              | `string`                                              |       `-`        |
 | tooltip           | 提示内容                                                                                                | `string`                                              |       `-`        |
 | show-colon        | 是否显示冒号                                                                                            | `boolean`                                             |     `false`      |
-| no-style          | 是否去除样式                                                                                            | `boolean`                                             |     `false`      |
+| no-style          | 直接输出默认插槽，省略布局元素。切换此属性会重新挂载后代字段；编辑期间切换布局请使用 layout 和 hide-label。                                                                                            | `boolean`                                             |     `false`      |
 | disabled          | 是否禁用                                                                                                | `boolean`                                             |       `-`        |
 | readonly          | 是否只读；未传时继承 Form                                                                               | `boolean`                                             |       `-`        |
 | help              | 帮助文案                                                                                                | `string`                                              |       `-`        |

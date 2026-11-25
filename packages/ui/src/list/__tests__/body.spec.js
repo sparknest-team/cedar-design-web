@@ -1,7 +1,7 @@
-import { createSSRApp, h, nextTick } from 'vue'
-import { renderToString } from 'vue/server-renderer'
+import { createSSRApp, h, nextTick, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, test } from 'vitest'
+import { renderToString } from 'vue/server-renderer'
 import List, { ListItem } from '..'
 import VirtualList from '../../_components/virtual-list-v2'
 
@@ -27,7 +27,10 @@ describe('List aligned body', () => {
     w.unmount()
   })
   test('manual slots override data and virtualization', () => {
-    const w = mount(List, { props: { data: [1, 2], virtualListProps: { height: 120 } }, slots: { default: () => h(ListItem, null, () => 'manual'), item: () => 'data' } })
+    const w = mount(List, {
+      props: { data: [1, 2], virtualListProps: { height: 120 } },
+      slots: { default: () => h(ListItem, null, () => 'manual'), item: () => 'data' },
+    })
     expect(w.findComponent(VirtualList).exists()).toBe(false)
     expect(w.text()).toContain('manual')
     expect(w.text()).not.toContain('data')
@@ -35,7 +38,14 @@ describe('List aligned body', () => {
   })
   test('virtual data updates, semantics, scroll events and methods', async () => {
     const data = Array.from({ length: 100 }, (_, id) => ({ id }))
-    const w = mount(List, { props: { data, maxHeight: 120, virtualListProps: { fixedSize: true, estimatedSize: 20, buffer: 3, itemKey: 'id' } }, slots: { item: ({ item, index }) => h(ListItem, null, () => item.id + ':' + index) } })
+    const w = mount(List, {
+      props: {
+        data,
+        maxHeight: 120,
+        virtualListProps: { fixedSize: true, estimatedSize: 20, buffer: 3, itemKey: 'id' },
+      },
+      slots: { item: ({ item, index }) => h(ListItem, null, () => item.id + ':' + index) },
+    })
     const virtual = w.findComponent(VirtualList)
     const element = virtual.element
     Object.defineProperty(element, 'clientHeight', { value: 120 })
@@ -52,7 +62,10 @@ describe('List aligned body', () => {
     w.unmount()
   })
   test('virtual empty respects loading and empty slot', async () => {
-    const w = mount(List, { props: { data: [], loading: true, virtualListProps: {} }, slots: { empty: () => 'Nothing' } })
+    const w = mount(List, {
+      props: { data: [], loading: true, virtualListProps: {} },
+      slots: { empty: () => 'Nothing' },
+    })
     expect(w.text()).not.toContain('Nothing')
     await w.setProps({ loading: false })
     expect(w.text()).toContain('Nothing')
@@ -60,7 +73,9 @@ describe('List aligned body', () => {
     w.unmount()
   })
   test('SSR renders native semantic content', async () => {
-    const html = await renderToString(createSSRApp({ render: () => h(List, { scrollbar: false }, () => h(ListItem, null, () => 'server')) }))
+    const html = await renderToString(
+      createSSRApp({ render: () => h(List, { scrollbar: false }, () => h(ListItem, null, () => 'server')) }),
+    )
     expect(html).toContain('role="list"')
     expect(html).toContain('role="listitem"')
     expect(html).toContain('server')
@@ -69,7 +84,16 @@ describe('List aligned body', () => {
 
 describe('virtual-list alignment foundation', () => {
   test('shrinking non-empty data recovers its window and threshold preserves indexes', async () => {
-    const w = mount(VirtualList, { props: { data: Array.from({ length: 100 }, (_, id) => ({ id })), itemKey: 'id', fixedSize: true, estimatedSize: 20, buffer: 3 }, slots: { item: ({ item, index }) => h('div', item.id + ':' + index) } })
+    const w = mount(VirtualList, {
+      props: {
+        data: Array.from({ length: 100 }, (_, id) => ({ id })),
+        itemKey: 'id',
+        fixedSize: true,
+        estimatedSize: 20,
+        buffer: 3,
+      },
+      slots: { item: ({ item, index }) => h('div', item.id + ':' + index) },
+    })
     w.vm.scrollTo({ index: 80, align: 'top' })
     await nextTick()
     await w.setProps({ data: [{ id: 'a' }, { id: 'b' }] })
@@ -84,7 +108,17 @@ describe('virtual-list alignment foundation', () => {
   })
 
   test('top bottom auto and invalid targets', async () => {
-    const w = mount(VirtualList, { props: { data: Array.from({ length: 100 }, (_, id) => ({ id })), itemKey: 'id', height: 100, fixedSize: true, estimatedSize: 20, buffer: 3 }, slots: { item: ({ item }) => h('div', String(item.id)) } })
+    const w = mount(VirtualList, {
+      props: {
+        data: Array.from({ length: 100 }, (_, id) => ({ id })),
+        itemKey: 'id',
+        height: 100,
+        fixedSize: true,
+        estimatedSize: 20,
+        buffer: 3,
+      },
+      slots: { item: ({ item }) => h('div', String(item.id)) },
+    })
     Object.defineProperty(w.element, 'clientHeight', { value: 100 })
     w.vm.scrollTo({ index: 10, align: 'top' })
     await nextTick()
@@ -107,4 +141,34 @@ describe('virtual-list alignment foundation', () => {
     expect(w.element.scrollTop).toBe(920)
     w.unmount()
   })
+})
+
+test('adding and removing a manual slot switches the existing list between both viewports', async () => {
+  const manual = ref(false)
+  const options = { height: 100 }
+  const rows = [{ key: 1 }]
+  const owner = mount({
+    render: () =>
+      h(
+        List,
+        { data: rows, virtualListProps: options },
+        {
+          item: () => 'data row',
+          ...(manual.value ? { default: () => 'manual row' } : {}),
+        },
+      ),
+  })
+  try {
+    expect(owner.findComponent(VirtualList).exists()).toBe(true)
+    manual.value = true
+    await nextTick()
+    expect(owner.findComponent(VirtualList).exists()).toBe(false)
+    expect(owner.text()).toContain('manual row')
+    manual.value = false
+    await nextTick()
+    expect(owner.findComponent(VirtualList).exists()).toBe(true)
+    expect(owner.text()).toContain('data row')
+  } finally {
+    owner.unmount()
+  }
 })

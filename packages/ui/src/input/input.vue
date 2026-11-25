@@ -21,7 +21,11 @@
       :popup-container="popupContainer"
       :text="type === 'password' && committedValue ? '••••••' : (committedValue ?? '')"
       :placeholder="placeholder"
-      :label="ariaLabel || (typeof nativeAttrs['aria-label'] === 'string' ? nativeAttrs['aria-label'] : undefined) || presentationLabel"
+      :label="
+        ariaLabel ||
+        (typeof nativeAttrs['aria-label'] === 'string' ? nativeAttrs['aria-label'] : undefined) ||
+        presentationLabel
+      "
       :open="editorOpen"
       :disabled="mergedDisabled"
       :readonly="mergedReadonly"
@@ -96,21 +100,22 @@
 
 <script setup lang="ts">
 import { computed, inject, nextTick, onMounted, ref, useAttrs, watch, type InputHTMLAttributes } from 'vue'
-import { useId } from '../_utils/vue-compat'
 import { invokeBeforeCommit, useFieldPresentation } from '../_components/field-presentation/context'
 import FieldPresentation from '../_components/field-presentation/FieldPresentation.vue'
 import { useSelectionSession } from '../_components/selection-field/use-selection-session'
 import { useEmptyValues } from '../_utils/empty-value'
 import { createNamespace } from '../_utils/global-config'
 import { useInputComposition } from '../_utils/input-composition'
-import FieldDecorator, { fieldDecoratorProps } from '../field-decorator'
+import { useId } from '../_utils/vue-compat'
+import FieldDecorator from '../field-decorator/FieldDecorator.vue'
+import { fieldDecoratorProps } from '../field-decorator/props'
+import { useFormErrorDescription } from '../form/error-description'
 import { oneTimeCodeKey } from './context'
 import InputFeedback from './InputFeedback.vue'
 import { captureInputSelection, splitInputAttrs } from './native-attrs'
 import { inputProps } from './props'
 import type { InputEmits, InputSlots } from './types'
 import { useInputForm } from './use-input-form'
-import { useFormErrorDescription } from '../form/error-description'
 import { useInputValue } from './use-input-value'
 
 defineOptions({ name: createNamespace('input').name, inheritAttrs: false })

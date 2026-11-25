@@ -6,17 +6,17 @@
 import { computed, h, inject, nextTick, ref, useSlots } from 'vue'
 import { useDirection } from '../_utils/direction'
 import { createNamespace } from '../_utils/global-config'
-import MenuView from './view'
 import type { TriggerInstance } from '../trigger'
-import { menuBranchProps } from './branch-props'
+import Trigger from '../trigger/trigger'
 import { menuDefaults, submenuTriggerAppearance } from './appearance'
-import Trigger from '../trigger'
-import MenuPanel from './MenuPanel.vue'
-import MenuOption from './MenuOption.vue'
+import { menuBranchProps } from './branch-props'
+import { menuInjectionKey } from './context'
 import { useMenuKeyboard } from './keyboard'
 import { useMenuLevel } from './level'
-import { menuInjectionKey } from './context'
-import { menuSelectionKey, createMenuTree } from './selection'
+import MenuOption from './MenuOption.vue'
+import MenuPanel from './MenuPanel.vue'
+import { createMenuTree, menuSelectionKey } from './selection'
+import MenuView from './view'
 
 defineOptions({ name: createNamespace('menu-branch').name })
 const props = defineProps(menuBranchProps)
@@ -29,19 +29,36 @@ const selection = inject(menuSelectionKey, undefined)
 const menu = inject(menuInjectionKey, undefined)
 const trigger = computed(() => menu?.submenuTrigger.value ?? menuDefaults.submenuTrigger)
 const disabled = computed(() => props.disabled || !!selection?.disabled.value)
-function close() { computedOpen.value = false }
-function allowClose() { triggerRef.value?.allowClose?.() }
+function close() {
+  computedOpen.value = false
+}
+function allowClose() {
+  triggerRef.value?.allowClose?.()
+}
 const branch = { close, allowClose, focus: () => triggerRef.value?.focusReference?.() }
 const { activate } = useMenuLevel(computedOpen, branch)
-function open() { if (!disabled.value) { activate(); computedOpen.value = true } }
+function open() {
+  if (!disabled.value) {
+    activate()
+    computedOpen.value = true
+  }
+}
 const keyboard = useMenuKeyboard({
-  reference: () => triggerRef.value?.getReference?.(), panel: () => panel.value?.panel,
-  visible: () => computedOpen.value, disabled: () => disabled.value,
-  isTopLayer: event => triggerRef.value?.isTopLayer?.(event) ?? false,
-  restoreFocus: () => triggerRef.value?.focusReference?.(), openKey: 'ArrowRight', open, close, tab: () => menu?.closeMenu?.(),
+  reference: () => triggerRef.value?.getReference?.(),
+  panel: () => panel.value?.panel,
+  visible: () => computedOpen.value,
+  disabled: () => disabled.value,
+  isTopLayer: (event) => triggerRef.value?.isTopLayer?.(event) ?? false,
+  restoreFocus: () => triggerRef.value?.focusReference?.(),
+  openKey: 'ArrowRight',
+  open,
+  close,
+  tab: () => menu?.closeMenu?.(),
 })
 // Under click, hovering must not collapse a sibling the user opened on purpose.
-function handleMouseenter() { if (trigger.value === 'hover') activate() }
+function handleMouseenter() {
+  if (trigger.value === 'hover') activate()
+}
 async function handleArrow(key: 'ArrowLeft' | 'ArrowRight') {
   if (key !== (isRtl.value ? 'ArrowLeft' : 'ArrowRight')) return
   open()
@@ -50,35 +67,60 @@ async function handleArrow(key: 'ArrowLeft' | 'ArrowRight') {
 }
 const viewOptions = computed(() => {
   const names = createMenuTree([], props.fieldNames).names
-  const value = props.option[names.value] !== undefined ? props.option[names.value] : typeof props.option[names.label] === 'function' ? undefined : props.option[names.label]
+  const value =
+    props.option[names.value] !== undefined
+      ? props.option[names.value]
+      : typeof props.option[names.label] === 'function'
+        ? undefined
+        : props.option[names.label]
   const active = selection?.isSelected(value) ?? false
-  const hasSelectedDescendant = selection && selection.modelValue.value !== undefined
-    ? selection.ancestors(selection.modelValue.value).includes(props.option)
-    : false
+  const hasSelectedDescendant =
+    selection && selection.modelValue.value !== undefined
+      ? selection.ancestors(selection.modelValue.value).includes(props.option)
+      : false
   return {
-    kind: 'submenu', triggerComponent: Trigger, triggerRef,
+    kind: 'submenu',
+    triggerComponent: Trigger,
+    triggerRef,
     triggerProps: {
       ...submenuTriggerAppearance(),
-      strategy: menu?.strategy.value ?? 'absolute', open: computedOpen.value, trigger: trigger.value,
-      placement: isRtl.value ? 'left-start' : 'right-start', unmountOnClose: true, disabled: disabled.value, escToClose: false,
-      referenceAttrs: { 'aria-haspopup': 'menu', 'aria-expanded': computedOpen.value },
-      onOpenChange: (open: boolean) => { if (open) activate(); computedOpen.value = open },
-    },
-    reference: () => h(MenuOption, {
-      ...props.option.props,
-      value,
-      option: props.option,
-      ripple: props.option.ripple,
-      highlight: computedOpen.value || hasSelectedDescendant,
-      childrenTrigger: true,
+      strategy: menu?.strategy.value ?? 'absolute',
+      open: computedOpen.value,
+      trigger: trigger.value,
+      placement: isRtl.value ? 'left-start' : 'right-start',
+      unmountOnClose: true,
       disabled: disabled.value,
-      'onKey-arrow-x': handleArrow,
-      onMouseenter: handleMouseenter,
-    }, {
-      default: () => props.renderers.label(props.option, active, props.level),
-      ...(props.renderers.hasIcon(props.option) ? { icon: () => props.renderers.icon(props.option, active, props.level) } : {}),
-      ...(props.renderers.hasExtra(props.option) ? { suffix: () => props.renderers.extra(props.option, active, props.level) } : {}),
-    }),
+      escToClose: false,
+      referenceAttrs: { 'aria-haspopup': 'menu', 'aria-expanded': computedOpen.value },
+      onOpenChange: (open: boolean) => {
+        if (open) activate()
+        computedOpen.value = open
+      },
+    },
+    reference: () =>
+      h(
+        MenuOption,
+        {
+          ...props.option.props,
+          value,
+          option: props.option,
+          ripple: props.option.ripple,
+          highlight: computedOpen.value || hasSelectedDescendant,
+          childrenTrigger: true,
+          disabled: disabled.value,
+          'onKey-arrow-x': handleArrow,
+          onMouseenter: handleMouseenter,
+        },
+        {
+          default: () => props.renderers.label(props.option, active, props.level),
+          ...(props.renderers.hasIcon(props.option)
+            ? { icon: () => props.renderers.icon(props.option, active, props.level) }
+            : {}),
+          ...(props.renderers.hasExtra(props.option)
+            ? { suffix: () => props.renderers.extra(props.option, active, props.level) }
+            : {}),
+        },
+      ),
     panelComponent: MenuPanel,
     panelProps: { ref: panel, submenu: true },
     items: () => slots.default?.(),

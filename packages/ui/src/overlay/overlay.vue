@@ -3,46 +3,45 @@
   <template v-if="false" />
   <teleport :to="popupContainerTarget" :disabled="popupContainer === false || teleportDisabled">
     <template v-if="true">
-    <transition :name="n('--fade')" @after-enter="transition.opened" @after-leave="transition.closed">
-      <div
-        v-if="shouldRender"
-        v-show="mergedOpen"
-        ref="overlayRoot"
-      :dir="readingDirection"
-        :class="n()"
-        :style="{ zIndex: mergedZIndex }"
-        v-bind="mergeProps(themeScope, $attrs)"
-      >
+      <transition :name="n('--fade')" @after-enter="transition.opened" @after-leave="transition.closed">
         <div
-          :class="n('backdrop')"
-          role="presentation"
-          @pointerdown="handleBackdropPointerDown"
-          @click="handleBackdropClick"
-        />
-        <div :class="n('content')">
-          <slot />
+          v-if="shouldRender"
+          v-show="mergedOpen"
+          ref="overlayRoot"
+          :dir="readingDirection"
+          :class="n()"
+          :style="{ zIndex: mergedZIndex }"
+          v-bind="mergeProps(themeScope, $attrs)"
+        >
+          <div
+            :class="n('backdrop')"
+            role="presentation"
+            @pointerdown="handleBackdropPointerDown"
+            @click="handleBackdropClick"
+          />
+          <div :class="n('content')">
+            <slot />
+          </div>
         </div>
-      </div>
-    </transition>
-    <template v-if="false" />
+      </transition>
+      <template v-if="false" />
     </template>
   </teleport>
 </template>
 
 <script setup lang="ts">
-import { useVisualSurface } from '../_utils/visual-surface'
-import { useThemeScope } from '../theme-provider/context'
+import { computed, mergeProps, onActivated, onDeactivated, ref, useAttrs } from 'vue'
+import { useActiveTarget } from '../_utils/active-target'
 import { useDirection } from '../_utils/direction'
-import { mergeProps,  useAttrs, computed, onActivated, onDeactivated, ref } from 'vue'
-import { useEventListener } from '@cedar-design/use-vue'
 import { createNamespace } from '../_utils/global-config'
-import { usePopupContainer } from '../_utils/popup-container'
+import { useLayerContainer } from '../_utils/layer-container'
 import { usePopupLayer } from '../_utils/popup-layer'
 import { usePopupTransition } from '../_utils/popup-transition'
 import { useScrollLock } from '../_utils/scroll-lock'
+import { useVisualSurface } from '../_utils/visual-surface'
 import { useZIndex } from '../context/zIndex'
+import { useThemeScope } from '../theme-provider/context'
 import { overlayProps } from './props'
-
 
 const themeScope = useThemeScope()
 
@@ -82,37 +81,26 @@ const transition = usePopupTransition(
   (event) => emit(event),
 )
 const { shouldRender } = transition
-const popupContainerTarget = usePopupContainer(() => props.popupContainer)
-const popupDocument = computed(() => {
-  const target = popupContainerTarget.value
-  if (typeof target !== 'string') {
-    return target.ownerDocument
-  }
-  return typeof document === 'undefined' ? undefined : document
-})
-const scrollLockTarget = computed(() => {
-  const target = popupContainerTarget.value
-  return typeof target === 'string' ? popupDocument.value?.body : target
-})
+const { popupContainerTarget, scrollLockTarget, modalDocument } = useLayerContainer(() => props.popupContainer)
 const layerActive = () => mergedOpen.value && !teleportDisabled.value
 const { zIndex } = useZIndex(layerActive, 3)
 const mergedZIndex = computed(() => props.zIndex ?? zIndex.value)
-useVisualSurface(() => mergedOpen.value || transition.leaving.value ? overlayRoot.value : undefined, () => mergedZIndex.value)
-const { onStackTop } = usePopupLayer(
-  layerActive,
-  mergedZIndex,
-  () => overlayRoot.value?.ownerDocument ?? popupDocument.value,
+useVisualSurface(
+  () => ((mergedOpen.value || transition.leaving.value) && modalDocument() ? overlayRoot.value : undefined),
+  () => mergedZIndex.value,
 )
+const { onStackTop } = usePopupLayer(layerActive, mergedZIndex, modalDocument)
 
 // Private ownership query for components that delegate keyboard shortcuts to this layer.
 defineExpose({ _isTopLayer: onStackTop })
 
-useScrollLock(
-  () => scrollLockTarget.value,
-  () => (mergedOpen.value || transition.leaving.value) && props.lockScroll,
-  { reserveScrollBar: true },
-)
-useEventListener(() => popupDocument.value, 'keydown', handleKeydown)
+useScrollLock(scrollLockTarget, () => (mergedOpen.value || transition.leaving.value) && props.lockScroll, {
+  reserveScrollBar: true,
+})
+useActiveTarget(modalDocument, (doc) => {
+  doc.addEventListener('keydown', handleKeydown)
+  return () => doc.removeEventListener('keydown', handleKeydown)
+})
 
 function handleBackdropPointerDown(event: PointerEvent) {
   backdropPointerDown = event.target === event.currentTarget
@@ -131,7 +119,14 @@ function handleBackdropClick(event: MouseEvent) {
 }
 
 function handleKeydown(event: KeyboardEvent) {
-  if (!mergedOpen.value || event.defaultPrevented || event.isComposing || event.keyCode === 229 || event.key !== 'Escape' || !onStackTop(event)) {
+  if (
+    !mergedOpen.value ||
+    event.defaultPrevented ||
+    event.isComposing ||
+    event.keyCode === 229 ||
+    event.key !== 'Escape' ||
+    !onStackTop(event)
+  ) {
     return
   }
   emit('key-escape', event)

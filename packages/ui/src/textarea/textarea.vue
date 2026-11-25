@@ -77,14 +77,15 @@ import {
   type CSSProperties,
   type TextareaHTMLAttributes,
 } from 'vue'
-import { useId } from '../_utils/vue-compat'
 import { createNamespace } from '../_utils/global-config'
 import { useInputComposition } from '../_utils/input-composition'
-import FieldDecorator, { fieldDecoratorProps } from '../field-decorator'
+import { useId } from '../_utils/vue-compat'
+import FieldDecorator from '../field-decorator/FieldDecorator.vue'
+import { fieldDecoratorProps } from '../field-decorator/props'
+import { useFormErrorDescription } from '../form/error-description'
 import InputFeedback from '../input/InputFeedback.vue'
 import { captureInputSelection, splitInputAttrs } from '../input/native-attrs'
 import { useInputForm } from '../input/use-input-form'
-import { useFormErrorDescription } from '../form/error-description'
 import { useInputValue } from '../input/use-input-value'
 import { textareaProps } from './props'
 import type { TextareaEmits, TextareaSlots } from './types'

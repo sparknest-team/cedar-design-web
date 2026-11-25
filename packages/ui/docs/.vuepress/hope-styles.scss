@@ -51,6 +51,3 @@
 .vp-navbar .vp-site-name { font-size: 18px; }
 .vp-navbar .vp-nav-links { font-size: 14px; }
 .vp-navbar .vp-navbar-end { gap: 4px; }
-
-.vp-skip-link { position: fixed; width: 1px; height: 1px; padding: 0; overflow: hidden; white-space: nowrap; clip-path: inset(50%); }
-.vp-skip-link:focus-visible { width: auto; height: auto; padding: .65rem 1.5rem; clip-path: none; overflow: visible; }

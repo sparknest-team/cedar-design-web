@@ -10,11 +10,8 @@ export default defineConfig({
   name: '@cedar-design/ui-vue',
   globalName: 'Cedar',
   bundleName: 'cedar',
-  external: [
-    'vue',
-    '@vue/shared',
-    ...Object.keys(pkg.dependencies ?? {}),
-  ],
+  umdExternal: ['vue'],
+  external: ['@cedar-design/ui-vue/trigger/server', 'vue', '@vue/shared', ...Object.keys(pkg.dependencies ?? {})],
   globals: {
     vue: 'Vue',
     '@vue/shared': 'VueShared',

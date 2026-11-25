@@ -255,6 +255,8 @@ before-* 等待期间显示加载反馈并标记 aria-busy；拒绝或失败后�
 | `click-overlay` | 点击背景层      | `MouseEvent`    |
 | `key-escape` | ESC           | `KeyboardEvent` |
 
+对话框重新打开时，`opened` 在 Vue 的 `after-enter` 钩子中触发。如果浏览器延迟绘制动画帧，最终画面可能在事件触发之后才显示。
+
 关闭按钮、背景层、ESC 和 `close()` 使用 `close` 语义，不会额外触发 `cancel`。
 
 内置按钮、遮罩、Esc、footer 插槽方法及实例 confirm()/cancel() 发起 beforeClose 守卫请求。实例 close()、函数返回句柄 close()、Dialog.close() 和父级 open=false 为直接关闭命令，不经过守卫；受控实例仍由父级决定是否接受 update:open(false)。直接关闭会退役等待中的守卫，旧结果不能关闭重开的实例。close 不代表离场结束，使用 closed/onClosed 观察完成。Maple Popup 的 close()/requestClose() 则是返回 `Promise<boolean>` 的守卫请求，不能混作直接关闭命令。

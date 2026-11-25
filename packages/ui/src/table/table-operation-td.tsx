@@ -1,19 +1,18 @@
 import { computed, defineComponent, inject, PropType, VNode } from 'vue'
-import { TableDataWithRaw, TableOperationColumn } from './types'
-import { getPrefixCls, createNamespace } from '../_utils/global-config'
-import { getOperationFixedCls, getOperationStyle } from './render/cell-layout'
-import { getLeafKeys, getSelectionStatus } from './utils'
-import Checkbox from '../checkbox'
-import Radio from '../radio'
-import { IconPlus } from '@cedar-design/icons-vue/icon-plus'
-import { IconMinus } from '@cedar-design/icons-vue/icon-minus'
 import { IconDragDotVertical } from '@cedar-design/icons-vue/icon-drag-dot-vertical'
-import { TableContext, tableInjectionKey } from './context'
-import { useI18n } from '../locale'
+import { IconMinus } from '@cedar-design/icons-vue/icon-minus'
+import { IconPlus } from '@cedar-design/icons-vue/icon-plus'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { BaseType } from '../_utils/types'
-import TableSlot from './TableSlot.vue'
+import Checkbox from '../checkbox/base'
+import { useI18n } from '../locale'
+import Radio from '../radio/presentation'
+import { TableContext, tableInjectionKey } from './context'
 import { forwardTableSlot } from './forward-table-slot'
-
+import { getOperationFixedCls, getOperationStyle } from './render/cell-layout'
+import TableSlot from './TableSlot.vue'
+import { TableDataWithRaw, TableOperationColumn } from './types'
+import { getLeafKeys, getSelectionStatus } from './utils'
 
 const { name } = createNamespace('operation-td')
 
@@ -71,7 +70,15 @@ export default defineComponent({
       const translated = t('table.selectRow', String(props.record.key))
       return translated === 'table.selectRow' ? `Select row ${props.record.key}` : translated
     }
-    const style = computed(() => getOperationStyle(props.operationColumn, props.operations, tableCtx.readingDirection, tableCtx.physicalDataColumns, tableCtx.tableLayout))
+    const style = computed(() =>
+      getOperationStyle(
+        props.operationColumn,
+        props.operations,
+        tableCtx.readingDirection,
+        tableCtx.physicalDataColumns,
+        tableCtx.tableLayout,
+      ),
+    )
 
     const cls = computed(() => [
       `${prefixCls}-td`,
@@ -147,9 +154,11 @@ export default defineComponent({
         return null
       }
       if (props.operationColumn.name === 'drag-handle') {
-        return slots['drag-handle-icon']
-          ? <TableSlot v-slots={forwardTableSlot(slots['drag-handle-icon'])} />
-          : <IconDragDotVertical />
+        return slots['drag-handle-icon'] ? (
+          <TableSlot v-slots={forwardTableSlot(slots['drag-handle-icon'])} />
+        ) : (
+          <IconDragDotVertical />
+        )
       }
       return null
     }

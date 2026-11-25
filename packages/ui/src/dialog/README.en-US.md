@@ -20,17 +20,18 @@ A modal dialog with matching declarative and programmatic APIs.
 ### Global
 
 <!-- demo-config-notes:start -->
+
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --- | --- | --- |
-| `title` | Title | Confirm, Form, Simple |
-| `type` | Status icon: `info`, `success`, `warning` or `error` | Confirm, Simple |
-| `message` | Message content; the default slot is also supported | Confirm, Simple |
-| `before-close` | Return a boolean/Promise or call done; the first completion wins | Form |
-| `simple` | Compact layout with a centered footer | Simple |
-<!-- demo-config-notes:end -->
+| Configuration  | Purpose                                                          | Related examples      |
+| -------------- | ---------------------------------------------------------------- | --------------------- |
+| `title`        | Title                                                            | Confirm, Form, Simple |
+| `type`         | Status icon: `info`, `success`, `warning` or `error`             | Confirm, Simple       |
+| `message`      | Message content; the default slot is also supported              | Confirm, Simple       |
+| `before-close` | Return a boolean/Promise or call done; the first completion wins | Form                  |
+| `simple`       | Compact layout with a centered footer                            | Simple                |
 
+<!-- demo-config-notes:end -->
 
 <demo src="./__demos__/global.vue"></demo>
 
@@ -65,16 +66,17 @@ Function calls honor `popupContainer` from explicit configuration or `setDefault
 ### Dialog sizing and long content
 
 <!-- demo-config-notes:start -->
+
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --- | --- | --- |
-| `title` | Title | No Padding, Max Height |
-| `body-style` | Body style | No Padding, Max Height |
-| `width` | Width | Dialog sizing and long content |
-| `fullscreen` | Fullscreen layout | Dialog sizing and long content |
-<!-- demo-config-notes:end -->
+| Configuration | Purpose           | Related examples               |
+| ------------- | ----------------- | ------------------------------ |
+| `title`       | Title             | No Padding, Max Height         |
+| `body-style`  | Body style        | No Padding, Max Height         |
+| `width`       | Width             | Dialog sizing and long content |
+| `fullscreen`  | Fullscreen layout | Dialog sizing and long content |
 
+<!-- demo-config-notes:end -->
 
 Open one dialog at a time to compare widths, fullscreen layouts and long-content boundaries.
 
@@ -93,18 +95,19 @@ Open one dialog at a time to compare widths, fullscreen layouts and long-content
 ### Draggable
 
 <!-- demo-config-notes:start -->
+
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --- | --- | --- |
-| `unmount-on-close` | Unmount after closing | Custom Text, Advanced |
-| `draggable` | Draggable | Draggable |
-| `confirm-button-text` | Confirm button text | Custom Text |
-| `cancel-button-text` | Cancel button text | Custom Text |
-| `footer` | Whether to show the footer | Advanced |
-| `type` | Status icon: `info`, `success`, `warning` or `error` | Advanced |
-<!-- demo-config-notes:end -->
+| Configuration         | Purpose                                              | Related examples      |
+| --------------------- | ---------------------------------------------------- | --------------------- |
+| `unmount-on-close`    | Unmount after closing                                | Custom Text, Advanced |
+| `draggable`           | Draggable                                            | Draggable             |
+| `confirm-button-text` | Confirm button text                                  | Custom Text           |
+| `cancel-button-text`  | Cancel button text                                   | Custom Text           |
+| `footer`              | Whether to show the footer                           | Advanced              |
+| `type`                | Status icon: `info`, `success`, `warning` or `error` | Advanced              |
 
+<!-- demo-config-notes:end -->
 
 <demo src="./__demos__/draggable.en-US.vue"></demo>
 
@@ -131,15 +134,16 @@ Open the panel and toggle the two switches independently. Both dividers start of
 ### Async
 
 <!-- demo-config-notes:start -->
+
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --- | --- | --- |
+| Configuration  | Purpose                                                          | Related examples                                     |
+| -------------- | ---------------------------------------------------------------- | ---------------------------------------------------- |
 | `before-close` | Return a boolean/Promise or call done; the first completion wins | Async close, before hooks and callback compatibility |
-| `title` | Title | Async |
-| `message` | Message content; the default slot is also supported | Async |
-<!-- demo-config-notes:end -->
+| `title`        | Title                                                            | Async                                                |
+| `message`      | Message content; the default slot is also supported              | Async                                                |
 
+<!-- demo-config-notes:end -->
 
 <demo src="./__demos__/async.vue"></demo>
 
@@ -149,35 +153,35 @@ Open the panel and toggle the two switches independently. Both dividers start of
 
 ### DialogConfig
 
-| Name | Description | Type |
-| ------------- | ---------------------------------- | -------------------------- |
-| `content` | Renderable content; takes priority over message | `RenderContent` |
-| `footer` | Footer visibility or custom footer content | `boolean \| RenderContent` |
-| `onConfirm` | Confirm callback | `(e?: Event) => void` |
-| `onCancel` | Cancel callback | `(e?: Event) => void` |
-| `onClickOverlay` | Overlay click callback | `() => void` |
-| `onKeyEscape` | Escape callback | `() => void` |
+| Name             | Description                                     | Type                       |
+| ---------------- | ----------------------------------------------- | -------------------------- |
+| `content`        | Renderable content; takes priority over message | `RenderContent`            |
+| `footer`         | Footer visibility or custom footer content      | `boolean \| RenderContent` |
+| `onConfirm`      | Confirm callback                                | `(e?: Event) => void`      |
+| `onCancel`       | Cancel callback                                 | `(e?: Event) => void`      |
+| `onClickOverlay` | Overlay click callback                          | `() => void`               |
+| `onKeyEscape`    | Escape callback                                 | `() => void`               |
 
 ### DialogMethod
 
-| Method | Description | Return value |
-| ---------------------------------- | ------------------------------ | -------------------------------------- |
-| `Dialog.open(config)` | Open a dialog | `Promise<DialogAction> & DialogReturn` |
-| `Dialog.confirm(config)` | Confirmation dialog; defaults to warning | Same as above |
-| `Dialog.alert(config)` | Alert dialog without a cancel button | Same as above |
-| `Dialog.info(config)` | Information dialog | Same as above |
-| `Dialog.success(config)` | Success dialog | Same as above |
-| `Dialog.warning(config)` | Warning dialog | Same as above |
-| `Dialog.error(config)` | Error dialog | Same as above |
-| `Dialog.close()` | Close the latest functional dialog | `void` |
-| `Dialog.setDefaultOptions(config)` | Set default programmatic options | `void` |
-| `Dialog.resetDefaultOptions()` | Reset default programmatic options | `void` |
+| Method                             | Description                              | Return value                           |
+| ---------------------------------- | ---------------------------------------- | -------------------------------------- |
+| `Dialog.open(config)`              | Open a dialog                            | `Promise<DialogAction> & DialogReturn` |
+| `Dialog.confirm(config)`           | Confirmation dialog; defaults to warning | Same as above                          |
+| `Dialog.alert(config)`             | Alert dialog without a cancel button     | Same as above                          |
+| `Dialog.info(config)`              | Information dialog                       | Same as above                          |
+| `Dialog.success(config)`           | Success dialog                           | Same as above                          |
+| `Dialog.warning(config)`           | Warning dialog                           | Same as above                          |
+| `Dialog.error(config)`             | Error dialog                             | Same as above                          |
+| `Dialog.close()`                   | Close the latest functional dialog       | `void`                                 |
+| `Dialog.setDefaultOptions(config)` | Set default programmatic options         | `void`                                 |
+| `Dialog.resetDefaultOptions()`     | Reset default programmatic options       | `void`                                 |
 
 ### DialogReturn
 
-| Prop | Description |
-| ---------------- | -------- |
-| `close()` | Close |
+| Prop             | Description    |
+| ---------------- | -------------- |
+| `close()`        | Close          |
 | `update(config)` | Update options |
 
 ### Reading direction
@@ -191,11 +195,13 @@ Inherits the nearest `dir="ltr|rtl"`, including runtime changes and local overri
 ## Usage notes
 
 ### Async operation feedback
+
 Awaited before-* hooks show loading feedback and aria-busy. Rejection or failure restores interaction; repeated input does not start the same operation again. Ordinary event return Promises do not participate in loading.
 
 Programmatic notification callbacks do not control task completion. Service selection/closing results settle independently of callback errors, and closing completion always releases the owned host. Exceptions still propagate through the caller or Vue error channel; returned Promises do not control loading or closing.
 
 ### Dragging and cancellation
+
 Title dragging is controlled only by the initiating primary pointer. Disabling `draggable`, closing, entering fullscreen, losing pointer capture or owner-window focus, deactivation and unmount all end the gesture and release listeners and capture. Reenabling requires a new gesture; the previous pointer cannot resume it. Disabling preserves the current offset; fullscreen and the existing post-close reset restore defaults. Listeners belong to the title element's document.
 
 ## API
@@ -204,67 +210,69 @@ Title dragging is controlled only by the initiating primary pointer. Disabling `
 
 Dividers follow Card and are disabled by default. Enable them separately with `top-divider` and `bottom-divider`; each appears only when its corresponding header or footer exists. Dialog also supports these options in simple mode and service calls, using `topDivider` and `bottomDivider` in service configuration.
 
-| Parameter | Description | Type | Default |
-| ------------------------- | -------------------------------------------- | -------------------------------- | ------------ |
-| top-divider | Divider between the title and content | `boolean` | `false` |
-| bottom-divider | Divider between the content and footer | `boolean` | `false` |
-| dir | Reading direction; inherits the source scope when omitted. Physical left/right placements keep their meaning. | `ReadingDirection` (`ltr` / `rtl`) | — |
-| `open` **(v-model)** | Visible state | `boolean` | `-` |
-| `default-open` | Initial uncontrolled state | `boolean` | `false` |
-| `title` | Title | `string` | `-` |
-| `message` | Message content; the default slot is also supported | `string` | `-` |
-| `message-align` | Message alignment | `'left' \| 'center' \| 'right'` | `'left'` |
-| `type` | Status icon: `info`, `success`, `warning` or `error` | `string` | `-` |
-| `simple` | Compact layout with a centered footer | `boolean` | `false` |
-| `width` | Width | `number \| string` | `-` |
-| `top` | Top offset; ignored when `align-center` is enabled | `number \| string` | `-` |
-| `title-align` | Title alignment | `'start' \| 'center'` | `'center'` |
-| `align-center` | Center vertically and horizontally | `boolean` | `true` |
-| `overlay` | Show overlay | `boolean` | `true` |
-| `overlay-class` | Overlay class | `string` | `-` |
-| `overlay-style` | Overlay style | `CSSProperties` | `-` |
-| `overlay-closable` | Request closure on an overlay click | `boolean` | `true` |
-| `esc-to-close` | Request closure on Escape | `boolean` | `true` |
-| `lock-scroll` | Lock background scrolling while open | `boolean` | `true` |
-| `close-on-route-change` | Close on browser history or hash changes | `boolean` | `false` |
-| `popup-container` | Teleport target; `false` disables teleport | `string \| HTMLElement \| false` | `'body'` |
-| `confirm-button` | Show the confirm button | `boolean` | `true` |
-| `cancel-button` | Show the cancel button | `boolean` | `true` |
-| `closable` | Show close button | `boolean` | `true` |
-| `confirm-button-text` | Confirm button text | `string` | `-` |
-| `cancel-button-text` | Cancel button text | `string` | `-` |
-| `confirm-button-loading` | Confirm button loading state | `boolean` | `false` |
-| `cancel-button-loading` | Cancel button loading state | `boolean` | `false` |
-| `confirm-button-disabled` | Disable the confirm button | `boolean` | `false` |
-| `cancel-button-disabled` | Disable the cancel button | `boolean` | `false` |
-| `confirm-button-props` | Confirm button props; defaults to primary + default and can be overridden | `ButtonProps` | `-` |
-| `cancel-button-props` | Cancel button props | `ButtonProps` | `-` |
-| `footer` | Whether to show the footer | `boolean` | `true` |
-| `dialog-class` | Dialog class | `string \| any[]` | `-` |
-| `dialog-style` | Dialog style | `CSSProperties` | `-` |
-| `body-class` | Body class | `string \| any[]` | `-` |
-| `body-style` | Body style | `StyleValue` | `-` |
-| `hide-title` | Hide the title | `boolean` | `false` |
-| `unmount-on-close` | Unmount after closing | `boolean` | `false` |
-| `draggable` | Allow dragging | `boolean` | `false` |
-| `fullscreen` | Fullscreen layout | `boolean` | `false` |
-| `overlay-animation-name` | Overlay animation name | `string` | `fade-modal` |
-| `dialog-animation-name` | Dialog animation name | `string` | `zoom-modal` |
-| `z-index` | Stack level | `number` | `-` |
-| `before-close` | Return a boolean/Promise or call done; the first completion wins | `DialogBeforeClose` | — |
+| Parameter                 | Description                                                                                                   | Type                               | Default      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ------------ |
+| top-divider               | Divider between the title and content                                                                         | `boolean`                          | `false`      |
+| bottom-divider            | Divider between the content and footer                                                                        | `boolean`                          | `false`      |
+| dir                       | Reading direction; inherits the source scope when omitted. Physical left/right placements keep their meaning. | `ReadingDirection` (`ltr` / `rtl`) | —            |
+| `open` **(v-model)**      | Visible state                                                                                                 | `boolean`                          | `-`          |
+| `default-open`            | Initial uncontrolled state                                                                                    | `boolean`                          | `false`      |
+| `title`                   | Title                                                                                                         | `string`                           | `-`          |
+| `message`                 | Message content; the default slot is also supported                                                           | `string`                           | `-`          |
+| `message-align`           | Message alignment                                                                                             | `'left' \| 'center' \| 'right'`    | `'left'`     |
+| `type`                    | Status icon: `info`, `success`, `warning` or `error`                                                          | `string`                           | `-`          |
+| `simple`                  | Compact layout with a centered footer                                                                         | `boolean`                          | `false`      |
+| `width`                   | Width                                                                                                         | `number \| string`                 | `-`          |
+| `top`                     | Top offset; ignored when `align-center` is enabled                                                            | `number \| string`                 | `-`          |
+| `title-align`             | Title alignment                                                                                               | `'start' \| 'center'`              | `'center'`   |
+| `align-center`            | Center vertically and horizontally                                                                            | `boolean`                          | `true`       |
+| `overlay`                 | Show overlay                                                                                                  | `boolean`                          | `true`       |
+| `overlay-class`           | Overlay class                                                                                                 | `string`                           | `-`          |
+| `overlay-style`           | Overlay style                                                                                                 | `CSSProperties`                    | `-`          |
+| `overlay-closable`        | Request closure on an overlay click                                                                           | `boolean`                          | `true`       |
+| `esc-to-close`            | Request closure on Escape                                                                                     | `boolean`                          | `true`       |
+| `lock-scroll`             | Lock background scrolling while open                                                                          | `boolean`                          | `true`       |
+| `close-on-route-change`   | Close on browser history or hash changes                                                                      | `boolean`                          | `false`      |
+| `popup-container`         | Teleport target; `false` disables teleport                                                                    | `string \| HTMLElement \| false`   | `'body'`     |
+| `confirm-button`          | Show the confirm button                                                                                       | `boolean`                          | `true`       |
+| `cancel-button`           | Show the cancel button                                                                                        | `boolean`                          | `true`       |
+| `closable`                | Show close button                                                                                             | `boolean`                          | `true`       |
+| `confirm-button-text`     | Confirm button text                                                                                           | `string`                           | `-`          |
+| `cancel-button-text`      | Cancel button text                                                                                            | `string`                           | `-`          |
+| `confirm-button-loading`  | Confirm button loading state                                                                                  | `boolean`                          | `false`      |
+| `cancel-button-loading`   | Cancel button loading state                                                                                   | `boolean`                          | `false`      |
+| `confirm-button-disabled` | Disable the confirm button                                                                                    | `boolean`                          | `false`      |
+| `cancel-button-disabled`  | Disable the cancel button                                                                                     | `boolean`                          | `false`      |
+| `confirm-button-props`    | Confirm button props; defaults to primary + default and can be overridden                                     | `ButtonProps`                      | `-`          |
+| `cancel-button-props`     | Cancel button props                                                                                           | `ButtonProps`                      | `-`          |
+| `footer`                  | Whether to show the footer                                                                                    | `boolean`                          | `true`       |
+| `dialog-class`            | Dialog class                                                                                                  | `string \| any[]`                  | `-`          |
+| `dialog-style`            | Dialog style                                                                                                  | `CSSProperties`                    | `-`          |
+| `body-class`              | Body class                                                                                                    | `string \| any[]`                  | `-`          |
+| `body-style`              | Body style                                                                                                    | `StyleValue`                       | `-`          |
+| `hide-title`              | Hide the title                                                                                                | `boolean`                          | `false`      |
+| `unmount-on-close`        | Unmount after closing                                                                                         | `boolean`                          | `false`      |
+| `draggable`               | Allow dragging                                                                                                | `boolean`                          | `false`      |
+| `fullscreen`              | Fullscreen layout                                                                                             | `boolean`                          | `false`      |
+| `overlay-animation-name`  | Overlay animation name                                                                                        | `string`                           | `fade-modal` |
+| `dialog-animation-name`   | Dialog animation name                                                                                         | `string`                           | `zoom-modal` |
+| `z-index`                 | Stack level                                                                                                   | `number`                           | `-`          |
+| `before-close`            | Return a boolean/Promise or call done; the first completion wins                                              | `DialogBeforeClose`                | —            |
 
 ### Dialog Events
 
-| Event | Description | Arguments |
-| ------------ | ------------- | --------------- |
-| `open` | When opened | `-` |
-| `opened` | Opening transition completes | `-` |
-| `close` | Closing begins | `-` |
-| `closed` | Closing transition completes | `-` |
-| `confirm` | Accepted confirm action | `Event` |
-| `cancel` | Accepted cancel or close action | `Event` |
-| `click-overlay` | `MouseEvent` | `MouseEvent` |
-| `key-escape` | ESC | `KeyboardEvent` |
+| Event           | Description                     | Arguments       |
+| --------------- | ------------------------------- | --------------- |
+| `open`          | When opened                     | `-`             |
+| `opened`        | Opening transition completes    | `-`             |
+| `close`         | Closing begins                  | `-`             |
+| `closed`        | Closing transition completes    | `-`             |
+| `confirm`       | Accepted confirm action         | `Event`         |
+| `cancel`        | Accepted cancel or close action | `Event`         |
+| `click-overlay` | `MouseEvent`                    | `MouseEvent`    |
+| `key-escape`    | ESC                             | `KeyboardEvent` |
+
+When the dialog reopens, it emits `opened` from Vue’s `after-enter` hook. If the browser delays animation frames, the final visual state can appear after this event.
 
 The `close` button, overlay, ESC and `close()` use `close` semantics without an additional `cancel` event.
 
@@ -272,11 +280,11 @@ Built-in buttons, overlay, Escape, footer methods and instance confirm()/cancel(
 
 ### Dialog Slots
 
-| Slot | Description | Prop |
-| --------- | ---- | ---------------------------- |
-| `default` | Content | `-` |
-| `title` | Title | `-` |
-| `footer` | Footer | `cancel`, `confirm`, `close` |
+| Slot      | Description | Prop                         |
+| --------- | ----------- | ---------------------------- |
+| `default` | Content     | `-`                          |
+| `title`   | Title       | `-`                          |
+| `footer`  | Footer      | `cancel`, `confirm`, `close` |
 
 Confirm and cancel buttons use Button's `default` status and `text` variant unless `confirmButtonProps` or `cancelButtonProps` overrides them.
 
@@ -290,35 +298,35 @@ Function-based Dialog calls default to simple layout (`simple: true`) with the t
 
 Accepts the component props in camelCase, plus:
 
-| Parameter | Description | Type |
-| ------------- | ---------------------------------- | -------------------------- |
-| `content` | Renderable content; takes priority over `message` | `RenderContent` |
-| `footer` | Whether to show a footer, or custom footer content | `boolean \| RenderContent` |
-| `onConfirm` | Confirm callback | `(e?: Event) => void` |
-| `onCancel` | Cancel callback | `(e?: Event) => void` |
-| `onClickOverlay` | Overlay click callback | `() => void` |
-| `onKeyEscape` | Escape callback | `() => void` |
+| Parameter        | Description                                        | Type                       |
+| ---------------- | -------------------------------------------------- | -------------------------- |
+| `content`        | Renderable content; takes priority over `message`  | `RenderContent`            |
+| `footer`         | Whether to show a footer, or custom footer content | `boolean \| RenderContent` |
+| `onConfirm`      | Confirm callback                                   | `(e?: Event) => void`      |
+| `onCancel`       | Cancel callback                                    | `(e?: Event) => void`      |
+| `onClickOverlay` | Overlay click callback                             | `() => void`               |
+| `onKeyEscape`    | Escape callback                                    | `() => void`               |
 
 ### DialogMethod
 
-| Method | Description | Returns |
-| ---------------------------------- | ------------------------------ | -------------------------------------- |
-| `Dialog.open(config)` | Open a dialog | `Promise<DialogAction> & DialogReturn` |
-| `Dialog.confirm(config)` | Confirmation dialog; defaults to `type: warning` | As above |
-| `Dialog.alert(config)` | Alert dialog without a cancel button | As above |
-| `Dialog.info(config)` | Information dialog | As above |
-| `Dialog.success(config)` | Success dialog | As above |
-| `Dialog.warning(config)` | Warning dialog | As above |
-| `Dialog.error(config)` | Error dialog | As above |
-| `Dialog.close()` | Close the latest functional dialog | `void` |
-| `Dialog.setDefaultOptions(config)` | Set default programmatic options | `void` |
-| `Dialog.resetDefaultOptions()` | Reset default programmatic options | `void` |
+| Method                             | Description                                      | Returns                                |
+| ---------------------------------- | ------------------------------------------------ | -------------------------------------- |
+| `Dialog.open(config)`              | Open a dialog                                    | `Promise<DialogAction> & DialogReturn` |
+| `Dialog.confirm(config)`           | Confirmation dialog; defaults to `type: warning` | As above                               |
+| `Dialog.alert(config)`             | Alert dialog without a cancel button             | As above                               |
+| `Dialog.info(config)`              | Information dialog                               | As above                               |
+| `Dialog.success(config)`           | Success dialog                                   | As above                               |
+| `Dialog.warning(config)`           | Warning dialog                                   | As above                               |
+| `Dialog.error(config)`             | Error dialog                                     | As above                               |
+| `Dialog.close()`                   | Close the latest functional dialog               | `void`                                 |
+| `Dialog.setDefaultOptions(config)` | Set default programmatic options                 | `void`                                 |
+| `Dialog.resetDefaultOptions()`     | Reset default programmatic options               | `void`                                 |
 
 ### DialogReturn
 
-| Prop | Description |
-| ---------------- | -------- |
-| `close()` | Close |
+| Prop             | Description    |
+| ---------------- | -------------- |
+| `close()`        | Close          |
 | `update(config)` | Update options |
 
 After installation, call through `app.config.globalProperties.$dialog`.
@@ -331,7 +339,7 @@ import type {
   DialogReturn,
   DialogService,
   DialogType,
-} from "@cedar-design/ui-vue";
+} from '@cedar-design/ui-vue'
 ```
 
 ## CSS Variables
@@ -342,7 +350,7 @@ Dialog public color variables have the same meanings as Maple: `--c-dialog-backg
 
 The backdrop consumes `sys-color-scrim` through the Dialog component variable. Dialog uses its own backdrop variables. Set a per-instance backdrop variable via `overlay-style`; a variable on the panel (`dialog-style`) does not inherit to its sibling backdrop. Explicit `overlay-style.backgroundColor` wins. Teleported content needs variables on its actual DOM ancestors. Dark themes inherit the same semantic colors; geometry remains platform-specific. Status icons use readable content colors.
 
-Variables are grouped by purpose: background/overlay-background for panel/scrim; border-* for panel/divider borders; title-* for title typography; content-* for body typography; actions-* for actions; close-button-* for the close button; status-* for semantic icons; simple-*/fullscreen-* for mode dimensions; animation-* for enter/leave motion. width/margin-top control ordinary panel layout. Internal drag/position variables are not public customization points.
+Variables are grouped by purpose: background/overlay-background for panel/scrim; border-* for panel/divider borders; title-* for title typography; content-* for body typography; actions-* for actions; close-button-* for the close button; status-* for semantic icons; simple-_/fullscreen-_ for mode dimensions; animation-* for enter/leave motion. width/margin-top control ordinary panel layout. Internal drag/position variables are not public customization points.
 
 <!-- component-css-variables:start -->
 
@@ -350,47 +358,47 @@ Use these variables to customize the component. Defaults may vary by the selecto
 
 <div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
-| Variable | Default / condition | Affected styles |
-| --- | --- | --- |
-| `--c-dialog-actions-button-gap` | `var(--c-sys-space-6)` | `margin-inline-start` |
-| `--c-dialog-actions-padding` | `var(--c-sys-space-7) var(--c-sys-space-8)` | `padding` |
-| `--c-dialog-animation-duration` | `var(--c-sys-motion-duration-slow)` | `transition` |
-| `--c-dialog-animation-easing` | `var(--c-sys-motion-easing-standard)` | `transition` |
-| `--c-dialog-background` | `var(--c-sys-color-surface-raised)` | `background-color` |
-| `--c-dialog-border-color` | `var(--c-sys-color-border-default)` | `border-bottom`, `border-top` |
-| `--c-dialog-border-radius` | `var(--c-sys-radius-md)` | `border-radius` |
-| `--c-dialog-border-width` | `1px` | `border-bottom`, `border-top` |
-| `--c-dialog-close-button-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-dialog-close-button-font-size` | `var(--c-sys-font-size-lg)` | `font-size` |
-| `--c-dialog-close-button-inset-inline-end` | `var(--c-sys-space-7)` | `inset-inline-end` |
-| `--c-dialog-close-button-size` | `32px` | `height`, `width` |
-| `--c-dialog-content-font-size` | `var(--c-sys-font-size-md)` | `font-size` |
-| `--c-dialog-content-line-height` | `var(--c-line-height)` | `line-height` |
-| `--c-dialog-content-padding` | `28px var(--c-sys-space-8)` | `padding` |
-| `--c-dialog-content-text-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-dialog-fullscreen-height` | `100vh`<br>`100dvh` | `height` |
-| `--c-dialog-fullscreen-width` | `100vw` | `width` |
-| `--c-dialog-margin-top` | `min(100px, 5vh)`<br>`min(100px, 5dvh)` | `top` |
-| `--c-dialog-max-height` | `90vh`<br>`90dvh` | `max-height` |
-| `--c-dialog-overlay-background` | `var(--c-sys-color-scrim)` | `background-color` |
-| `--c-dialog-simple-actions-gap` | `32px` | `margin-top` |
-| `--c-dialog-simple-border-radius` | `var(--c-sys-radius-md)` | `border-radius` |
-| `--c-dialog-simple-content-gap` | `28px` | `margin-bottom` |
-| `--c-dialog-simple-padding` | `28px 32px 32px` | `padding` |
-| `--c-dialog-simple-width` | `400px` | `width` |
-| `--c-dialog-status-danger-color` | `var(--c-sys-color-content-danger)` | `color` |
-| `--c-dialog-status-icon-gap` | `var(--c-sys-space-5)` | `margin-inline-end` |
-| `--c-dialog-status-icon-size` | `18px` | `font-size` |
-| `--c-dialog-status-info-color` | `var(--c-sys-color-content-info)` | `color` |
-| `--c-dialog-status-success-color` | `var(--c-sys-color-content-success)` | `color` |
-| `--c-dialog-status-warning-color` | `var(--c-sys-color-content-warning)` | `color` |
-| `--c-dialog-title-font-size` | `var(--c-sys-font-size-lg)` | `font-size` |
-| `--c-dialog-title-font-weight` | `var(--c-sys-font-weight-medium)` | `font-weight` |
-| `--c-dialog-title-justify` | `center` | `justify-content` |
-| `--c-dialog-title-min-height` | `48px` | `min-height` |
-| `--c-dialog-title-padding` | `0 var(--c-sys-space-8)` | `padding` |
-| `--c-dialog-title-text-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-dialog-width` | `520px` | `width` |
+| Variable                                   | Default / condition                         | Affected styles               |
+| ------------------------------------------ | ------------------------------------------- | ----------------------------- |
+| `--c-dialog-actions-button-gap`            | `var(--c-sys-space-6)`                      | `margin-inline-start`         |
+| `--c-dialog-actions-padding`               | `var(--c-sys-space-7) var(--c-sys-space-8)` | `padding`                     |
+| `--c-dialog-animation-duration`            | `var(--c-sys-motion-duration-slow)`         | `transition`                  |
+| `--c-dialog-animation-easing`              | `var(--c-sys-motion-easing-standard)`       | `transition`                  |
+| `--c-dialog-background`                    | `var(--c-sys-color-surface-raised)`         | `background-color`            |
+| `--c-dialog-border-color`                  | `var(--c-sys-color-border-default)`         | `border-bottom`, `border-top` |
+| `--c-dialog-border-radius`                 | `var(--c-sys-radius-md)`                    | `border-radius`               |
+| `--c-dialog-border-width`                  | `1px`                                       | `border-bottom`, `border-top` |
+| `--c-dialog-close-button-color`            | `var(--c-sys-color-content-secondary)`      | `color`                       |
+| `--c-dialog-close-button-font-size`        | `var(--c-sys-font-size-lg)`                 | `font-size`                   |
+| `--c-dialog-close-button-inset-inline-end` | `var(--c-sys-space-7)`                      | `inset-inline-end`            |
+| `--c-dialog-close-button-size`             | `32px`                                      | `height`, `width`             |
+| `--c-dialog-content-font-size`             | `var(--c-sys-font-size-md)`                 | `font-size`                   |
+| `--c-dialog-content-line-height`           | `var(--c-line-height)`                      | `line-height`                 |
+| `--c-dialog-content-padding`               | `28px var(--c-sys-space-8)`                 | `padding`                     |
+| `--c-dialog-content-text-color`            | `var(--c-sys-color-content-primary)`        | `color`                       |
+| `--c-dialog-fullscreen-height`             | `100vh`<br>`100dvh`                         | `height`                      |
+| `--c-dialog-fullscreen-width`              | `100vw`                                     | `width`                       |
+| `--c-dialog-margin-top`                    | `min(100px, 5vh)`<br>`min(100px, 5dvh)`     | `top`                         |
+| `--c-dialog-max-height`                    | `90vh`<br>`90dvh`                           | `max-height`                  |
+| `--c-dialog-overlay-background`            | `var(--c-sys-color-scrim)`                  | `background-color`            |
+| `--c-dialog-simple-actions-gap`            | `32px`                                      | `margin-top`                  |
+| `--c-dialog-simple-border-radius`          | `var(--c-sys-radius-md)`                    | `border-radius`               |
+| `--c-dialog-simple-content-gap`            | `28px`                                      | `margin-bottom`               |
+| `--c-dialog-simple-padding`                | `28px 32px 32px`                            | `padding`                     |
+| `--c-dialog-simple-width`                  | `400px`                                     | `width`                       |
+| `--c-dialog-status-danger-color`           | `var(--c-sys-color-content-danger)`         | `color`                       |
+| `--c-dialog-status-icon-gap`               | `var(--c-sys-space-5)`                      | `margin-inline-end`           |
+| `--c-dialog-status-icon-size`              | `18px`                                      | `font-size`                   |
+| `--c-dialog-status-info-color`             | `var(--c-sys-color-content-info)`           | `color`                       |
+| `--c-dialog-status-success-color`          | `var(--c-sys-color-content-success)`        | `color`                       |
+| `--c-dialog-status-warning-color`          | `var(--c-sys-color-content-warning)`        | `color`                       |
+| `--c-dialog-title-font-size`               | `var(--c-sys-font-size-lg)`                 | `font-size`                   |
+| `--c-dialog-title-font-weight`             | `var(--c-sys-font-weight-medium)`           | `font-weight`                 |
+| `--c-dialog-title-justify`                 | `center`                                    | `justify-content`             |
+| `--c-dialog-title-min-height`              | `48px`                                      | `min-height`                  |
+| `--c-dialog-title-padding`                 | `0 var(--c-sys-space-8)`                    | `padding`                     |
+| `--c-dialog-title-text-color`              | `var(--c-sys-color-content-primary)`        | `color`                       |
+| `--c-dialog-width`                         | `520px`                                     | `width`                       |
 
 </div>
 

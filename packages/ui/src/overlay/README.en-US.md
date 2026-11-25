@@ -25,33 +25,33 @@ These are actual :root defaults. Prefer component variables for business customi
 
 ### Overlay Props
 
-| Prop | Description | Type | Default |
-| ------------------ | -------------------------------------------- | -------------------------------- | -------- |
-| `v-model:open` | Visible state | `boolean` | `false` |
-| `default-open` | Whether to display by default in uncontrolled mode | `boolean` | `false` |
-| `overlay-closable` | Whether clicking the backdrop closes the Overlay | `boolean` | `true` |
-| `lock-scroll` | Lock scrolling on the host | `boolean` | `true` |
-| `unmount-on-close` | Whether to unmount slot content after closing | `boolean` | `true` |
-| `esc-to-close` | Whether Escape closes the overlay | `boolean` | `true` |
-| `popup-container` | Teleport target; `false` renders in place | `string \| HTMLElement \| false` | `'body'` |
-| `z-index` | Custom z-index | `number` | `-` |
+| Prop               | Description                                                                                | Type                             | Default  |
+| ------------------ | ------------------------------------------------------------------------------------------ | -------------------------------- | -------- |
+| `v-model:open`     | Visible state                                                                              | `boolean`                        | `false`  |
+| `default-open`     | Whether to display by default in uncontrolled mode                                         | `boolean`                        | `false`  |
+| `overlay-closable` | Whether clicking the backdrop closes the Overlay                                           | `boolean`                        | `true`   |
+| `lock-scroll`      | Lock the target container while open. Inline overlays lock the body of their own document. | `boolean`                        | `true`   |
+| `unmount-on-close` | Whether to unmount slot content after closing                                              | `boolean`                        | `true`   |
+| `esc-to-close`     | Whether Escape closes the overlay                                                          | `boolean`                        | `true`   |
+| `popup-container`  | Teleport target; `false` renders in place                                                  | `string \| HTMLElement \| false` | `'body'` |
+| `z-index`          | Custom z-index                                                                             | `number`                         | `-`      |
 
 ### Overlay Events
 
-| Event | Description | Arguments |
-| ------------- | ------------ | --------------- |
-| `update:open` | Open state changed | `boolean` |
-| `open` | Opening starts | `-` |
-| `opened` | Opening transition completes | `-` |
-| `close` | Closing starts | `-` |
-| `closed` | Closing transition completes | `-` |
-| `click` | Click on the background area | `MouseEvent` |
-| `key-escape` | Escape was pressed | `KeyboardEvent` |
+| Event         | Description                  | Arguments       |
+| ------------- | ---------------------------- | --------------- |
+| `update:open` | Open state changed           | `boolean`       |
+| `open`        | Opening starts               | `-`             |
+| `opened`      | Opening transition completes | `-`             |
+| `close`       | Closing starts               | `-`             |
+| `closed`      | Closing transition completes | `-`             |
+| `click`       | Click on the background area | `MouseEvent`    |
+| `key-escape`  | Escape was pressed           | `KeyboardEvent` |
 
 ### Overlay Slots
 
-| Slot | Description |
-| --------- | ---------------- |
+| Slot      | Description                        |
+| --------- | ---------------------------------- |
 | `default` | Content above the background layer |
 
 ## CSS Variables
@@ -62,11 +62,11 @@ Use these variables to customize the component. Defaults may vary by the selecto
 
 <div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
-| Variable | Default / condition | Affected styles |
-| --- | --- | --- |
-| `--c-overlay-animation-duration` | `var(--c-sys-motion-duration-slow)` | `transition` |
-| `--c-overlay-background-color` | `var(--c-sys-color-scrim)` | `background-color` |
-| `--c-overlay-content-z-index` | `var(--c-sys-layer-raised)` | `z-index` |
+| Variable                         | Default / condition                 | Affected styles    |
+| -------------------------------- | ----------------------------------- | ------------------ |
+| `--c-overlay-animation-duration` | `var(--c-sys-motion-duration-slow)` | `transition`       |
+| `--c-overlay-background-color`   | `var(--c-sys-color-scrim)`          | `background-color` |
+| `--c-overlay-content-z-index`    | `var(--c-sys-layer-raised)`         | `z-index`          |
 
 </div>
 

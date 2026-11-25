@@ -3,16 +3,18 @@ import { previewImage } from '../preview-api'
 
 vi.mock('../Preview.vue', async () => {
   const { defineComponent, h } = await import('vue')
-  return { default: defineComponent({
-    inheritAttrs: false,
-    props: ['src'],
-    emits: ['closed'],
-    setup(props, { emit, expose }) {
-      const close = () => emit('closed')
-      expose({ close })
-      return () => h('button', { 'data-preview-test': props.src, onClick: close }, props.src)
-    },
-  }) }
+  return {
+    default: defineComponent({
+      inheritAttrs: false,
+      props: ['src'],
+      emits: ['closed'],
+      setup(props, { emit, expose }) {
+        const close = () => emit('closed')
+        expose({ close })
+        return () => h('button', { 'data-preview-test': props.src, onClick: close }, props.src)
+      },
+    }),
+  }
 })
 vi.mock('../PreviewGroup.vue', async () => {
   const component = await import('../Preview.vue')
@@ -30,7 +32,7 @@ test('replacement finalizes the old instance exactly once and old handles cannot
   const first = previewImage({ src: 'first', onClosed: firstClosed })
   const second = previewImage({ src: 'second', onClosed: secondClosed })
   expect(firstClosed).toHaveBeenCalledTimes(1)
-  expect(nodes().map(node => node.textContent)).toEqual(['second'])
+  expect(nodes().map((node) => node.textContent)).toEqual(['second'])
   first.close()
   expect(secondClosed).not.toHaveBeenCalled()
   expect(nodes()).toHaveLength(1)
@@ -69,15 +71,31 @@ test('replacement cleans the host even when the old callback throws', () => {
 test('a preview opened reentrantly by onClosed remains the sole latest instance', () => {
   const nestedClosed = vi.fn()
   let nested
-  previewImage({ src: 'first', onClosed: () => {
-    nested = previewImage({ src: 'nested', onClosed: nestedClosed })
-  } })
+  previewImage({
+    src: 'first',
+    onClosed: () => {
+      nested = previewImage({ src: 'nested', onClosed: nestedClosed })
+    },
+  })
   const superseded = previewImage({ src: 'outer' })
   expect(superseded).toBeUndefined()
-  expect(nodes().map(node => node.textContent)).toEqual(['nested'])
+  expect(nodes().map((node) => node.textContent)).toEqual(['nested'])
   expect(nestedClosed).not.toHaveBeenCalled()
   nested.close()
   expect(nestedClosed).toHaveBeenCalledTimes(1)
   expect(nodes()).toHaveLength(0)
 })
 
+test('inherits default images for an options-only call and prioritizes an explicit source', () => {
+  previewImage.setDefaultOptions({ images: ['default-a', 'default-b'] })
+  try {
+    previewImage({ closable: true })
+    expect(nodes().map((node) => node.textContent)).toEqual(['default-a'])
+    previewImage({ src: 'local' })
+    expect(nodes().map((node) => node.textContent)).toEqual(['local'])
+    previewImage({ src: 'ignored', images: ['first', 'second'] })
+    expect(nodes().map((node) => node.textContent)).toEqual(['first'])
+  } finally {
+    previewImage.resetDefaultOptions()
+  }
+})
