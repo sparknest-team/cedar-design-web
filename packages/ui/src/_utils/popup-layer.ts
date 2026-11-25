@@ -18,6 +18,7 @@ interface Layer {
   depth: number
   ancestors: readonly symbol[]
   yieldToDescendants: boolean
+  modal: boolean
 }
 interface Registry {
   layers: Map<symbol, Layer>
@@ -39,10 +40,14 @@ function registryFor(document: Document) {
 
 /** Read visual layers without joining focus or Escape dispatch. */
 export function getHighestPopupZIndex(ownerDocument: Document | undefined): number {
-  if (!ownerDocument) return 0
+  if (!ownerDocument) {
+    return 0
+  }
   let highest = 0
   for (const layer of registryFor(ownerDocument).layers.values()) {
-    if (Number.isFinite(layer.zIndex.value)) highest = Math.max(highest, layer.zIndex.value)
+    if (Number.isFinite(layer.zIndex.value)) {
+      highest = Math.max(highest, layer.zIndex.value)
+    }
   }
   return highest
 }
@@ -53,6 +58,7 @@ export function usePopupLayer(
   zIndex: Readonly<Ref<number>>,
   ownerDocument?: () => Document | undefined,
   yieldToDescendants = false,
+  modal = false,
 ) {
   const instance = getCurrentInstance()
   const id = Symbol('popup-layer')
@@ -85,7 +91,7 @@ export function usePopupLayer(
     if (!active()) {
       registry.layers.delete(id)
     } else if (!registry.layers.has(id)) {
-      registry.layers.set(id, { id, zIndex, depth, ancestors, yieldToDescendants, order: ++registry.sequence })
+      registry.layers.set(id, { id, zIndex, depth, ancestors, yieldToDescendants, modal, order: ++registry.sequence })
     }
   }
   watch(active, sync, { flush: 'sync' })
@@ -128,5 +134,15 @@ export function usePopupLayer(
     }
     return top === id
   }
-  return { onStackTop, syncOwner: sync }
+  function onModalStackTop() {
+    if (!registry || !active() || suspended || !registry.layers.has(id)) {
+      return false
+    }
+    const top = [...registry.layers.values()]
+      .filter((layer) => layer.modal)
+      .sort((a, b) => a.zIndex.value - b.zIndex.value || a.depth - b.depth || a.order - b.order)
+      .at(-1)
+    return top?.id === id
+  }
+  return { onStackTop, onModalStackTop, syncOwner: sync }
 }

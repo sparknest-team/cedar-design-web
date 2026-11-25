@@ -125,7 +125,9 @@ const responsiveObserve: {
           screen,
         )
       }
-      if (this.matchHandlers[matchMediaQuery]) return
+      if (this.matchHandlers[matchMediaQuery]) {
+        return
+      }
       const mql = window.matchMedia(matchMediaQuery)
       if (mql.addEventListener) {
         mql.addEventListener('change', listener)
