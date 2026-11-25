@@ -6,12 +6,13 @@
     "url": "git+https://github.com/sparknest-team/cedar-design-web.git",
     "directory": "packages/ui"
   },
-  "main": "lib/index.js",
-  "module": "es/index.mjs",
-  "types": "types/index.d.ts",
-  "style": "es/cedar.css",
-  "unpkg": "umd/cedar.js",
-  "jsdelivr": "umd/cedar.js",
+  "sideEffects": [
+    "src/**/style/*",
+    "es/**/style/*",
+    "lib/**/style/*",
+    "*.css",
+    "*.less"
+  ],
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
@@ -72,6 +73,12 @@
       "require": "./lib/table/core/style/index.js"
     }
   },
+  "main": "lib/index.js",
+  "jsdelivr": "umd/cedar.js",
+  "unpkg": "umd/cedar.js",
+  "module": "es/index.mjs",
+  "types": "types/index.d.ts",
+  "style": "es/cedar.css",
   "files": [
     "es",
     "lib",
@@ -79,34 +86,36 @@
     "umd",
     "reset"
   ],
-  "sideEffects": [
-    "src/**/style/*",
-    "es/**/style/*",
-    "lib/**/style/*",
-    "*.css",
-    "*.less"
-  ],
   "scripts": {
     "build": "pnpm build:lib && pnpm build:doc",
-    "dev": "vuepress dev docs",
-    "ui:gen": "tsx scripts/generate/component.ts",
-    "build:lib": "cedar-cli compile ui-build.config.mjs",
     "build:doc": "pnpm docs:llms && node --max-old-space-size=6144 ./node_modules/vuepress/bin/vuepress.js build docs --dest dist",
-    "dtsgen": "tsx scripts dtsgen 'components/**/*.{ts,tsx,vue}'",
-    "watch": "vite build --watch",
-    "test:watch": "vitest",
-    "test": "vitest run && vitest run --config docs/.vuepress/vitest.config.mts",
-    "coverage": "vitest run --coverage",
-    "format": "prettier --write .",
-    "lint": "eslint src --ext .vue,.js,.ts,.tsx --max-warnings 0 && node ../../../design-ui/bin/api-naming-check.mjs",
-    "lint-staged": "lint-staged",
-    "clean-cache": "rm -rf docs/.vuepress/.cache docs/.vuepress/.cache-build docs/.vuepress/.temp docs/.vuepress/.temp-build node_modules/.vite",
-    "prepublishOnly": "pnpm build:lib",
+    "build:lib": "cedar-cli compile ui-build.config.mjs",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 2",
+    "clean-cache": "rm -rf docs/.vuepress/.cache docs/.vuepress/.cache-build docs/.vuepress/.temp docs/.vuepress/.temp-build node_modules/.vite",
+    "coverage": "vitest run --coverage",
+    "dev": "vuepress dev docs",
+    "docs:llms": "node ../../../design-ui/bin/llms-docs.mjs cedar . docs/.vuepress/public",
+    "dtsgen": "tsx scripts dtsgen 'components/**/*.{ts,tsx,vue}'",
+    "format": "prettier --write .",
+    "lint": "eslint src --max-warnings 0 && node ../../../design-ui/bin/api-naming-check.mjs",
+    "lint-staged": "lint-staged",
+    "prepublishOnly": "pnpm build:lib",
     "preview": "vite preview --config docs/.vuepress/preview.config.ts",
+    "test": "vitest run && vitest run --config docs/.vuepress/vitest.config.mts",
+    "test:watch": "vitest",
     "typecheck": "vue-tsc -p tsconfig.declaration.json --noEmit",
     "typecheck:contracts": "tsc -p tsconfig.contracts.json",
-    "docs:llms": "node ../../../design-ui/bin/llms-docs.mjs cedar . docs/.vuepress/public"
+    "ui:gen": "tsx scripts/generate/component.ts",
+    "watch": "vite build --watch"
+  },
+  "lint-staged": {
+    "src/**/*.{js,ts,tsx,vue}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "src/**/*.{json,css,less,md}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@cedar-design/icons-vue": "workspace:*",
@@ -129,15 +138,6 @@
     "sortablejs": "^1.15.3",
     "zod": "^4.1.12"
   },
-  "lint-staged": {
-    "src/**/*.{js,ts,tsx,vue}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "src/**/*.{json,css,less,md}": [
-      "prettier --write"
-    ]
-  },
   "devDependencies": {
     "@cedar-design/cli-vue": "workspace:*",
     "@cedar-design/resolver-vue": "workspace:*",
@@ -155,11 +155,11 @@
     "@typescript-eslint/parser": "^8.12.2",
     "@vitejs/plugin-vue": "6.0.11",
     "@vitejs/plugin-vue-jsx": "5.1.6",
+    "@vitest/coverage-v8": "5.1.0",
     "@vitest/ui": "5.1.0",
-    "@vue/eslint-config-prettier": "^6.0.0",
-    "@vue/eslint-config-typescript": "^7.0.0",
     "@vue/repl": "^4.4.2",
     "@vue/runtime-core": "catalog:",
+    "@vue/server-renderer": "catalog:",
     "@vue/test-utils": "^2.0.2",
     "@vuepress/bundler-vite": "2.0.0-rc.18",
     "@vuepress/helper": "2.0.0-rc.63",
@@ -176,9 +176,8 @@
     "components-helper": "^2.0.0",
     "conventional-changelog-cli": "^4.1.0",
     "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^8.37.0",
-    "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-vue": "^7.0.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-vue": "^10.12.1",
     "execa": "^6.1.0",
     "fast-glob": "^3.2.11",
     "fs-extra": "^11.2.0",
@@ -210,13 +209,12 @@
     "vite": "8.3.8",
     "vitest": "5.1.0",
     "vue": "catalog:",
+    "vue-eslint-parser": "^10.4.2",
     "vue-router": "^4.2.5",
     "vue-tsc": "^2.1.10",
     "vuepress": "2.0.0-rc.18",
     "vuepress-plugin-md-enhance": "^2.0.0-rc.43",
-    "vuepress-theme-hope": "2.0.0-rc.61",
-    "@vitest/coverage-v8": "5.1.0",
-    "@vue/server-renderer": "catalog:"
+    "vuepress-theme-hope": "2.0.0-rc.61"
   },
   "peerDependencies": {
     "vue": "3"
