@@ -6,17 +6,70 @@ const root = new URL('../../', import.meta.url)
 const workflow = readFileSync(new URL('.github/workflows/quality.yml', root), 'utf8')
 const { scripts } = JSON.parse(readFileSync(new URL('package.json', root), 'utf8'))
 
+function job(workflow, id) {
+  const body = workflow.split(new RegExp(`^  ${id}: *$`, 'm'))[1]?.split(/^  [\w-]+: *$/m)[0]
+  assert.ok(body, `${id} job must exist`)
+  return body
+}
+
 function assertMergeGate(workflow, scripts) {
   // Keep the existing required-check context, and run on every PR/merge queue entry.
   assert.match(workflow, /^  pull_request:\s*$/m)
   assert.match(workflow, /^  merge_group:\s*$/m)
-  assert.match(workflow, /^  quality:\s*$/m)
-  assert.doesNotMatch(workflow, /^\s*(?:paths(?:-ignore)?|branches-ignore|continue-on-error|needs):/m)
+  assert.doesNotMatch(workflow, /^\s*(?:paths(?:-ignore)?|branches-ignore|continue-on-error):/m)
+  assert.deepEqual(
+    workflow.match(/^\s*needs:.*$/gm)?.map((line) => line.trim()),
+    ['needs: [checks, test-shards]'],
+  )
+  assert.equal((workflow.match(/install --frozen-lockfile/g) ?? []).length, 3)
   assert.doesNotMatch(workflow.split('  push:')[0], /^\s*branches:/m, 'PRs cannot be branch-filtered')
-  const quality = workflow.split(/^  quality:\s*$/m)[1]?.split(/^  [\w-]+:\s*$/m)[0]
-  assert.ok(quality, 'quality job must exist')
-  assert.doesNotMatch(quality, /^    (?:if|name):/m, 'required job cannot be skipped or renamed')
-  const steps = quality.split(/^      - /m).slice(1)
+  const quality = job(workflow, 'quality')
+  assert.match(quality, /^    needs: \[checks, test-shards\]$/m)
+  assert.deepEqual(quality.match(/^    if:.*$/gm), ['    if: always()'])
+  assert.doesNotMatch(quality, /^    name:/m, 'required job cannot be renamed')
+  const [aggregate, ...extraSteps] = quality.split(/^      - /m).slice(1)
+  assert.equal(extraSteps.length, 0)
+  assert.ok(aggregate, 'quality must check the dependency results')
+  assert.doesNotMatch(aggregate, /^\s*if:/m)
+  assert.ok(aggregate.includes('EVENT_NAME: ${{ github.event_name }}'))
+  assert.ok(aggregate.includes('CHECKS_RESULT: ${{ needs.checks.result }}'))
+  assert.ok(aggregate.includes('SHARDS_RESULT: ${{ needs.test-shards.result }}'))
+  assert.equal(
+    aggregate.split(/^        run: \|$/m)[1]?.trim(),
+    [
+      'expected_shards_result=skipped',
+      '          if [[ "$EVENT_NAME" == pull_request ]]; then',
+      '            expected_shards_result=success',
+      '          fi',
+      '          if [[ "$CHECKS_RESULT" != success || "$SHARDS_RESULT" != "$expected_shards_result" ]]; then',
+      '            echo "::error::$EVENT_NAME: checks=$CHECKS_RESULT, test-shards=$SHARDS_RESULT (expected $expected_shards_result)"',
+      '            exit 1',
+      '          fi',
+    ].join('\n'),
+    'quality must require successful checks and the shard result appropriate to the event',
+  )
+
+  const shards = job(workflow, 'test-shards')
+  assert.deepEqual(shards.match(/^    if:.*$/gm), ["    if: github.event_name == 'pull_request'"])
+  assert.match(shards, /^      matrix:\n        shard: \[1, 2, 3, 4\]$/m)
+  const shardSteps = shards
+    .split(/^      - /m)
+    .slice(1)
+    .filter((step) => step.split('\n')[0] === 'run: pnpm test:shard')
+  assert.equal(shardSteps.length, 1)
+  assert.doesNotMatch(shardSteps[0], /^\s*if:/m)
+  assert.ok(shardSteps[0].includes('SHARD: ${{ matrix.shard }}/4'))
+
+  const shardCommands = scripts['test:shard'].split(' && ')
+  assert.equal(shardCommands.length, 2)
+  assert.ok(shardCommands[0].includes('--shard="${SHARD:?Set SHARD like 1/4}"'))
+  assert.ok(shardCommands[1].includes('--config docs/.vuepress/vitest.config.mts --shard="$SHARD"'))
+  assert.doesNotMatch(scripts['quality:fast'], /\bpnpm test\b/)
+  assert.ok(scripts.quality.split(' && ').includes('pnpm test'))
+
+  const checks = job(workflow, 'checks')
+  assert.doesNotMatch(checks, /^    if:/m, 'checks must run on every event')
+  const steps = checks.split(/^      - /m).slice(1)
   // 2026-11-25 分层改造：PR 跑 quality:fast、merge_group/main 跑完整 quality。
   // 原本这里要求 `pnpm quality` 无条件强制跑一次；分层后必须允许 if，但条件被精确锁定：
   //   - 完整 quality 只能由「非 PR 事件」触发（即 merge_group / push main / workflow_dispatch）
@@ -104,9 +157,45 @@ for (const [name, mutate] of [
   ['fast step disabled', (value) => value.replace("if: github.event_name == 'pull_request'", 'if: false')],
   ['fast channel removed', (value) => value.replace('- run: pnpm quality:fast', '- run: pnpm quality')],
   ['channels swapped', (value) => value.replace("if: github.event_name == 'pull_request'", 'if: always()')],
+  ['missing shard', (value) => value.replace('shard: [1, 2, 3, 4]', 'shard: [1, 2, 3]')],
+  ['missing shard dependency', (value) => value.replace('needs: [checks, test-shards]', 'needs: [checks]')],
+  [
+    'conditional aggregator',
+    (value) =>
+      value.replace('    needs: [checks, test-shards]\n    if: always()\n', '    needs: [checks, test-shards]\n'),
+  ],
+  [
+    'shard test step disabled',
+    (value) => value.replace('- run: pnpm test:shard\n', '- run: pnpm test:shard\n        if: false\n'),
+  ],
+  [
+    'shard job runs on non-PR events',
+    (value) => value.replace("  test-shards:\n    if: github.event_name == 'pull_request'\n", '  test-shards:\n'),
+  ],
+  [
+    'non-PR shards required to succeed',
+    (value) => value.replace('expected_shards_result=skipped', 'expected_shards_result=success'),
+  ],
+  [
+    'PR shards allowed to skip',
+    (value) => value.replace('expected_shards_result=success', 'expected_shards_result=skipped'),
+  ],
+  [
+    'additional canonical frozen installs',
+    (value) => value.replaceAll('--config.frozen-lockfile=true install', 'install --frozen-lockfile'),
+  ],
 ]) {
   test(`rejects ${name}`, () => assert.throws(() => assertMergeGate(mutate(workflow), scripts)))
 }
+
+test('rejects restoring the unsharded test to fast quality', () => {
+  assert.throws(() =>
+    assertMergeGate(workflow, {
+      ...scripts,
+      'quality:fast': scripts['quality:fast'] + ' && pnpm test',
+    }),
+  )
+})
 
 test('rejects missing, filtered or failure-tolerant locale checks', () => {
   for (const command of scripts['check:demo-i18n'].split(' && ')) {

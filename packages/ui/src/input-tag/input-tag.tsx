@@ -12,39 +12,39 @@ import {
   toRefs,
   TransitionGroup,
   watch,
-  type InputHTMLAttributes,
   type ComponentPublicInstance,
+  type InputHTMLAttributes,
   type SlotsType,
 } from 'vue'
-import { useId } from '../_utils/vue-compat'
 import FeedbackIcon from '../_components/FeedbackIcon.vue'
 import ResizeObserver from '../_components/resize-observer'
+import { useOptionRequest } from '../_hooks/use-option-request'
 import { INPUT_EVENTS } from '../_utils/constant'
 import { resolveEmptyValue } from '../_utils/empty-value'
 import { createNamespace } from '../_utils/global-config'
 import { useInputComposition } from '../_utils/input-composition'
 import { isNull, isObject, isUndefined } from '../_utils/is'
 import { Backspace, Enter } from '../_utils/keycode'
+import { useId } from '../_utils/vue-compat'
 import FieldDecorator from '../field-decorator'
 import { useFormErrorDescription } from '../form/error-description'
 import { splitInputAttrs } from '../input/native-attrs'
 import { useInputForm } from '../input/use-input-form'
-import Tag from '../tag'
-import { useTagCloseLabel } from '../tag/platform'
-import { useOptionRequest } from '../_hooks/use-option-request'
 import { useSelect } from '../select/hooks/use-select'
-import Option from '../select/Option.vue'
 import OptGroup from '../select/Optgroup.vue'
+import Option from '../select/Option.vue'
 import SelectDropdown from '../select/SelectDropdown.vue'
 import type { SelectOptionGroupInfo, SelectOptionInfo } from '../select/types'
 import { isGroupOptionInfo } from '../select/utils'
-import Trigger from '../trigger'
+import Tag from '../tag'
+import { useTagCloseLabel } from '../tag/platform'
+import Trigger from '../trigger/trigger'
 import { inputTagEmits } from './emits'
 import { inputTagProps } from './props'
+import { findInputTagOption, inputTagOptionsKey } from './selected-options'
 import { createTagKeyResolver } from './tag-keys'
 import type { InputTagFieldNames, InputTagSlots, InputTagValue, TagData, TagDataInfo } from './types'
 import { getValueData } from './utils'
-import { findInputTagOption, inputTagOptionsKey } from './selected-options'
 
 const DEFAULT_FIELD_NAMES = {
   value: 'value',
@@ -144,7 +144,7 @@ export default defineComponent({
     const source = useOptionRequest(
       () => props.options,
       () => blocked.value || Boolean(props.disabledInput),
-      error => emit('load-error', error),
+      (error) => emit('load-error', error),
       () => props.searchDelay,
       inputTagProps,
       false,
@@ -158,8 +158,15 @@ export default defineComponent({
     const searchEnabled = computed(() => props.options !== undefined)
     const optionsFilter = computed(() => !source.remote.value)
     const noSelectedKeys = ref<string[]>([])
-    const candidateVisible = computed(() => searchEnabled.value && candidateOpen.value && _focused.value &&
-      !blocked.value && !props.disabledInput && computedInputValue.value.length >= Math.max(1, props.minSearchLength))
+    const candidateVisible = computed(
+      () =>
+        searchEnabled.value &&
+        candidateOpen.value &&
+        _focused.value &&
+        !blocked.value &&
+        !props.disabledInput &&
+        computedInputValue.value.length >= Math.max(1, props.minSearchLength),
+    )
     const restoreInput = () => {
       if (inputRef.value && !isComposition.value) inputRef.value.value = computedInputValue.value
     }
@@ -244,7 +251,14 @@ export default defineComponent({
     }
     const resolveTagKeys = createTagKeyResolver()
     const valueData = computed(() => {
-      const items = getValueData(computedValue.value, mergedFieldNames.value, value => findInputTagOption(source.options.value, value, mergedFieldNames.value) ?? props.fallbackOption?.(value) ?? selectedOptions.get(value))
+      const items = getValueData(
+        computedValue.value,
+        mergedFieldNames.value,
+        (value) =>
+          findInputTagOption(source.options.value, value, mergedFieldNames.value) ??
+          props.fallbackOption?.(value) ??
+          selectedOptions.get(value),
+      )
       const keys = resolveTagKeys(computedValue.value, items)
       return items.map((item, index) => ({ ...item, key: keys[index] }))
     })
@@ -287,18 +301,36 @@ export default defineComponent({
 
     const commitCandidate = (key: string, event: Event) => {
       const option = optionInfoMap.get(key)
-      if (!option || option.disabled || blocked.value || candidateLoading.value ||
-          (typeof option.value !== 'string' && typeof option.value !== 'number')) return
+      if (
+        !option ||
+        option.disabled ||
+        blocked.value ||
+        candidateLoading.value ||
+        (typeof option.value !== 'string' && typeof option.value !== 'number')
+      )
+        return
       const value = option.value
-      if (props.uniqueValue && valueData.value.some(item => item.value === value)) return
-      selectedOptions.set(value, { ...option.raw, value, label: String(option.label ?? value), [mergedFieldNames.value.label]: String(option.label ?? value), closable: true })
+      if (props.uniqueValue && valueData.value.some((item) => item.value === value)) return
+      selectedOptions.set(value, {
+        ...option.raw,
+        value,
+        label: String(option.label ?? value),
+        [mergedFieldNames.value.label]: String(option.label ?? value),
+        closable: true,
+      })
       updateValue(props.multiple ? computedValue.value.concat(value) : [value], event)
       emit('select', value, option)
       candidateOpen.value = false
       source.cancel()
       updateInputValue('', event)
     }
-    const { validOptions, validOptionInfos, optionInfoMap, activeKey, handleKeyDown: handleCandidateKeyDown } = useSelect({
+    const {
+      validOptions,
+      validOptionInfos,
+      optionInfoMap,
+      activeKey,
+      handleKeyDown: handleCandidateKeyDown,
+    } = useSelect({
       options: source.options,
       inputValue: computedInputValue,
       filterOption: optionsFilter,
@@ -309,29 +341,52 @@ export default defineComponent({
       dropdownRef,
       optionRefs,
       onSelect: commitCandidate,
-      onOpenChange: value => { candidateOpen.value = value },
+      onOpenChange: (value) => {
+        candidateOpen.value = value
+      },
       enterToOpen: false,
-      getOptionId: key => `${listboxId}-${encodeURIComponent(key)}`,
+      getOptionId: (key) => `${listboxId}-${encodeURIComponent(key)}`,
     })
-    watch(computedInputValue, value => {
-      if (!searchEnabled.value || !_focused.value || blocked.value || isComposition.value) return
-      candidateOpen.value = value.length >= Math.max(1, props.minSearchLength)
-      if (!candidateOpen.value) { source.cancel(); return }
-      emit('search', value)
-      void source.search(value)
-    }, { flush: 'sync' })
-    watch(() => Math.max(1, props.minSearchLength), () => {
-      if (!searchEnabled.value || !_focused.value || blocked.value || isComposition.value) return
-      candidateOpen.value = computedInputValue.value.length >= Math.max(1, props.minSearchLength)
-      if (candidateOpen.value) void source.search(computedInputValue.value)
-      else source.cancel()
-    }, { flush: 'sync' })
-    watch([validOptionInfos, candidateLoading, computedInputValue], () => {
-      if (!props.autoCommitSingle || !candidateVisible.value || candidateLoading.value || isComposition.value ||
-          (source.remote.value && source.query.value !== computedInputValue.value)) return
-      const options = validOptionInfos.value.filter(option => !option.disabled)
-      if (options.length === 1) commitCandidate(options[0].key, new Event('auto-commit'))
-    }, { flush: 'post' })
+    watch(
+      computedInputValue,
+      (value) => {
+        if (!searchEnabled.value || !_focused.value || blocked.value || isComposition.value) return
+        candidateOpen.value = value.length >= Math.max(1, props.minSearchLength)
+        if (!candidateOpen.value) {
+          source.cancel()
+          return
+        }
+        emit('search', value)
+        void source.search(value)
+      },
+      { flush: 'sync' },
+    )
+    watch(
+      () => Math.max(1, props.minSearchLength),
+      () => {
+        if (!searchEnabled.value || !_focused.value || blocked.value || isComposition.value) return
+        candidateOpen.value = computedInputValue.value.length >= Math.max(1, props.minSearchLength)
+        if (candidateOpen.value) void source.search(computedInputValue.value)
+        else source.cancel()
+      },
+      { flush: 'sync' },
+    )
+    watch(
+      [validOptionInfos, candidateLoading, computedInputValue],
+      () => {
+        if (
+          !props.autoCommitSingle ||
+          !candidateVisible.value ||
+          candidateLoading.value ||
+          isComposition.value ||
+          (source.remote.value && source.query.value !== computedInputValue.value)
+        )
+          return
+        const options = validOptionInfos.value.filter((option) => !option.disabled)
+        if (options.length === 1) commitCandidate(options[0].key, new Event('auto-commit'))
+      },
+      { flush: 'post' },
+    )
 
     const isTagClosable = (item: TagDataInfo) =>
       !blocked.value && !item.tagProps?.loading && Boolean(item.tagProps?.closable ?? item.closable)
@@ -362,7 +417,9 @@ export default defineComponent({
           if (notify) emit('press-enter', computedInputValue.value, e)
           return
         }
-        const newValue = props.multiple ? computedValue.value.concat(computedInputValue.value) : [computedInputValue.value]
+        const newValue = props.multiple
+          ? computedValue.value.concat(computedInputValue.value)
+          : [computedInputValue.value]
         updateValue(newValue, e)
         if (notify) emit('press-enter', computedInputValue.value, e)
         if (!retainInputValue.value.create) {
@@ -373,7 +430,12 @@ export default defineComponent({
 
     const handleFocus = (ev: FocusEvent) => {
       _focused.value = true
-      if (searchEnabled.value && !blocked.value && !props.disabledInput && computedInputValue.value.length >= Math.max(1, props.minSearchLength)) {
+      if (
+        searchEnabled.value &&
+        !blocked.value &&
+        !props.disabledInput &&
+        computedInputValue.value.length >= Math.max(1, props.minSearchLength)
+      ) {
         candidateOpen.value = true
         emit('search', computedInputValue.value)
         void source.search(computedInputValue.value)
@@ -530,7 +592,8 @@ export default defineComponent({
               >
                 {tags.value.map((item, index) => {
                   const content = slots.label?.({ data: item.raw }) ?? props.formatLabel?.(item.raw) ?? item.label
-                  const visibleLabel = typeof content === 'string' || typeof content === 'number' ? String(content).trim() : ''
+                  const visibleLabel =
+                    typeof content === 'string' || typeof content === 'number' ? String(content).trim() : ''
                   const label = visibleLabel || String(item.label ?? item.value)
                   return (
                     <Tag
@@ -559,7 +622,11 @@ export default defineComponent({
                   aria-autocomplete={searchEnabled.value ? 'list' : undefined}
                   aria-expanded={searchEnabled.value ? candidateVisible.value : undefined}
                   aria-controls={candidateVisible.value ? listboxId : undefined}
-                  aria-activedescendant={candidateVisible.value && activeKey.value ? `${listboxId}-${encodeURIComponent(activeKey.value)}` : undefined}
+                  aria-activedescendant={
+                    candidateVisible.value && activeKey.value
+                      ? `${listboxId}-${encodeURIComponent(activeKey.value)}`
+                      : undefined
+                  }
                   ref={inputRef}
                   key={`${prefix}-input`}
                   class={classes(n('input'))}
@@ -583,29 +650,56 @@ export default defineComponent({
     )
 
     const renderOption = (item: SelectOptionInfo | SelectOptionGroupInfo): import('vue').VNodeChild =>
-      isGroupOptionInfo(item)
-        ? <OptGroup key={item.key} label={item.label}>{item.options.map(renderOption)}</OptGroup>
-        : <Option key={item.key} value={item.value} disabled={item.disabled} internal ref={(node: Element | ComponentPublicInstance | null) => {
+      isGroupOptionInfo(item) ? (
+        <OptGroup key={item.key} label={item.label}>
+          {item.options.map(renderOption)}
+        </OptGroup>
+      ) : (
+        <Option
+          key={item.key}
+          value={item.value}
+          disabled={item.disabled}
+          internal
+          ref={(node: Element | ComponentPublicInstance | null) => {
             const element = node && '$el' in node ? node.$el : node
             if (element) optionRefs.value[item.key] = element as HTMLElement
             else delete optionRefs.value[item.key]
-          }} v-slots={{ default: () => item.label }} />
-    const render = () => searchEnabled.value ? (
-      <Trigger
-        trigger="focus"
-        unmountOnClose={true}
-        placement="bottom-start"
-        popupOffset={4}
-        preventFocus
-        autoFitPopupWidth
-        closeOnClickReference={false}
-        open={candidateVisible.value}
-        onUpdate:open={(value: boolean) => { candidateOpen.value = value }}
-        v-slots={{ content: () => <SelectDropdown ref={dropdownRef} listboxId={listboxId} loading={candidateLoading.value} empty={candidateVisible.value && !validOptionInfos.value.length}>{validOptions.value.map(renderOption)}</SelectDropdown> }}
-      >
-        {renderField()}
-      </Trigger>
-    ) : renderField()
+          }}
+          v-slots={{ default: () => item.label }}
+        />
+      )
+    const render = () =>
+      searchEnabled.value ? (
+        <Trigger
+          trigger="focus"
+          unmountOnClose={true}
+          placement="bottom-start"
+          popupOffset={4}
+          preventFocus
+          autoFitPopupWidth
+          closeOnClickReference={false}
+          open={candidateVisible.value}
+          onUpdate:open={(value: boolean) => {
+            candidateOpen.value = value
+          }}
+          v-slots={{
+            content: () => (
+              <SelectDropdown
+                ref={dropdownRef}
+                listboxId={listboxId}
+                loading={candidateLoading.value}
+                empty={candidateVisible.value && !validOptionInfos.value.length}
+              >
+                {validOptions.value.map(renderOption)}
+              </SelectDropdown>
+            ),
+          }}
+        >
+          {renderField()}
+        </Trigger>
+      ) : (
+        renderField()
+      )
 
     return {
       inputRef,

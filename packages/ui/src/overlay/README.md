@@ -29,7 +29,7 @@ permalink: /components/overlay/
 | `v-model:open`     | 是否显示                                     | `boolean`                        | `false`  |
 | `default-open`     | 非受控模式下是否默认显示                     | `boolean`                        | `false`  |
 | `overlay-closable` | 点击背景区域是否关闭                         | `boolean`                        | `true`   |
-| `lock-scroll`      | 是否锁定挂载容器滚动                         | `boolean`                        | `true`   |
+| `lock-scroll`      | 打开时锁定挂载容器的滚动。原地渲染时锁定所在文档的 body。 | `boolean`                        | `true`   |
 | `unmount-on-close` | 关闭后是否卸载插槽内容                       | `boolean`                        | `true`   |
 | `esc-to-close`     | 是否按 Escape 关闭                           | `boolean`                        | `true`   |
 | `popup-container`  | Teleport 挂载位置；`false` 表示原地渲染       | `string \| HTMLElement \| false` | `'body'` |

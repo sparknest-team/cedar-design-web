@@ -15,21 +15,24 @@ Start with the basic example, then compare related settings before moving to con
 
 ## Layout and arrangement
 
+In a native `dir="auto"` or `<bdi>` scope, changes to the text direction update the thumb position and arrow keys.
+
+A horizontal slider follows the reading direction of its assigned slot in an open shadow root, including after reassignment. A slider mounted inside a closed shadow root follows its ancestors there. When a slider is passed into that root from outside and the internal slot sets the direction, keep the same native `dir` on the element passed into that slot so the thumb position and arrow keys stay in sync.
+
 ### Vertical
 
 <!-- demo-config-notes:start -->
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| -------------- | --------------------------------------------------------- | -------- |
-| `orientation` | Horizontal/vertical axis of the slider track and interaction, default horizontal; not the direction of value increments | Vertical |
-| `aria-label` | Name, or separate names for range thumbs | Vertical |
-| `range` | Fixed low/high thumbs; initial reversed values are sorted | Vertical |
-| `show-tooltip` | true on hover/focus/drag, false hidden, always persistent | Vertical |
+| Configuration  | Purpose                                                                                                                 | Related examples |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `orientation`  | Horizontal/vertical axis of the slider track and interaction, default horizontal; not the direction of value increments | Vertical         |
+| `aria-label`   | Name, or separate names for range thumbs                                                                                | Vertical         |
+| `range`        | Fixed low/high thumbs; initial reversed values are sorted                                                               | Vertical         |
+| `show-tooltip` | true on hover/focus/drag, false hidden, always persistent                                                               | Vertical         |
 
 <!-- demo-config-notes:end -->
-
 
 Preview configuration: `orientation="vertical"`, `aria-label="Vertical value"`, `range`, `show-tooltip="always"`.
 
@@ -43,13 +46,12 @@ Preview configuration: `orientation="vertical"`, `aria-label="Vertical value"`, 
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| -------------- | --------------------------------------------- | -------------- |
+| Configuration  | Purpose                                                   | Related examples |
+| -------------- | --------------------------------------------------------- | ---------------- |
 | `show-tooltip` | true on hover/focus/drag, false hidden, always persistent | Touch And Labels |
-| `aria-label` | Name, or separate names for range thumbs | Touch And Labels |
+| `aria-label`   | Name, or separate names for range thumbs                  | Touch And Labels |
 
 <!-- demo-config-notes:end -->
-
 
 Preview configuration: `show-tooltip="always"`, `aria-label="Always visible"`, `:show-tooltip="false"`, `active-color="#722ed1"`.
 
@@ -63,17 +65,16 @@ Preview configuration: `show-tooltip="always"`, `aria-label="Always visible"`, `
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ------------ | ---------------------------------------------------- | -------------------------------------- |
-| `aria-label` | Name, or separate names for range thumbs | Keyboard Input, Controlled Range |
-| `range` | Fixed low/high thumbs; initial reversed values are sorted | Keyboard Input, Controlled Range |
-| `step` | Positive finite step aligned to min; max remains reachable | Keyboard Input |
-| `marks` | Map positions within the finite range to text | Keyboard Input |
-| `show-ticks` | Show step ticks; dense ticks are reduced, up to 1000 | Keyboard Input |
-| `show-input` | InputNumber; Enter or blur commits via the same model | Keyboard Input |
+| Configuration | Purpose                                                    | Related examples                 |
+| ------------- | ---------------------------------------------------------- | -------------------------------- |
+| `aria-label`  | Name, or separate names for range thumbs                   | Keyboard Input, Controlled Range |
+| `range`       | Fixed low/high thumbs; initial reversed values are sorted  | Keyboard Input, Controlled Range |
+| `step`        | Positive finite step aligned to min; max remains reachable | Keyboard Input                   |
+| `marks`       | Map positions within the finite range to text              | Keyboard Input                   |
+| `show-ticks`  | Show step ticks; dense ticks are reduced, up to 1000       | Keyboard Input                   |
+| `show-input`  | InputNumber; Enter or blur commits via the same model      | Keyboard Input                   |
 
 <!-- demo-config-notes:end -->
-
 
 <demo src="./__demos__/state-lab.vue"></demo>
 
@@ -120,50 +121,50 @@ Steps align to a decimal grid anchored at min, retaining exact endpoints and ran
 
 `empty-values` recognizes empty data; `empty-value` keeps existing clear output. `empty-text` defaults to `'-'` under `read-pretty`, with Field > FormItem > Form precedence and custom read slots first. With explicit `empty-values`, built-in required uses the policy; custom validators receive original data. See the [shared guide](/en/guide/empty-values/).
 
-| Prop | Type | Default and scope |
-| ------------ | ------------------ | ----------------------------------------------------- |
+| Prop         | Type               | Default and scope                                                           |
+| ------------ | ------------------ | --------------------------------------------------------------------------- |
 | empty-values | readonly unknown[] | Field > FormItem > Form > component-family default; replaces the whole list |
-| empty-text | string | Field > FormItem > Form > '-'; explicit '' is valid |
+| empty-text   | string             | Field > FormItem > Form > '-'; explicit '' is valid                         |
 
 These props belong to field presentation; pure panels do not gain reading mode. Form and FormItem provide inherited settings. The existing empty-value type and clear fallback remain component-specific.
 
 ### Slider Props
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| model-value | SliderValue / null | undefined | Controlled number or range pair; null is explicitly empty. |
-| default-value | SliderValue | 0 | Uncontrolled initial value; ranges normalize to an ascending pair. |
-| min | number / string | 0 | Finite minimum, accepting decimal and exponential numeric strings. |
-| max | number / string | 100 | Finite maximum; interaction is blocked when it does not exceed min. |
-| step | number / string | 1 | Positive finite step anchored at min; invalid values fall back to 1. |
-| range | boolean | false | Two-thumb range with ordered, noncrossing endpoints. |
-| orientation | 'horizontal' / 'vertical' | 'horizontal' | Track orientation; invalid values produce a development diagnostic. |
-| disabled | boolean | undefined | Disable interaction; inherited from the form when omitted. |
-| readonly | boolean | undefined | Readonly retains focus and tooltips while blocking value changes. |
-| error | boolean | undefined | Error appearance, inherited from the form when omitted. |
-| marks | Record<number, string> | undefined | Text marks at positions within the range. |
-| show-ticks | boolean | false | Display step ticks, capped at 1000. |
-| show-input | boolean | false | Show an accompanying InputNumber, or two in range mode. The slider’s aria-describedby also applies to the number inputs and is combined with form error descriptions. An explicit aria-description is forwarded to both the slider and number inputs. Browsers prioritize a resolvable aria-describedby, so the two descriptions are not necessarily combined. |
-| show-tooltip | boolean / 'always' | true | True shows on hover, focus or drag; false hides; always remains visible. |
-| format-tooltip | SliderTooltipFormatter | undefined | Format tooltips and aria-valuetext without changing the model. |
-| aria-label | string / [string, string] | undefined | Single-thumb name or names for the two range thumbs. |
-| active-color | string | undefined | Selected track color. |
-| track-color | string | undefined | Background track color. |
-| thumb-color | string | undefined | Thumb color. |
-| label-color | string | undefined | Tooltip background color. |
-| label-text-color | string | undefined | Tooltip text color. |
-| track-height | number / string | undefined | Track thickness, with numeric values in px; invalid lengths preserve theme defaults. |
-| thumb-size | number / string | undefined | Thumb diameter, with numeric values in px; invalid lengths preserve theme defaults. |
-| edit-mode | FieldEditMode<br>`'direct' \| 'click' \| 'dblclick'` | undefined | Field editing entry, inherited from the form when omitted, otherwise direct. |
-| read-pretty | boolean | undefined | Common pure-reading state, independent of readonly and disabled. |
-| before-commit | BeforeFieldCommit | undefined | Deferred confirmation protocol ({ value, previousValue }, done, { signal }); complete with a boolean, Promise or done; synchronous undefined waits for done. |
-| open | boolean | undefined | Controlled deferred editor state. |
-| default-open | boolean | false | Initial uncontrolled deferred editor state. |
-| popup-container | PopupContainer | undefined | Deferred editor mount target: selector, HTMLElement or false. |
-| clearable | boolean | false | Provide clearing in the deferred editor; does not add a clear button to the inline slider. |
-| empty-value | SliderProps['emptyValue'] | undefined | Published clear override, including explicit null. |
-| empty-values | readonly unknown[] | undefined | Empty-value recognition inherited through field, FormItem and Form. |
-| empty-text | string | undefined | Default empty reading text; defaults to a dash after inheritance. |
+| Prop             | Type                                                 | Default      | Description                                                                                                                                                                                                                                                                                                                                                    |
+| ---------------- | ---------------------------------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| model-value      | SliderValue / null                                   | undefined    | Controlled number or range pair; null is explicitly empty.                                                                                                                                                                                                                                                                                                     |
+| default-value    | SliderValue                                          | 0            | Uncontrolled initial value; ranges normalize to an ascending pair.                                                                                                                                                                                                                                                                                             |
+| min              | number / string                                      | 0            | Finite minimum, accepting decimal and exponential numeric strings.                                                                                                                                                                                                                                                                                             |
+| max              | number / string                                      | 100          | Finite maximum; interaction is blocked when it does not exceed min.                                                                                                                                                                                                                                                                                            |
+| step             | number / string                                      | 1            | Positive finite step anchored at min; invalid values fall back to 1.                                                                                                                                                                                                                                                                                           |
+| range            | boolean                                              | false        | Two-thumb range with ordered, noncrossing endpoints.                                                                                                                                                                                                                                                                                                           |
+| orientation      | 'horizontal' / 'vertical'                            | 'horizontal' | Track orientation; invalid values produce a development diagnostic.                                                                                                                                                                                                                                                                                            |
+| disabled         | boolean                                              | undefined    | Disable interaction; inherited from the form when omitted.                                                                                                                                                                                                                                                                                                     |
+| readonly         | boolean                                              | undefined    | Readonly retains focus and tooltips while blocking value changes.                                                                                                                                                                                                                                                                                              |
+| error            | boolean                                              | undefined    | Error appearance, inherited from the form when omitted.                                                                                                                                                                                                                                                                                                        |
+| marks            | Record<number, string>                               | undefined    | Text marks at positions within the range.                                                                                                                                                                                                                                                                                                                      |
+| show-ticks       | boolean                                              | false        | Display step ticks, capped at 1000.                                                                                                                                                                                                                                                                                                                            |
+| show-input       | boolean                                              | false        | Show an accompanying InputNumber, or two in range mode. The slider’s aria-describedby also applies to the number inputs and is combined with form error descriptions. An explicit aria-description is forwarded to both the slider and number inputs. Browsers prioritize a resolvable aria-describedby, so the two descriptions are not necessarily combined. |
+| show-tooltip     | boolean / 'always'                                   | true         | True shows on hover, focus or drag; false hides; always remains visible.                                                                                                                                                                                                                                                                                       |
+| format-tooltip   | SliderTooltipFormatter                               | undefined    | Format tooltips and aria-valuetext without changing the model.                                                                                                                                                                                                                                                                                                 |
+| aria-label       | string / [string, string]                            | undefined    | Single-thumb name or names for the two range thumbs.                                                                                                                                                                                                                                                                                                           |
+| active-color     | string                                               | undefined    | Selected track color.                                                                                                                                                                                                                                                                                                                                          |
+| track-color      | string                                               | undefined    | Background track color.                                                                                                                                                                                                                                                                                                                                        |
+| thumb-color      | string                                               | undefined    | Thumb color.                                                                                                                                                                                                                                                                                                                                                   |
+| label-color      | string                                               | undefined    | Tooltip background color.                                                                                                                                                                                                                                                                                                                                      |
+| label-text-color | string                                               | undefined    | Tooltip text color.                                                                                                                                                                                                                                                                                                                                            |
+| track-height     | number / string                                      | undefined    | Track thickness, with numeric values in px; invalid lengths preserve theme defaults.                                                                                                                                                                                                                                                                           |
+| thumb-size       | number / string                                      | undefined    | Thumb diameter, with numeric values in px; invalid lengths preserve theme defaults.                                                                                                                                                                                                                                                                            |
+| edit-mode        | FieldEditMode<br>`'direct' \| 'click' \| 'dblclick'` | undefined    | Field editing entry, inherited from the form when omitted, otherwise direct.                                                                                                                                                                                                                                                                                   |
+| read-pretty      | boolean                                              | undefined    | Common pure-reading state, independent of readonly and disabled.                                                                                                                                                                                                                                                                                               |
+| before-commit    | BeforeFieldCommit                                    | undefined    | Deferred confirmation protocol ({ value, previousValue }, done, { signal }); complete with a boolean, Promise or done; synchronous undefined waits for done.                                                                                                                                                                                                   |
+| open             | boolean                                              | undefined    | Controlled deferred editor state.                                                                                                                                                                                                                                                                                                                              |
+| default-open     | boolean                                              | false        | Initial uncontrolled deferred editor state.                                                                                                                                                                                                                                                                                                                    |
+| popup-container  | PopupContainer                                       | undefined    | Deferred editor mount target: selector, HTMLElement or false.                                                                                                                                                                                                                                                                                                  |
+| clearable        | boolean                                              | false        | Provide clearing in the deferred editor; does not add a clear button to the inline slider.                                                                                                                                                                                                                                                                     |
+| empty-value      | SliderProps['emptyValue']                            | undefined    | Published clear override, including explicit null.                                                                                                                                                                                                                                                                                                             |
+| empty-values     | readonly unknown[]                                   | undefined    | Empty-value recognition inherited through field, FormItem and Form.                                                                                                                                                                                                                                                                                            |
+| empty-text       | string                                               | undefined    | Default empty reading text; defaults to a dash after inheritance.                                                                                                                                                                                                                                                                                              |
 
 In range mode, `aria-labelledby` names the range group; an `aria-label` array still names the two thumbs. An explicit `role` takes precedence.
 
@@ -177,12 +178,12 @@ Controlled display changes only after parent updates; normalization does not emi
 
 ### Slider Events
 
-| Event | Arguments | Meaning |
-| ------------------ | ------------- | ---------------------------- |
-| update:model-value | `SliderValue` | Request an update |
-| change | `SliderValue` | Distinct numeric proposal paired with the model event |
-| start | — | Interaction starts |
-| end | `SliderValue` | Final proposal when interaction ends |
+| Event              | Arguments     | Meaning                                               |
+| ------------------ | ------------- | ----------------------------------------------------- |
+| update:model-value | `SliderValue` | Request an update                                     |
+| change             | `SliderValue` | Distinct numeric proposal paired with the model event |
+| start              | —             | Interaction starts                                    |
+| end                | `SliderValue` | Final proposal when interaction ends                  |
 
 ### Slider Slots / Methods
 
@@ -198,25 +199,25 @@ Use these variables to customize the component. Defaults may vary by the selecto
 
 <div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
-| Variable | Default / condition | Affected styles |
-| --- | --- | --- |
-| `--c-slider-active-color` | `var(--c-sys-color-action-primary)` | `background`, `outline` |
-| `--c-slider-control-height` | `var(--c-sys-control-height-md)` | `height`, `min-height`, `padding-bottom`, `padding-inline-end`, `width` |
-| `--c-slider-disabled-color` | `var(--c-sys-color-content-disabled)` | `background`, `border-color` |
-| `--c-slider-error-color` | `var(--c-sys-color-content-danger)` | `background`, `border-color` |
-| `--c-slider-font-size` | `var(--c-sys-font-size-sm)` | `font-size` |
-| `--c-slider-gap` | `var(--c-sys-space-4)` | `bottom`, `gap`, `left`, `padding` |
-| `--c-slider-input-width` | `80px` | `width` |
-| `--c-slider-radius` | `var(--c-sys-radius-md)` | `border-radius` |
-| `--c-slider-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-slider-thumb-border-color` | `var(--c-sys-color-action-primary)` | `border` |
-| `--c-slider-thumb-color` | `var(--c-sys-color-surface-default)` | `background` |
-| `--c-slider-thumb-size` | `16px` | `height`, `width` |
-| `--c-slider-tooltip-background` | `var(--c-sys-color-surface-tooltip)` | `background` |
-| `--c-slider-tooltip-color` | `var(--c-sys-color-content-on-dark)` | `color` |
-| `--c-slider-track-color` | `var(--c-sys-color-state-hover)` | `background` |
-| `--c-slider-track-height` | `4px` | `height`, `width` |
-| `--c-slider-transition-duration` | `var(--c-sys-motion-duration-fast)` | `transition` |
+| Variable                         | Default / condition                    | Affected styles                                                         |
+| -------------------------------- | -------------------------------------- | ----------------------------------------------------------------------- |
+| `--c-slider-active-color`        | `var(--c-sys-color-action-primary)`    | `background`, `outline`                                                 |
+| `--c-slider-control-height`      | `var(--c-sys-control-height-md)`       | `height`, `min-height`, `padding-bottom`, `padding-inline-end`, `width` |
+| `--c-slider-disabled-color`      | `var(--c-sys-color-content-disabled)`  | `background`, `border-color`                                            |
+| `--c-slider-error-color`         | `var(--c-sys-color-content-danger)`    | `background`, `border-color`                                            |
+| `--c-slider-font-size`           | `var(--c-sys-font-size-sm)`            | `font-size`                                                             |
+| `--c-slider-gap`                 | `var(--c-sys-space-4)`                 | `bottom`, `gap`, `left`, `padding`                                      |
+| `--c-slider-input-width`         | `80px`                                 | `width`                                                                 |
+| `--c-slider-radius`              | `var(--c-sys-radius-md)`               | `border-radius`                                                         |
+| `--c-slider-text-color`          | `var(--c-sys-color-content-secondary)` | `color`                                                                 |
+| `--c-slider-thumb-border-color`  | `var(--c-sys-color-action-primary)`    | `border`                                                                |
+| `--c-slider-thumb-color`         | `var(--c-sys-color-surface-default)`   | `background`                                                            |
+| `--c-slider-thumb-size`          | `16px`                                 | `height`, `width`                                                       |
+| `--c-slider-tooltip-background`  | `var(--c-sys-color-surface-tooltip)`   | `background`                                                            |
+| `--c-slider-tooltip-color`       | `var(--c-sys-color-content-on-dark)`   | `color`                                                                 |
+| `--c-slider-track-color`         | `var(--c-sys-color-state-hover)`       | `background`                                                            |
+| `--c-slider-track-height`        | `4px`                                  | `height`, `width`                                                       |
+| `--c-slider-transition-duration` | `var(--c-sys-motion-duration-fast)`    | `transition`                                                            |
 
 </div>
 

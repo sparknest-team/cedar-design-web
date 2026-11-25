@@ -5,7 +5,6 @@ permalink: /en/components/form/
 
 # Form
 
-
 Horizontal form items use zero Row gutter by default, preserving the standard 16px item spacing. Explicit `row-props.gutter` overrides remain available. Input and selection fields default to `outline`; `filled` and `standard` remain explicit options.
 
 ## Field names
@@ -41,16 +40,24 @@ Bind the input to the form model with `v-model` to display its last published va
 Inside a Form bound to `model`, use `compact` to switch the outer FormItem’s `layout` and `hide-label`. Keep the inner field mounted and give its input an accessible name that also works when the outer label is hidden.
 
 ```vue
+<script setup>
+import { reactive, ref } from 'vue'
+import { Form as CForm, FormItem as CFormItem, Input as CInput } from '@cedar-design/ui-vue'
+import '@cedar-design/ui-vue/style'
+
+const compact = ref(false)
+const model = reactive({ account: '' })
+</script>
+
 <template>
-  <c-form-item
-    label="Account"
-    :layout="compact ? 'vertical' : 'horizontal'"
-    :hide-label="compact"
-  >
-    <c-form-item field="account" no-style>
-      <c-input v-model="model.account" aria-label="Account" />
-    </c-form-item>
-  </c-form-item>
+  <label><input v-model="compact" type="checkbox" /> Compact layout</label>
+  <CForm :model="model" edit-mode="direct">
+    <CFormItem label="Account" :layout="compact ? 'vertical' : 'horizontal'" :hide-label="compact">
+      <CFormItem field="account" no-style>
+        <CInput v-model="model.account" aria-label="Account" />
+      </CFormItem>
+    </CFormItem>
+  </CForm>
 </template>
 ```
 
@@ -82,7 +89,7 @@ Form and FormItem accept start/end/left/center/right for content-align and start
 The component exports the following types
 
 ```ts
-import type { FormProps } from "@cedar-design/ui-vue";
+import type { FormProps } from '@cedar-design/ui-vue'
 ```
 
 ## Basic examples
@@ -101,17 +108,16 @@ import type { FormProps } from "@cedar-design/ui-vue";
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ------------------ | --------------------------------------------------------- | ------------------------------------------ |
-| `layout` | The layout of the form, including horizontal, vertical, and multi-column | Layout, Decoration, Label width strategies |
-| `model` | Form data object | Decoration, Label width strategies |
-| `disabled` | Whether to disable the form | Disabled |
-| `label-align` | Label alignment | Label width strategies |
-| `auto-label-width` | Automatically measure label widths; only effective with `layout="horizontal"` | Label width strategies |
-| `label-col-flex` | Label-column flex; numbers are flex ratios, unit-bearing strings are widths | Label width strategies |
+| Configuration      | Purpose                                                                       | Related examples                           |
+| ------------------ | ----------------------------------------------------------------------------- | ------------------------------------------ |
+| `layout`           | The layout of the form, including horizontal, vertical, and multi-column      | Layout, Decoration, Label width strategies |
+| `model`            | Form data object                                                              | Decoration, Label width strategies         |
+| `disabled`         | Whether to disable the form                                                   | Disabled                                   |
+| `label-align`      | Label alignment                                                               | Label width strategies                     |
+| `auto-label-width` | Automatically measure label widths; only effective with `layout="horizontal"` | Label width strategies                     |
+| `label-col-flex`   | Label-column flex; numbers are flex ratios, unit-bearing strings are widths   | Label width strategies                     |
 
 <!-- demo-config-notes:end -->
-
 
 - `disabled`: Whether to disable the form
 
@@ -119,7 +125,7 @@ import type { FormProps } from "@cedar-design/ui-vue";
 
 ### Layout
 
-`edit-mode` describes editing behavior: `direct` always shows the control; `click` and `dblclick` activate the existing editor overlay near the field. `readPretty` is an independent boolean. FormItem and fields inherit the mode when omitted. 
+`edit-mode` describes editing behavior: `direct` always shows the control; `click` and `dblclick` activate the existing editor overlay near the field. `readPretty` is an independent boolean. FormItem and fields inherit the mode when omitted.
 
 Combine `layout`, `content-align` with `direct / click / dblclick` editing and the independent `readPretty` boolean to compare label, value and wrapped-text alignment. Notes can override the form layout, and values survive every switch. Click or double-click a value to edit in a popover; readPretty displays saved text.
 
@@ -226,13 +232,12 @@ Enter values, then switch between measured labels, responsive columns and fixed 
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| -------- | ------------------------------------ | ------------------------------------------ |
-| `model` | Form data object | Validate, Cross Field, Clear Trigger |
-| `layout` | The layout of the form, including horizontal, vertical, and multi-column | Clear Trigger |
+| Configuration | Purpose                                                                  | Related examples                     |
+| ------------- | ------------------------------------------------------------------------ | ------------------------------------ |
+| `model`       | Form data object                                                         | Validate, Cross Field, Clear Trigger |
+| `layout`      | The layout of the form, including horizontal, vertical, and multi-column | Clear Trigger                        |
 
 <!-- demo-config-notes:end -->
-
 
 - `model`: Form data object
 
@@ -271,16 +276,15 @@ Preview configuration: `placeholder="please enter your username..."`.
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ----------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------- |
-| `layout` | The layout of the form, including horizontal, vertical, and multi-column | State Lab, Presentation Status, Platform Presentation |
-| `model` | Form data object | Field Presentation, Platform Presentation, Scroll Assign |
-| `disabled` | Whether to disable the form | State Lab |
-| `readonly` | Whether form controls are readonly | State Lab |
-| `scroll-to-error` | After failed validation, scroll to the first (start) or last (end) invalid field in document order; this is not viewport alignment | Scroll Assign |
+| Configuration     | Purpose                                                                                                                            | Related examples                                         |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `layout`          | The layout of the form, including horizontal, vertical, and multi-column                                                           | State Lab, Presentation Status, Platform Presentation    |
+| `model`           | Form data object                                                                                                                   | Field Presentation, Platform Presentation, Scroll Assign |
+| `disabled`        | Whether to disable the form                                                                                                        | State Lab                                                |
+| `readonly`        | Whether form controls are readonly                                                                                                 | State Lab                                                |
+| `scroll-to-error` | After failed validation, scroll to the first (start) or last (end) invalid field in document order; this is not viewport alignment | Scroll Assign                                            |
 
 <!-- demo-config-notes:end -->
-
 
 - `layout`: The layout of the form, including horizontal, vertical, and multi-column
 
@@ -336,15 +340,14 @@ Preview configuration: `default-value="2026-10-20 09:30:00"`, `show-time`, `:dis
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ---------- | ---------------------- | ---------------------------------------- |
-| `model` | Form data object | Dynamic Form, Async Validate Form, Async Fields |
-| `disabled` | Whether to disable the form | Presentation State, Async Race |
-| `readonly` | Whether form controls are readonly | Presentation State, Async Race |
-| `rules` | Form item validation rules | Presentation State |
+| Configuration | Purpose                            | Related examples                                |
+| ------------- | ---------------------------------- | ----------------------------------------------- |
+| `model`       | Form data object                   | Dynamic Form, Async Validate Form, Async Fields |
+| `disabled`    | Whether to disable the form        | Presentation State, Async Race                  |
+| `readonly`    | Whether form controls are readonly | Presentation State, Async Race                  |
+| `rules`       | Form item validation rules         | Presentation State                              |
 
 <!-- demo-config-notes:end -->
-
 
 - `model`: Form data object
 
@@ -403,11 +406,11 @@ An existing model object with a missing property captures undefined. Model/rule 
 
 xs/sm/md/lg/xl select geometry through size classes. All sizes default to 16px item spacing; control height and label font size still follow size. Item bottom spacing and reserved validation-message height both use size-*-item-margin-bottom. Inline layout uses inline-item-margin-bottom; error/help do not add item bottom spacing again.
 
-| Variable | Default |
+| Variable                              | Default                     |
 | ------------------------------------- | --------------------------- |
-| `--c-form-size-xl-height` | `var(--c-size-xl)` |
-| `--c-form-size-xl-label-font-size` | `var(--c-sys-font-size-lg)` |
-| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-7)` |
+| `--c-form-size-xl-height`             | `var(--c-size-xl)`          |
+| `--c-form-size-xl-label-font-size`    | `var(--c-sys-font-size-lg)` |
+| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-7)`        |
 
 ### edit-mode inheritance
 
@@ -423,13 +426,12 @@ Form supports `direct / click / dblclick`. When unset, each field retains its ow
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| -------- | ------------------------------------ | ---------------- |
-| `model` | Form data object | Task Workflow |
-| `layout` | The layout of the form, including horizontal, vertical, and multi-column | Task Workflow |
+| Configuration | Purpose                                                                  | Related examples |
+| ------------- | ------------------------------------------------------------------------ | ---------------- |
+| `model`       | Form data object                                                         | Task Workflow    |
+| `layout`      | The layout of the form, including horizontal, vertical, and multi-column | Task Workflow    |
 
 <!-- demo-config-notes:end -->
-
 
 - `model`: Form data object
 - `layout`: The layout of the form, including horizontal, vertical, and multi-column
@@ -440,182 +442,177 @@ Form supports `direct / click / dblclick`. When unset, each field retains its ow
 
 Use edit-mode for editing presentation and read-pretty for reading state. The internal descriptor fieldEditModeProp is not a public Form or FormItem prop.
 
-
 ### Empty values and reading placeholders
 
 Form / FormItem provide empty recognition through `empty-values`; each field defines clear output with its own `empty-value`. `empty-text` defaults to `'-'` under `read-pretty`, with Field > FormItem > Form precedence and custom read slots first. With explicit `empty-values`, built-in required uses the policy; custom validators receive original data. See the [shared guide](/en/guide/empty-values/).
 
-| Prop | Type | Default and scope |
-| ------------ | ------------------ | ----------------------------------------------------- |
+| Prop         | Type               | Default and scope                                                           |
+| ------------ | ------------------ | --------------------------------------------------------------------------- |
 | empty-values | readonly unknown[] | Field > FormItem > Form > component-family default; replaces the whole list |
-| empty-text | string | Field > FormItem > Form > '-'; explicit '' is valid |
+| empty-text   | string             | Field > FormItem > Form > '-'; explicit '' is valid                         |
 
 These props belong to field presentation; pure panels do not gain reading mode. Form and FormItem provide inherited settings. The existing empty-value type and clear fallback remain component-specific.
 
 ### Form Props
 
-| Parameter | Description | Type | Default |
-| ----------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------ | :-------------------: |
-| model | Form data object | `object` | `{}` |
-| layout | The layout of the form, including horizontal, vertical, and multi-column | `'horizontal' \| 'vertical' \| 'inline'` | `'horizontal'` |
-| size | The size of the form | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` |
-| label-col-flex | Label-column flex; numbers are flex ratios, unit-bearing strings are widths | `number \| string` | `-` |
-| label-col-style | Per-instance label column style | `CSSProperties` | `-` |
-| wrapper-col-style | Per-instance control column style | `CSSProperties` | `-` |
-| label-col-props | Label layout options; same parameters as the col component | `object` | `span: 5, offset: 0` |
-| wrapper-col-props | Form-control layout options; same parameters as the col component | `object` | `span: 19, offset: 0` |
-| label-align | Label alignment | `'start' \| 'end' \| 'left' \| 'right'` | `'end'` |
-| `content-align` | Content alignment shared by direct fields, editor triggers and readPretty output; independent of label-align | `'start' \| 'end' \| 'left' \| 'center' \| 'right'` | `'start'` |
-| `read-pretty` | Independent reading toggle. When true, displays the saved value; when false, restores the current edit-mode. FormItem inherits Form when unset | `boolean` | `-` |
-| `edit-mode` | Shared editing mode for form fields; when unset, preserves each field default | `'direct' \| 'click' \| 'dblclick'` | `-` |
-| disabled | Whether to disable the form | `boolean` | `-` |
-| readonly | Whether form controls are readonly | `boolean` | `-` |
-| rules | Form item validation rules | `Record<string, FieldRule \| FieldRule[]>` | `-` |
-| auto-label-width | Automatically measure label widths; only effective with `layout="horizontal"` | `boolean` | `false` |
-| id | Prefix for form-control ids | `string` | `-` |
-| scroll-to-error | After failed validation, scroll to the first (start) or last (end) invalid field in document order; this is not viewport alignment | `'start' \| 'end'` | Do not scroll |
+| Parameter         | Description                                                                                                                                    | Type                                                |        Default        |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | :-------------------: |
+| model             | Form data object                                                                                                                               | `object`                                            |         `{}`          |
+| layout            | The layout of the form, including horizontal, vertical, and multi-column                                                                       | `'horizontal' \| 'vertical' \| 'inline'`            |    `'horizontal'`     |
+| size              | The size of the form                                                                                                                           | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`              |        `'md'`         |
+| label-col-flex    | Label-column flex; numbers are flex ratios, unit-bearing strings are widths                                                                    | `number \| string`                                  |          `-`          |
+| label-col-style   | Per-instance label column style                                                                                                                | `CSSProperties`                                     |          `-`          |
+| wrapper-col-style | Per-instance control column style                                                                                                              | `CSSProperties`                                     |          `-`          |
+| label-col-props   | Label layout options; same parameters as the col component                                                                                     | `object`                                            | `span: 5, offset: 0`  |
+| wrapper-col-props | Form-control layout options; same parameters as the col component                                                                              | `object`                                            | `span: 19, offset: 0` |
+| label-align       | Label alignment                                                                                                                                | `'start' \| 'end' \| 'left' \| 'right'`             |        `'end'`        |
+| `content-align`   | Content alignment shared by direct fields, editor triggers and readPretty output; independent of label-align                                   | `'start' \| 'end' \| 'left' \| 'center' \| 'right'` |       `'start'`       |
+| `read-pretty`     | Independent reading toggle. When true, displays the saved value; when false, restores the current edit-mode. FormItem inherits Form when unset | `boolean`                                           |          `-`          |
+| `edit-mode`       | Shared editing mode for form fields; when unset, preserves each field default                                                                  | `'direct' \| 'click' \| 'dblclick'`                 |          `-`          |
+| disabled          | Whether to disable the form                                                                                                                    | `boolean`                                           |          `-`          |
+| readonly          | Whether form controls are readonly                                                                                                             | `boolean`                                           |          `-`          |
+| rules             | Form item validation rules                                                                                                                     | `Record<string, FieldRule \| FieldRule[]>`          |          `-`          |
+| auto-label-width  | Automatically measure label widths; only effective with `layout="horizontal"`                                                                  | `boolean`                                           |        `false`        |
+| id                | Prefix for form-control ids                                                                                                                    | `string`                                            |          `-`          |
+| scroll-to-error   | After failed validation, scroll to the first (start) or last (end) invalid field in document order; this is not viewport alignment             | `'start' \| 'end'`                                  |     Do not scroll     |
 
 ### Form Events
 
-| Event | Description | Arguments |
-| -------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| submit | Triggered when the form is submitted | data: `{values: Record<string, any>; errors: Record<string, ValidatedError> \| undefined}`<br>ev: `Event` |
-| submit-success | Emitted when validation succeeds | values: `Record<string, any>`<br>ev: `Event` |
-| submit-failed | Emitted when validation fails | data: `{values: Record<string, any>; errors: Record<string, FormSubmitError>}`<br>ev: `Event` |
-| reset | Emitted on native reset; also resets field values and validation state | ev: `Event` |
+| Event          | Description                                                            | Arguments                                                                                                 |
+| -------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| submit         | Triggered when the form is submitted                                   | data: `{values: Record<string, any>; errors: Record<string, ValidatedError> \| undefined}`<br>ev: `Event` |
+| submit-success | Emitted when validation succeeds                                       | values: `Record<string, any>`<br>ev: `Event`                                                              |
+| submit-failed  | Emitted when validation fails                                          | data: `{values: Record<string, any>; errors: Record<string, FormSubmitError>}`<br>ev: `Event`             |
+| reset          | Emitted on native reset; also resets field values and validation state | ev: `Event`                                                                                               |
 
 ### Form Methods
 
-| Method | Description | Arguments | Returns |
-| ------------- | -------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| validate | Validate all form data | callback: `(errors: undefined \| Record<string, ValidatedError>) => void` | Promise<undefined \| Record<string, ValidatedError>> |
-| validateField | Validate selected form fields | field: `string \| string[]`<br>callback: `(errors: undefined \| Record<string, ValidatedError>) => void` | Promise<undefined \| Record<string, ValidatedError>> |
-| resetFields | Reset form data | field: `string \| string[]` | - |
-| clearValidate | Clear validation state | field: `string \| string[]` | - |
-| setFields | Set form-item values and states | data: `Record<string, FieldData>` | - |
-| scrollToField | Scroll to a form item | `field: string` | `-` |
+| Method        | Description                     | Arguments                                                                                                | Returns                                              |
+| ------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| validate      | Validate all form data          | callback: `(errors: undefined \| Record<string, ValidatedError>) => void`                                | Promise<undefined \| Record<string, ValidatedError>> |
+| validateField | Validate selected form fields   | field: `string \| string[]`<br>callback: `(errors: undefined \| Record<string, ValidatedError>) => void` | Promise<undefined \| Record<string, ValidatedError>> |
+| resetFields   | Reset form data                 | field: `string \| string[]`                                                                              | -                                                    |
+| clearValidate | Clear validation state          | field: `string \| string[]`                                                                              | -                                                    |
+| setFields     | Set form-item values and states | data: `Record<string, FieldData>`                                                                        | -                                                    |
+| scrollToField | Scroll to a form item           | `field: string`                                                                                          | `-`                                                  |
 
 ### FormItem Props
 
 Layout, label/content columns, styles, alignment and flex inherit from Form when omitted; explicit values override them.
 
-| Parameter | Description | Type | Default |
-| ----------------- | ------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | :--------------: |
-| field | Field path in the data object; required for data fields | `string` | `''` |
-| label | Label text | `string` | `-` |
-| tooltip | Hint content | `string` | `-` |
-| show-colon | Whether to show a colon | `boolean` | `false` |
-| no-style | Whether to remove styling | `boolean` | `false` |
-| disabled | Whether disabled | `boolean` | `-` |
-| readonly | Readonly state; inherits from Form when omitted | `boolean` | `-` |
-| help | Help text | `string` | `-` |
-| extra | Extra text | `string` | `-` |
-| required | Whether a value is required | `boolean` | `false` |
-| asterisk-position | Logical start/end position of the required asterisk within the field label, default start; not the form or popup position | `'start' \| 'end'` | `'start'` |
-| rules | Field validation rules; take precedence over Form rules | `FieldRule \| FieldRule[]` | `-` |
-| validate-status | Validation state | `'success' \| 'warning' \| 'error' \| 'validating'` | `-` |
-| validate-trigger | Events that trigger validation; `clear` is emitted only by a control `clear` action and is distinct from `change` | `'change' \| 'input' \| 'focus' \| 'blur' \| 'clear'` | `'change'` |
-| size | Control size; inherits from Form when omitted. Form layout still controls label appearance | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `-` |
-| layout | Form-item layout; inherits from Form when omitted | `'horizontal' \| 'vertical' \| 'inline'` | `-` |
-| label-align | Label alignment; inherits from Form when omitted | `'start' \| 'end' \| 'left' \| 'right'` | `-` |
-| `content-align` | Content alignment shared by direct fields, editor triggers and readPretty output; independent of label-align | `'start' \| 'end' \| 'left' \| 'center' \| 'right'` | `-` (inherits Form) |
-| `read-pretty` | Independent reading toggle. When true, displays the saved value; when false, restores the current edit-mode. FormItem inherits Form when unset | `boolean` | `-` |
-| `edit-mode` | Editing mode; inherits Form when unset and may be overridden by individual fields | `'direct' \| 'click' \| 'dblclick'` | `-` |
-| label-col-props | Label layout options; same parameters as the col component | `object` | `-` |
-| wrapper-col-props | Form-control layout options; same parameters as the col component | `object` | `-` |
-| hide-label | Hide label | `boolean` | `false` |
-| hide-asterisk | Whether to hide the required marker | `boolean` | `false` |
-| label-col-style | Style for the label layout component | `object` | `-` |
-| wrapper-col-style | Style for the control layout component | `object` | `-` |
-| row-props | Form-item layout options; same parameters as the row component | `object` | `-` |
-| row-class | Class for the form-item layout component | `string\|array\|object` | `-` |
-| content-class | Class for the control wrapper | `string\|array\|object` | `-` |
-| content-flex | Whether the content wrapper uses flex layout | `boolean` | `true` |
-| label-col-flex | Sets flex on the label `Col` component; the control `Col` flex is then set to `auto` | `number\|string` | `-` |
-| feedback | Whether to show control feedback icons | `boolean` | `false` |
-| label-component | Element used to render the form-item label | `string` | `'label'` |
-| label-attrs | Native label attributes; for targets the actual control id | `object` | `-` |
+| Parameter         | Description                                                                                                                                         | Type                                                  |       Default       |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | :-----------------: |
+| field             | Field path in the data object; required for data fields                                                                                             | `string`                                              |        `''`         |
+| label             | Label text                                                                                                                                          | `string`                                              |         `-`         |
+| tooltip           | Hint content                                                                                                                                        | `string`                                              |         `-`         |
+| show-colon        | Whether to show a colon                                                                                                                             | `boolean`                                             |       `false`       |
+| no-style          | Render the default slot without layout elements. Toggling this prop remounts descendants. Use layout and hide-label to change layout while editing. | `boolean`                                             |       `false`       |
+| disabled          | Whether disabled                                                                                                                                    | `boolean`                                             |         `-`         |
+| readonly          | Readonly state; inherits from Form when omitted                                                                                                     | `boolean`                                             |         `-`         |
+| help              | Help text                                                                                                                                           | `string`                                              |         `-`         |
+| extra             | Extra text                                                                                                                                          | `string`                                              |         `-`         |
+| required          | Whether a value is required                                                                                                                         | `boolean`                                             |       `false`       |
+| asterisk-position | Logical start/end position of the required asterisk within the field label, default start; not the form or popup position                           | `'start' \| 'end'`                                    |      `'start'`      |
+| rules             | Field validation rules; take precedence over Form rules                                                                                             | `FieldRule \| FieldRule[]`                            |         `-`         |
+| validate-status   | Validation state                                                                                                                                    | `'success' \| 'warning' \| 'error' \| 'validating'`   |         `-`         |
+| validate-trigger  | Events that trigger validation; `clear` is emitted only by a control `clear` action and is distinct from `change`                                   | `'change' \| 'input' \| 'focus' \| 'blur' \| 'clear'` |     `'change'`      |
+| size              | Control size; inherits from Form when omitted. Form layout still controls label appearance                                                          | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                |         `-`         |
+| layout            | Form-item layout; inherits from Form when omitted                                                                                                   | `'horizontal' \| 'vertical' \| 'inline'`              |         `-`         |
+| label-align       | Label alignment; inherits from Form when omitted                                                                                                    | `'start' \| 'end' \| 'left' \| 'right'`               |         `-`         |
+| `content-align`   | Content alignment shared by direct fields, editor triggers and readPretty output; independent of label-align                                        | `'start' \| 'end' \| 'left' \| 'center' \| 'right'`   | `-` (inherits Form) |
+| `read-pretty`     | Independent reading toggle. When true, displays the saved value; when false, restores the current edit-mode. FormItem inherits Form when unset      | `boolean`                                             |         `-`         |
+| `edit-mode`       | Editing mode; inherits Form when unset and may be overridden by individual fields                                                                   | `'direct' \| 'click' \| 'dblclick'`                   |         `-`         |
+| label-col-props   | Label layout options; same parameters as the col component                                                                                          | `object`                                              |         `-`         |
+| wrapper-col-props | Form-control layout options; same parameters as the col component                                                                                   | `object`                                              |         `-`         |
+| hide-label        | Hide label                                                                                                                                          | `boolean`                                             |       `false`       |
+| hide-asterisk     | Whether to hide the required marker                                                                                                                 | `boolean`                                             |       `false`       |
+| label-col-style   | Style for the label layout component                                                                                                                | `object`                                              |         `-`         |
+| wrapper-col-style | Style for the control layout component                                                                                                              | `object`                                              |         `-`         |
+| row-props         | Form-item layout options; same parameters as the row component                                                                                      | `object`                                              |         `-`         |
+| row-class         | Class for the form-item layout component                                                                                                            | `string\|array\|object`                               |         `-`         |
+| content-class     | Class for the control wrapper                                                                                                                       | `string\|array\|object`                               |         `-`         |
+| content-flex      | Whether the content wrapper uses flex layout                                                                                                        | `boolean`                                             |       `true`        |
+| label-col-flex    | Sets flex on the label `Col` component; the control `Col` flex is then set to `auto`                                                                | `number\|string`                                      |         `-`         |
+| feedback          | Whether to show control feedback icons                                                                                                              | `boolean`                                             |       `false`       |
+| label-component   | Element used to render the form-item label                                                                                                          | `string`                                              |      `'label'`      |
+| label-attrs       | Native label attributes; for targets the actual control id                                                                                          | `object`                                              |         `-`         |
 
 ### FormItem Slots
 
 When rendering a list of inputs in the default slot on the server, use `v-for` with a stable `:key`. Adding `v-memo` to the same node can leave the inputs out of the initial HTML. This applies to both values of `no-style`. To keep `v-memo`, move the list template into a separate Vue component and render that component in the slot, for example `<FieldList :rows="rows" />`. Keep the loop, key, and memo dependencies together in `FieldList.vue`.
 
-| Slot | Description | Prop |
-| ------ | :------: | ---- |
-| label | Label | - |
-| help | Help content | - |
-| extra | Extra content | - |
+| Slot  |  Description  | Prop |
+| ----- | :-----------: | ---- |
+| label |     Label     | -    |
+| help  | Help content  | -    |
+| extra | Extra content | -    |
 
 ## Types
 
 ### FieldRule
 
-| Parameter | Description | Type | Default |
-| --------- | --------------------------------- | ----------------------------------------------------------------------------------------------------------- | :-----: |
-| type | Validated value type; defaults to `'string'` | `'string'    \| 'number'    \| 'boolean'    \| 'array'    \| 'object'    \| 'email'    \| 'url'    \| 'ip'` | `-` |
-| required | Whether the value is required | `boolean` | `false` |
-| message | Message displayed on validation failure | `string` | `-` |
-| length | Required length for string/array values | `number` | `-` |
-| maxLength | Maximum string length | `number` | `-` |
-| minLength | Minimum string length | `number` | `-` |
-| match | Pattern matching for strings | `RegExp` | `-` |
-| uppercase | Uppercase string validation | `boolean` | `false` |
-| lowercase | Lowercase string validation | `boolean` | `false` |
-| min | Minimum numeric value | `number` | `-` |
-| max | Maximum numeric value | `number` | `-` |
-| equal | Numeric-value validation | `number` | `-` |
-| positive | Positive-number validation | `boolean` | `false` |
-| negative | Negative-number validation | `boolean` | `false` |
-| true | Whether a boolean is `true` | `boolean` | `false` |
-| false | Whether a boolean is `false` | `boolean` | `false` |
-| includes | Whether an array contains the specified value | `any[]` | `-` |
-| deepEqual | Whether array elements are equal | `any` | `-` |
-| empty | Whether an object is empty | `boolean` | `false` |
-| hasKeys | Whether an object contains the specified property | `string[]` | `-` |
-| validator | Custom validation; context contains model/field; asynchronous rules must return a Promise | `(value, callback, context?) => void \| Promise<void>` | `-` |
+| Parameter | Description                                                                               | Type                                                                                                        | Default |
+| --------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | :-----: |
+| type      | Validated value type; defaults to `'string'`                                              | `'string'    \| 'number'    \| 'boolean'    \| 'array'    \| 'object'    \| 'email'    \| 'url'    \| 'ip'` |   `-`   |
+| required  | Whether the value is required                                                             | `boolean`                                                                                                   | `false` |
+| message   | Message displayed on validation failure                                                   | `string`                                                                                                    |   `-`   |
+| length    | Required length for string/array values                                                   | `number`                                                                                                    |   `-`   |
+| maxLength | Maximum string length                                                                     | `number`                                                                                                    |   `-`   |
+| minLength | Minimum string length                                                                     | `number`                                                                                                    |   `-`   |
+| match     | Pattern matching for strings                                                              | `RegExp`                                                                                                    |   `-`   |
+| uppercase | Uppercase string validation                                                               | `boolean`                                                                                                   | `false` |
+| lowercase | Lowercase string validation                                                               | `boolean`                                                                                                   | `false` |
+| min       | Minimum numeric value                                                                     | `number`                                                                                                    |   `-`   |
+| max       | Maximum numeric value                                                                     | `number`                                                                                                    |   `-`   |
+| equal     | Numeric-value validation                                                                  | `number`                                                                                                    |   `-`   |
+| positive  | Positive-number validation                                                                | `boolean`                                                                                                   | `false` |
+| negative  | Negative-number validation                                                                | `boolean`                                                                                                   | `false` |
+| true      | Whether a boolean is `true`                                                               | `boolean`                                                                                                   | `false` |
+| false     | Whether a boolean is `false`                                                              | `boolean`                                                                                                   | `false` |
+| includes  | Whether an array contains the specified value                                             | `any[]`                                                                                                     |   `-`   |
+| deepEqual | Whether array elements are equal                                                          | `any`                                                                                                       |   `-`   |
+| empty     | Whether an object is empty                                                                | `boolean`                                                                                                   | `false` |
+| hasKeys   | Whether an object contains the specified property                                         | `string[]`                                                                                                  |   `-`   |
+| validator | Custom validation; context contains model/field; asynchronous rules must return a Promise | `(value, callback, context?) => void \| Promise<void>`                                                      |   `-`   |
 
 ### FieldData
 
-| Parameter | Description | Type | Default |
-| ------- | -------------- | ---------------- | :----: |
-| value | Field value | `any` | `-` |
-| status | Field state | `ValidateStatus`<br>`'error' \| 'success' \| 'warning' \| 'validating'` | `-` |
-| message | Field error message | `string` | `-` |
+| Parameter | Description         | Type                                                                    | Default |
+| --------- | ------------------- | ----------------------------------------------------------------------- | :-----: |
+| value     | Field value         | `any`                                                                   |   `-`   |
+| status    | Field state         | `ValidateStatus`<br>`'error' \| 'success' \| 'warning' \| 'validating'` |   `-`   |
+| message   | Field error message | `string`                                                                |   `-`   |
 
 ### ValidatedError
 
-| Parameter | Description | Type | Default |
-| --------------- | ---------------------- | --------- | :-----: |
-| label | Label text | `string` | `-` |
-| field | Field name | `string` | `-` |
-| value | Field value | `any` | `-` |
-| type | Field type | `string` | `-` |
+| Parameter       | Description                            | Type      | Default |
+| --------------- | -------------------------------------- | --------- | :-----: |
+| label           | Label text                             | `string`  |   `-`   |
+| field           | Field name                             | `string`  |   `-`   |
+| value           | Field value                            | `any`     |   `-`   |
+| type            | Field type                             | `string`  |   `-`   |
 | isRequiredError | Whether this is a required-field error | `boolean` | `false` |
-| message | Error message | `string` | `-` |
+| message         | Error message                          | `string`  |   `-`   |
 
 ### FormItemEventHandler
 
-| Parameter | Description | Type | Default |
-| -------- | -------- | ---------------------- | :----: |
-| onChange | onChange | `(ev?: Event) => void` | `-` |
-| onInput | onInput | `(ev?: Event) => void` | `-` |
-| onFocus | onFocus | `(ev?: Event) => void` | `-` |
-| onBlur | onBlur | `(ev?: Event) => void` | `-` |
+| Parameter | Description | Type                   | Default |
+| --------- | ----------- | ---------------------- | :-----: |
+| onChange  | onChange    | `(ev?: Event) => void` |   `-`   |
+| onInput   | onInput     | `(ev?: Event) => void` |   `-`   |
+| onFocus   | onFocus     | `(ev?: Event) => void` |   `-`   |
+| onBlur    | onBlur      | `(ev?: Event) => void` |   `-`   |
 
 ### useFormItem
 
 ```ts
-const useFormItem = (data: {
-  size?: Ref<Size | undefined>;
-  disabled?: Ref<boolean>;
-  error?: Ref<boolean>;
-}) => {
-  mergedSize: Ref<Size>;
-  mergedDisabled: Ref<boolean>;
-  mergedError: Ref<boolean>;
-  feedback: Ref<string>;
-  eventHandlers: Ref<FormItemEventHandler>;
-};
+const useFormItem = (data: { size?: Ref<Size | undefined>; disabled?: Ref<boolean>; error?: Ref<boolean> }) => {
+  mergedSize: Ref<Size>
+  mergedDisabled: Ref<boolean>
+  mergedError: Ref<boolean>
+  feedback: Ref<string>
+  eventHandlers: Ref<FormItemEventHandler>
+}
 ```
 
 ### Cedar rule protocol
@@ -626,6 +623,7 @@ Unexpected throws or Promise rejection reject public validate. Handle them with 
 
 ```ts
 import type { FieldRule } from '@cedar-design/ui-vue'
+
 const nameRule: FieldRule<string> = {
   validator: async (value, callback, context) => {
     await Promise.resolve()
@@ -648,12 +646,21 @@ These events notify only: listener Promises are not awaited and do not execute r
 
 ```ts
 import type {
-  FormProps, FormItemProps, FormInstance, FormItemInstance,
-  ValidatedError, FormValidateErrors, FieldData,
-  FormEmits, FormSlots, FormItemSlots, FormSubmitError,
   BeforeFieldCommit,
+  FieldData,
+  FormEmits,
+  FormInstance,
+  FormItemInstance,
+  FormItemProps,
+  FormItemSlots,
+  FormProps,
+  FormSlots,
+  FormSubmitError,
+  FormValidateErrors,
+  ValidatedError,
 } from '@cedar-design/ui-vue'
 ```
+
 Custom form controls can call `useFormErrorDescription()` in `setup` and bind `describe(existingIds)` to the interactive element's `aria-describedby`. Existing descriptions are preserved, and the FormItem error ID follows the visible error. Outside FormItem, only the existing descriptions are retained.
 
 See [Section](/en/components/section/) for section props and slots.
@@ -666,85 +673,85 @@ Use these variables to customize the component. Defaults may vary by the selecto
 
 <div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
-| Variable | Default / condition | Affected styles |
-| --- | --- | --- |
-| `--c-form-error-text-font-size` | `var(--c-font-size-body-1)` | `font-size` |
-| `--c-form-extra-margin-bottom` | `var(--c-spacing-2)` | `margin-bottom` |
-| `--c-form-extra-margin-top` | `var(--c-spacing-2)` | `margin-top` |
-| `--c-form-extra-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-form-extra-text-font-size` | `var(--c-font-size-body-1)` | `font-size` |
-| `--c-form-feedback-icon-font-size` | `14px` | `font-size` |
-| `--c-form-feedback-icon-right` | `9px` | `inset-inline-end` |
-| `--c-form-feedback-loading-font-size` | `12px` | `font-size` |
-| `--c-form-has-feedback-control-padding-right` | `28px` | `padding-inline-end` |
-| `--c-form-inline-item-margin-bottom` | `var(--c-spacing-4)` | `margin-bottom` |
-| `--c-form-inline-item-margin-right` | `var(--c-spacing-9)` | `margin-inline-end` |
-| `--c-form-label-margin-right` | `var(--c-spacing-7)` | `padding-inline-end` |
-| `--c-form-label-text-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-form-line-height` | `var(--c-line-height)` | `line-height`, `padding-top` |
-| `--c-form-required-symbol-color` | `var(--c-sys-color-content-danger)` | `color` |
-| `--c-form-required-symbol-font-size` | `var(--c-font-size-body-1)` | `font-size` |
-| `--c-form-size-lg-height` | `var(--c-size-lg)` | `line-height`, `min-height` |
-| `--c-form-size-lg-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
-| `--c-form-size-lg-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
-| `--c-form-size-md-height` | `var(--c-size-md)` | `line-height`, `min-height` |
-| `--c-form-size-md-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
-| `--c-form-size-md-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
-| `--c-form-size-sm-height` | `var(--c-size-sm)` | `line-height`, `min-height` |
-| `--c-form-size-sm-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
-| `--c-form-size-sm-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
-| `--c-form-size-xl-height` | `var(--c-size-xl)` | `line-height`, `min-height` |
-| `--c-form-size-xl-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
-| `--c-form-size-xl-label-font-size` | `var(--c-sys-font-size-lg)` | `font-size` |
-| `--c-form-size-xs-height` | `var(--c-size-xs)` | `line-height`, `min-height` |
-| `--c-form-size-xs-item-margin-bottom` | `var(--c-spacing-7)` | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
-| `--c-form-size-xs-label-font-size` | `var(--c-font-size-body-1)` | `font-size` |
-| `--c-form-status-error-bg` | `var(--c-color-danger-light-1)` | `background-color` |
-| `--c-form-status-error-border-color` | `transparent` | `border-color` |
-| `--c-form-status-error-focus-bg` | `var(--c-color-bg-2)` | `background-color` |
-| `--c-form-status-error-focus-border-color` | `var(--c-sys-color-content-danger)` | `border-color` |
-| `--c-form-status-error-focus-shadow-color` | `var(--c-color-danger-light-2)` | `box-shadow` |
-| `--c-form-status-error-focus-shadow-size` | `var(--c-shadow-distance-none)` | `box-shadow` |
-| `--c-form-status-error-hover-bg` | `var(--c-color-danger-light-2)` | `background-color` |
-| `--c-form-status-error-hover-border-color` | `transparent` | `border-color` |
-| `--c-form-status-error-tip-icon-color` | `var(--c-sys-color-content-danger)` | `color` |
-| `--c-form-status-error-tip-text-color` | `var(--c-sys-color-content-danger)` | `color` |
-| `--c-form-status-success-bg` | `var(--c-color-fill-2)` | `background-color` |
-| `--c-form-status-success-border-color` | `transparent` | `border-color` |
-| `--c-form-status-success-focus-bg` | `var(--c-color-bg-2)` | `background-color` |
-| `--c-form-status-success-focus-border-color` | `var(--c-sys-color-content-success)` | `border-color` |
-| `--c-form-status-success-focus-shadow-color` | `var(--c-color-success-light-2)` | `box-shadow` |
-| `--c-form-status-success-focus-shadow-size` | `var(--c-shadow-distance-none)` | `box-shadow` |
-| `--c-form-status-success-hover-bg` | `var(--c-color-fill-3)` | `background-color` |
-| `--c-form-status-success-hover-border-color` | `transparent` | `border-color` |
-| `--c-form-status-success-tip-icon-color` | `var(--c-sys-color-content-success)` | `color` |
-| `--c-form-status-success-tip-text-color` | `var(--c-sys-color-content-success)` | `color` |
-| `--c-form-status-validating-bg` | `var(--c-color-fill-2)` | `background-color` |
-| `--c-form-status-validating-border-color` | `transparent` | `border-color` |
-| `--c-form-status-validating-focus-bg` | `var(--c-color-bg-2)` | `background-color` |
-| `--c-form-status-validating-focus-border-color` | `var(--c-sys-color-action-primary)` | `border-color` |
-| `--c-form-status-validating-focus-shadow-color` | `var(--c-color-primary-light-2)` | `box-shadow` |
-| `--c-form-status-validating-focus-shadow-size` | `var(--c-shadow-distance-none)` | `box-shadow` |
-| `--c-form-status-validating-hover-bg` | `var(--c-color-fill-3)` | `background-color` |
-| `--c-form-status-validating-hover-border-color` | `transparent` | `border-color` |
-| `--c-form-status-validating-tip-icon-color` | `var(--c-sys-color-content-brand)` | `color` |
-| `--c-form-status-validating-tip-text-color` | `var(--c-sys-color-content-brand)` | `color` |
-| `--c-form-status-warning-bg` | `var(--c-color-warning-light-1)` | `background-color` |
-| `--c-form-status-warning-border-color` | `transparent` | `border-color` |
-| `--c-form-status-warning-focus-bg` | `var(--c-color-bg-2)` | `background-color` |
-| `--c-form-status-warning-focus-border-color` | `var(--c-sys-color-content-warning)` | `border-color` |
-| `--c-form-status-warning-focus-shadow-color` | `var(--c-color-warning-light-2)` | `box-shadow` |
-| `--c-form-status-warning-focus-shadow-size` | `var(--c-shadow-distance-none)` | `box-shadow` |
-| `--c-form-status-warning-hover-bg` | `var(--c-color-warning-light-2)` | `background-color` |
-| `--c-form-status-warning-hover-border-color` | `transparent` | `border-color` |
-| `--c-form-status-warning-tip-icon-color` | `var(--c-sys-color-content-warning)` | `color` |
-| `--c-form-status-warning-tip-text-color` | `var(--c-sys-color-content-warning)` | `color` |
-| `--c-form-tooltip-margin-left` | `var(--c-sys-space-2)` | `padding-inline-start` |
-| `--c-form-tooltip-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-form-transition-duration-3` | `var(--c-transition-duration-3)` | `transition` |
-| `--c-form-transition-duration-5` | `var(--c-transition-duration-5)` | `animation` |
-| `--c-form-transition-timing-function-linear` | `var(--c-transition-timing-function-linear)` | `animation`, `transition` |
-| `--c-form-vertical-label-margin-bottom` | `var(--c-spacing-4)` | `margin-bottom`, `padding-top` |
+| Variable                                        | Default / condition                          | Affected styles                                                     |
+| ----------------------------------------------- | -------------------------------------------- | ------------------------------------------------------------------- |
+| `--c-form-error-text-font-size`                 | `var(--c-font-size-body-1)`                  | `font-size`                                                         |
+| `--c-form-extra-margin-bottom`                  | `var(--c-spacing-2)`                         | `margin-bottom`                                                     |
+| `--c-form-extra-margin-top`                     | `var(--c-spacing-2)`                         | `margin-top`                                                        |
+| `--c-form-extra-text-color`                     | `var(--c-sys-color-content-secondary)`       | `color`                                                             |
+| `--c-form-extra-text-font-size`                 | `var(--c-font-size-body-1)`                  | `font-size`                                                         |
+| `--c-form-feedback-icon-font-size`              | `14px`                                       | `font-size`                                                         |
+| `--c-form-feedback-icon-right`                  | `9px`                                        | `inset-inline-end`                                                  |
+| `--c-form-feedback-loading-font-size`           | `12px`                                       | `font-size`                                                         |
+| `--c-form-has-feedback-control-padding-right`   | `28px`                                       | `padding-inline-end`                                                |
+| `--c-form-inline-item-margin-bottom`            | `var(--c-spacing-4)`                         | `margin-bottom`                                                     |
+| `--c-form-inline-item-margin-right`             | `var(--c-spacing-9)`                         | `margin-inline-end`                                                 |
+| `--c-form-label-margin-right`                   | `var(--c-spacing-7)`                         | `padding-inline-end`                                                |
+| `--c-form-label-text-color`                     | `var(--c-sys-color-content-primary)`         | `color`                                                             |
+| `--c-form-line-height`                          | `var(--c-line-height)`                       | `line-height`, `padding-top`                                        |
+| `--c-form-required-symbol-color`                | `var(--c-sys-color-content-danger)`          | `color`                                                             |
+| `--c-form-required-symbol-font-size`            | `var(--c-font-size-body-1)`                  | `font-size`                                                         |
+| `--c-form-size-lg-height`                       | `var(--c-size-lg)`                           | `line-height`, `min-height`                                         |
+| `--c-form-size-lg-item-margin-bottom`           | `var(--c-spacing-7)`                         | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
+| `--c-form-size-lg-label-font-size`              | `var(--c-font-size-body-3)`                  | `font-size`                                                         |
+| `--c-form-size-md-height`                       | `var(--c-size-md)`                           | `line-height`, `min-height`                                         |
+| `--c-form-size-md-item-margin-bottom`           | `var(--c-spacing-7)`                         | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
+| `--c-form-size-md-label-font-size`              | `var(--c-font-size-body-3)`                  | `font-size`                                                         |
+| `--c-form-size-sm-height`                       | `var(--c-size-sm)`                           | `line-height`, `min-height`                                         |
+| `--c-form-size-sm-item-margin-bottom`           | `var(--c-spacing-7)`                         | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
+| `--c-form-size-sm-label-font-size`              | `var(--c-font-size-body-3)`                  | `font-size`                                                         |
+| `--c-form-size-xl-height`                       | `var(--c-size-xl)`                           | `line-height`, `min-height`                                         |
+| `--c-form-size-xl-item-margin-bottom`           | `var(--c-spacing-7)`                         | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
+| `--c-form-size-xl-label-font-size`              | `var(--c-sys-font-size-lg)`                  | `font-size`                                                         |
+| `--c-form-size-xs-height`                       | `var(--c-size-xs)`                           | `line-height`, `min-height`                                         |
+| `--c-form-size-xs-item-margin-bottom`           | `var(--c-spacing-7)`                         | `line-height`, `margin-bottom`, `min-height`, `padding-block-start` |
+| `--c-form-size-xs-label-font-size`              | `var(--c-font-size-body-1)`                  | `font-size`                                                         |
+| `--c-form-status-error-bg`                      | `var(--c-color-danger-light-1)`              | `background-color`                                                  |
+| `--c-form-status-error-border-color`            | `transparent`                                | `border-color`                                                      |
+| `--c-form-status-error-focus-bg`                | `var(--c-color-bg-2)`                        | `background-color`                                                  |
+| `--c-form-status-error-focus-border-color`      | `var(--c-sys-color-content-danger)`          | `border-color`                                                      |
+| `--c-form-status-error-focus-shadow-color`      | `var(--c-color-danger-light-2)`              | `box-shadow`                                                        |
+| `--c-form-status-error-focus-shadow-size`       | `var(--c-shadow-distance-none)`              | `box-shadow`                                                        |
+| `--c-form-status-error-hover-bg`                | `var(--c-color-danger-light-2)`              | `background-color`                                                  |
+| `--c-form-status-error-hover-border-color`      | `transparent`                                | `border-color`                                                      |
+| `--c-form-status-error-tip-icon-color`          | `var(--c-sys-color-content-danger)`          | `color`                                                             |
+| `--c-form-status-error-tip-text-color`          | `var(--c-sys-color-content-danger)`          | `color`                                                             |
+| `--c-form-status-success-bg`                    | `var(--c-color-fill-2)`                      | `background-color`                                                  |
+| `--c-form-status-success-border-color`          | `transparent`                                | `border-color`                                                      |
+| `--c-form-status-success-focus-bg`              | `var(--c-color-bg-2)`                        | `background-color`                                                  |
+| `--c-form-status-success-focus-border-color`    | `var(--c-sys-color-content-success)`         | `border-color`                                                      |
+| `--c-form-status-success-focus-shadow-color`    | `var(--c-color-success-light-2)`             | `box-shadow`                                                        |
+| `--c-form-status-success-focus-shadow-size`     | `var(--c-shadow-distance-none)`              | `box-shadow`                                                        |
+| `--c-form-status-success-hover-bg`              | `var(--c-color-fill-3)`                      | `background-color`                                                  |
+| `--c-form-status-success-hover-border-color`    | `transparent`                                | `border-color`                                                      |
+| `--c-form-status-success-tip-icon-color`        | `var(--c-sys-color-content-success)`         | `color`                                                             |
+| `--c-form-status-success-tip-text-color`        | `var(--c-sys-color-content-success)`         | `color`                                                             |
+| `--c-form-status-validating-bg`                 | `var(--c-color-fill-2)`                      | `background-color`                                                  |
+| `--c-form-status-validating-border-color`       | `transparent`                                | `border-color`                                                      |
+| `--c-form-status-validating-focus-bg`           | `var(--c-color-bg-2)`                        | `background-color`                                                  |
+| `--c-form-status-validating-focus-border-color` | `var(--c-sys-color-action-primary)`          | `border-color`                                                      |
+| `--c-form-status-validating-focus-shadow-color` | `var(--c-color-primary-light-2)`             | `box-shadow`                                                        |
+| `--c-form-status-validating-focus-shadow-size`  | `var(--c-shadow-distance-none)`              | `box-shadow`                                                        |
+| `--c-form-status-validating-hover-bg`           | `var(--c-color-fill-3)`                      | `background-color`                                                  |
+| `--c-form-status-validating-hover-border-color` | `transparent`                                | `border-color`                                                      |
+| `--c-form-status-validating-tip-icon-color`     | `var(--c-sys-color-content-brand)`           | `color`                                                             |
+| `--c-form-status-validating-tip-text-color`     | `var(--c-sys-color-content-brand)`           | `color`                                                             |
+| `--c-form-status-warning-bg`                    | `var(--c-color-warning-light-1)`             | `background-color`                                                  |
+| `--c-form-status-warning-border-color`          | `transparent`                                | `border-color`                                                      |
+| `--c-form-status-warning-focus-bg`              | `var(--c-color-bg-2)`                        | `background-color`                                                  |
+| `--c-form-status-warning-focus-border-color`    | `var(--c-sys-color-content-warning)`         | `border-color`                                                      |
+| `--c-form-status-warning-focus-shadow-color`    | `var(--c-color-warning-light-2)`             | `box-shadow`                                                        |
+| `--c-form-status-warning-focus-shadow-size`     | `var(--c-shadow-distance-none)`              | `box-shadow`                                                        |
+| `--c-form-status-warning-hover-bg`              | `var(--c-color-warning-light-2)`             | `background-color`                                                  |
+| `--c-form-status-warning-hover-border-color`    | `transparent`                                | `border-color`                                                      |
+| `--c-form-status-warning-tip-icon-color`        | `var(--c-sys-color-content-warning)`         | `color`                                                             |
+| `--c-form-status-warning-tip-text-color`        | `var(--c-sys-color-content-warning)`         | `color`                                                             |
+| `--c-form-tooltip-margin-left`                  | `var(--c-sys-space-2)`                       | `padding-inline-start`                                              |
+| `--c-form-tooltip-text-color`                   | `var(--c-sys-color-content-secondary)`       | `color`                                                             |
+| `--c-form-transition-duration-3`                | `var(--c-transition-duration-3)`             | `transition`                                                        |
+| `--c-form-transition-duration-5`                | `var(--c-transition-duration-5)`             | `animation`                                                         |
+| `--c-form-transition-timing-function-linear`    | `var(--c-transition-timing-function-linear)` | `animation`, `transition`                                           |
+| `--c-form-vertical-label-margin-bottom`         | `var(--c-spacing-4)`                         | `margin-bottom`, `padding-top`                                      |
 
 </div>
 

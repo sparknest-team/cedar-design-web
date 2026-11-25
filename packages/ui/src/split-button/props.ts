@@ -1,11 +1,12 @@
 import type { ButtonHTMLAttributes, PropType } from 'vue'
-import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
 import { popupContainerProp } from '../_utils/popup-container'
-import { buttonGroupProps, buttonProps, type ButtonProps } from '../button'
-import { menuProps } from '../menu'
+import type { CompatiblePublicProps as ExtractPublicPropTypes } from '../_utils/public-props'
+import { buttonGroupProps, buttonProps, type ButtonProps } from '../button/props'
+import { menuProps } from '../menu/props'
 
 /** Props and native attributes forwarded to either nested button. */
-export type SplitButtonButtonProps = Partial<ButtonProps> & Omit<ButtonHTMLAttributes, keyof ButtonProps | 'onClick'> & { onClick?: (event: MouseEvent) => void }
+export type SplitButtonButtonProps = Partial<ButtonProps> &
+  Omit<ButtonHTMLAttributes, keyof ButtonProps | 'onClick'> & { onClick?: (event: MouseEvent) => void }
 
 export const splitButtonProps = {
   /** 菜单是否打开 */

@@ -1,18 +1,21 @@
 import { withInstall } from '../_utils/global-config'
-import { withPropsDefaultsSetter } from '../_utils/maple/components'
-import _Image from './Image.vue'
-import _ImagePreview from './Preview.vue'
-import _ImagePreviewGroup from './PreviewGroup.vue'
-import _ImagePreviewAction from './PreviewAction.vue'
-import previewImage from './preview-api'
 import { imagePreviewGroupProps } from './groupProps'
+import _Image from './Image.vue'
+import previewImage from './preview-api'
+import _ImagePreview from './Preview.vue'
+import _ImagePreviewAction from './PreviewAction.vue'
+import _ImagePreviewGroup from './PreviewGroup.vue'
 import { imagePreviewProps } from './previewProps'
 import { imageProps } from './props'
 
-const ImagePreview: import('../_utils/global-config').ComponentWithInstall<typeof _ImagePreview> = withInstall(_ImagePreview)
-const ImagePreviewGroup: import('../_utils/global-config').ComponentWithInstall<typeof _ImagePreviewGroup> = withInstall(_ImagePreviewGroup)
+const ImagePreview: import('../_utils/global-config').ComponentWithInstall<typeof _ImagePreview> =
+  withInstall(_ImagePreview)
+const ImagePreviewGroup: import('../_utils/global-config').ComponentWithInstall<typeof _ImagePreviewGroup> =
+  withInstall(_ImagePreviewGroup)
 
-const Image: import('../_utils/global-config').ComponentWithInstall<typeof _Image & { Preview: typeof ImagePreview; PreviewGroup: typeof ImagePreviewGroup; preview: typeof previewImage }> = withInstall(
+const Image: import('../_utils/global-config').ComponentWithInstall<
+  typeof _Image & { Preview: typeof ImagePreview; PreviewGroup: typeof ImagePreviewGroup; preview: typeof previewImage }
+> = withInstall(
   _Image,
   Object.assign(_Image, {
     Preview: ImagePreview,
@@ -23,10 +26,6 @@ const Image: import('../_utils/global-config').ComponentWithInstall<typeof _Imag
     components: [_Image, ImagePreview, ImagePreviewGroup, _ImagePreviewAction],
   },
 )
-
-withPropsDefaultsSetter(Image, imageProps)
-withPropsDefaultsSetter(ImagePreview, imagePreviewProps)
-withPropsDefaultsSetter(ImagePreviewGroup, imagePreviewGroupProps)
 
 export type ImagePreviewActionInstance = InstanceType<typeof _ImagePreviewAction>
 

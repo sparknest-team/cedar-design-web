@@ -13,6 +13,7 @@ import {
 import type { TriggerEvent } from './contract'
 import { bindTriggerEvents, type TriggerElement } from './reference'
 import { isTriggerReferenceClickBlocked } from './reference-click'
+import { createDelayedTask } from './state'
 
 export type { TriggerEvent } from './contract'
 export interface InteractionOptions {
@@ -46,18 +47,56 @@ interface ReferenceInteraction {
   isTopLayer: (event?: Event) => boolean
   refreshRoots: () => void
 }
-const referenceInteractions = new WeakMap<Document, Set<ReferenceInteraction>>()
-const closedPeerReferences = new WeakMap<Document, Set<ReferenceInteraction>>()
+interface PeerRegistry {
+  peers: Set<ReferenceInteraction>
+  closed: Set<ReferenceInteraction>
+}
+const referenceInteractions = new WeakMap<Document, PeerRegistry>()
 // Eagerly mounted children can process the same capture event before their
 // parent. Retain their dismissal ownership until this event is collected.
 const dismissedInteractions = new WeakMap<Event, Set<InteractionContext>>()
+
+// A pointer release or a label activation can be followed by another click in the same task.
+function pendingActivation<T>() {
+  let value: T | undefined
+  const task = createDelayedTask()
+  return {
+    get value() {
+      return value
+    },
+    set(next?: T) {
+      task.cancel()
+      value = next
+    },
+    expire() {
+      task.schedule(() => {
+        value = undefined
+      })
+    },
+  }
+}
+
+function collectClosedRoots(element: Element | undefined | null, roots = new Set<ShadowRoot>()) {
+  let root = element?.getRootNode()
+  while (root && root.nodeType === 11 && 'host' in root) {
+    const shadow = root as ShadowRoot
+    if (shadow.mode === 'closed') roots.add(shadow)
+    root = shadow.host.getRootNode()
+  }
+  return roots
+}
 
 function includes(element: Element | undefined, event: Event | Node): boolean {
   if (!element) {
     return false
   }
   if ('composedPath' in event) {
-    return event.composedPath().includes(element) || Boolean(event.target && typeof (event.target as Node).nodeType === 'number' && element.contains(event.target as Node))
+    return (
+      event.composedPath().includes(element) ||
+      Boolean(
+        event.target && typeof (event.target as Node).nodeType === 'number' && element.contains(event.target as Node),
+      )
+    )
   }
   return element.contains(event)
 }
@@ -117,69 +156,58 @@ export function useTriggerInteraction(
     isTopLayer: (event?: Event) => boolean
     onPoint?: (event: MouseEvent) => void
     onOutside: (event: Event) => void
-    onReferenceEvent?: (name: string, event: Event) => void
     isMovingBlur?: (event: Event) => boolean
   },
 ) {
   const parent = inject(interactionKey, undefined)
   const children = new Set<InteractionContext>()
-  let allowClose = true
   let insidePopup = false
   let insideReference = false
   let focusInside = false
   let restoringFocus = false
-  let pointerDismiss: { path: EventTarget[]; target: Node | null; related?: Node; timeStamp: number; trusted: boolean; pointerId?: number; releasedPath?: EventTarget[] } | undefined
-  let pointerReleaseTimer: ReturnType<typeof setTimeout> | undefined
-  const clearPointerRelease = () => {
-    if (pointerReleaseTimer !== undefined) clearTimeout(pointerReleaseTimer)
-    pointerReleaseTimer = undefined
+  const pointer = pendingActivation<{
+    down: PointerEvent
+    path: EventTarget[]
+    target: Node | null
+    related?: Node
+    releasedPath?: EventTarget[]
+  }>()
+  const labelActivation = pendingActivation<{ control: Node; trusted: boolean }>()
+  const differentPointer = (event: PointerEvent) => {
+    const id = pointer.value?.down.pointerId
+    return typeof id === 'number' && typeof event.pointerId === 'number' && event.pointerId !== id
   }
-  const onPointerUp = (event: Event) => {
-    const pending = pointerDismiss
-    const releasedId = (event as PointerEvent).pointerId
-    if (pending?.pointerId !== undefined && typeof releasedId === 'number' && pending.pointerId !== releasedId) return
-    clearPointerRelease()
-    if (!pending) return
-    pending.releasedPath = event.composedPath()
-    pointerReleaseTimer = setTimeout(() => {
-      if (pointerDismiss === pending) pointerDismiss = undefined
-      pointerReleaseTimer = undefined
-    }, 0)
+  const onPointerUp = (event: PointerEvent) => {
+    if (pointer.value && !differentPointer(event)) {
+      pointer.value.releasedPath = event.composedPath()
+      pointer.expire()
+    }
   }
-  let forwardedLabel: { control: Node; trusted: boolean } | undefined
-  let forwardedLabelTimer: ReturnType<typeof setTimeout> | undefined
-  const clearForwardedLabel = () => {
-    forwardedLabel = undefined
-    if (forwardedLabelTimer !== undefined) clearTimeout(forwardedLabelTimer)
-    forwardedLabelTimer = undefined
+  const onPointerDown = (event: PointerEvent) => {
+    if (event.isPrimary === false) return
+    labelActivation.set()
+    pointer.set(
+      api.visible.value && has('focus') && event.button === 0
+        ? {
+            down: event,
+            path: event.composedPath(),
+            target: typeof (event.target as Node | null)?.nodeType === 'number' ? (event.target as Node) : null,
+          }
+        : undefined,
+    )
   }
-  const onPointerDown = (event: Event) => {
-    if ((event as PointerEvent).isPrimary === false) return
-    clearPointerRelease()
-    clearForwardedLabel()
-    const pointer = event as PointerEvent
-    pointerDismiss = api.visible.value && has('focus') && pointer.button === 0
-      ? { path: event.composedPath(), target: event.target && typeof (event.target as Node).nodeType === 'number' ? event.target as Node : null, timeStamp: event.timeStamp, trusted: event.isTrusted, pointerId: typeof pointer.pointerId === 'number' ? pointer.pointerId : undefined }
-      : undefined
+  const onPointerCancel = (event: PointerEvent) => {
+    if (!differentPointer(event)) {
+      pointer.set()
+      labelActivation.set()
+    }
   }
-  const onPointerCancel = (event: Event) => {
-    const canceledId = (event as PointerEvent).pointerId
-    if (pointerDismiss?.pointerId !== undefined && typeof canceledId === 'number' && pointerDismiss.pointerId !== canceledId) return
-    pointerDismiss = undefined
-    clearPointerRelease()
-    clearForwardedLabel()
-  }
-  const coalescedClicks = new WeakSet<Event>()
   const has = (event: TriggerEvent) => ([] as TriggerEvent[]).concat(options.trigger).includes(event)
   const contains = (event: Event | Node): boolean =>
     includes(api.reference.value, event) ||
     includes(api.popup.value ?? undefined, event) ||
     [...children].some((child) => child.contains(event))
-  const close = (delay = 0) => {
-    if (allowClose) {
-      api.request(false, delay)
-    }
-  }
+  const close = (delay = 0) => api.request(false, delay)
   const enter = () => {
     if (!options.disabled && has('hover')) {
       api.request(true, options.mouseEnterDelay ?? 0)
@@ -213,7 +241,6 @@ export function useTriggerInteraction(
   }
 
   const onClick = (event: Event) => {
-    api.onReferenceEvent?.('onClick', event)
     if (options.disabled || isTriggerReferenceClickBlocked(event)) {
       return
     }
@@ -231,7 +258,6 @@ export function useTriggerInteraction(
     }
   }
   const onEnter = (event: Event) => {
-    api.onReferenceEvent?.('onMouseenter', event)
     insideReference = true
     // Capture an opening point, never overwrite an open context menu on re-entry.
     if (!options.disabled && has('hover') && !api.visible.value) {
@@ -239,20 +265,17 @@ export function useTriggerInteraction(
     }
     enter()
   }
-  const onLeave = (event: Event) => {
-    api.onReferenceEvent?.('onMouseleave', event)
+  const onLeave = () => {
     insideReference = false
     leave()
   }
-  const onFocus = (event: Event) => {
-    api.onReferenceEvent?.('onFocusin', event)
+  const onFocus = () => {
     focusInside = true
     if (!restoringFocus && !options.disabled && has('focus')) {
       api.request(true, options.focusDelay ?? 0)
     }
   }
   const onBlur = (event: Event) => {
-    api.onReferenceEvent?.('onFocusout', event)
     if (api.isMovingBlur?.(event)) return
     const related = (event as FocusEvent).relatedTarget as Node | null
     if (related && contains(related)) {
@@ -260,16 +283,27 @@ export function useTriggerInteraction(
     }
     focusInside = false
     if (has('focus') && options.blurToClose !== false && !(has('hover') && (insideReference || insidePopup))) {
-      if (allowClose && pointerDismiss) {
+      const pointerDismiss = pointer.value
+      if (pointerDismiss) {
         if (related && pointerDismiss.path.includes(related)) pointerDismiss.related = related
-        else if (related && pointerDismiss.target && pointerDismiss.path.some((node) => (node as Element).nodeType === 1 && (node as Element).localName === 'label' && (node as HTMLLabelElement).control === related)) pointerDismiss.related = pointerDismiss.target
-        else if (!related && pointerDismiss.target && !contains(pointerDismiss.target)) pointerDismiss.related = pointerDismiss.target
+        else if (
+          related &&
+          pointerDismiss.target &&
+          pointerDismiss.path.some(
+            (node) =>
+              (node as Element).nodeType === 1 &&
+              (node as Element).localName === 'label' &&
+              (node as HTMLLabelElement).control === related,
+          )
+        )
+          pointerDismiss.related = pointerDismiss.target
+        else if (!related && pointerDismiss.target && !contains(pointerDismiss.target))
+          pointerDismiss.related = pointerDismiss.target
       }
       close()
     }
   }
   const onContextMenu = (event: Event) => {
-    api.onReferenceEvent?.('onContextmenu', event)
     if (options.disabled || !has('contextMenu')) {
       return
     }
@@ -316,7 +350,7 @@ export function useTriggerInteraction(
     isTopLayer: api.isTopLayer,
     refreshRoots: () => refreshShadowRoots(),
   }
-  let active = false
+  let registry: PeerRegistry | undefined
   // A sibling reference can dismiss this whole branch while its child owns
   // the top layer. An unrelated top layer still protects the branch below it.
   const hasTopDescendant = (event: Event, branch = context): boolean =>
@@ -324,76 +358,105 @@ export function useTriggerInteraction(
       (child) =>
         dismissedInteractions.get(event)?.has(child) || child.isTopLayer?.(event) || hasTopDescendant(event, child),
     )
-  const isTopPeerReference = (event: Event) =>
-    [...(owner ? (referenceInteractions.get(owner) ?? []) : [])].some(
-      (other) =>
+  const isTopPeerReference = (event: Event) => {
+    if (!registry) return false
+    for (const other of registry.peers) {
+      if (
         other !== peer &&
         other.parent === parent &&
         includes(other.reference.value, event) &&
-        ((other.visible.value && other.isTopLayer(event)) || hasTopDescendant(event)),
-    )
+        ((other.visible.value && other.isTopLayer(event)) || hasTopDescendant(event))
+      )
+        return true
+    }
+    return false
+  }
   const shadowInsideEvents = new WeakSet<Event>()
   const shadowPeerEvents = new WeakSet<Event>()
-  let shadowRoots: ShadowRoot[] = []
+  let shadowRoots = new Set<ShadowRoot>()
   let outsideGeneration = 0
   const markShadowInside = (event: Event) => {
     if (contains(event)) shadowInsideEvents.add(event)
     if (isTopPeerReference(event)) shadowPeerEvents.add(event)
   }
+  const updateShadowRoots = (next: Set<ShadowRoot>) => {
+    for (const root of shadowRoots) {
+      if (!next.has(root)) root.removeEventListener('click', markShadowInside, true)
+    }
+    for (const root of next) {
+      if (!shadowRoots.has(root)) root.addEventListener('click', markShadowInside, true)
+    }
+    shadowRoots = next
+  }
   const refreshShadowRoots = () => {
-    for (const root of shadowRoots) root.removeEventListener('click', markShadowInside, true)
-    const roots = new Set<ShadowRoot>()
-    const closedPeers = owner ? closedPeerReferences.get(owner) : undefined
-    const peerReferences = [...(closedPeers ?? [])].filter((other) => other.parent === parent).map((other) => other.reference.value)
-    for (const element of [api.reference.value, api.popup.value, ...peerReferences]) {
-      let root = element?.getRootNode()
-      while (root && root.nodeType === 11 && 'host' in root) {
-        const shadow = root as ShadowRoot
-        if (shadow.mode === 'closed') roots.add(shadow)
-        root = shadow.host.getRootNode()
+    const next = collectClosedRoots(api.reference.value)
+    collectClosedRoots(api.popup.value, next)
+    if (registry) {
+      for (const other of registry.closed) {
+        if (other.parent === parent) collectClosedRoots(other.reference.value, next)
       }
     }
-    shadowRoots = [...roots]
-    for (const root of shadowRoots) root.addEventListener('click', markShadowInside, true)
+    updateShadowRoots(next)
   }
-  watch(api.visible, () => { outsideGeneration++ }, { flush: 'sync' })
+  watch(
+    api.visible,
+    () => {
+      outsideGeneration++
+    },
+    { flush: 'sync' },
+  )
+  const canDismissOutside = () => !!registry && api.visible.value && options.clickOutsideToClose !== false
   const onOutside = (event: Event) => {
-    const clickId = (event as PointerEvent).pointerId
-    const otherPointer = (pointerDismiss?.trusted && !event.isTrusted) || (pointerDismiss?.pointerId !== undefined && typeof clickId === 'number' && pointerDismiss.pointerId !== clickId)
-    const pending = otherPointer ? undefined : pointerDismiss
-    const forwarded = forwardedLabel
-    if (!otherPointer) pointerDismiss = undefined
-    if (!active || !api.visible.value || options.clickOutsideToClose === false || contains(event)) return
+    const otherPointer = (pointer.value?.down.isTrusted && !event.isTrusted) || differentPointer(event as PointerEvent)
+    const pending = otherPointer ? undefined : pointer.value
+    const forwarded = labelActivation.value
+    if (!otherPointer) pointer.set()
+    if (!canDismissOutside() || contains(event)) return
     const path = event.composedPath()
-    const forwardedMatch = !!forwarded && (event as MouseEvent).detail > 0 && (!forwarded.trusted || event.isTrusted) && path.includes(forwarded.control)
+    const forwardedMatch =
+      !!forwarded &&
+      (event as MouseEvent).detail > 0 &&
+      (!forwarded.trusted || event.isTrusted) &&
+      path.includes(forwarded.control)
     const clickTarget = event.target as Node | null
-    const dragMatch = !!pending?.related && !!pending.target && !!pending.releasedPath && !!clickTarget &&
-      typeof clickTarget.contains === 'function' && clickTarget.contains(pending.target) && pending.releasedPath.includes(clickTarget)
-    const pointerMatch = !!pending?.related && (!pending.trusted || event.isTrusted) && event.timeStamp >= pending.timeStamp &&
-      (path.includes(pending.related) || dragMatch)
-    if ((event as MouseEvent).detail > 0 && (pointerMatch || forwardedMatch)) coalescedClicks.add(event)
-    if (forwardedMatch) clearForwardedLabel()
-    const label = pending?.path.find((node) => (node as Element).nodeType === 1 && (node as Element).localName === 'label' && path.includes(node)) as HTMLLabelElement | undefined
+    const dragMatch =
+      !!pending?.related &&
+      !!pending.target &&
+      !!pending.releasedPath &&
+      !!clickTarget &&
+      typeof clickTarget.contains === 'function' &&
+      clickTarget.contains(pending.target) &&
+      pending.releasedPath.includes(clickTarget)
+    const pointerMatch =
+      !!pending?.related && event.timeStamp >= pending.down.timeStamp && (path.includes(pending.related) || dragMatch)
+    const coalesced = (event as MouseEvent).detail > 0 && (pointerMatch || forwardedMatch)
+    if (forwardedMatch) labelActivation.set()
+    const label = pending?.path.find(
+      (node) => (node as Element).nodeType === 1 && (node as Element).localName === 'label' && path.includes(node),
+    ) as HTMLLabelElement | undefined
     if (label?.control && !path.includes(label.control)) {
-      clearForwardedLabel()
-      const forwarding = { control: label.control, trusted: event.isTrusted }
-      forwardedLabel = forwarding
-      forwardedLabelTimer = setTimeout(() => { if (forwardedLabel === forwarding) forwardedLabel = undefined; forwardedLabelTimer = undefined }, 0)
+      labelActivation.set({ control: label.control, trusted: event.isTrusted })
+      labelActivation.expire()
     }
     const eligible = api.isTopLayer(event) || isTopPeerReference(event)
     // The document path hides a closed root's internals; wait for its capture listener.
-    if (shadowRoots.some((root) => event.composedPath().includes(root.host))) {
+    if ([...shadowRoots].some((root) => path.includes(root.host))) {
       const generation = outsideGeneration
       setTimeout(() => {
-        if (active && api.visible.value && generation === outsideGeneration && !shadowInsideEvents.has(event) && (eligible || shadowPeerEvents.has(event))) {
-          deliverOutside(event)
+        if (
+          canDismissOutside() &&
+          generation === outsideGeneration &&
+          !shadowInsideEvents.has(event) &&
+          (eligible || shadowPeerEvents.has(event))
+        ) {
+          deliverOutside(event, coalesced)
         }
       }, 0)
       return
     }
-    if (eligible) deliverOutside(event)
+    if (eligible) deliverOutside(event, coalesced)
   }
-  const deliverOutside = (event: Event) => {
+  const deliverOutside = (event: Event, coalesced: boolean) => {
     let dismissed = dismissedInteractions.get(event)
     if (!dismissed) {
       dismissed = new Set()
@@ -401,7 +464,7 @@ export function useTriggerInteraction(
     }
     dismissed.add(context)
     api.onOutside(event)
-    if (!coalescedClicks.has(event)) close()
+    if (!coalesced) close()
   }
   const focusReference = () => {
     if (!api.reference.value?.isConnected) {
@@ -416,15 +479,28 @@ export function useTriggerInteraction(
   }
   const onKeydown = (event: KeyboardEvent) => {
     const target = event.target as HTMLElement | null
-    if (active && api.visible.value && options.clickOutsideToClose !== false && !event.defaultPrevented && !event.isComposing &&
+    if (
+      canDismissOutside() &&
+      !event.defaultPrevented &&
+      !event.isComposing &&
       ['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(event.key) &&
-      typeof target?.closest === 'function' && !!target.closest('[aria-haspopup="menu"]') &&
+      typeof target?.closest === 'function' &&
+      !!target.closest('[aria-haspopup="menu"]') &&
       !target?.closest('input, textarea, [contenteditable="true"], [role="textbox"]') &&
-      isTopPeerReference(event)) {
+      isTopPeerReference(event)
+    ) {
       close()
       return false
     }
-    if (event.key !== 'Escape' || event.defaultPrevented || event.isComposing || event.keyCode === 229 || !api.visible.value || options.escToClose === false || !api.isTopLayer(event)) {
+    if (
+      event.key !== 'Escape' ||
+      event.defaultPrevented ||
+      event.isComposing ||
+      event.keyCode === 229 ||
+      !api.visible.value ||
+      options.escToClose === false ||
+      !api.isTopLayer(event)
+    ) {
       return false
     }
     event.preventDefault()
@@ -437,64 +513,40 @@ export function useTriggerInteraction(
     })
     return true
   }
-  let owner: Document | undefined
-  let peerReferenceHadClosedRoot = false
-  const hasClosedRoot = (element: Element | undefined) => {
-    let root = element?.getRootNode()
-    while (root && root.nodeType === 11 && 'host' in root) {
-      const shadow = root as ShadowRoot
-      if (shadow.mode === 'closed') return true
-      root = shadow.host.getRootNode()
+  const refreshSiblings = (peers: Set<ReferenceInteraction>) => {
+    for (const other of peers) {
+      if (other !== peer && other.parent === parent) other.refreshRoots()
     }
-    return false
   }
-  const registerReference = () => {
-    if (!owner) {
-      return
+  const registerReference = (owner: Document) => {
+    registry = referenceInteractions.get(owner)
+    if (!registry) {
+      registry = { peers: new Set(), closed: new Set() }
+      referenceInteractions.set(owner, registry)
     }
-    active = true
-    let peers = referenceInteractions.get(owner)
-    if (!peers) {
-      peers = new Set()
-      referenceInteractions.set(owner, peers)
+    registry.peers.add(peer)
+    if (collectClosedRoots(peer.reference.value).size) {
+      registry.closed.add(peer)
+      refreshSiblings(registry.peers)
     }
-    peers.add(peer)
-    peerReferenceHadClosedRoot = hasClosedRoot(peer.reference.value)
-    if (peerReferenceHadClosedRoot) {
-      let closedPeers = closedPeerReferences.get(owner)
-      if (!closedPeers) {
-        closedPeers = new Set()
-        closedPeerReferences.set(owner, closedPeers)
-      }
-      closedPeers.add(peer)
-    }
-    peer.refreshRoots()
-    if (peerReferenceHadClosedRoot) {
-      for (const other of peers) if (other !== peer && other.parent === parent) other.refreshRoots()
-    }
+    refreshShadowRoots()
   }
   const unregisterReference = () => {
-    active = false
-    if (owner) {
-      const peers = referenceInteractions.get(owner)
-      peers?.delete(peer)
-      if (peerReferenceHadClosedRoot) {
-        closedPeerReferences.get(owner)?.delete(peer)
-        for (const other of peers ?? []) if (other.parent === parent) other.refreshRoots()
-      }
-      peerReferenceHadClosedRoot = false
-    }
+    if (!registry) return
+    registry.peers.delete(peer)
+    if (registry.closed.delete(peer)) refreshSiblings(registry.peers)
+    registry = undefined
   }
   const documentCleanups: (() => void)[] = []
-  let mounted = false
-  let suspended = false
-  const onPopupKeydown = (event: KeyboardEvent) => { if (includes(api.popup.value ?? undefined, event)) onKeydown(event) }
+  const onPopupKeydown = (event: KeyboardEvent) => {
+    if (includes(api.popup.value ?? undefined, event)) onKeydown(event)
+  }
   const bindDocument = (doc: Document, keydown: (event: KeyboardEvent) => void) => {
     const view = doc.defaultView
     const update = (method: 'addEventListener' | 'removeEventListener') => {
-      doc[method]('pointerdown', onPointerDown, true)
-      doc[method]('pointerup', onPointerUp, true)
-      doc[method]('pointercancel', onPointerCancel, true)
+      doc[method]('pointerdown', onPointerDown as EventListener, true)
+      doc[method]('pointerup', onPointerUp as EventListener, true)
+      doc[method]('pointercancel', onPointerCancel as EventListener, true)
       doc[method]('click', onOutside, true)
       // The indexed DOM methods expose only their common EventListener overload.
       view?.[method]('keydown', keydown as EventListener)
@@ -504,37 +556,37 @@ export function useTriggerInteraction(
   }
   const unbind = () => {
     outsideGeneration++
-    for (const root of shadowRoots) root.removeEventListener('click', markShadowInside, true)
-    shadowRoots = []
+    updateShadowRoots(new Set())
     unregisterReference()
-    pointerDismiss = undefined
-    clearPointerRelease()
-    clearForwardedLabel()
+    pointer.set()
+    labelActivation.set()
     for (const cleanup of documentCleanups) {
       cleanup()
     }
     documentCleanups.length = 0
-    owner = undefined
   }
   const bind = () => {
     unbind()
-    if (!mounted || suspended) return
-    owner = api.reference.value?.ownerDocument ?? api.popup.value?.ownerDocument ?? document
-    registerReference()
-    refreshShadowRoots()
+    const owner = api.reference.value?.ownerDocument ?? api.popup.value?.ownerDocument ?? document
+    registerReference(owner)
     bindDocument(owner, onKeydown)
     const popupDocument = api.popup.value?.ownerDocument
     if (popupDocument && popupDocument !== owner) {
       bindDocument(popupDocument, onPopupKeydown)
     }
   }
-  watch([api.reference, api.popup], bind, { flush: 'sync' })
-  watch(api.popupTarget, bind, { flush: 'post' })
-  onMounted(() => { mounted = true; bind() })
-  onActivated(() => { suspended = false; bind() })
-  onDeactivated(() => { suspended = true; unbind() })
+  const rebind = () => {
+    if (registry) bind()
+  }
+  const activate = () => {
+    if (!registry) bind()
+  }
+  watch([api.reference, api.popup], rebind, { flush: 'sync' })
+  watch(api.popupTarget, rebind, { flush: 'post' })
+  onMounted(activate)
+  onActivated(activate)
+  onDeactivated(unbind)
   onBeforeUnmount(() => {
-    mounted = false
     unbind()
     parent?.children.delete(context)
   })
@@ -545,12 +597,6 @@ export function useTriggerInteraction(
     popupFocus: onFocus,
     popupBlur: onBlur,
     contains,
-    allowClose: () => {
-      allowClose = true
-    },
-    setAllowClose: (value: boolean) => {
-      allowClose = value
-    },
     open: () => api.request(true),
     close: () => close(),
   }

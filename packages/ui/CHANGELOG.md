@@ -1,5 +1,20 @@
 # @cedar-design/ui-vue
 
+## 1.4.6
+
+### Patch Changes
+
+- [#37](https://github.com/sparknest-team/cedar-design-web/pull/37) [`d14560b`](https://github.com/sparknest-team/cedar-design-web/commit/d14560b3999b220424403b64414333232c333661) Thanks [@sparknest-team](https://github.com/sparknest-team)! - PC 端弹层移除触摸监听，改用 overscroll-behavior 拦截边界链式滚动：modal-focus 不再在 document 上注册 touchstart/touchmove，dialog/drawer 的可滚动容器补 overscroll-behavior: contain。
+
+- [#40](https://github.com/sparknest-team/cedar-design-web/pull/40) [`827c050`](https://github.com/sparknest-team/cedar-design-web/commit/827c050336e6fa18a51b3c7a153f719908952902) Thanks [@sparknest-team](https://github.com/sparknest-team)! - Section 标题默认使用 h4，调整正文间距、状态底色和整段色条圆角。Card 的长标题示例支持悬停或键盘聚焦查看全文。
+
+- [#34](https://github.com/sparknest-team/cedar-design-web/pull/34) [`3bd00a7`](https://github.com/sparknest-team/cedar-design-web/commit/3bd00a7070694e29e90e031e35132f88210169fa) Thanks [@sparknest-team](https://github.com/sparknest-team)! - 同步 Maple 的共享基础模块（trigger 定位、弹层栈、焦点管理、滚动锁、树/级联数据、输入合成等），消除 design-ui 共享基础漂移检查失败。
+
+- Updated dependencies []:
+  - @cedar-design/icons-vue@1.4.6
+  - @cedar-design/shared-vue@1.4.6
+  - @cedar-design/use-vue@1.4.6
+
 ## 1.4.5
 
 ### Patch Changes
