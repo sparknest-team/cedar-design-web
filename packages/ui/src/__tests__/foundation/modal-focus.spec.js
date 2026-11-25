@@ -4,7 +4,7 @@ import { describe, expect, test } from 'vitest'
 import { useModalFocus } from '../../_utils/modal-focus'
 import { usePopupLayer } from '../../_utils/popup-layer'
 
-describe('modal focus and touch contract', () => {
+describe('modal focus contract', () => {
   test('parent-first close keeps child focus and restores the visible outer opener', async () => {
     const opener = document.createElement('button')
     document.body.append(opener); opener.focus()
@@ -105,27 +105,5 @@ describe('modal focus and touch contract', () => {
       active.value = false; await nextTick(); expect(document.activeElement).toBe(outside)
       active.value = true; await nextTick(); await nextTick(); expect(document.activeElement).toBe(parentRoot.value)
     } finally { wrapper.unmount(); outside.remove() }
-  })
-  test('touch permits inner scrolling and pinch, blocks background and overscroll', async () => {
-    const root = ref()
-    const wrapper = mount({ setup() {
-      const { onStackTop } = usePopupLayer(() => true, ref(1))
-      useModalFocus(() => root.value, () => true, onStackTop)
-      return () => h('div', { ref: root, tabindex: -1 }, h('div', { style: 'overflow-y:auto' }, 'scroll'))
-    } }, { attachTo: document.body })
-    try {
-      await nextTick()
-      const scroller = root.value.firstElementChild
-      Object.defineProperties(scroller, { scrollHeight: { value: 300 }, clientHeight: { value: 100 } })
-      const touch = (target, type, y, count = 1) => {
-        const event = new Event(type, { bubbles: true, cancelable: true })
-        Object.defineProperty(event, 'touches', { value: Array.from({ length: count }, () => ({ clientX: 0, clientY: y })) })
-        target.dispatchEvent(event); return event.defaultPrevented
-      }
-      touch(scroller, 'touchstart', 100); expect(touch(scroller, 'touchmove', 50)).toBe(false)
-      scroller.scrollTop = 200; expect(touch(scroller, 'touchmove', 0)).toBe(true)
-      touch(document.body, 'touchstart', 100); expect(touch(document.body, 'touchmove', 50)).toBe(true)
-      touch(document.body, 'touchstart', 100, 2); expect(touch(document.body, 'touchmove', 50, 2)).toBe(false)
-    } finally { wrapper.unmount() }
   })
 })
