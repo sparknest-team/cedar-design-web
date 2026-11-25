@@ -17,7 +17,28 @@ function assertMergeGate(workflow, scripts) {
   assert.ok(quality, 'quality job must exist')
   assert.doesNotMatch(quality, /^    (?:if|name):/m, 'required job cannot be skipped or renamed')
   const steps = quality.split(/^      - /m).slice(1)
-  for (const command of ['pnpm quality', 'node --test scripts/quality/demo-i18n-ci.test.mjs']) {
+  // 2026-11-25 分层改造：PR 跑 quality:fast、merge_group/main 跑完整 quality。
+  // 原本这里要求 `pnpm quality` 无条件强制跑一次；分层后必须允许 if，但条件被精确锁定：
+  //   - 完整 quality 只能由「非 PR 事件」触发（即 merge_group / push main / workflow_dispatch）
+  //   - fast 通道只能由 pull_request 触发，两者必须同时存在，且 demo i18n gate 在两条通道里都要有
+  // 这样「被 if: false / 其它条件关闭」仍然会被下面的分支和变异测试抓到。
+  const qualitySteps = steps.filter(step => step.split('\n')[0] === 'run: pnpm quality')
+  assert.equal(qualitySteps.length, 1, 'pnpm quality must appear exactly once as a step')
+  const qualityIf = qualitySteps[0].match(/^\s*if:\s*(.+)$/m)?.[1]?.trim()
+  assert.equal(qualityIf, "github.event_name != 'pull_request'",
+    'full quality must be gated to non-PR events only (merge_queue / main / manual)')
+
+  const fastSteps = steps.filter(step => step.split('\n')[0] === 'run: pnpm quality:fast')
+  assert.equal(fastSteps.length, 1, 'pnpm quality:fast must appear exactly once as a step')
+  const fastIf = fastSteps[0].match(/^\s*if:\s*(.+)$/m)?.[1]?.trim()
+  assert.equal(fastIf, "github.event_name == 'pull_request'",
+    'fast quality must be gated to pull_request events only')
+
+  // demo i18n gate 必须在两条通道里都跑到
+  assert.ok(scripts['quality:fast'].split(' && ').includes('pnpm check:demo-i18n'),
+    'fast channel must keep the demo i18n gate')
+
+  for (const command of ['node --test scripts/quality/demo-i18n-ci.test.mjs']) {
     const gateSteps = steps.filter(step => step.split('\n')[0] === `run: ${command}`)
     assert.equal(gateSteps.length, 1, `${command} must run once as a mandatory step`)
     assert.doesNotMatch(gateSteps[0], /^\s*if:/m)
@@ -51,6 +72,10 @@ for (const [name, mutate] of [
   ['allowed failure', value => value.replace('- run: pnpm quality', '- continue-on-error: true\n        run: pnpm quality')],
   ['removed quality command', value => value.replace('pnpm quality', 'pnpm test')],
   ['removed independent wiring check', value => value.replace('- run: node --test scripts/quality/demo-i18n-ci.test.mjs', '- run: node --version')],
+  ['quality step disabled', value => value.replace("if: github.event_name != 'pull_request'", 'if: false')],
+  ['fast step disabled', value => value.replace("if: github.event_name == 'pull_request'", 'if: false')],
+  ['fast channel removed', value => value.replace('- run: pnpm quality:fast', '- run: pnpm quality')],
+  ['channels swapped', value => value.replace("if: github.event_name == 'pull_request'", 'if: always()')],
 ]) {
   test(`rejects ${name}`, () => assert.throws(() => assertMergeGate(mutate(workflow), scripts)))
 }

@@ -85,12 +85,13 @@ jobs:
         run: pnpm exec changeset status --since=origin/main
       # PR 只跑 fast 通道（静态检查 + 构建 + 单测），目标 10 分钟内出结果。
       # 文档站、浏览器回归、三引擎兼容性由 quality-slow.yml 每日跑，以及 main/merge_group 的完整通道兜底。
-      - name: Fast quality checks (PR gate)
+      # 注意：两个 step 的 `run:` 必须写在第一行，demo-i18n-ci.test.mjs 用 `step.split('\n')[0]` 匹配。
+      - run: pnpm quality:fast
+        name: Fast quality checks (PR gate)
         if: github.event_name == 'pull_request'
-        run: pnpm quality:fast
-      - name: Full quality checks (main / merge queue)
+      - run: pnpm quality
+        name: Full quality checks (main / merge queue)
         if: github.event_name != 'pull_request'
-        run: pnpm quality
       - name: Verify linked PRs stayed unchanged
         uses: actions/github-script@v7
         env:
