@@ -26,15 +26,16 @@
           <slot name="description">{{ description }}</slot>
         </div>
       </div>
-      <div :class="classes(n('content'), [inline, n('content--inline')])">
+      <OptionalSlotBody :class="classes(n('content'), [inline, n('content--inline')])">
         <slot />
-      </div>
+      </OptionalSlotBody>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import { computed, inject } from 'vue'
+import OptionalSlotBody from '../_components/optional-slot-body'
 import { createNamespace } from '../_utils/global-config'
 import { useId } from '../_utils/vue-compat'
 import { formInjectionKey } from '../form/context'

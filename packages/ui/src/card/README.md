@@ -37,17 +37,9 @@ permalink: /components/card/
 
 <demo src="./__demos__/appearance-lab.vue"></demo>
 
-### 尺寸与标题层级
+### 卡片尺寸与标题层级
 
-切换 Card 尺寸、标题层级和页脚对齐，或调整内嵌 Section 的变体，实时查看组合效果。Card 说明文字保持 15px，Section 说明文字保持 13px。Card 尺寸会改变说明文字周围的间距。
-
-| 尺寸 | h1 | h2 | h3 | h4 | h5 | h6 | 正文水平内边距 | 说明上方间距 |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `xs` | 25px | 21px | 19px | 17px | 15px | 13px | 8px | 6px |
-| `sm` | 26px | 22px | 20px | 18px | 16px | 14px | 12px | 8px |
-| `md` | 30px | 26px | 24px | 22px | 20px | 18px | 16px | 20px |
-| `lg` | 34px | 30px | 28px | 26px | 24px | 22px | 20px | 20px |
-| `xl` | 38px | 34px | 32px | 30px | 28px | 26px | 24px | 24px |
+尺寸控制布局间距，标题层级可选 `h1` 到 `h6`，Card 默认使用普通文本标题。预览会显示当前组合，以及标题和说明各自的字号与上方间距。关闭「显示描述」会收起描述及其上方间距。关闭「显示正文」后，默认插槽只剩注释，正文容器和它的间距会一起移除。标题与下方说明同属卡片头部。从 `xs` 到 `xl`，两者间距依次为 2、4、6、8、10px。
 
 <demo src="./__demos__/sizes-and-headings.vue"></demo>
 
@@ -213,6 +205,8 @@ Card 展开时保留原有 DOM 位置和表单归属。支持 Popover API 的浏
 
 ### Card Slots
 
+默认插槽控制正文。省略插槽，或用 `v-if` 隐藏其中的全部内容时，正文容器及其间距一并移除。使用 `{{ note }}` 这样的文本插值时，即使字符串为空，也会保留正文容器。
+
 | 插槽 | 说明 | 参数 |
 | --- | --- | --- |
 | default | 正文 | — |
@@ -274,14 +268,14 @@ import type { CardProps } from '@cedar-design/ui-vue'
 | `--c-card-content-row-margin` | `16px 0 0 0` | `margin` |
 | `--c-card-description-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-card-description-font-size` | `15px` | `font-size` |
-| `--c-card-description-margin` | `20px 0 0 0` | `margin` |
+| `--c-card-description-margin` | `6px 0 0 0` | `margin` |
 | `--c-card-description-padding` | `0 16px` | `padding` |
 | `--c-card-filled-background` | `var(--c-sys-color-surface-muted)` | `background-color` |
 | `--c-card-floating-buttons-bottom` | `16px` | `bottom` |
 | `--c-card-floating-buttons-color` | `var(--c-sys-color-content-primary)` | `color` |
 | `--c-card-floating-buttons-right` | `16px` | `inset-inline-end` |
 | `--c-card-footer-bottom` | `9px` | `bottom` |
-| `--c-card-footer-margin` | `30px 0 0 0` | `margin` |
+| `--c-card-footer-margin` | `16px 0 0 0` | `margin` |
 | `--c-card-footer-padding` | `0 16px` | `padding` |
 | `--c-card-footer-right` | `13px` | `inset-inline-end`, `inset-inline-start` |
 | `--c-card-heading-size-step` | `1px` | `font-size` |
@@ -296,16 +290,16 @@ import type { CardProps } from '@cedar-design/ui-vue'
 | `--c-card-row-line-height` | `1.5` | `line-height` |
 | `--c-card-size-lg-section-margin` | `20px 0 0` | `margin` |
 | `--c-card-size-lg-section-padding` | `0 20px` | `padding` |
-| `--c-card-size-lg-title-font-size` | `24px` | `font-size` |
-| `--c-card-size-sm-section-margin` | `8px 0 0` | `margin` |
+| `--c-card-size-lg-title-font-size` | `20px` | `font-size` |
+| `--c-card-size-sm-section-margin` | `12px 0 0` | `margin` |
 | `--c-card-size-sm-section-padding` | `0 12px` | `padding` |
-| `--c-card-size-sm-title-font-size` | `16px` | `font-size` |
+| `--c-card-size-sm-title-font-size` | `20px` | `font-size` |
 | `--c-card-size-xl-section-margin` | `24px 0 0` | `margin` |
 | `--c-card-size-xl-section-padding` | `0 24px` | `padding` |
-| `--c-card-size-xl-title-font-size` | `28px` | `font-size` |
-| `--c-card-size-xs-section-margin` | `6px 0 0` | `margin` |
+| `--c-card-size-xl-title-font-size` | `20px` | `font-size` |
+| `--c-card-size-xs-section-margin` | `8px 0 0` | `margin` |
 | `--c-card-size-xs-section-padding` | `0 8px` | `padding` |
-| `--c-card-size-xs-title-font-size` | `15px` | `font-size` |
+| `--c-card-size-xs-title-font-size` | `20px` | `font-size` |
 | `--c-card-subtitle-color` | `var(--c-sys-color-content-secondary)` | `color` |
 | `--c-card-subtitle-font-size` | `15px` | `font-size` |
 | `--c-card-subtitle-margin` | `10px 0 0 0` | `margin` |
@@ -313,9 +307,9 @@ import type { CardProps } from '@cedar-design/ui-vue'
 | `--c-card-subtitle-row-margin` | `-8px 0 0 0` | `margin` |
 | `--c-card-title-color` | `var(--c-sys-color-content-primary)` | `color` |
 | `--c-card-title-font-size` | `20px` | `font-size` |
-| `--c-card-title-margin` | `15px 0 0 0` | `margin` |
+| `--c-card-title-margin` | `16px 0 0 0` | `margin` |
 | `--c-card-title-padding` | `0 16px` | `padding` |
-| `--c-card-title-row-margin` | `12px 0` | `margin` |
+| `--c-card-title-row-margin` | `16px 0 12px` | `margin` |
 
 </div>
 

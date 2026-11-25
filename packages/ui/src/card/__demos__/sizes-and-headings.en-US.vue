@@ -1,65 +1,62 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { ref, watch } from 'vue'
 
-const footerAlignments = ['start', 'center', 'end'] as const
-const sectionVariants = ['heading-line', 'plain', 'tonal', 'outline'] as const
-const headingLevels = [1, 2, 3, 4, 5, 6] as const
-const model = reactive<{
-  size: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  headingLevel: (typeof headingLevels)[number]
-  footerAlign: (typeof footerAlignments)[number]
-  sectionVariant: (typeof sectionVariants)[number]
-}>({
-  size: 'md',
-  headingLevel: 4,
-  footerAlign: 'end',
-  sectionVariant: 'heading-line',
-})
+const sizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
+const size = ref<(typeof sizes)[number]>('md')
+const levels = [1, 2, 3, 4, 5, 6] as const
+const level = ref<(typeof levels)[number] | 'default'>('default')
+const showDescription = ref(true)
+const showContent = ref(true)
+const preview = ref<HTMLElement | null>(null)
+const titleMetrics = ref('')
+const descriptionMetrics = ref('')
+
+function measureText() {
+  const container = preview.value?.querySelector<HTMLElement>('.c-card__container')
+  const title = container?.querySelector('.c-card__title-text')
+  const description = container?.querySelector('.c-card__description')
+  if (!container || !title?.parentElement) return
+
+  titleMetrics.value = formatMetrics(title, getComputedStyle(title.parentElement).marginTop)
+  descriptionMetrics.value = description ? formatMetrics(description, getComputedStyle(description).marginTop) : ''
+}
+
+function formatMetrics(element: Element, gap: string) {
+  const fontSize = getComputedStyle(element).fontSize
+  return `font size ${fontSize} · gap above ${gap}`
+}
+
+watch([preview, size, level, showDescription], measureText, { flush: 'post' })
 </script>
 
 <template>
   <c-space direction="column" align="stretch">
-    <c-form :model="model" layout="vertical" edit-mode="direct">
-      <c-form-item field="size" label="Card size">
-        <c-radio-group v-model="model.size" aria-label="Card size">
-          <c-radio value="xs">Extra small (xs)</c-radio>
-          <c-radio value="sm">Compact (sm)</c-radio>
-          <c-radio value="md">Default (md)</c-radio>
-          <c-radio value="lg">Large (lg)</c-radio>
-          <c-radio value="xl">Extra large (xl)</c-radio>
-        </c-radio-group>
-      </c-form-item>
-      <c-form-item field="headingLevel" label="Heading level">
-        <c-radio-group v-model="model.headingLevel" aria-label="Heading level">
-          <c-radio v-for="level in headingLevels" :key="level" :value="level">h{{ level }}</c-radio>
-        </c-radio-group>
-      </c-form-item>
-      <c-form-item field="footerAlign" label="Footer alignment">
-        <c-radio-group v-model="model.footerAlign" aria-label="Footer alignment">
-          <c-radio v-for="value in footerAlignments" :key="value" :value="value">{{ value }}</c-radio>
-        </c-radio-group>
-      </c-form-item>
-      <c-form-item field="sectionVariant" label="Section variant">
-        <c-radio-group v-model="model.sectionVariant" aria-label="Section variant">
-          <c-radio v-for="value in sectionVariants" :key="value" :value="value">{{ value }}</c-radio>
-        </c-radio-group>
-      </c-form-item>
-    </c-form>
-    <output>Rendered tag <code>&lt;h{{ model.headingLevel }}&gt;</code></output>
-
-    <c-card
-      :size="model.size"
-      :heading-level="model.headingLevel"
-      :footer-align="model.footerAlign"
-      title="Project overview"
-      description="Project settings apply to the whole team."
-      top-divider
-      bottom-divider
-    >
-      <c-section :size="model.size" :heading-level="model.headingLevel" :variant="model.sectionVariant" title="Member permissions" description="Permissions are grouped by role.">
-        Administrators can invite members.
-      </c-section>
-      <template #footer>Last updated today</template>
-    </c-card>
+    <span>Card size</span>
+    <c-radio-group v-model="size" aria-label="Card size">
+      <c-radio v-for="value in sizes" :key="value" :value="value">{{ value }}</c-radio>
+    </c-radio-group>
+    <span>Heading level</span>
+    <c-radio-group v-model="level" aria-label="Heading level">
+      <c-radio value="default">Default</c-radio>
+      <c-radio v-for="value in levels" :key="value" :value="value">h{{ value }}</c-radio>
+    </c-radio-group>
+    <c-checkbox v-model="showDescription">Show description</c-checkbox>
+    <c-checkbox v-model="showContent">Show content</c-checkbox>
+    <output>
+      Size {{ size }} · Heading {{ level === 'default' ? 'Default' : `h${level}` }}<br />
+      Title · {{ titleMetrics }}
+      <template v-if="showDescription"><br />Description · {{ descriptionMetrics }}</template>
+    </output>
+    <div ref="preview" @transitionend="measureText">
+      <c-card
+        :size="size"
+        :heading-level="level === 'default' ? undefined : level"
+        title="Project overview"
+        :description="showDescription ? 'Project settings apply to the entire team.' : undefined"
+      >
+        <!-- Only this comment remains when content is hidden. -->
+        <span v-if="showContent">Administrators can invite members.</span>
+      </c-card>
+    </div>
   </c-space>
 </template>

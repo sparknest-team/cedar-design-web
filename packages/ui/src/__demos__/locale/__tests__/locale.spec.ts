@@ -38,9 +38,9 @@ const demos: Record<
     en: string
   }
 > = {
-  sectionHeadingOptions: {
-    load: () => import('../../../section/__demos__/heading-options.vue'),
-    loadEnglish: () => import('../../../section/__demos__/heading-options.en-US.vue'),
+  sectionSizes: {
+    load: () => import('../../../section/__demos__/sizes.vue'),
+    loadEnglish: () => import('../../../section/__demos__/sizes.en-US.vue'),
     plugins: ['Section', 'Radio', 'Checkbox', 'Space'],
     zh: '显示标题',
     en: 'Show heading',
@@ -232,15 +232,15 @@ afterEach(() => {
 
 describe('demo locales', () => {
   it.each([
-    [() => import('../../../section/__demos__/outline.vue'), '发布记录'],
-    [() => import('../../../section/__demos__/outline.en-US.vue'), 'Release history'],
-    [() => import('../../../section/__demos__/plain.vue'), '成员权限'],
-    [() => import('../../../section/__demos__/plain.en-US.vue'), 'Member permissions'],
-  ] as const)('renders the static example heading %s', async (load, heading) => {
+    [() => import('../../../section/__demos__/outline.vue'), '发布记录', 'h3'],
+    [() => import('../../../section/__demos__/outline.en-US.vue'), 'Release history', 'h3'],
+    [() => import('../../../section/__demos__/plain.vue'), '成员权限', 'h4'],
+    [() => import('../../../section/__demos__/plain.en-US.vue'), 'Member permissions', 'h4'],
+  ] as const)('renders the static example heading %s', async (load, heading, tag) => {
     const [{ default: Demo }, { default: Section }] = await Promise.all([load(), plugins.Section()])
     const wrapper = mount(Demo, { global: { plugins: [Section] } })
     wrappers.push(wrapper)
-    expect(wrapper.get('section :is(h3, h4)').text()).toBe(heading)
+    expect(wrapper.get(`section ${tag}`).text()).toBe(heading)
   })
   it.each(Object.keys(demos))(
     'renders both languages for %s',
@@ -255,10 +255,13 @@ describe('demo locales', () => {
     120_000,
   )
   it('previews each Section variant with and without a heading or description', async () => {
-    const wrapper = await render('sectionHeadingOptions')
+    const wrapper = await render('sectionSizes')
     const section = wrapper.get('section')
     const [title, description, marker] = wrapper.findAll('input[type="checkbox"]')
-    for (const radio of wrapper.get('[role="radiogroup"]').findAll('input[type="radio"]')) {
+    await title.setValue(false)
+    await description.setValue(false)
+    await marker.setValue(false)
+    for (const radio of wrapper.get('[aria-label="分组风格"]').findAll('input[type="radio"]')) {
       await radio.setValue(true)
       expect(section.classes()).toContain(`c-section--${(radio.element as HTMLInputElement).value}`)
       expect(section.find('.c-section__header').exists()).toBe(false)
@@ -281,7 +284,7 @@ describe('demo locales', () => {
       await description.setValue(true)
       expect(section.get('.c-section__description').text()).toContain('权限变更')
       await title.setValue(false)
-      expect(section.find('h4').exists()).toBe(false)
+      expect(section.find('.c-section__title').exists()).toBe(false)
       expect(section.find('.c-section__description').exists()).toBe(true)
       await description.setValue(false)
     }

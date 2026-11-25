@@ -18,31 +18,24 @@ Source changes synchronously invalidate render generations. Close, row direction
 ### Appearance configuration comparison
 
 <!-- demo-config-notes:start -->
+
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --- | --- | --- |
-| `title` | Title | Appearance configuration comparison, Hover style |
-| `description` | Description | Appearance configuration comparison |
-| `hoverable` | Hover style | Hover style |
-<!-- demo-config-notes:end -->
+| Configuration | Purpose     | Related examples                                 |
+| ------------- | ----------- | ------------------------------------------------ |
+| `title`       | Title       | Appearance configuration comparison, Hover style |
+| `description` | Description | Appearance configuration comparison              |
+| `hoverable`   | Hover style | Hover style                                      |
 
+<!-- demo-config-notes:end -->
 
 Choose a dimension to compare all its values side by side while keeping other settings and content identical. Change the other settings to inspect combinations; input specimens share one model.
 
 <demo src="./__demos__/appearance-lab.en-US.vue"></demo>
 
-### Sizes and heading levels
+### Card sizes and heading levels
 
-Choose the Card size, title level, or footer alignment to preview a Card containing a Section. Use the Section variant control to change the nested Section appearance. The Card description stays at 15px and the Section description stays at 13px. Changes to Card size affect the spacing around its description.
-
-| Size | h1 | h2 | h3 | h4 | h5 | h6 | Body horizontal padding | Description top margin |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `xs` | 25px | 21px | 19px | 17px | 15px | 13px | 8px | 6px |
-| `sm` | 26px | 22px | 20px | 18px | 16px | 14px | 12px | 8px |
-| `md` | 30px | 26px | 24px | 22px | 20px | 18px | 16px | 20px |
-| `lg` | 34px | 30px | 28px | 26px | 24px | 22px | 20px | 20px |
-| `xl` | 38px | 34px | 32px | 30px | 28px | 26px | 24px | 24px |
+Size controls spacing. Choose a heading level from `h1` to `h6`. Card uses plain text for its title by default. The preview shows the active combination, font sizes and gaps above the title and description. Turn off “Show description” to hide the description and its spacing. Turn off “Show content” to leave only a comment in the default slot. The body container and its spacing disappear. The title and its description form the card header. From `xs` through `xl`, their gap is 2px, 4px, 6px, 8px and 10px, respectively.
 
 <demo src="./__demos__/sizes-and-headings.en-US.vue"></demo>
 
@@ -55,17 +48,19 @@ Choose the Card size, title level, or footer alignment to preview a Card contain
 ### Images and directions
 
 <!-- demo-config-notes:start -->
+
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --- | --- | --- |
-| `direction` | Order of cover and body, default column; supports row, column and row-reverse. Does not position the card itself | Images and directions |
-| `title` | Title | Images and directions |
-| `image-src` | Cover image URL; cover slot takes precedence | Images and directions |
-| `image-alt` | Image alternative text | Images and directions |
-| `image-fit` | Cover image fit mode; defaults to cover | Images and directions |
-| `image-height` | Image height; numbers use px | Images and directions |
-| `image-width` | Image width; numbers use px | Images and directions |
+| Configuration  | Purpose                                                                                                          | Related examples      |
+| -------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `direction`    | Order of cover and body, default column; supports row, column and row-reverse. Does not position the card itself | Images and directions |
+| `title`        | Title                                                                                                            | Images and directions |
+| `image-src`    | Cover image URL; cover slot takes precedence                                                                     | Images and directions |
+| `image-alt`    | Image alternative text                                                                                           | Images and directions |
+| `image-fit`    | Cover image fit mode; defaults to cover                                                                          | Images and directions |
+| `image-height` | Image height; numbers use px                                                                                     | Images and directions |
+| `image-width`  | Image width; numbers use px                                                                                      | Images and directions |
+
 <!-- demo-config-notes:end -->
 
 <demo src="./__demos__/image.vue"></demo>
@@ -89,15 +84,16 @@ Card contains the report, Tabs switch analysis views, and Section groups the con
 ### Custom header
 
 <!-- demo-config-notes:start -->
+
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --- | --- | --- |
-| `title` | Title | Custom header |
-| `top-divider` | Top divider | Content slots |
-| `bottom-divider` | Bottom divider | Content slots |
-<!-- demo-config-notes:end -->
+| Configuration    | Purpose        | Related examples |
+| ---------------- | -------------- | ---------------- |
+| `title`          | Title          | Custom header    |
+| `top-divider`    | Top divider    | Content slots    |
+| `bottom-divider` | Bottom divider | Content slots    |
 
+<!-- demo-config-notes:end -->
 
 <demo src="./__demos__/no-padding.vue"></demo>
 
@@ -110,16 +106,17 @@ Card contains the report, Tabs switch analysis views, and Section groups the con
 ### Ripple and click
 
 <!-- demo-config-notes:start -->
+
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --- | --- | --- |
-| `title` | Title | Ripple and click, Floating and close |
-| `ripple` | Click ripple | Ripple and click |
-| `floating` | Floating expansion state; supports v-model:floating | Floating and close |
-| `floating-duration` | Floating expansion transition duration in ms | Floating and close |
-<!-- demo-config-notes:end -->
+| Configuration       | Purpose                                             | Related examples                     |
+| ------------------- | --------------------------------------------------- | ------------------------------------ |
+| `title`             | Title                                               | Ripple and click, Floating and close |
+| `ripple`            | Click ripple                                        | Ripple and click                     |
+| `floating`          | Floating expansion state; supports v-model:floating | Floating and close                   |
+| `floating-duration` | Floating expansion transition duration in ms        | Floating and close                   |
 
+<!-- demo-config-notes:end -->
 
 <demo src="./__demos__/ripple.vue"></demo>
 
@@ -132,16 +129,17 @@ Card contains the report, Tabs switch analysis views, and Section groups the con
 ### Floating scheduler lifecycle
 
 <!-- demo-config-notes:start -->
+
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --- | --- | --- |
-| `floating` | Floating expansion state; supports v-model:floating | Floating scheduler lifecycle |
-| `ripple` | Click ripple | Floating scheduler lifecycle |
-| `floating-duration` | Floating expansion transition duration in ms | Floating scheduler lifecycle |
-| `title` | Title | Floating scheduler lifecycle |
-<!-- demo-config-notes:end -->
+| Configuration       | Purpose                                             | Related examples             |
+| ------------------- | --------------------------------------------------- | ---------------------------- |
+| `floating`          | Floating expansion state; supports v-model:floating | Floating scheduler lifecycle |
+| `ripple`            | Click ripple                                        | Floating scheduler lifecycle |
+| `floating-duration` | Floating expansion transition duration in ms        | Floating scheduler lifecycle |
+| `title`             | Title                                               | Floating scheduler lifecycle |
 
+<!-- demo-config-notes:end -->
 
 <demo src="./__demos__/scheduler-lifecycle.en-US.vue"></demo>
 
@@ -175,54 +173,56 @@ The default close button uses the current locale's close label; override it with
 
 ### Card Props
 
-| Prop | Description | Type | Default |
-| --- | --- | --- | --- |
-| variant | Appearance | `default / outline / tonal` | `outline` |
-| size | Density; omitted value follows platform rules below | `xs / sm / md / lg / xl` | `undefined` |
-| heading-level | Semantic heading level for the title; also controls its font size | `1 / 2 / 3 / 4 / 5 / 6` | `undefined` |
-| footer-align | Footer alignment; start and end follow the reading direction | `start / center / end` | `end` |
-| direction | Order of cover and body, default column; supports row, column and row-reverse. Does not position the card itself | `row / column / row-reverse` | `column` |
-| hoverable | Hover styling | `boolean` | `false` |
-| title-style | Title row styles | `CSSProperties` | `undefined` |
-| title | Title | `string` | `undefined` |
-| subtitle | Subtitle | `string` | `undefined` |
-| description | Description | `string` | `undefined` |
-| top-divider | Top divider with the same horizontal inset as the content | `boolean` | `false` |
-| bottom-divider | Bottom divider with the same horizontal inset as the content | `boolean` | `false` |
-| image-src | Cover image URL; cover slot takes precedence | `string` | `undefined` |
-| image-fit | Cover image fit | `fill / contain / cover / none / scale-down` | `cover` |
-| image-height | Image height; numbers use px | `string / number` | `undefined` |
-| image-width | Image width; numbers use px | `string / number` | `undefined` |
-| image-alt | Image alternative text | `string` | `undefined` |
-| elevation | Shadow for default variant; true means level 1, false disables it, numeric levels 0–24 | `boolean / number` | `0` |
-| ripple | Click ripple | `boolean` | `false` |
-| floating | Floating expansion state; supports v-model:floating | `boolean` | `false` |
-| floating-duration | Floating expansion transition duration in ms | `number` | `250` |
-| aria-label | Accessible name for the expanded panel. Defaults to the plain text title. | `string` | `—` |
-| aria-labelledby | ID of the visible heading in a custom title or header slot. | `string` | `—` |
-| close-button-aria-label | Accessible name of the default close button | `string` | `—` |
+| Prop                    | Description                                                                                                      | Type                                         | Default     |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | ----------- |
+| variant                 | Appearance                                                                                                       | `default / outline / tonal`                  | `outline`   |
+| size                    | Density; omitted value follows platform rules below                                                              | `xs / sm / md / lg / xl`                     | `undefined` |
+| heading-level           | Semantic heading level for the title; also controls its font size                                                | `1 / 2 / 3 / 4 / 5 / 6`                      | `undefined` |
+| footer-align            | Footer alignment; start and end follow the reading direction                                                     | `start / center / end`                       | `end`       |
+| direction               | Order of cover and body, default column; supports row, column and row-reverse. Does not position the card itself | `row / column / row-reverse`                 | `column`    |
+| hoverable               | Hover styling                                                                                                    | `boolean`                                    | `false`     |
+| title-style             | Title row styles                                                                                                 | `CSSProperties`                              | `undefined` |
+| title                   | Title                                                                                                            | `string`                                     | `undefined` |
+| subtitle                | Subtitle                                                                                                         | `string`                                     | `undefined` |
+| description             | Description                                                                                                      | `string`                                     | `undefined` |
+| top-divider             | Top divider with the same horizontal inset as the content                                                        | `boolean`                                    | `false`     |
+| bottom-divider          | Bottom divider with the same horizontal inset as the content                                                     | `boolean`                                    | `false`     |
+| image-src               | Cover image URL; cover slot takes precedence                                                                     | `string`                                     | `undefined` |
+| image-fit               | Cover image fit                                                                                                  | `fill / contain / cover / none / scale-down` | `cover`     |
+| image-height            | Image height; numbers use px                                                                                     | `string / number`                            | `undefined` |
+| image-width             | Image width; numbers use px                                                                                      | `string / number`                            | `undefined` |
+| image-alt               | Image alternative text                                                                                           | `string`                                     | `undefined` |
+| elevation               | Shadow for default variant; true means level 1, false disables it, numeric levels 0–24                           | `boolean / number`                           | `0`         |
+| ripple                  | Click ripple                                                                                                     | `boolean`                                    | `false`     |
+| floating                | Floating expansion state; supports v-model:floating                                                              | `boolean`                                    | `false`     |
+| floating-duration       | Floating expansion transition duration in ms                                                                     | `number`                                     | `250`       |
+| aria-label              | Accessible name for the expanded panel. Defaults to the plain text title.                                        | `string`                                     | `—`         |
+| aria-labelledby         | ID of the visible heading in a custom title or header slot.                                                      | `string`                                     | `—`         |
+| close-button-aria-label | Accessible name of the default close button                                                                      | `string`                                     | `—`         |
 
 ### Card Events
 
-| Event | Arguments and timing |
-| --- | --- |
-| click | `(event: Event)`, emitted when the card is clicked |
+| Event           | Arguments and timing                                                                                                             |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| click           | `(event: Event)`, emitted when the card is clicked                                                                               |
 | update:floating | `(value: boolean)`, emits false when the built-in close button or Escape requests closing; expansion is controlled by the parent |
 
 ### Card Slots
 
-| Slot | Description | Arguments |
-| --- | --- | --- |
-| default | Body | — |
-| cover | Cover content; overrides the image-src image | — |
-| header | Entire header; overrides title, title-action and subtitle | — |
-| title | Title | `{ slotClass: string }` |
-| title-action | Title action | — |
-| subtitle | Subtitle | `{ slotClass: string }` |
-| description | Custom description content uses the Card description container and spacing | `{ slotClass: string }` |
-| footer | Footer actions | — |
-| floating-content | Expanded content; column layout only | — |
-| close-button | Custom close button; update floating yourself | — |
+The default slot controls the body. Omitting it or hiding all its children with `v-if` removes the body container and its spacing. A text interpolation such as `{{ note }}` keeps the container even when the string is empty.
+
+| Slot             | Description                                                                | Arguments               |
+| ---------------- | -------------------------------------------------------------------------- | ----------------------- |
+| default          | Body                                                                       | —                       |
+| cover            | Cover content; overrides the image-src image                               | —                       |
+| header           | Entire header; overrides title, title-action and subtitle                  | —                       |
+| title            | Title                                                                      | `{ slotClass: string }` |
+| title-action     | Title action                                                               | —                       |
+| subtitle         | Subtitle                                                                   | `{ slotClass: string }` |
+| description      | Custom description content uses the Card description container and spacing | `{ slotClass: string }` |
+| footer           | Footer actions                                                             | —                       |
+| floating-content | Expanded content; column layout only                                       | —                       |
+| close-button     | Custom close button; update floating yourself                              | —                       |
 
 ### Card Methods
 
@@ -242,8 +242,6 @@ The component exports the following types
 import type { CardProps } from '@cedar-design/ui-vue'
 ```
 
-
-
 ## CSS Variables
 
 Regular/filled backgrounds and borders use `surface-default`, `surface-muted` and `border-default`. Titles, body and secondary text use `content-primary`, `content-tertiary` and `content-secondary`. Expanded floating buttons use `content-primary`; text and icons on dark close buttons use `content-on-dark`.
@@ -254,66 +252,66 @@ Use these variables to customize the component. Defaults may vary by the selecto
 
 <div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
-| Variable | Default / condition | Affected styles |
-| --- | --- | --- |
-| `--c-card-animation-duration` | `var(--c-sys-motion-duration-slow)` | `transition` |
-| `--c-card-animation-easing` | `var(--c-sys-motion-easing-standard)` | `transition-timing-function` |
-| `--c-card-background` | `var(--c-sys-color-surface-default)` | `background` |
-| `--c-card-border-radius` | `4px` | `border-radius` |
-| `--c-card-close-button-background` | `#212121` | `background-color` |
-| `--c-card-close-button-border-radius` | `50%` | `border-radius` |
-| `--c-card-close-button-icon-size` | `24px` | `font-size` |
-| `--c-card-close-button-size` | `56px` | `height`, `width` |
-| `--c-card-close-button-text-color` | `var(--c-sys-color-content-on-dark)` | `color` |
-| `--c-card-content-color` | `var(--c-sys-color-content-tertiary)` | `color` |
-| `--c-card-content-font-size` | `15px` | `font-size` |
-| `--c-card-content-margin` | `16px 0 0 0` | `margin` |
-| `--c-card-content-padding` | `0 16px` | `padding` |
-| `--c-card-content-row-margin` | `16px 0 0 0` | `margin` |
-| `--c-card-description-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-card-description-font-size` | `15px` | `font-size` |
-| `--c-card-description-margin` | `20px 0 0 0` | `margin` |
-| `--c-card-description-padding` | `0 16px` | `padding` |
-| `--c-card-filled-background` | `var(--c-sys-color-surface-muted)` | `background-color` |
-| `--c-card-floating-buttons-bottom` | `16px` | `bottom` |
-| `--c-card-floating-buttons-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-card-floating-buttons-right` | `16px` | `inset-inline-end` |
-| `--c-card-footer-bottom` | `9px` | `bottom` |
-| `--c-card-footer-margin` | `30px 0 0 0` | `margin` |
-| `--c-card-footer-padding` | `0 16px` | `padding` |
-| `--c-card-footer-right` | `13px` | `inset-inline-end`, `inset-inline-start` |
-| `--c-card-heading-size-step` | `1px` | `font-size` |
-| `--c-card-hover-shadow` | `0 2px 1px -1px var(--c-shadow-key-umbra-opacity), 0 1px 1px 0 var(--c-shadow-key-penumbra-opacity), 0 1px 3px 0 var(--c-shadow-key-ambient-opacity)` | `box-shadow` |
-| `--c-card-image-height` | `200px` | `height` |
-| `--c-card-image-width` | `100%` | `width` |
-| `--c-card-line-height` | `22px` | `line-height` |
-| `--c-card-outline-color` | `var(--c-sys-color-border-default)` | `border` |
-| `--c-card-padding` | `0 0 15px 0` | `padding` |
-| `--c-card-row-height` | `140px` | `min-height` |
-| `--c-card-row-image-width` | `140px` | `width` |
-| `--c-card-row-line-height` | `1.5` | `line-height` |
-| `--c-card-size-lg-section-margin` | `20px 0 0` | `margin` |
-| `--c-card-size-lg-section-padding` | `0 20px` | `padding` |
-| `--c-card-size-lg-title-font-size` | `24px` | `font-size` |
-| `--c-card-size-sm-section-margin` | `8px 0 0` | `margin` |
-| `--c-card-size-sm-section-padding` | `0 12px` | `padding` |
-| `--c-card-size-sm-title-font-size` | `16px` | `font-size` |
-| `--c-card-size-xl-section-margin` | `24px 0 0` | `margin` |
-| `--c-card-size-xl-section-padding` | `0 24px` | `padding` |
-| `--c-card-size-xl-title-font-size` | `28px` | `font-size` |
-| `--c-card-size-xs-section-margin` | `6px 0 0` | `margin` |
-| `--c-card-size-xs-section-padding` | `0 8px` | `padding` |
-| `--c-card-size-xs-title-font-size` | `15px` | `font-size` |
-| `--c-card-subtitle-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-card-subtitle-font-size` | `15px` | `font-size` |
-| `--c-card-subtitle-margin` | `10px 0 0 0` | `margin` |
-| `--c-card-subtitle-padding` | `0 16px` | `padding` |
-| `--c-card-subtitle-row-margin` | `-8px 0 0 0` | `margin` |
-| `--c-card-title-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-card-title-font-size` | `20px` | `font-size` |
-| `--c-card-title-margin` | `15px 0 0 0` | `margin` |
-| `--c-card-title-padding` | `0 16px` | `padding` |
-| `--c-card-title-row-margin` | `12px 0` | `margin` |
+| Variable                              | Default / condition                                                                                                                                   | Affected styles                          |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `--c-card-animation-duration`         | `var(--c-sys-motion-duration-slow)`                                                                                                                   | `transition`                             |
+| `--c-card-animation-easing`           | `var(--c-sys-motion-easing-standard)`                                                                                                                 | `transition-timing-function`             |
+| `--c-card-background`                 | `var(--c-sys-color-surface-default)`                                                                                                                  | `background`                             |
+| `--c-card-border-radius`              | `4px`                                                                                                                                                 | `border-radius`                          |
+| `--c-card-close-button-background`    | `#212121`                                                                                                                                             | `background-color`                       |
+| `--c-card-close-button-border-radius` | `50%`                                                                                                                                                 | `border-radius`                          |
+| `--c-card-close-button-icon-size`     | `24px`                                                                                                                                                | `font-size`                              |
+| `--c-card-close-button-size`          | `56px`                                                                                                                                                | `height`, `width`                        |
+| `--c-card-close-button-text-color`    | `var(--c-sys-color-content-on-dark)`                                                                                                                  | `color`                                  |
+| `--c-card-content-color`              | `var(--c-sys-color-content-tertiary)`                                                                                                                 | `color`                                  |
+| `--c-card-content-font-size`          | `15px`                                                                                                                                                | `font-size`                              |
+| `--c-card-content-margin`             | `16px 0 0 0`                                                                                                                                          | `margin`                                 |
+| `--c-card-content-padding`            | `0 16px`                                                                                                                                              | `padding`                                |
+| `--c-card-content-row-margin`         | `16px 0 0 0`                                                                                                                                          | `margin`                                 |
+| `--c-card-description-color`          | `var(--c-sys-color-content-secondary)`                                                                                                                | `color`                                  |
+| `--c-card-description-font-size`      | `15px`                                                                                                                                                | `font-size`                              |
+| `--c-card-description-margin`         | `6px 0 0 0`                                                                                                                                           | `margin`                                 |
+| `--c-card-description-padding`        | `0 16px`                                                                                                                                              | `padding`                                |
+| `--c-card-filled-background`          | `var(--c-sys-color-surface-muted)`                                                                                                                    | `background-color`                       |
+| `--c-card-floating-buttons-bottom`    | `16px`                                                                                                                                                | `bottom`                                 |
+| `--c-card-floating-buttons-color`     | `var(--c-sys-color-content-primary)`                                                                                                                  | `color`                                  |
+| `--c-card-floating-buttons-right`     | `16px`                                                                                                                                                | `inset-inline-end`                       |
+| `--c-card-footer-bottom`              | `9px`                                                                                                                                                 | `bottom`                                 |
+| `--c-card-footer-margin`              | `16px 0 0 0`                                                                                                                                          | `margin`                                 |
+| `--c-card-footer-padding`             | `0 16px`                                                                                                                                              | `padding`                                |
+| `--c-card-footer-right`               | `13px`                                                                                                                                                | `inset-inline-end`, `inset-inline-start` |
+| `--c-card-heading-size-step`          | `1px`                                                                                                                                                 | `font-size`                              |
+| `--c-card-hover-shadow`               | `0 2px 1px -1px var(--c-shadow-key-umbra-opacity), 0 1px 1px 0 var(--c-shadow-key-penumbra-opacity), 0 1px 3px 0 var(--c-shadow-key-ambient-opacity)` | `box-shadow`                             |
+| `--c-card-image-height`               | `200px`                                                                                                                                               | `height`                                 |
+| `--c-card-image-width`                | `100%`                                                                                                                                                | `width`                                  |
+| `--c-card-line-height`                | `22px`                                                                                                                                                | `line-height`                            |
+| `--c-card-outline-color`              | `var(--c-sys-color-border-default)`                                                                                                                   | `border`                                 |
+| `--c-card-padding`                    | `0 0 15px 0`                                                                                                                                          | `padding`                                |
+| `--c-card-row-height`                 | `140px`                                                                                                                                               | `min-height`                             |
+| `--c-card-row-image-width`            | `140px`                                                                                                                                               | `width`                                  |
+| `--c-card-row-line-height`            | `1.5`                                                                                                                                                 | `line-height`                            |
+| `--c-card-size-lg-section-margin`     | `20px 0 0`                                                                                                                                            | `margin`                                 |
+| `--c-card-size-lg-section-padding`    | `0 20px`                                                                                                                                              | `padding`                                |
+| `--c-card-size-lg-title-font-size`    | `20px`                                                                                                                                                | `font-size`                              |
+| `--c-card-size-sm-section-margin`     | `12px 0 0`                                                                                                                                            | `margin`                                 |
+| `--c-card-size-sm-section-padding`    | `0 12px`                                                                                                                                              | `padding`                                |
+| `--c-card-size-sm-title-font-size`    | `20px`                                                                                                                                                | `font-size`                              |
+| `--c-card-size-xl-section-margin`     | `24px 0 0`                                                                                                                                            | `margin`                                 |
+| `--c-card-size-xl-section-padding`    | `0 24px`                                                                                                                                              | `padding`                                |
+| `--c-card-size-xl-title-font-size`    | `20px`                                                                                                                                                | `font-size`                              |
+| `--c-card-size-xs-section-margin`     | `8px 0 0`                                                                                                                                             | `margin`                                 |
+| `--c-card-size-xs-section-padding`    | `0 8px`                                                                                                                                               | `padding`                                |
+| `--c-card-size-xs-title-font-size`    | `20px`                                                                                                                                                | `font-size`                              |
+| `--c-card-subtitle-color`             | `var(--c-sys-color-content-secondary)`                                                                                                                | `color`                                  |
+| `--c-card-subtitle-font-size`         | `15px`                                                                                                                                                | `font-size`                              |
+| `--c-card-subtitle-margin`            | `10px 0 0 0`                                                                                                                                          | `margin`                                 |
+| `--c-card-subtitle-padding`           | `0 16px`                                                                                                                                              | `padding`                                |
+| `--c-card-subtitle-row-margin`        | `-8px 0 0 0`                                                                                                                                          | `margin`                                 |
+| `--c-card-title-color`                | `var(--c-sys-color-content-primary)`                                                                                                                  | `color`                                  |
+| `--c-card-title-font-size`            | `20px`                                                                                                                                                | `font-size`                              |
+| `--c-card-title-margin`               | `16px 0 0 0`                                                                                                                                          | `margin`                                 |
+| `--c-card-title-padding`              | `0 16px`                                                                                                                                              | `padding`                                |
+| `--c-card-title-row-margin`           | `16px 0 12px`                                                                                                                                         | `margin`                                 |
 
 </div>
 
