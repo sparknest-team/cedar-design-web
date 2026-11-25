@@ -1,5 +1,31 @@
 # @cedar-design/ui-vue
 
+## 1.4.5
+
+### Patch Changes
+
+- [#27](https://github.com/sparknest-team/cedar-design-web/pull/27) [`9120382`](https://github.com/sparknest-team/cedar-design-web/commit/912038251152f8585603b2f15a52d559eef6de5a) Thanks [@sparknest-team](https://github.com/sparknest-team)! - section: `show-marker` 改为显式默认 `false`，去掉按表单上下文推断
+
+  `Section` 原来在未传 `show-marker` 时，会根据祖先是否存在 `Form` 自行决定是否显示标题色条
+  （`props.showMarker ?? !!form`），使同一份调用代码在表单内外视觉不同。现改为
+  `default: false`，需要色条时显式传入。`form` 上下文仍用于 `--form` 类名与 inline 布局。
+
+- Updated dependencies []:
+  - @cedar-design/icons-vue@1.4.5
+  - @cedar-design/shared-vue@1.4.5
+  - @cedar-design/use-vue@1.4.5
+
+## 1.4.4
+
+### Patch Changes
+
+- [#24](https://github.com/sparknest-team/cedar-design-web/pull/24) [`5e7c655`](https://github.com/sparknest-team/cedar-design-web/commit/5e7c655526feb53ac6cf0531ed977935e39b4405) Thanks [@sparknest-team](https://github.com/sparknest-team)! - Section 标题默认使用 h4，调整正文间距、状态底色和整段色条圆角。Card 的长标题示例支持悬停或键盘聚焦查看全文。
+
+- Updated dependencies []:
+  - @cedar-design/icons-vue@1.4.4
+  - @cedar-design/shared-vue@1.4.4
+  - @cedar-design/use-vue@1.4.4
+
 ## 1.4.3
 
 ### Patch Changes
@@ -103,13 +129,13 @@
 
 ---
 
-[//]: # "template"
-[//]: # "## 1.1.2"
-[//]: # "#### Feature"
-[//]: # "#### Fix"
-[//]: # "#### Style"
-[//]: # "#### Breaking Change"
-[//]: # "#### Remove"
+[//]: # 'template'
+[//]: # '## 1.1.2'
+[//]: # '#### Feature'
+[//]: # '#### Fix'
+[//]: # '#### Style'
+[//]: # '#### Breaking Change'
+[//]: # '#### Remove'
 
 ## Unreleased
 

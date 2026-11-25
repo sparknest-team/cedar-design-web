@@ -1,5 +1,19 @@
 # @cedar-design/use-vue
 
+## 1.4.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @cedar-design/shared-vue@1.4.5
+
+## 1.4.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @cedar-design/shared-vue@1.4.4
+
 ## 1.4.3
 
 ### Patch Changes

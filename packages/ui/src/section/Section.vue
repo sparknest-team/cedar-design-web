@@ -1,38 +1,28 @@
 <template>
   <section
     :id="sectionId"
-    :class="
-      classes(n(), n(`--${variant}`), n(`--size-${size}`), [!!status, n(`--${status}`)], [!!form, n('--form')])
-    "
-    :aria-labelledby="(title || $slots.title) ? titleId : undefined"
-    :aria-describedby="(description || $slots.description) ? descriptionId : undefined"
+    :class="classes(n(), n(`--${variant}`), n(`--size-${size}`), [!!status, n(`--${status}`)], [!!form, n('--form')])"
+    :aria-labelledby="title || $slots.title ? titleId : undefined"
+    :aria-describedby="description || $slots.description ? descriptionId : undefined"
   >
     <div :class="classes(n('surface'), [showMarker && markerPlacement === 'section', n('surface--marked')])">
-      <div
-        v-if="title || $slots.title || description || $slots.description || $slots.extra"
-        :class="n('header')"
-      >
+      <div v-if="title || $slots.title || description || $slots.description || $slots.extra" :class="n('header')">
         <div :class="n('heading')">
-          <div v-if="title || $slots.title" :class="classes(n('label'), [showMarker && markerPlacement === 'title', n('label--marked')])">
+          <div
+            v-if="title || $slots.title"
+            :class="classes(n('label'), [showMarker && markerPlacement === 'title', n('label--marked')])"
+          >
             <component :is="`h${headingLevel}`" :id="titleId" :class="n('title')">
               <slot name="title">{{ title }}</slot>
             </component>
           </div>
-          <span
-            v-if="variant === 'heading-line'"
-            :class="n('line')"
-            aria-hidden="true"
-          />
+          <span v-if="variant === 'heading-line'" :class="n('line')" aria-hidden="true" />
           <span v-else :class="n('spacer')" aria-hidden="true" />
           <div v-if="$slots.extra" :class="n('extra')">
             <slot name="extra" />
           </div>
         </div>
-        <div
-          v-if="description || $slots.description"
-          :id="descriptionId"
-          :class="n('description')"
-        >
+        <div v-if="description || $slots.description" :id="descriptionId" :class="n('description')">
           <slot name="description">{{ description }}</slot>
         </div>
       </div>
@@ -55,7 +45,6 @@ defineSlots<SectionSlots>()
 const props = defineProps(sectionProps)
 const { n, classes } = createNamespace('section')
 const form = inject(formInjectionKey, undefined)
-const showMarker = computed(() => props.showMarker ?? !!form)
 const inline = computed(() => form?.layout === 'inline')
 const uniqueId = useId()
 const sectionId = computed(() => props.id ?? `c-section-${uniqueId}`)

@@ -11,16 +11,22 @@ export function useInputComposition() {
     committed = undefined
   }
   function end(event: Event) {
-    if (!isComposing.value) return false
+    if (!isComposing.value) {
+      return false
+    }
     revision++
     isComposing.value = false
     committed = (event.target as HTMLInputElement).value
     return true
   }
   function accepts(event: Event) {
-    if (isComposing.value || (event as InputEvent).isComposing) return false
+    if (isComposing.value || (event as InputEvent).isComposing) {
+      return false
+    }
     const value = (event.target as HTMLInputElement).value
-    if (committed !== undefined && value === committed) return false
+    if (committed !== undefined && value === committed) {
+      return false
+    }
     committed = undefined
     revision++
     return true

@@ -1,6 +1,6 @@
 {
   "name": "@cedar-design/use-vue",
-  "version": "1.4.3",
+  "version": "1.4.5",
   "description": "composable utilities of Cedar",
   "keywords": [
     "composable",
@@ -21,9 +21,9 @@
   "type": "module",
   "exports": {
     ".": {
+      "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
-      "require": "./lib/index.cjs",
-      "types": "./lib/index.d.ts"
+      "require": "./lib/index.cjs"
     }
   },
   "main": "lib/index.cjs",

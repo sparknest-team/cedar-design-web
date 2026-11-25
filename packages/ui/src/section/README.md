@@ -50,7 +50,7 @@ heading-line 在标题后绘制装饰线，操作放入 extra 插槽。
 
 ### 行内表单分组
 
-放在 Form 中时，Section 默认采用 heading-line 并显示标题色条。字段跟随 inline 布局横排，空间不足时换行。需要分隔相邻分区时，可在页面中使用 Divider。
+放在 Form 中时，Section 默认采用 heading-line。需要标题色条时显式传 show-marker。字段跟随 inline 布局横排，空间不足时换行。需要分隔相邻分区时，可在页面中使用 Divider。
 
 <demo src="./__demos__/inline-form.vue"></demo>
 
@@ -67,7 +67,7 @@ heading-line 在标题后绘制装饰线，操作放入 extra 插槽。
 | variant | 外观，可选 plain、heading-line、tonal、outline | heading-line |
 | status | 状态决定色条、tonal 浅色背景和 outline 描边的颜色（default / info / success / warning / danger） | — |
 | heading-level | 标题层级，取值 1 至 6 | `4` |
-| show-marker | 显示色条 | 表单内开启 |
+| show-marker | 显示色条 | 默认关闭 |
 | marker-placement | 色条位置（`title` / `section`） | `title` |
 
 ### Section Slots
@@ -84,7 +84,7 @@ heading-line 在标题后绘制装饰线，操作放入 extra 插槽。
 
 | 变量 | 默认值／条件 | 影响的样式 |
 | --- | --- | --- |
-| `--c-section-accent-color` | `var(--c-sys-color-action-primary)` | `background`, `background-color`, `border` |
+| `--c-section-accent-color` | `var(--c-sys-color-action-primary)` | `background`, `border`, `border-inline-start` |
 | `--c-section-after-gap` | `24px` | `margin-block`, `padding-block-start` |
 | `--c-section-before-gap` | `32px` | `padding-block-start` |
 | `--c-section-card-background` | `var(--c-sys-color-surface-default)` | `background-color` |
@@ -96,32 +96,32 @@ heading-line 在标题后绘制装饰线，操作放入 extra 插槽。
 | `--c-section-description-line-height` | `20px` | `line-height` |
 | `--c-section-description-size` | `13px` | `font-size` |
 | `--c-section-divider-color` | `var(--c-sys-color-border-default)` | `border-block-start` |
-| `--c-section-divider-width` | `1px` | `border`, `border-block-start` |
-| `--c-section-header-gap` | `20px` | `margin-block-end` |
+| `--c-section-divider-width` | `1px` | `border`, `border-block-start`, `border-radius` |
+| `--c-section-header-gap` | `20px` | `margin-block-start` |
 | `--c-section-heading-gap` | `16px` | `margin-inline-start` |
 | `--c-section-heading-size-step` | `1px` | `font-size`, `line-height` |
 | `--c-section-marker-gap` | `12px` | `padding-inline-end`, `padding-inline-start`, `row-gap` |
 | `--c-section-marker-height` | `16px` | `height` |
 | `--c-section-marker-radius` | `2px` | `border-radius` |
-| `--c-section-marker-width` | `3px` | `padding-inline-start`, `width` |
+| `--c-section-marker-width` | `3px` | `border-inline-start`, `padding-inline-start`, `width` |
 | `--c-section-outline-color` | `var(--c-sys-color-border-default)` | `border` |
 | `--c-section-size-lg-card-padding` | `20px` | `padding` |
-| `--c-section-size-lg-header-gap` | `24px` | `margin-block-end` |
+| `--c-section-size-lg-header-gap` | `24px` | `margin-block-start` |
 | `--c-section-size-lg-marker-height` | `20px` | `height` |
 | `--c-section-size-lg-title-line-height` | `28px` | `line-height` |
 | `--c-section-size-lg-title-size` | `20px` | `font-size` |
 | `--c-section-size-sm-card-padding` | `12px` | `padding` |
-| `--c-section-size-sm-header-gap` | `12px` | `margin-block-end` |
+| `--c-section-size-sm-header-gap` | `12px` | `margin-block-start` |
 | `--c-section-size-sm-marker-height` | `14px` | `height` |
 | `--c-section-size-sm-title-line-height` | `20px` | `line-height` |
 | `--c-section-size-sm-title-size` | `14px` | `font-size` |
 | `--c-section-size-xl-card-padding` | `24px` | `padding` |
-| `--c-section-size-xl-header-gap` | `28px` | `margin-block-end` |
+| `--c-section-size-xl-header-gap` | `28px` | `margin-block-start` |
 | `--c-section-size-xl-marker-height` | `24px` | `height` |
 | `--c-section-size-xl-title-line-height` | `32px` | `line-height` |
 | `--c-section-size-xl-title-size` | `24px` | `font-size` |
 | `--c-section-size-xs-card-padding` | `8px` | `padding` |
-| `--c-section-size-xs-header-gap` | `8px` | `margin-block-end` |
+| `--c-section-size-xs-header-gap` | `8px` | `margin-block-start` |
 | `--c-section-size-xs-marker-height` | `12px` | `height` |
 | `--c-section-size-xs-title-line-height` | `18px` | `line-height` |
 | `--c-section-size-xs-title-size` | `14px` | `font-size` |

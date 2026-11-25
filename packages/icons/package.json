@@ -1,20 +1,17 @@
 {
   "name": "@cedar-design/icons-vue",
-  "version": "1.4.3",
+  "version": "1.4.5",
+  "description": "SVG icon components for Cedar",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sparknest-team/cedar-design-web.git",
     "directory": "packages/icons"
   },
-  "description": "SVG icon components for Cedar",
   "license": "MIT",
-  "type": "module",
-  "main": "./lib/index.cjs",
-  "module": "./es/index.mjs",
-  "types": "./types/index.d.ts",
   "sideEffects": [
     "./style.css"
   ],
+  "type": "module",
   "exports": {
     ".": {
       "import": {
@@ -38,6 +35,9 @@
     },
     "./style.css": "./style.css"
   },
+  "main": "./lib/index.cjs",
+  "module": "./es/index.mjs",
+  "types": "./types/index.d.ts",
   "files": [
     "es",
     "lib",
@@ -45,13 +45,10 @@
     "style.css"
   ],
   "scripts": {
+    "build": "pnpm generate:check && node scripts/build.mjs",
     "generate": "node scripts/generate.mjs",
     "generate:check": "node scripts/generate.mjs --check",
-    "build": "pnpm generate:check && node scripts/build.mjs",
     "typecheck": "vue-tsc --noEmit -p tsconfig.contract.json"
-  },
-  "peerDependencies": {
-    "vue": "^3.2.47"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "6.0.11",
@@ -60,6 +57,9 @@
     "vite": "8.3.8",
     "vue": "catalog:",
     "vue-tsc": "^2.0.29"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.47"
   },
   "publishConfig": {
     "access": "public",
