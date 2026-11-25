@@ -1,26 +1,26 @@
 {
   "name": "@cedar-design/preset-tailwindcss-vue",
   "version": "1.4.5",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sparknest-team/cedar-design-web.git",
-    "directory": "packages/preset-tailwindcss"
-  },
   "description": "Tailwind CSS preset for Cedar Design",
   "keywords": [
     "tailwindcss",
     "preset",
     "cedar"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sparknest-team/cedar-design-web.git",
+    "directory": "packages/preset-tailwindcss"
+  },
   "license": "MIT",
   "author": "shuai.meng",
   "sideEffects": false,
   "type": "module",
   "exports": {
     ".": {
+      "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
-      "require": "./lib/index.cjs",
-      "types": "./lib/index.d.ts"
+      "require": "./lib/index.cjs"
     },
     "./*": "./*"
   },
@@ -36,9 +36,9 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "tailwindcss": "^3.4.1",
     "tsup": "catalog:",
-    "typescript": "catalog:",
-    "tailwindcss": "^3.4.1"
+    "typescript": "catalog:"
   },
   "peerDependencies": {
     "tailwindcss": "^3.4.1"

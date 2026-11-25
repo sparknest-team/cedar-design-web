@@ -1,26 +1,26 @@
 {
   "name": "@cedar-design/preset-unocss-vue",
   "version": "1.4.5",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sparknest-team/cedar-design-web.git",
-    "directory": "packages/preset-unocss"
-  },
   "description": "UnoCSS preset for Cedar Design",
   "keywords": [
     "unocss",
     "preset",
     "cedar"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sparknest-team/cedar-design-web.git",
+    "directory": "packages/preset-unocss"
+  },
   "license": "MIT",
   "author": "shuai.meng",
   "sideEffects": false,
   "type": "module",
   "exports": {
     ".": {
+      "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
-      "require": "./lib/index.cjs",
-      "types": "./lib/index.d.ts"
+      "require": "./lib/index.cjs"
     },
     "./*": "./*"
   },

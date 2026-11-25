@@ -1,5 +1,4 @@
 import type { PropType, VNodeChild } from 'vue'
-
 import { componentSizes, type ComponentSize, type SemanticStatus } from '../_utils/constant'
 import type { CompatiblePublicProps } from '../_utils/public-props'
 
@@ -13,10 +12,10 @@ export const sectionProps = {
   /** 分区 ID，未设置时自动生成。 */
   id: String,
   /** 分区标题，也可通过 title 插槽提供。 */
-  title: { type: String, default: "" },
+  title: { type: String, default: '' },
   /** 标题下方的补充说明。 */
-  description: { type: String, default: "" },
-  /** 分区尺寸，控制标题字号、标题色条和间距。 */
+  description: { type: String, default: '' },
+  /** 分区尺寸，控制标题行高、色条高度和间距。 */
   size: {
     type: String as PropType<SectionSize>,
     default: 'md',
@@ -39,10 +38,10 @@ export const sectionProps = {
 }
 
 export interface SectionSlots {
-  default?: () => VNodeChild;
-  title?: () => VNodeChild;
-  description?: () => VNodeChild;
-  extra?: () => VNodeChild;
+  default?: () => VNodeChild
+  title?: () => VNodeChild
+  description?: () => VNodeChild
+  extra?: () => VNodeChild
 }
 
 export type SectionProps = CompatiblePublicProps<typeof sectionProps>
