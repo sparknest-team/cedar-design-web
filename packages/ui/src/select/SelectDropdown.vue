@@ -9,7 +9,12 @@
         <component :is="SelectEmpty" />
       </slot>
     </div>
-    <div v-if="virtualList && !loading && !empty" :id="listboxId" :role="listboxId ? 'listbox' : undefined" :aria-multiselectable="listboxId ? multiple : undefined">
+    <div
+      v-if="virtualList && !loading && !empty"
+      :id="listboxId"
+      :role="listboxId ? 'listbox' : undefined"
+      :aria-multiselectable="listboxId ? multiple : undefined"
+    >
       <slot name="virtual-list" />
     </div>
     <component
@@ -19,12 +24,20 @@
       :class="`${prefixCls}-list-wrapper`"
       v-bind="
         displayScrollbar
-          ? { ...scrollbarProps, outerStyle: [scrollbarProps?.outerStyle, !loading && !empty ? undefined : { display: 'none' }] }
+          ? {
+              ...scrollbarProps,
+              outerStyle: [scrollbarProps?.outerStyle, !loading && !empty ? undefined : { display: 'none' }],
+            }
           : { style: !loading && !empty ? undefined : { display: 'none' } }
       "
       @scroll="handleScroll"
     >
-      <ul :id="listboxId" :role="listboxId ? 'listbox' : undefined" :aria-multiselectable="listboxId ? multiple : undefined" :class="`${prefixCls}-list`">
+      <ul
+        :id="listboxId"
+        :role="listboxId ? 'listbox' : undefined"
+        :aria-multiselectable="listboxId ? multiple : undefined"
+        :class="`${prefixCls}-list`"
+      >
         <slot />
       </ul>
     </component>
@@ -44,7 +57,8 @@ import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import type { EmitType } from '../_utils/types'
 import Empty from '../empty/Empty.vue'
 import Loading from '../loading/Loading.vue'
-import Scrollbar, { ScrollbarProps } from '../scrollbar'
+import Scrollbar from '../scrollbar/Scrollbar.vue'
+import type { ScrollbarProps } from '../scrollbar/types'
 
 const { name } = createNamespace('select-dropdown')
 

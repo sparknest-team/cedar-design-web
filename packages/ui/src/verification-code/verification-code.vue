@@ -69,9 +69,10 @@ import {
   type ComponentPublicInstance,
 } from 'vue'
 import { createNamespace } from '../_utils/global-config'
-import Input, { type InputInstance } from '../input'
-import { oneTimeCodeKey } from '../input/context'
 import { provideFormErrorDescriptionBoundary, useFormErrorDescription } from '../form/error-description'
+import type { InputInstance } from '../input'
+import Input from '../input/base'
+import { oneTimeCodeKey } from '../input/context'
 import { useVerificationForm } from './form-adapter'
 import { verificationCodeProps } from './props'
 import type { VerificationCodeEmits, VerificationCodeSlots } from './types'

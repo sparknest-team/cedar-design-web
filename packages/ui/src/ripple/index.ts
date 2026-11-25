@@ -1,7 +1,7 @@
 import { type App, type Directive, type DirectiveBinding, type Plugin } from 'vue'
 import { getRect, getStyle, supportTouch } from '@cedar-design/shared-vue'
-import context from '../context'
 import { createNamespace } from '../_utils/global-config'
+import context from '../context'
 import type { RippleDirectiveValue } from './props'
 
 export type { RippleDirectiveValue } from './props'
@@ -121,7 +121,11 @@ function setStyles(element: RippleHTMLElement) {
   const { zIndex, position } = getStyle(element)
   const styles = new Map<string, { value: string; priority: string; applied: string }>()
   const set = (property: string, applied: string) => {
-    styles.set(property, { value: element.style.getPropertyValue(property), priority: element.style.getPropertyPriority(property), applied })
+    styles.set(property, {
+      value: element.style.getPropertyValue(property),
+      priority: element.style.getPropertyPriority(property),
+      applied,
+    })
     element.style.setProperty(property, applied)
   }
   element._ripple!.styles = styles
@@ -143,8 +147,12 @@ function computeRippleStyles(element: RippleHTMLElement, event: TouchEvent | Key
   const size: number = radius * 2
 
   const point = isTouchEvent(event) ? event.touches[0] : 'clientX' in event ? event : undefined
-  const localX = point ? (point.clientX - left) * (width ? (element.offsetWidth || width) / width : 1) - element.clientLeft : clientWidth / 2
-  const localY = point ? (point.clientY - top) * (height ? (element.offsetHeight || height) / height : 1) - element.clientTop : clientHeight / 2
+  const localX = point
+    ? (point.clientX - left) * (width ? (element.offsetWidth || width) / width : 1) - element.clientLeft
+    : clientWidth / 2
+  const localY = point
+    ? (point.clientY - top) * (height ? (element.offsetHeight || height) / height : 1) - element.clientTop
+    : clientHeight / 2
 
   const centerX: number = (clientWidth - radius * 2) / 2
   const centerY: number = (clientHeight - radius * 2) / 2
@@ -171,16 +179,22 @@ function createRipple(this: RippleHTMLElement, event: TouchEvent | KeyboardEvent
   const task = () => {
     const current = () => this._ripple === _ripple && !_ripple.disabled && context.enableRipple
     if (!current()) {
-      if (this._ripple === _ripple) { _ripple.tasker = null; stopObserverIfIdle(this, _ripple) }
+      if (this._ripple === _ripple) {
+        _ripple.tasker = null
+        stopObserverIfIdle(this, _ripple)
+      }
       return
     }
     _ripple.tasker = null
 
-    const { x, y, centerX, centerY, size }: RippleStyles = computeRippleStyles(this, event)
-    if (!current()) {
+    // Layout reads can synchronously disable or replace this directive.
+    const stillActive = () => {
+      if (current()) return true
       if (this._ripple === _ripple) clearTasks(this)
-      return
+      return false
     }
+    const { x, y, centerX, centerY, size }: RippleStyles = computeRippleStyles(this, event)
+    if (!stillActive()) return
     const ripple: RippleHTMLElement = this.ownerDocument.createElement('div')
     ripple.classList.add(n())
     ripple.style.opacity = `0`
@@ -191,34 +205,22 @@ function createRipple(this: RippleHTMLElement, event: TouchEvent | KeyboardEvent
     ripple.dataset.createdAt = String(performance.now())
 
     setStyles(this)
-    if (!current()) {
-      if (this._ripple === _ripple) clearTasks(this)
-      return
-    }
+    if (!stillActive()) return
 
     this.appendChild(ripple)
     const wave = { expandUntil: performance.now() + 20, released: false }
     waves.set(ripple, wave)
+    const ownsWave = () => stillActive() && waves.get(ripple) === wave
     const expansion = transitionTime(ripple, 'transform')
-    if (!current() || waves.get(ripple) !== wave) {
-      if (!current() && this._ripple === _ripple) clearTasks(this)
-      return
-    }
+    if (!ownsWave()) return
     wave.expandUntil += expansion
 
     schedule(
       this,
       () => {
-        const wave = waves.get(ripple)
-        if (!wave || !current()) {
-          if (!current() && this._ripple === _ripple) clearTasks(this)
-          return
-        }
+        if (!ownsWave()) return
         const expansion = transitionTime(ripple, 'transform')
-        if (!current() || waves.get(ripple) !== wave) {
-          if (!current() && this._ripple === _ripple) clearTasks(this)
-          return
-        }
+        if (!ownsWave()) return
         wave.expandUntil = performance.now() + expansion
         ripple.style.transform = `translate(${centerX}px, ${centerY}px) scale3d(1, 1, 1)`
         ripple.style.opacity = `.25`
@@ -303,8 +305,13 @@ function createTouchRipple(this: RippleHTMLElement, event: TouchEvent) {
 }
 
 function createMouseRipple(this: RippleHTMLElement, event: MouseEvent) {
-  const capabilities = (event as MouseEvent & { sourceCapabilities?: { firesTouchEvents?: boolean } }).sourceCapabilities
-  if (event.button !== 0 || capabilities?.firesTouchEvents || Date.now() - (this._ripple?.lastTouchAt ?? -Infinity) < 800) {
+  const capabilities = (event as MouseEvent & { sourceCapabilities?: { firesTouchEvents?: boolean } })
+    .sourceCapabilities
+  if (
+    event.button !== 0 ||
+    capabilities?.firesTouchEvents ||
+    Date.now() - (this._ripple?.lastTouchAt ?? -Infinity) < 800
+  ) {
     return
   }
   createRipple.call(this, event)
@@ -347,20 +354,38 @@ function releaseOnMovedHost(this: RippleHTMLElement) {
   if (this._ripple && this._ripple.document !== this.ownerDocument) syncOwnerDocument(this)
 }
 
+function setHostListeners(element: RippleHTMLElement, enabled: boolean) {
+  function listen<K extends keyof HTMLElementEventMap>(
+    event: K,
+    handler: (this: RippleHTMLElement, event: HTMLElementEventMap[K]) => void,
+    options?: AddEventListenerOptions,
+  ) {
+    if (enabled) {
+      element.addEventListener(event, handler, options)
+    } else {
+      element.removeEventListener(event, handler)
+    }
+  }
+  listen('touchstart', createTouchRipple, { passive: true })
+  listen('mousedown', createMouseRipple, { passive: true })
+  listen('touchmove', forbidRippleTask, { passive: true })
+  listen('mouseup', releaseOnMovedHost)
+  listen('touchend', releaseOnMovedHost)
+  listen('touchcancel', releaseOnMovedHost)
+  listen('dragstart', removeRipple, { passive: true })
+  listen('keydown', createKeyboardRipple)
+  listen('keyup', removeKeyboardRipple)
+  listen('blur', removeKeyboardRipple)
+}
+
 function bindListeners(el: RippleHTMLElement) {
   const state = el._ripple
-  if (!state || state.listening || state.disabled) return
+  if (!state || state.listening || state.disabled) {
+    return
+  }
   state.listening = true
-  el.addEventListener('touchstart', createTouchRipple, { passive: true })
-  el.addEventListener('mousedown', createMouseRipple, { passive: true })
-  el.addEventListener('touchmove', forbidRippleTask, { passive: true })
-  el.addEventListener('mouseup', releaseOnMovedHost)
-  el.addEventListener('touchend', releaseOnMovedHost)
-  el.addEventListener('touchcancel', releaseOnMovedHost)
-  el.addEventListener('dragstart', removeRipple, { passive: true })
-  el.addEventListener('keydown', createKeyboardRipple)
-  el.addEventListener('keyup', removeKeyboardRipple)
-  el.addEventListener('blur', removeKeyboardRipple)
+  setHostListeners(el, true)
+
   let group = releaseGroups.get(state.document)
   if (!group) {
     const hosts = new Set<RippleHTMLElement>()
@@ -381,18 +406,12 @@ function bindListeners(el: RippleHTMLElement) {
 
 function unbindListeners(el: RippleHTMLElement) {
   const state = el._ripple
-  if (!state?.listening) return
+  if (!state?.listening) {
+    return
+  }
   state.listening = false
-  el.removeEventListener('keydown', createKeyboardRipple)
-  el.removeEventListener('keyup', removeKeyboardRipple)
-  el.removeEventListener('blur', removeKeyboardRipple)
-  el.removeEventListener('touchstart', createTouchRipple)
-  el.removeEventListener('mousedown', createMouseRipple)
-  el.removeEventListener('touchmove', forbidRippleTask)
-  el.removeEventListener('mouseup', releaseOnMovedHost)
-  el.removeEventListener('touchend', releaseOnMovedHost)
-  el.removeEventListener('touchcancel', releaseOnMovedHost)
-  el.removeEventListener('dragstart', removeRipple)
+  setHostListeners(el, false)
+
   const group = releaseGroups.get(state.document)
   if (group && group.hosts.delete(el) && !group.hosts.size) {
     for (const event of releaseEvents) {

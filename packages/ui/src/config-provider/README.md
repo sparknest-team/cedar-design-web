@@ -72,6 +72,8 @@ import type { ConfigProviderProps, ConfigProviderInstance, ConfigProviderSlots }
 使用 `<c-config-provider dir="rtl">` 设置局部 RTL；省略 dir 时继承父级，可嵌套 `dir="ltr"` 切回 LTR。普通原生 DOM dir 容器同样有效。Provider 使用 display: contents 的 div 承载方向，不增加布局盒子；请放在允许 div 的 HTML 上下文中。它不会修改整个 document。发布前将原 rtl 布尔配置统一收敛为 dir；明确表示物理左右的方位 API 保持原意。
 ## CSS Variables
 
+原生 `dir="auto"` 或 `<bdi>` 容器中的控件会跟随浏览器计算的文本方向。输入框作为弹层参考元素时，键入文字会更新弹层方向。脚本直接修改 `input.value` 或 `textarea.value` 时，共享定时器会在后续检查中同步方向。封闭 ShadowRoot 的内部插槽设置了方向时，请在传入插槽的元素上同步设置原生 `dir`。
+
 <!-- component-css-variables:start -->
 
 本组件未声明独立的公共 CSS 变量。请使用本页公开的配置与布局入口。

@@ -1,16 +1,16 @@
 import { computed, createSSRApp, defineComponent, h, nextTick, ref } from 'vue'
+import { provideDirection, useDirection } from '@cedar-design/use-vue'
 import { renderToString } from '@vue/server-renderer'
 import { mount } from '@vue/test-utils'
 import { afterEach, expect, test, vi } from 'vitest'
-import { provideDirection, useDirection } from '@cedar-design/use-vue'
-import { physicalScrollLeft, nativeScrollLeft } from '../direction'
-import Slider from '../../slider'
-import Rate from '../../rate'
 import Carousel, { CarouselItem } from '../../carousel'
-import Trigger from '../../trigger'
-import NativeDialog from '../../dialog/Dialog.vue'
 import ScopeProvider from '../../config-provider'
+import NativeDialog from '../../dialog/Dialog.vue'
+import Rate from '../../rate'
+import Slider from '../../slider'
+import Trigger from '../../trigger'
 import { getPlacementOffset, getTransformOrigin } from '../../trigger/geometry'
+import { nativeScrollLeft, physicalScrollLeft } from '../direction'
 
 const wrappers = []
 const hosts = []
@@ -26,19 +26,26 @@ function setup(component, options = {}) {
   wrappers.push(wrapper)
   return wrapper
 }
-async function settled() { await nextTick(); await Promise.resolve(); await nextTick(); await nextTick() }
+async function settled() {
+  await nextTick()
+  await Promise.resolve()
+  await nextTick()
+  await nextTick()
+}
 afterEach(() => {
-  wrappers.splice(0).forEach(wrapper => wrapper.unmount())
-  hosts.splice(0).forEach(el => el.remove())
+  wrappers.splice(0).forEach((wrapper) => wrapper.unmount())
+  hosts.splice(0).forEach((el) => el.remove())
   vi.restoreAllMocks()
 })
 
 test('native nested scopes update dynamically and stop affecting an unmounted consumer', async () => {
-  const Probe = defineComponent({ setup() {
-    const el = ref()
-    const { dir } = useDirection(() => el.value)
-    return () => h('span', { ref: el, 'data-direction': dir.value })
-  } })
+  const Probe = defineComponent({
+    setup() {
+      const el = ref()
+      const { dir } = useDirection(() => el.value)
+      return () => h('span', { ref: el, 'data-direction': dir.value })
+    },
+  })
   const disconnect = vi.spyOn(window.MutationObserver.prototype, 'disconnect')
   const wrapper = setup(Probe)
   await settled()
@@ -55,15 +62,78 @@ test('native nested scopes update dynamically and stop affecting an unmounted co
   disconnect.mockRestore()
 })
 
+test('observes native ancestors only while direction is inherited', async () => {
+  const explicit = ref('ltr')
+  const Probe = defineComponent({
+    setup() {
+      const el = ref()
+      const { dir } = useDirection(
+        () => el.value,
+        () => explicit.value,
+      )
+      return () => h('span', { ref: el, 'data-direction': dir.value })
+    },
+  })
+  const observe = vi.spyOn(window.MutationObserver.prototype, 'observe')
+  const disconnect = vi.spyOn(window.MutationObserver.prototype, 'disconnect')
+  const wrapper = setup(Probe)
+  const rootObservers = () =>
+    observe.mock.contexts.filter((_, i) => observe.mock.calls[i][0] === document.documentElement)
+  await settled()
+  expect(wrapper.attributes('data-direction')).toBe('ltr')
+  expect(rootObservers()).toHaveLength(0)
+  explicit.value = undefined
+  await settled()
+  expect(wrapper.attributes('data-direction')).toBe('rtl')
+  expect(rootObservers()).toHaveLength(1)
+  const [observer] = rootObservers()
+  explicit.value = 'rtl'
+  await settled()
+  expect(disconnect.mock.contexts).toContain(observer)
+  wrapper.element.parentElement.dir = 'ltr'
+  await settled()
+  expect(wrapper.attributes('data-direction')).toBe('rtl')
+  explicit.value = undefined
+  await settled()
+  expect(wrapper.attributes('data-direction')).toBe('ltr')
+})
+
+test('reads the latest target immediately when an explicit direction is removed', async () => {
+  const target = ref(host('ltr'))
+  const explicit = ref('ltr')
+  let read
+  setup(
+    defineComponent({
+      setup() {
+        const { dir } = useDirection(
+          () => target.value,
+          () => explicit.value,
+        )
+        read = () => dir.value
+        return () => h('span')
+      },
+    }),
+  )
+  await settled()
+  target.value = host('rtl')
+  await settled()
+  explicit.value = undefined
+  expect(read()).toBe('rtl')
+})
+
 test('injected direction is available during SSR without consulting the browser', async () => {
-  const Probe = defineComponent({ setup() {
-    const { dir } = useDirection()
-    return () => h('span', dir.value)
-  } })
-  const Scope = defineComponent({ setup() {
-    provideDirection(computed(() => 'rtl'))
-    return () => h(Probe)
-  } })
+  const Probe = defineComponent({
+    setup() {
+      const { dir } = useDirection()
+      return () => h('span', dir.value)
+    },
+  })
+  const Scope = defineComponent({
+    setup() {
+      provideDirection(computed(() => 'rtl'))
+      return () => h(Probe)
+    },
+  })
   expect(await renderToString(createSSRApp(Scope))).toBe('<span>rtl</span>')
 })
 
@@ -95,9 +165,12 @@ test('rate uses the right half for a half-value in RTL and mirrors horizontal ke
 })
 
 test('carousel next follows ArrowLeft in RTL and respects a local LTR override', async () => {
-  const wrapper = setup(Carousel, { props: { keyboard: true }, slots: {
-    default: () => [h(CarouselItem, { key: 'a' }, () => 'a'), h(CarouselItem, { key: 'b' }, () => 'b')],
-  } })
+  const wrapper = setup(Carousel, {
+    props: { keyboard: true },
+    slots: {
+      default: () => [h(CarouselItem, { key: 'a' }, () => 'a'), h(CarouselItem, { key: 'b' }, () => 'b')],
+    },
+  })
   await settled()
   await wrapper.trigger('keydown', { key: 'ArrowLeft' })
   expect(wrapper.emitted('update:modelValue').at(-1)).toEqual([2])
@@ -117,9 +190,13 @@ test('logical popup alignments reverse while physical sides and vertical alignme
 })
 
 test('teleported popup receives its reference scope and updates when that scope changes', async () => {
-  const wrapper = setup(Trigger, { props: { open: true, autoFitPosition: false, placement: 'bottom-start' }, slots: {
-    default: () => h('button', 'open'), content: () => 'popup',
-  } })
+  const wrapper = setup(Trigger, {
+    props: { open: true, autoFitPosition: false, placement: 'bottom-start' },
+    slots: {
+      default: () => h('button', 'open'),
+      content: () => 'popup',
+    },
+  })
   await settled()
   const popup = document.querySelector('[trigger-placement]')
   expect(popup.getAttribute('dir')).toBe('rtl')
@@ -127,7 +204,6 @@ test('teleported popup receives its reference scope and updates when that scope 
   await settled()
   expect(popup.getAttribute('dir')).toBe('ltr')
 })
-
 
 test('native negative RTL scrolling maps to physical thumb positions and clamps overscroll', () => {
   const el = host()
@@ -145,7 +221,6 @@ test('native negative RTL scrolling maps to physical thumb positions and clamps 
   expect(nativeScrollLeft(el, 100)).toBe(100)
 })
 
-
 test('modal portals retain a native local scope instead of inheriting the body direction', async () => {
   const wrapper = setup(NativeDialog, { props: { open: true } })
   await settled()
@@ -158,11 +233,13 @@ test('modal portals retain a native local scope instead of inheriting the body d
   wrappers.pop()
 })
 
-
 test('an unspecified nested provider preserves a closer native direction override', async () => {
-  const wrapper = setup({ render: () => h(ScopeProvider, { dir: 'rtl' }, () =>
-    h('div', { dir: 'ltr' }, [h(ScopeProvider, {}, () => h(Slider, { editMode: 'direct', defaultValue: 20 }))]),
-  ) })
+  const wrapper = setup({
+    render: () =>
+      h(ScopeProvider, { dir: 'rtl' }, () =>
+        h('div', { dir: 'ltr' }, [h(ScopeProvider, {}, () => h(Slider, { editMode: 'direct', defaultValue: 20 }))]),
+      ),
+  })
   await settled()
   expect(wrapper.get('[role="slider"]').element.style.left).toBe('20%')
 })

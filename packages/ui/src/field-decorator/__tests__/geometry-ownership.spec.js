@@ -3,16 +3,33 @@ import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, expect, test, vi } from 'vitest'
 import Field from '../FieldDecorator.vue'
 import { useFieldGeometry } from '../use-field-geometry'
-const previous = { ResizeObserver: globalThis.ResizeObserver, requestAnimationFrame: globalThis.requestAnimationFrame, cancelAnimationFrame: globalThis.cancelAnimationFrame }
+
+const previous = {
+  ResizeObserver: globalThis.ResizeObserver,
+  requestAnimationFrame: globalThis.requestAnimationFrame,
+  cancelAnimationFrame: globalThis.cancelAnimationFrame,
+}
 let frames, observers, owners
 class Observer {
   targets = new Set()
-  constructor(callback) { this.callback = callback; observers.push(this) }
-  observe(target) { this.targets.add(target) }
-  disconnect() { this.targets.clear() }
-  notify(target) { if (this.targets.has(target)) this.callback([]) }
+  constructor(callback) {
+    this.callback = callback
+    observers.push(this)
+  }
+  observe(target) {
+    this.targets.add(target)
+  }
+  disconnect() {
+    this.targets.clear()
+  }
+  notify(target) {
+    if (this.targets.has(target)) this.callback([])
+  }
 }
-const tick = async () => { frames.splice(0).forEach(fn => fn()); await nextTick() }
+const tick = async () => {
+  frames.splice(0).forEach((fn) => fn())
+  await nextTick()
+}
 function dimensions(root, value) {
   const middle = root.querySelector('.c-field-decorator__middle')
   Object.defineProperty(root, 'clientWidth', { configurable: true, value: 500 })
@@ -20,44 +37,74 @@ function dimensions(root, value) {
   Object.defineProperty(middle, 'offsetWidth', { configurable: true, get: value })
 }
 beforeEach(() => {
-  frames = []; observers = []; owners = []
+  frames = []
+  observers = []
+  owners = []
   vi.stubGlobal('ResizeObserver', Observer)
-  vi.stubGlobal('requestAnimationFrame', vi.fn().mockImplementation(fn => frames.push(fn)))
-  vi.stubGlobal('cancelAnimationFrame', vi.fn().mockImplementation(() => {}))
+  vi.stubGlobal(
+    'requestAnimationFrame',
+    vi.fn().mockImplementation((fn) => frames.push(fn)),
+  )
+  vi.stubGlobal(
+    'cancelAnimationFrame',
+    vi.fn().mockImplementation(() => {}),
+  )
 })
-afterEach(() => { owners.forEach(owner => owner.unmount()); vi.restoreAllMocks(); Object.entries(previous).forEach(([key, value]) => vi.stubGlobal(key, value)) })
+afterEach(() => {
+  owners.forEach((owner) => owner.unmount())
+  vi.restoreAllMocks()
+  Object.entries(previous).forEach(([key, value]) => vi.stubGlobal(key, value))
+})
 test('a replacement tag is observed for later resizes rather than only measured once', async () => {
-  const owner = mount(Field, { props: { tag: 'div', placeholder: 'Account' }, slots: { default: () => h('input') } }); owners.push(owner)
+  const owner = mount(Field, { props: { tag: 'div', placeholder: 'Account' }, slots: { default: () => h('input') } })
+  owners.push(owner)
   let width = 200
   dimensions(owner.element, () => width)
-  window.dispatchEvent(new Event('resize')); await tick(); await tick()
+  window.dispatchEvent(new Event('resize'))
+  await tick()
+  await tick()
   await owner.setProps({ tag: 'span' })
   dimensions(owner.element, () => width)
-  await tick(); await tick()
+  await tick()
+  await tick()
   expect(owner.element.style.getPropertyValue('--c-internal-field-content-width')).toBe('200px')
   width = 350
-  observers.forEach(observer => observer.notify(owner.element))
-  await tick(); await tick()
+  observers.forEach((observer) => observer.notify(owner.element))
+  await tick()
+  await tick()
   expect(owner.element.style.getPropertyValue('--c-internal-field-content-width')).toBe('350px')
 })
 test('a delivered old frame cannot mutate geometry after a KeepAlive cycle', async () => {
-  const show = ref(true), inner = ref()
-  const owner = mount({ setup: () => () => h(KeepAlive, null, { default: () => show.value ? h(Field, { ref: inner }, { default: () => h('input') }) : null }) }); owners.push(owner)
+  const show = ref(true),
+    inner = ref()
+  const owner = mount({
+    setup: () => () =>
+      h(KeepAlive, null, {
+        default: () => (show.value ? h(Field, { ref: inner }, { default: () => h('input') }) : null),
+      }),
+  })
+  owners.push(owner)
   const root = inner.value.$el
   let width = 200
   dimensions(root, () => width)
-  window.dispatchEvent(new Event('resize')); await tick(); await tick()
-  observers.forEach(observer => observer.notify(root))
+  window.dispatchEvent(new Event('resize'))
+  await tick()
+  await tick()
+  observers.forEach((observer) => observer.notify(root))
   const old = frames.splice(0)[0]
-  show.value = false; await nextTick(); show.value = true; await nextTick()
+  show.value = false
+  await nextTick()
+  show.value = true
+  await nextTick()
   width = 350
-  old(); await nextTick()
+  old()
+  await nextTick()
   expect(root.style.getPropertyValue('--c-internal-field-content-width')).toBe('200px')
-  observers.forEach(observer => observer.notify(root))
-  await tick(); await tick()
+  observers.forEach((observer) => observer.notify(root))
+  await tick()
+  await tick()
   expect(root.style.getPropertyValue('--c-internal-field-content-width')).toBe('350px')
 })
-
 
 test('unmount during measurement cannot publish a stale width', async () => {
   const root = document.createElement('div')
@@ -68,11 +115,22 @@ test('unmount during measurement cannot publish a stale width', async () => {
   Object.defineProperty(middle, 'offsetWidth', { configurable: true, value: 200 })
   const add = vi.spyOn(window, 'addEventListener')
   let geometry
-  const owner = mount({ setup() { geometry = useFieldGeometry(ref(root), ref(middle)); return () => h('div') } })
+  const owner = mount({
+    setup() {
+      geometry = useFieldGeometry(ref(root), ref(middle))
+      return () => h('div')
+    },
+  })
   owners.push(owner)
   const resize = add.mock.calls.find(([type]) => type === 'resize')[1]
   expect(geometry.value['--c-internal-field-content-width']).toBe('200px')
-  Object.defineProperty(middle, 'offsetWidth', { configurable: true, get() { owner.unmount(); return 350 } })
+  Object.defineProperty(middle, 'offsetWidth', {
+    configurable: true,
+    get() {
+      owner.unmount()
+      return 350
+    },
+  })
   frames.length = 0
   resize(new Event('resize'))
   frames.shift()()
@@ -84,7 +142,12 @@ test('a consumed frame cannot release a newer scheduled measurement', () => {
   const middle = document.createElement('div')
   Object.defineProperty(root, 'clientWidth', { value: 500 })
   const add = vi.spyOn(window, 'addEventListener')
-  const owner = mount({ setup() { useFieldGeometry(ref(root), ref(middle)); return () => h('div') } })
+  const owner = mount({
+    setup() {
+      useFieldGeometry(ref(root), ref(middle))
+      return () => h('div')
+    },
+  })
   owners.push(owner)
   const resize = add.mock.calls.find(([type]) => type === 'resize')[1]
   frames.length = 0
@@ -96,4 +159,38 @@ test('a consumed frame cannot release a newer scheduled measurement', () => {
   old()
   resize(new Event('resize'))
   expect(frames).toHaveLength(2)
+})
+
+test('geometry uses the iframe owning the field for resize, frames and cleanup', () => {
+  const frame = document.body.appendChild(document.createElement('iframe'))
+  const view = frame.contentWindow
+  const root = view.document.createElement('div')
+  const middle = root.appendChild(view.document.createElement('span'))
+  const callbacks = []
+  const cancel = vi.fn()
+  view.requestAnimationFrame = (callback) => callbacks.push(callback)
+  view.cancelAnimationFrame = cancel
+  view.ResizeObserver = Observer
+  let width = 120
+  Object.defineProperty(root, 'clientWidth', { value: 400 })
+  Object.defineProperty(middle, 'offsetWidth', { get: () => width })
+  let geometry
+  const wrapper = mount({
+    setup() {
+      geometry = useFieldGeometry(ref(root), ref(middle))
+      return () => h('div')
+    },
+  })
+  try {
+    width = 220
+    view.dispatchEvent(new view.Event('resize'))
+    expect(callbacks).toHaveLength(1)
+    callbacks[0](0)
+    expect(geometry.value['--c-internal-field-content-width']).toBe('220px')
+    view.dispatchEvent(new view.Event('resize'))
+  } finally {
+    wrapper.unmount()
+    frame.remove()
+  }
+  expect(cancel).toHaveBeenCalledWith(2)
 })

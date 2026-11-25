@@ -29,15 +29,15 @@ Use [ThemeProvider](/en/components/theme-provider/) for themes. ConfigProvider h
 
 ### ConfigProvider Props
 
-| Prop | Description | Type | Default |
-| ---- | ---- | ---- | ---- |
-| prefix-cls | Inherit the parent when omitted, with c at the root; custom prefixes require matching built styles | `string` | — |
-| locale | Complete language pack; inherit the parent when omitted, or the global locale when the entire chain is unspecified | `CedarLang` | — |
-| size | Default descendant size; inherit the parent when omitted, with component size taking precedence | `ComponentSize` (`xs` / `sm` / `md` / `lg` / `xl`) | — |
-| global | Choose application-level injection during setup; static and intended for an application-lifetime root configuration | `boolean` | `false` |
-| update-at-scroll | Inherit the parent when omitted, with false at the root; only supported popup consumers use this preference | `boolean` | — |
-| scroll-to-close | Inherit the parent when omitted, with false at the root; does not actively close all popups | `boolean` | — |
-| dir | Reading direction; inherits the source scope when omitted. Physical left/right placements keep their meaning. | `ReadingDirection` (`ltr` / `rtl`) | — |
+| Prop             | Description                                                                                                         | Type                                               | Default |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------- |
+| prefix-cls       | Inherit the parent when omitted, with c at the root; custom prefixes require matching built styles                  | `string`                                           | —       |
+| locale           | Complete language pack; inherit the parent when omitted, or the global locale when the entire chain is unspecified  | `CedarLang`                                        | —       |
+| size             | Default descendant size; inherit the parent when omitted, with component size taking precedence                     | `ComponentSize` (`xs` / `sm` / `md` / `lg` / `xl`) | —       |
+| global           | Choose application-level injection during setup; static and intended for an application-lifetime root configuration | `boolean`                                          | `false` |
+| update-at-scroll | Inherit the parent when omitted, with false at the root; only supported popup consumers use this preference         | `boolean`                                          | —       |
+| scroll-to-close  | Inherit the parent when omitted, with false at the root; does not actively close all popups                         | `boolean`                                          | —       |
+| dir              | Reading direction; inherits the source scope when omitted. Physical left/right placements keep their meaning.       | `ReadingDirection` (`ltr` / `rtl`)                 | —       |
 
 ### ConfigProvider Events
 
@@ -45,11 +45,11 @@ No declared events or public business instance methods. Native listeners fall th
 
 ### ConfigProvider Slots
 
-| Slot | Description | Prop |
-| ------- | ---- | ---- |
-| default | Subtree content | — |
-| empty | Empty content for descendants supporting this configuration | `{ component: string }` |
-| loading | Shared indicator consumed by Loading; a local icon takes precedence | — |
+| Slot    | Description                                                         | Prop                    |
+| ------- | ------------------------------------------------------------------- | ----------------------- |
+| default | Subtree content                                                     | —                       |
+| empty   | Empty content for descendants supporting this configuration         | `{ component: string }` |
+| loading | Shared indicator consumed by Loading; a local icon takes precedence | —                       |
 
 Nested providers inherit omitted prefix-cls, locale, size, update-at-scroll and scroll-to-close from the nearest parent; explicit false overrides remain effective. dir inherits through the reading-direction scope. locale remains a complete pack rather than a deep merge of partial packs. Size, language and scroll preferences update reactively. Keep prefix-cls fixed at initialization; changing a prefix requires matching styles and remounting the subtree.
 
@@ -62,16 +62,18 @@ global chooses injection scope only during setup and cannot switch dynamically; 
 The component exports the following types
 
 ```ts
-import type { ConfigProviderProps, ConfigProviderInstance, ConfigProviderSlots } from '@cedar-design/ui-vue'
+import type { ConfigProviderInstance, ConfigProviderProps, ConfigProviderSlots } from '@cedar-design/ui-vue'
 ```
 
 Component subpath entries also export these types and configProviderProps. The internal injection context is not a public configuration method.
 
-
 ## Reading direction
 
 Use `<c-config-provider dir="rtl">` to scope right-to-left layout. Omit `dir` to inherit, or nest `dir="ltr"` for a local override. Native DOM `dir` containers work too. The provider renders a `display: contents` div to carry direction to ordinary descendants without adding a layout box; place it in an HTML context that permits a div. It does not change the document direction. The former boolean `rtl` option is replaced by `dir` before release. Physical left/right placements retain their meaning.
+
 ## CSS Variables
+
+Inside a native `dir="auto"` or `<bdi>` scope, controls follow the text direction computed by the browser. For an input used as a popup reference, typing updates the popup direction. Direct assignments to `input.value` or `textarea.value` are detected on a shared timer, so the update can occur later. If a closed shadow root sets the direction on an internal slot, mirror that direction on the element passed into the slot.
 
 <!-- component-css-variables:start -->
 

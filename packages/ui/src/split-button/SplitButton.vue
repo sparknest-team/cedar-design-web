@@ -52,9 +52,11 @@
 import { computed, ref } from 'vue'
 import { IconMenuDown } from '@cedar-design/icons-vue'
 import { createNamespace } from '../_utils/global-config'
-import Button, { ButtonGroup } from '../button'
-import Menu, { type MenuInstance } from '../menu'
+import Button from '../button/base'
+import ButtonGroup from '../button/ButtonGroup.vue'
 import { useI18n } from '../locale'
+import type { MenuInstance } from '../menu'
+import Menu from '../menu/Menu.vue'
 import { splitButtonProps } from './props'
 
 defineOptions({
@@ -76,7 +78,6 @@ const triggerLabel = computed(() => {
 })
 const actionDisabled = computed(() => !!(props.disabled || props.buttonProps?.disabled))
 const triggerDisabled = computed(() => !!(props.disabled || props.triggerButtonProps?.disabled))
-
 
 const uncontrolledOpen = ref(props.defaultOpen)
 const computedOpen = computed({

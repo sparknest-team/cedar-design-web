@@ -14,22 +14,38 @@
       :aria-label="ariaLabel"
       @click="handleClick"
     >
-      <slot><IconToTop aria-hidden="true" /></slot>
+      <slot>
+        <svg
+          class="c-icon c-icon-to-top"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 48 48"
+          width="1em"
+          height="1em"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="4"
+          stroke-linecap="butt"
+          stroke-linejoin="miter"
+          role="img"
+          aria-hidden="true"
+        >
+          <path d="M43 7H5M24 20v23M24 13.96 30.453 21H17.546zm.736-.804Z" />
+          <path fill="currentColor" stroke="none" d="m24 14-6 7h12z" />
+        </svg>
+      </slot>
     </button>
   </Teleport>
 </template>
 
 <script setup lang="ts">
-import { useThemeScope } from '../theme-provider/context'
 import { mergeProps, useAttrs } from 'vue'
 import { useDirection } from '../_utils/direction'
-import { IconToTop } from '@cedar-design/icons-vue'
 import { createNamespace, formatElevation } from '../_utils/global-config'
 import { toSizeUnit } from '../_utils/maple/elements'
 import { usePopupContainer } from '../_utils/popup-container'
+import { useThemeScope } from '../theme-provider/context'
 import { backTopProps } from './props'
 import { useBackTop } from './use-back-top'
-
 
 const themeScope = useThemeScope()
 

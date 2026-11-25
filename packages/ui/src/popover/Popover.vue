@@ -33,10 +33,10 @@
 
 <script setup lang="ts">
 import { Comment, Fragment, Text, useAttrs, useSlots, type VNode } from 'vue'
-import { useId } from '../_utils/vue-compat'
 import { createNamespace } from '../_utils/global-config'
-import Trigger from '../trigger'
+import { useId } from '../_utils/vue-compat'
 import type { TriggerReferenceAttrs } from '../trigger'
+import Trigger from '../trigger/trigger'
 import { useTriggerWrapper } from '../trigger/wrapper'
 import { useAppearance } from './platform'
 import { popoverProps } from './props'
@@ -98,9 +98,7 @@ const { triggerRef, triggerBindings } = controls
 const { contentBindings, titleClass, bodyClass } = appearance
 
 function semanticReferenceAttrs(open: boolean): TriggerReferenceAttrs {
-  const custom = typeof props.referenceAttrs === 'function'
-    ? props.referenceAttrs(open)
-    : props.referenceAttrs
+  const custom = typeof props.referenceAttrs === 'function' ? props.referenceAttrs(open) : props.referenceAttrs
   return {
     ...custom,
     'aria-controls': contentId,

@@ -1,7 +1,7 @@
 <script lang="ts">
 import { cloneVNode, computed, defineComponent, h, provide } from 'vue'
 import { createNamespace } from '../_utils/global-config'
-import Popover from '../popover'
+import Popover from '../popover/Popover.vue'
 import Avatar from './Avatar.vue'
 import { avatarGroupInjectionKey } from './context'
 import { getAllElements, toSizeUnit } from './platform'
@@ -27,17 +27,19 @@ export default defineComponent({
       const layerCount = visible.length + (hidden.length ? 1 : 0)
       const rendered = visible.map((child, index) =>
         cloneVNode(child, {
-          style: [
-            child.props?.style,
-            { zIndex: props.zIndexAscend ? index + 1 : layerCount - index },
-          ],
+          style: [child.props?.style, { zIndex: props.zIndexAscend ? index + 1 : layerCount - index }],
         }),
       )
 
       if (hidden.length) {
         const summary = h(
           Avatar,
-          { class: n('max-count-avatar'), role: 'button', tabindex: 0, style: [props.maxStyle, { zIndex: props.zIndexAscend ? layerCount : 1 }] },
+          {
+            class: n('max-count-avatar'),
+            role: 'button',
+            tabindex: 0,
+            style: [props.maxStyle, { zIndex: props.zIndexAscend ? layerCount : 1 }],
+          },
           { default: () => `+${hidden.length}` },
         )
         rendered.push(

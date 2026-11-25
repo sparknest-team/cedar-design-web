@@ -1,3 +1,20 @@
+// Hope adds padding to the skip link even while sr-only clips it.
+.vp-skip-link.sr-only:not(:focus-visible) {
+  padding: 0;
+  clip-path: inset(50%);
+}
+
+.vp-skip-link.sr-only:focus-visible {
+  position: fixed;
+  width: auto;
+  height: auto;
+  padding: 0.65rem 1.5rem;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  white-space: nowrap;
+}
+
 :root {
   --vp-c-accent: var(--c-color-primary);
   --vp-c-accent-bg: var(--c-color-primary);

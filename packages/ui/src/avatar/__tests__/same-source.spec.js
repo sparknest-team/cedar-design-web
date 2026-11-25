@@ -1,7 +1,8 @@
-import { Fragment, createSSRApp, h, nextTick, ref } from 'vue'
-import { mount } from '@vue/test-utils'
+import { createSSRApp, Fragment, h, nextTick, ref } from 'vue'
 import { renderToString } from '@vue/server-renderer'
+import { mount } from '@vue/test-utils'
 import { describe, expect, test, vi } from 'vitest'
+import Popover, { popoverProps } from '../../popover'
 import { Avatar, AvatarGroup } from '../index'
 
 describe('Avatar same source', () => {
@@ -39,7 +40,9 @@ describe('Avatar same source', () => {
 
 test('updates slotted image mode when content changes', async () => {
   const image = ref(true)
-  const wrapper = mount({ render: () => h(Avatar, null, () => image.value ? h('img', { alt: 'Portrait' }) : 'Long name') })
+  const wrapper = mount({
+    render: () => h(Avatar, null, () => (image.value ? h('img', { alt: 'Portrait' }) : 'Long name')),
+  })
   await nextTick()
   expect(wrapper.find('.c-avatar__image').exists()).toBe(true)
   image.value = false
@@ -82,7 +85,10 @@ test('orders summary with group layers and respects unlimited maxCount', async (
 
 test('invalid numeric group options safely use defaults', () => {
   const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-  const wrapper = mount(AvatarGroup, { props: { maxCount: 1.5, size: Infinity, offset: NaN }, slots: { default: () => [h(Avatar, null, () => 'A'), h(Avatar, null, () => 'B')] } })
+  const wrapper = mount(AvatarGroup, {
+    props: { maxCount: 1.5, size: Infinity, offset: NaN },
+    slots: { default: () => [h(Avatar, null, () => 'A'), h(Avatar, null, () => 'B')] },
+  })
   expect(wrapper.findAll('.c-avatar')).toHaveLength(2)
   expect(wrapper.find('.c-avatar-group__max-count-avatar').exists()).toBe(false)
   expect(wrapper.attributes('style') || '').not.toContain('NaN')
@@ -94,7 +100,10 @@ test('invalid numeric group options safely use defaults', () => {
 
 test('trigger icon provides keyboard activation without nesting a supplied button', async () => {
   const action = vi.fn()
-  const w = mount(Avatar, { props: { triggerAriaLabel: 'Edit avatar', onClick: action }, slots: { 'trigger-icon': () => '+' } })
+  const w = mount(Avatar, {
+    props: { triggerAriaLabel: 'Edit avatar', onClick: action },
+    slots: { 'trigger-icon': () => '+' },
+  })
   await nextTick()
   expect(w.attributes('role')).toBe('button')
   expect(w.attributes('aria-label')).toBe('Edit avatar')
@@ -112,7 +121,7 @@ test('trigger icon provides keyboard activation without nesting a supplied butto
 
 test('tracks controls inserted by a component inside the trigger slot', async () => {
   const interactive = ref(false)
-  const Child = { render: () => interactive.value ? h('button', 'Edit') : h('span', '+') }
+  const Child = { render: () => (interactive.value ? h('button', 'Edit') : h('span', '+')) }
   const wrapper = mount(Avatar, { slots: { 'trigger-icon': () => h(Child) } })
   await nextTick()
   expect(wrapper.attributes('role')).toBe('button')
@@ -126,4 +135,37 @@ test('tracks controls inserted by a component inside the trigger slot', async ()
   await nextTick()
   expect(wrapper.attributes('role')).toBe('button')
   wrapper.unmount()
+})
+
+test('respects cancelled keyboard activation on the avatar button', async () => {
+  const click = vi.fn()
+  const avatar = mount(Avatar, {
+    attrs: { onKeydown: (event) => event.preventDefault() },
+    props: { onClick: click },
+    slots: { 'trigger-icon': () => '+' },
+  })
+  try {
+    for (const key of ['Enter', ' ']) {
+      await avatar.trigger('keydown', { key })
+    }
+    expect(click).not.toHaveBeenCalled()
+  } finally {
+    avatar.unmount()
+  }
+})
+
+test('overflow uses the public Popover defaults', () => {
+  const trigger = popoverProps.trigger.default
+  let group
+  try {
+    Popover.setPropsDefaults({ trigger: 'focus' })
+    group = mount(AvatarGroup, {
+      props: { maxCount: 1 },
+      slots: { default: () => [h(Avatar, null, () => 'A'), h(Avatar, null, () => 'B')] },
+    })
+    expect(group.getComponent(Popover).props('trigger')).toBe('focus')
+  } finally {
+    group?.unmount()
+    Popover.setPropsDefaults({ trigger })
+  }
 })
