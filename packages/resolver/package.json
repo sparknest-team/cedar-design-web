@@ -1,6 +1,6 @@
 {
   "name": "@cedar-design/resolver-vue",
-  "version": "1.4.7",
+  "version": "1.4.8",
   "description": "Cedar resolver for unplugin-vue-components and unplugin-auto-import",
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
   "name": "@cedar-design/preset-tailwindcss-vue",
-  "version": "1.4.7",
+  "version": "1.4.8",
   "description": "Tailwind CSS preset for Cedar Design",
   "keywords": [
     "tailwindcss",

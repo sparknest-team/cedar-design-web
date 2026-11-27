@@ -1,5 +1,15 @@
 # @cedar-design/ui-vue
 
+## 1.4.8
+
+### Patch Changes
+
+- [#46](https://github.com/sparknest-team/cedar-design-web/pull/46) [`1cb4034`](https://github.com/sparknest-team/cedar-design-web/commit/1cb40342f1921d6bd8900f94175a75dfe78b4ce1) Thanks [@sparknest-team](https://github.com/sparknest-team)! - 修复 jsdom 31 升级后失效的单元测试：未挂载元素的尺寸测量改用 `attachTo`、指针事件改用真 `PointerEvent` 并共用显式 `pointerId`、CSS 序列化断言语义化，并补齐 `@cedar-design/ui-vue` 子路径别名使 scheduler/core 等 demo 可被收集。
+- Updated dependencies []:
+  - @cedar-design/icons-vue@1.4.8
+  - @cedar-design/shared-vue@1.4.8
+  - @cedar-design/use-vue@1.4.8
+
 ## 1.4.7
 
 ### Patch Changes
