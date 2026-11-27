@@ -10,6 +10,11 @@ export const testSourceAliases = [
   // 示例文件按真实消费方写法 import 包名；测试里要落到源码，
   // 否则 check:demo-i18n（quality 第一步，早于 build:lib）解析不到构建产物。
   { find: /^@cedar-design\/ui-vue$/, replacement: source('ui') + 'index.ts' },
+  {
+    find: /^@cedar-design\/ui-vue\/trigger\/server$/,
+    replacement: fileURLToPath(new URL('../../trigger-server.cjs', import.meta.url)),
+  },
+  { find: /^@cedar-design\/ui-vue\/(.+)$/, replacement: source('ui') + '$1/index.ts' },
   { find: /^@cedar-design\/use-vue$/, replacement: source('use') + 'index.ts' },
   { find: /^@cedar-design\/shared-vue$/, replacement: source('shared') + 'index.ts' },
   { find: /^@cedar-design\/icons-vue\/(icon-[\w-]+)$/, replacement: iconSource + '$1/index.ts' },

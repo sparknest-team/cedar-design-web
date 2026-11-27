@@ -39,16 +39,19 @@ describe('divider orientation-relative spacing', () => {
   it('keeps vertical height tied to the along-line inset when outer spacing changes', async () => {
     const wrapper = mount(Divider, { props: { orientation: 'vertical', inset: [8, 24], spacing: [12, 20] } })
     const style = wrapper.element.style
-    expect(style.maxHeight).toBe('calc(100% - 8px - 24px)')
+    const expectedSize = document.createElement('div').style
+    expectedSize.maxHeight = 'calc(100% - 8px - 24px)'
+    expect(expectedSize.maxHeight).not.toBe('')
+    expect(style.maxHeight).toBe(expectedSize.maxHeight)
     expect(style.marginBlockStart).toBe('8px')
     expect(style.marginBlockEnd).toBe('24px')
     expect(style.marginInlineStart).toBe('12px')
     expect(style.marginInlineEnd).toBe('20px')
     await wrapper.setProps({ spacing: [16, 32] })
-    expect(style.maxHeight).toBe('calc(100% - 8px - 24px)')
+    expect(style.maxHeight).toBe(expectedSize.maxHeight)
     await wrapper.setProps({ orientation: 'horizontal' })
     expect(style.maxHeight).toBe('')
-    expect(style.maxWidth).toBe('calc(100% - 8px - 24px)')
+    expect(style.maxWidth).toBe(expectedSize.maxHeight)
     expect(style.marginBlockStart).toBe('16px')
     expect(style.marginBlockEnd).toBe('32px')
     wrapper.unmount()

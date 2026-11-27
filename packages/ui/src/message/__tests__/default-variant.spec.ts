@@ -1,10 +1,12 @@
 import { mount } from '@vue/test-utils'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import Message, { _MessageComponent, messageProps } from '..'
 
-afterEach(() => {
+afterEach(async () => {
   Message.clear()
   Message.resetDefaultOptions()
+  // The service removes its DOM after the leave transition completes.
+  await vi.waitFor(() => expect(document.body.querySelectorAll('.c-message')).toHaveLength(0))
 })
 describe('Message default variant contract', () => {
   it('uses neutral for component and imperative defaults', async () => {

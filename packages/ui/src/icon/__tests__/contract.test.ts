@@ -1,26 +1,26 @@
-import { defineComponent, h } from "vue";
-import { mount } from "@vue/test-utils";
-import { describe, expect, it } from "vitest";
+import { defineComponent, h } from 'vue'
 import { IconAlert, IconCheckCircle } from '@cedar-design/icons-vue'
-import IconComponent from "..";
+import { mount } from '@vue/test-utils'
+import { describe, expect, it } from 'vitest'
+import IconComponent from '..'
 
-describe("icon public contract", () => {
-  it("exports a namespaced component", () => {
-    expect(IconComponent).toBeTruthy();
-    expect(IconComponent.name).toMatch(/^C/);
-  });
+describe('icon public contract', () => {
+  it('exports a namespaced component', () => {
+    expect(IconComponent).toBeTruthy()
+    expect(IconComponent.name).toMatch(/^C/)
+  })
 
-  it("resolves name from explicitly registered application components", () => {
+  it('resolves name from explicitly registered application components', () => {
     const IconCheckCircleFill = defineComponent({
       template: '<svg class="registered-icon" />',
-    });
+    })
     const wrapper = mount(IconComponent, {
-      props: { name: "check-circle-fill" },
+      props: { name: 'check-circle-fill' },
       global: { components: { IconCheckCircleFill } },
-    });
+    })
 
-    expect(wrapper.find("svg.registered-icon").exists()).toBe(true);
-  });
+    expect(wrapper.find('svg.registered-icon').exists()).toBe(true)
+  })
 
   it('resolves icons installed by the Cedar icon package', () => {
     const wrapper = mount(IconComponent, {
@@ -46,8 +46,9 @@ describe("icon public contract", () => {
   it('does not apply Cedar outline strokes to supplemental fill icons', () => {
     const wrapper = mount(IconAlert)
 
-    expect(wrapper.attributes('style')).toContain('fill: currentColor')
-    expect(wrapper.attributes('style')).toContain('stroke: none')
+    const { style } = wrapper.get<SVGElement>('svg').element
+    expect(style.getPropertyValue('fill').toLowerCase()).toBe('currentcolor')
+    expect(style.getPropertyValue('stroke')).toBe('none')
   })
 
   it('supports the shared standalone icon props', () => {
@@ -92,4 +93,4 @@ describe("icon public contract", () => {
     expect(wrapper.attributes('style')).toContain('rotate: 45deg')
     expect(wrapper.attributes('style')).toContain('transition-duration: 120ms')
   })
-});
+})

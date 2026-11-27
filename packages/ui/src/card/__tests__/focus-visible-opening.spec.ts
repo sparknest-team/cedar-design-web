@@ -1,5 +1,5 @@
-import { mount } from '@vue/test-utils'
 import { defineComponent, h, KeepAlive, nextTick, onMounted, ref } from 'vue'
+import { mount } from '@vue/test-utils'
 import { expect, test, vi } from 'vitest'
 import Card from '../Card.vue'
 
@@ -8,8 +8,18 @@ test('shows initially expanded content when its child focuses on mount and retur
   const opener = document.createElement('button')
   document.body.append(opener)
   opener.focus()
-  const child = defineComponent({ setup() { const input = ref<HTMLInputElement>(); onMounted(() => input.value?.focus()); return () => h('input', { ref: input }) } })
-  const wrapper = mount(Card, { attachTo: document.body, props: { floating: true, ripple: true }, slots: { 'floating-content': () => h(child) } })
+  const child = defineComponent({
+    setup() {
+      const input = ref<HTMLInputElement>()
+      onMounted(() => input.value?.focus())
+      return () => h('input', { ref: input })
+    },
+  })
+  const wrapper = mount(Card, {
+    attachTo: document.body,
+    props: { floating: true, ripple: true },
+    slots: { 'floating-content': () => h(child) },
+  })
   try {
     await nextTick()
     const area = wrapper.get('[class$="card__floating-content"]')
@@ -39,7 +49,11 @@ test('shows initially expanded content when its child focuses on mount and retur
 
 test('focus in ordinary card content does not reveal floating content while opening', async () => {
   vi.useFakeTimers()
-  const wrapper = mount(Card, { attachTo: document.body, props: { floating: true, ripple: true }, slots: { default: () => h('button', 'regular'), 'floating-content': () => h('input') } })
+  const wrapper = mount(Card, {
+    attachTo: document.body,
+    props: { floating: true, ripple: true },
+    slots: { default: () => h('button', 'regular'), 'floating-content': () => h('input') },
+  })
   try {
     await nextTick()
     wrapper.get('button').element.focus()
@@ -54,12 +68,28 @@ test('focus in ordinary card content does not reveal floating content while open
   }
 })
 
-
 test('resets revealed content if closed while its KeepAlive card is inactive', async () => {
   vi.useFakeTimers()
-  const shown = ref(true), floating = ref(true)
-  const child = defineComponent({ setup() { const input = ref<HTMLInputElement>(); onMounted(() => input.value?.focus()); return () => h('input', { ref: input }) } })
-  const wrapper = mount({ setup: () => () => h(KeepAlive, null, () => shown.value ? h(Card, { floating: floating.value, ripple: true }, { 'floating-content': () => h(child) }) : null) }, { attachTo: document.body })
+  const shown = ref(true),
+    floating = ref(true)
+  const child = defineComponent({
+    setup() {
+      const input = ref<HTMLInputElement>()
+      onMounted(() => input.value?.focus())
+      return () => h('input', { ref: input })
+    },
+  })
+  const wrapper = mount(
+    {
+      setup: () => () =>
+        h(KeepAlive, null, () =>
+          shown.value
+            ? h(Card, { floating: floating.value, ripple: true }, { 'floating-content': () => h(child) })
+            : null,
+        ),
+    },
+    { attachTo: document.body },
+  )
   try {
     await nextTick()
     expect((wrapper.get('[class$="card__floating-content"]').element as HTMLElement).style.height).toBe('auto')
@@ -78,20 +108,32 @@ test('resets revealed content if closed while its KeepAlive card is inactive', a
   }
 })
 
-
 test('ends the fade when content receives focus after opening starts', async () => {
-  const wrapper = mount(Card, { attachTo: document.body, props: { floating: true, ripple: false, floatingDuration: 250 }, slots: { 'floating-content': () => h('input') } })
+  const frames: FrameRequestCallback[] = []
+  const requestFrame = vi
+    .spyOn(globalThis, 'requestAnimationFrame')
+    .mockImplementation((callback) => frames.push(callback))
+  const wrapper = mount(Card, {
+    attachTo: document.body,
+    props: { floating: false, ripple: false, floatingDuration: 250 },
+    slots: { 'floating-content': () => h('input') },
+  })
   try {
-    const area = wrapper.get('[class$="card__floating-content"]')
-    for (let attempt = 0; attempt < 100 && (area.element as HTMLElement).style.opacity !== '1'; attempt++) {
-      await new Promise((resolve) => setTimeout(resolve, 20))
-    }
-    expect((area.element as HTMLElement).style.opacity).toBe('1')
+    await wrapper.setProps({ floating: true })
+    const area = wrapper.get<HTMLElement>('[class$="card__floating-content"]')
+    await vi.waitFor(() => expect(frames).toHaveLength(1))
+    frames.shift()!(0)
+    expect(frames).toHaveLength(1)
+    frames.shift()!(16)
+    await nextTick()
+    await nextTick()
+    expect(area.element.style.opacity).toBe('1')
     expect(area.attributes('aria-hidden')).toBeUndefined()
     wrapper.get('input').element.focus()
     await nextTick()
-    expect((area.element as HTMLElement).style.transition).toBe('none')
+    expect(area.element.style.transition).toBe('none')
   } finally {
     wrapper.unmount()
+    requestFrame.mockRestore()
   }
 })

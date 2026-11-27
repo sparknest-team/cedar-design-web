@@ -1,17 +1,24 @@
 import { h } from 'vue'
 import { mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it } from 'vitest'
-import Sider from '../Sider.vue'
 import ResizeBox from '../../resize-box/ResizeBox.vue'
+import Sider from '../Sider.vue'
 
 const owners: ReturnType<typeof mount>[] = []
-afterEach(() => { owners.splice(0).forEach(owner => owner.unmount()) })
+afterEach(() => {
+  owners.splice(0).forEach((owner) => owner.unmount())
+})
 const render = (props = {}) => {
-  const owner = mount(Sider, { props: { collapsible: true, resizeDirections: ['right'], ...props }, slots: { default: () => h('input') } })
+  const owner = mount(Sider, {
+    attachTo: document.body,
+    props: { collapsible: true, resizeDirections: ['right'], ...props },
+    slots: { default: () => h('input') },
+  })
   owners.push(owner)
   return owner
 }
-const grow = async (owner: ReturnType<typeof render>) => owner.find('.c-resizebox-direction-right').trigger('keydown', { key: 'ArrowRight' })
+const grow = async (owner: ReturnType<typeof render>) =>
+  owner.find('.c-resizebox-direction-right').trigger('keydown', { key: 'ArrowRight' })
 describe('sider owns collapsed and expanded resize widths', () => {
   it('collapses after resizing and restores the resized expanded width without remounting content', async () => {
     const owner = render()
@@ -55,6 +62,9 @@ describe('sider owns collapsed and expanded resize widths', () => {
     expect(owner.find<HTMLElement>('.c-layout-sider-children').element.style.width).toBe('210px')
     await owner.find('button').trigger('click')
     expect(owner.element.style.width).toBe('48px')
-    expect(owner.find<HTMLElement>('.c-layout-sider-children').element.style.transform).toContain('210px')
+    const expected = document.createElement('div').style
+    expected.transform = 'translateX(calc(48px - 210px))'
+    expect(expected.transform).not.toBe('')
+    expect(owner.find<HTMLElement>('.c-layout-sider-children').element.style.transform).toBe(expected.transform)
   })
 })
