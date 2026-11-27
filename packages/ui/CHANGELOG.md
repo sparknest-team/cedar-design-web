@@ -1,5 +1,15 @@
 # @cedar-design/ui-vue
 
+## 1.4.7
+
+### Patch Changes
+
+- [#43](https://github.com/sparknest-team/cedar-design-web/pull/43) [`21c67ea`](https://github.com/sparknest-team/cedar-design-web/commit/21c67eab0e29ea11b22aece23269101242718d95) Thanks [@sparknest-team](https://github.com/sparknest-team)! - 修复 Table 的选择、展开或拖拽列随右侧固定列自动冻结时，表格左边缘多显示一道阴影的问题。
+- Updated dependencies []:
+  - @cedar-design/icons-vue@1.4.7
+  - @cedar-design/shared-vue@1.4.7
+  - @cedar-design/use-vue@1.4.7
+
 ## 1.4.6
 
 ### Patch Changes

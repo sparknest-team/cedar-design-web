@@ -1,5 +1,9 @@
 # @cedar-design/shared-vue
 
+## 1.4.7
+
+No changes in this release.
+
 ## 1.4.6
 
 ## 1.4.5
