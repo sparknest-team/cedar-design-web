@@ -934,17 +934,6 @@ export default defineComponent({
       return `${prefixCls}-scroll-position-middle`;
     };
 
-    const getTableFixedCls = () => {
-      const cls: string[] = [];
-      if (hasLeftFixedColumn.value) {
-        cls.push(`${prefixCls}-has-fixed-col-left`);
-      }
-      if (hasRightFixedColumn.value) {
-        cls.push(`${prefixCls}-has-fixed-col-right`);
-      }
-      return cls;
-    };
-
     const handleScroll = (e: Event) => {
       if (
         (e.target as HTMLDivElement).scrollLeft !== containerScrollLeft.value
@@ -1087,6 +1076,8 @@ export default defineComponent({
         ? operationsFn({ dragHandle, expand, selection })
         : operations;
     });
+
+    const hasPhysicalLeftOperations = computed(() => operations.value.some(operation => operation.fixed));
 
     // Operation columns still need a header row when all data columns are hidden.
     const displayHeaderRows = computed<TableColumnData[][]>(() =>
@@ -1246,7 +1237,7 @@ export default defineComponent({
       reactive({
         readingDirection,
         physicalDataColumns: dataColumns,
-        hasPhysicalLeftOperations: computed(() => operations.value.some(operation => operation.fixed)),
+        hasPhysicalLeftOperations,
         loadMore,
         addLazyLoadData,
         slots,
@@ -1307,7 +1298,13 @@ export default defineComponent({
     });
 
     const tableCls = computed(() => {
-      const cls = getTableFixedCls();
+      const cls: string[] = [];
+      if (hasLeftFixedDataColumns.value || hasPhysicalLeftOperations.value) {
+        cls.push(`${prefixCls}-has-fixed-col-left`);
+      }
+      if (hasRightFixedColumn.value) {
+        cls.push(`${prefixCls}-has-fixed-col-right`);
+      }
 
       if (hasHorizontalOverflow.value) {
         cls.push(`${prefixCls}-scroll-x`);
