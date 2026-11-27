@@ -4,20 +4,11 @@
     "noEmit": true,
     "declaration": false,
     "emitDeclarationOnly": false,
-    "rootDir": ".",
+    "rootDir": "../../..",
     "paths": {
-      "@cedar-design/ui-vue": [
-        "src/index.ts"
-      ],
-      "@sparknest/ui-doc-preview-vue": [
-        "../../../design-ui/packages/ui-doc-preview/src/index.ts"
-      ],
-      "vue": [
-        "./node_modules/vue"
-      ],
-      "@cedar-design/ui-vue/*": [
-        "./src/*/index.ts"
-      ]
+      "@cedar-design/ui-vue": ["./src/index.ts"],
+      "vue": ["./node_modules/vue"],
+      "@cedar-design/ui-vue/*": ["./src/*/index.ts"]
     }
   },
   "include": [
@@ -26,7 +17,7 @@
     "type-tests/map-contract.ts",
     "type-tests/menu-size.ts",
     "type-tests/p1-api.ts",
-    "src/**/*.d.ts",
+    "./src/**/*.d.ts",
     "type-tests/p2-api.ts",
     "type-tests/f07-api.ts",
     "type-tests/f08-table.tsx",

@@ -6,6 +6,7 @@ import { expect, test } from 'vitest'
 import { createDevApp } from '@vuepress/core'
 import { slimsearchPlugin } from '@vuepress/plugin-slimsearch'
 import { loadJSONIndex, search } from 'slimsearch'
+import { decodeData } from '@vuepress/helper/shared'
 
 test('all search sections and both locales are indexed before preparation finishes', async () => {
   const folder = await mkdtemp(join(tmpdir(), 'cedar-search-index-'))
@@ -26,8 +27,10 @@ test('all search sections and both locales are indexed before preparation finish
     await app.prepare()
     const readIndex = async (name: string) => {
       const module = await readFile(app.dir.temp(`slimsearch/${name}.js`), 'utf8')
-      const json = JSON.parse(module.trim().replace(/^export default /, '').replace(/;$/, ''))
-      return loadJSONIndex(json, { fields: ['h', 't', 'c'], storeFields: ['h', 'a', 't', 'c'] })
+      const encoded = JSON.parse(module.trim().replace(/^export default /, '').replace(/;$/, ''))
+      return loadJSONIndex(decodeData(encoded), {
+        fields: ['heading', 'text', 'customFields'], storeFields: ['heading', 'text', 'customFields'],
+      })
     }
     expect(search(await readIndex('root'), 'UniqueSection2000').some(hit => String(hit.id).endsWith('#uniquesection2000'))).toBe(true)
     expect(search(await readIndex('en'), 'verification').some(hit => String(hit.id).endsWith('#snapshot'))).toBe(true)

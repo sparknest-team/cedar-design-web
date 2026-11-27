@@ -7,6 +7,7 @@ Read the quick start and the relevant component page before generating code. Fol
 Documentation language: en-US.
 
 - [Full documentation](./llms-full.en-US.txt)
+- [Changelog](./llms/en-US/changelog.md): /en/changelog/
 - [Affix](./llms/en-US/components/affix.md): /en/components/affix/
 - [Alert](./llms/en-US/components/alert.md): /en/components/alert/
 - [Anchor](./llms/en-US/components/anchor.md): /en/components/anchor/

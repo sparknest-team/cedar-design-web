@@ -2,7 +2,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, relative, resolve } from 'node:path'
-import ts from 'typescript'
+import ts from 'typescript-js'
 import { beforeAll, expect, it } from 'vitest'
 import Themes from '../../themes'
 

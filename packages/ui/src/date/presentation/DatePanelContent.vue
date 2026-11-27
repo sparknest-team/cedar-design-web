@@ -24,20 +24,13 @@
   </CalendarContent>
 </template>
 <script setup lang="ts">
-import dayjs from 'dayjs'
 import { computed, shallowRef, useSlots, watch } from 'vue'
+import dayjs from 'dayjs'
 import { createNamespace } from '../../_utils/global-config'
 import { calendarValueFormat, fromCalendarValue, toCalendarValue } from '../calendar-value'
 import { isCalendarDateDisabled } from '../date-rules'
 import { dateTimeDisabledRules } from '../date-time-rules'
-import {
-  dateDisplayFormat,
-  dateUsesSeconds,
-  parseDateValue,
-  sameDateSelection,
-  type DateSelection,
-  type DateSide,
-} from '../date-value'
+import { dateDisplayFormat, dateUsesSeconds, parseDateValue, sameDateSelection, type DateSide } from '../date-value'
 import { normalizeDateRange } from '../normalize-date-range'
 import type { DatePanelContentProps } from '../panel-state'
 import RangeContent from '../picker/DateRangePicker.vue'
@@ -62,9 +55,13 @@ const bindings = computed(() => {
     defaultPickerValue: _defaultPicker,
     ...options
   } = props.options
-  const instant = (date: Date) => options.timeZone
-    ? parseDateValue(dayjs(date).format('YYYY-MM-DD HH:mm:ss'), { ...options, valueFormat: 'YYYY-MM-DD HH:mm:ss' })?.toDate()
-    : date
+  const instant = (date: Date) =>
+    options.timeZone
+      ? parseDateValue(dayjs(date).format('YYYY-MM-DD HH:mm:ss'), {
+          ...options,
+          valueFormat: 'YYYY-MM-DD HH:mm:ss',
+        })?.toDate()
+      : date
   return {
     ...options,
     timePickerProps: {
@@ -82,8 +79,7 @@ const bindings = computed(() => {
     open: true,
     disableConfirm: true,
     disabledDate: (date: Date | undefined, side: DateSide = 'start') =>
-      !date || !instant(date) ||
-      isCalendarDateDisabled(instant(date)!, props.options, side),
+      !date || !instant(date) || isCalendarDateDisabled(instant(date)!, props.options, side),
     disabledTime: (date: Date, side: DateSide = 'start') => {
       const rules = dateTimeDisabledRules(instant(date) ?? new Date(NaN), props.options, side)
       return {
@@ -102,16 +98,20 @@ const singlePickerValue = computed(() => (typeof viewport.value === 'string' ? v
 const calendarValue = computed(() => toCalendarValue(props.value, props.options))
 // Keep the renderer's in-progress click state; a partial draft only disables outer confirmation.
 const rangeValue = shallowRef<string[]>([])
-watch(calendarValue, (value) => {
-  if (Array.isArray(value) && (value.length === 0 || (value.length === 2 && value.every(Boolean)))) {
-    rangeValue.value = value.map(part => String(part ?? ''))
-  }
-}, { immediate: true })
+watch(
+  calendarValue,
+  (value) => {
+    if (Array.isArray(value) && (value.length === 0 || (value.length === 2 && value.every(Boolean)))) {
+      rangeValue.value = value.map((part) => String(part ?? ''))
+    }
+  },
+  { immediate: true },
+)
 const singleValue = computed(() => (typeof calendarValue.value === 'string' ? calendarValue.value : undefined))
-function navigate(value: DateSelection) {
+function navigate(value: Date | string | number | (Date | string | number | null | undefined)[] | null | undefined) {
   emit('navigate', fromCalendarValue(value, props.options))
 }
-function selectDraft(value: DateSelection) {
+function selectDraft(value: Date | string | number | (Date | string | number | null | undefined)[] | null | undefined) {
   const candidate = fromCalendarValue(value, props.options, props.value)
   const normalized = normalizeDateRange(candidate, props.options)
   // The renderer suppresses change for the existing range, but restarting and
@@ -123,7 +123,7 @@ function selectDraft(value: DateSelection) {
     emit('select', normalized)
   }
 }
-function select(value: DateSelection) {
+function select(value: Date | string | number | (Date | string | number | null | undefined)[] | null | undefined) {
   const candidate = fromCalendarValue(value, props.options, props.value)
   emit('select', props.range ? normalizeDateRange(candidate, props.options) : candidate)
 }

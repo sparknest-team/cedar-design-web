@@ -3,14 +3,14 @@
     {
       "name": "model-value",
       "description": "受控值",
-      "type": "RadioModel",
+      "type": "string | number | boolean | null",
       "defaultValue": "undefined",
       "kind": "scenario"
     },
     {
       "name": "default-value",
       "description": "非受控初始值",
-      "type": "RadioModel",
+      "type": "string | number | boolean | null",
       "defaultValue": "null",
       "kind": "scenario"
     },
@@ -20,10 +20,7 @@
       "type": "'radio'|'button'",
       "defaultValue": "'radio'",
       "kind": "enum",
-      "options": [
-        "radio",
-        "button"
-      ],
+      "options": ["radio", "button"],
       "initial": "radio"
     },
     {
@@ -32,19 +29,13 @@
       "type": "'xs'|'sm'|'md'|'lg'|'xl'",
       "defaultValue": "-",
       "kind": "enum",
-      "options": [
-        "xs",
-        "sm",
-        "md",
-        "lg",
-        "xl"
-      ],
+      "options": ["xs", "sm", "md", "lg", "xl"],
       "initial": "xs"
     },
     {
       "name": "options",
       "description": "选项；传入时替代默认插槽",
-      "type": "Array<ChoiceValue | RadioOption | Record<string, unknown>>",
+      "type": "Array<string | number | boolean | RadioOption | Record<string, unknown>>",
       "defaultValue": "undefined",
       "kind": "json",
       "initial": "{}"
@@ -55,10 +46,7 @@
       "type": "'horizontal'|'vertical'",
       "defaultValue": "'horizontal'",
       "kind": "enum",
-      "options": [
-        "horizontal",
-        "vertical"
-      ],
+      "options": ["horizontal", "vertical"],
       "initial": "horizontal"
     },
     {
@@ -99,14 +87,8 @@
     }
   ],
   "methodNames": [],
-  "events": [
-    "update:modelValue",
-    "change"
-  ],
-  "slotNames": [
-    "radio",
-    "label"
-  ],
+  "events": ["update:modelValue", "change"],
+  "slotNames": ["radio", "label"],
   "slotDefaults": {
     "radio": false,
     "label": false

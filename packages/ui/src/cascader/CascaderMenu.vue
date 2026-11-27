@@ -3,7 +3,9 @@
     :open="controller.computedOpen"
     :multiple="multiple"
     :items="controller.fieldItems"
-    :disabled="controller.mergedDisabled || controller.mergedReadonly || controller.loading || controller.session.pending"
+    :disabled="
+      controller.mergedDisabled || controller.mergedReadonly || controller.loading || controller.session.pending
+    "
     @remove="controller.handleRemove"
     @clear="controller.clearSelection"
   >
@@ -16,8 +18,8 @@
       :readonly="controller.mergedReadonly"
       :hint="false"
       :variant="editor ? 'outline' : undefined"
-      :aria-label="texts.search.value"
-      :aria-controls="optionsId"
+      :ariaLabel="texts.search.value"
+      :input-attrs="{ 'aria-controls': optionsId }"
       :placeholder="texts.search.value"
       clearable
       @update:model-value="controller.handleInputValueChange"
@@ -69,57 +71,51 @@
   </SelectedOptions>
 </template>
 <script setup lang="ts">
+import { computed, inject, onBeforeUnmount, ref, toRefs } from 'vue'
+import { isolateEditorForm } from '../_components/field-presentation/form-bridge'
+import { useFieldTexts } from '../_components/field-presentation/texts'
+import { selectionEditorSurface } from '../_components/selected-options/context'
+import SelectedOptions from '../_components/selected-options/SelectedOptions.vue'
 import type { CompatibleReactive as UnwrapNestedRefs } from '../_utils/compatible-reactive'
-import { computed, inject, onBeforeUnmount, ref, toRefs } from "vue"
-import { useId } from '../_utils/vue-compat';
-import { useFieldTexts } from "../_components/field-presentation/texts";
-import { isolateEditorForm } from "../_components/field-presentation/form-bridge";
-import { provideFormErrorDescriptionBoundary } from "../form/error-description";
-import { selectionEditorSurface } from "../_components/selected-options/context";
-import SelectedOptions from "../_components/selected-options/SelectedOptions.vue";
-import Input from "../input/base";
-import { createNamespace } from "../_utils/global-config";
-import BaseCascaderPanel from "./base-cascader-panel";
-import CascaderSearchPanel from "./cascader-search-panel";
-import CascaderEditorPanel from "./CascaderEditorPanel.vue";
-import type { CascaderController } from "./use-cascader-controller";
+import { createNamespace } from '../_utils/global-config'
+import { useId } from '../_utils/vue-compat'
+import { provideFormErrorDescriptionBoundary } from '../form/error-description'
+import Input from '../input/base'
+import BaseCascaderPanel from './base-cascader-panel'
+import CascaderSearchPanel from './cascader-search-panel'
+import CascaderEditorPanel from './CascaderEditorPanel.vue'
+import type { CascaderController } from './use-cascader-controller'
 
-defineOptions({ name: createNamespace("cascader-menu").name });
-isolateEditorForm();
-provideFormErrorDescriptionBoundary();
-const texts = useFieldTexts();
-const optionsId = `cascader-editor-options-${useId()}`;
-const editor = inject(selectionEditorSurface, undefined);
-const searchInputRef = ref<{ focus: () => void }>();
-const focusEditorSearch = () => searchInputRef.value?.focus();
+defineOptions({ name: createNamespace('cascader-menu').name })
+isolateEditorForm()
+provideFormErrorDescriptionBoundary()
+const texts = useFieldTexts()
+const optionsId = `cascader-editor-options-${useId()}`
+const editor = inject(selectionEditorSurface, undefined)
+const searchInputRef = ref<{ focus: () => void }>()
+const focusEditorSearch = () => searchInputRef.value?.focus()
 const { controller, keyboardHandler, listboxId, focusFallback, dialogId, reportPopupElement } = defineProps<{
-  controller: UnwrapNestedRefs<CascaderController>;
+  controller: UnwrapNestedRefs<CascaderController>
   reportPopupElement?: (element: HTMLElement | null) => void
   dialogId?: string
   listboxId?: string
-  focusFallback?: () => void;
-  searchable?: boolean;
-  keyboardHandler?: (event: KeyboardEvent) => void | Promise<void>;
-}>();
+  focusFallback?: () => void
+  searchable?: boolean
+  keyboardHandler?: (event: KeyboardEvent) => void | Promise<void>
+}>()
 const hierarchyPanel = ref<{ $el: HTMLElement }>()
 const hierarchyElement = computed(() => hierarchyPanel.value?.$el)
 defineExpose({ hierarchyElement })
-let menuDisposed = false;
-onBeforeUnmount(() => { menuDisposed = true; });
+let menuDisposed = false
+onBeforeUnmount(() => {
+  menuDisposed = true
+})
 const focusSearchFallback = () => {
-  if (menuDisposed || (!editor && !controller.computedOpen)) return;
-  if (editor) focusEditorSearch();
-  else focusFallback?.();
-};
-const {
-  loading,
-  showSearchPanel,
-  filteredLeafOptions,
-  activeKey,
-  displayColumns,
-  selectedPath,
-  totalLevel,
-} = toRefs(controller);
-const { multiple, checkStrictly, searchOptionOnlyLabel, virtualListProps } =
-  toRefs(controller.props);
+  if (menuDisposed || (!editor && !controller.computedOpen)) return
+  if (editor) focusEditorSearch()
+  else focusFallback?.()
+}
+const { loading, showSearchPanel, filteredLeafOptions, activeKey, displayColumns, selectedPath, totalLevel } =
+  toRefs(controller)
+const { multiple, checkStrictly, searchOptionOnlyLabel, virtualListProps } = toRefs(controller.props)
 </script>

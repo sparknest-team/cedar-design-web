@@ -33,13 +33,12 @@
 
 <script setup lang="ts">
 import { computed, provide, reactive, useSlots } from 'vue'
-import { useFormErrorDescription } from '../form/error-description'
 import { useOptionRequest } from '../_hooks/use-option-request'
 import { createNamespace } from '../_utils/global-config'
+import { useFormErrorDescription } from '../form/error-description'
 import { ChoiceLabel } from './choice-label'
 import { normalizeChoiceOptions } from './choice-options'
 import { choiceLimit, useChoiceState } from './choice-state'
-import type { ChoiceValue } from './choice-value-props'
 import { checkboxGroupKey } from './context'
 import Checkbox from './presentation'
 import { checkboxGroupProps } from './props'
@@ -58,8 +57,8 @@ const emit = defineEmits<{
   'update:open': [open: boolean]
   'open-change': [open: boolean]
   'load-error': [error: unknown]
-  'update:modelValue': [value: ChoiceValue[] | null]
-  change: [value: ChoiceValue[] | null, event?: Event]
+  'update:modelValue': [value: (string | number | boolean)[] | null]
+  change: [value: (string | number | boolean)[] | null, event?: Event]
 }>()
 const { mergedDisabled, mergedReadonly, mergedError, eventHandlers } = useChoiceForm(props)
 const source = useOptionRequest(

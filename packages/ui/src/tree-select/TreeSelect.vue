@@ -76,7 +76,7 @@
           :hint="false"
           :disabled="mergedDisabled || mergedReadonly"
           clearable
-          :aria-label="texts.search.value"
+          :ariaLabel="texts.search.value"
           :placeholder="texts.search.value"
           @update:model-value="onSearchValueChange"
         />
@@ -136,7 +136,6 @@
   </component>
 </template>
 <script lang="ts">
-import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
 import {
   computed,
   CSSProperties,
@@ -154,6 +153,7 @@ import { fieldEditorEnterSubmits } from '../_components/field-presentation/conte
 import { useFieldTexts } from '../_components/field-presentation/texts'
 import { selectionEditorSurface } from '../_components/selected-options/context'
 import SelectedOptions from '../_components/selected-options/SelectedOptions.vue'
+import { useEmptySlot } from '../_components/selection-field/empty-slot'
 import type { SelectionFieldItem } from '../_components/selection-field/props'
 import SelectionField from '../_components/selection-field/SelectionField.vue'
 import { useFormItem } from '../_hooks/use-form-item'
@@ -165,8 +165,8 @@ import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { isFunction, isUndefined } from '../_utils/is'
 import { matchesOptionText } from '../_utils/option-data'
 import pickSubCompSlots from '../_utils/pick-sub-comp-slots'
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
 import { Data } from '../_utils/types'
-import { useEmptySlot } from '../_components/selection-field/empty-slot'
 import Empty from '../empty'
 import Input from '../input'
 import Loading from '../loading/Loading.vue'
@@ -461,7 +461,14 @@ export default defineComponent({
     const panelRef = ref<TreeSelectPanelHandle>()
     const onKeydown = (event: KeyboardEvent) => {
       emit('keydown', event)
-      if (event.defaultPrevented || event.isComposing || event.keyCode === 229 || mergedDisabled.value || mergedReadonly.value || loading.value)
+      if (
+        event.defaultPrevented ||
+        event.isComposing ||
+        event.keyCode === 229 ||
+        mergedDisabled.value ||
+        mergedReadonly.value ||
+        loading.value
+      )
         return
       if (!panelVisible.value && event.key === 'Enter' && editorEnterSubmits?.value) return
       if (!panelVisible.value && ['Enter', 'ArrowDown', 'ArrowUp'].includes(event.key)) {

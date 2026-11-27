@@ -1,19 +1,20 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 
-import { ref } from "vue";
-import type { DateSelection } from "@cedar-design/ui-vue";
-const limited = ref(true);
-const fieldValue = ref<DateSelection>("2025-02-12");
-const panelValue = ref<DateSelection>("2025-02-12");
-const week = ref<0 | 1 | 6>(1);
+const limited = ref(true)
+const fieldValue = ref<Date | string | number | (Date | string | number | null | undefined)[] | null | undefined>(
+  '2025-02-12',
+)
+const panelValue = ref<Date | string | number | (Date | string | number | null | undefined)[] | null | undefined>(
+  '2025-02-12',
+)
+const week = ref<0 | 1 | 6>(1)
 </script>
 
 <template>
   <div class="entry-demo">
     <p>仅允许选择 2025 年 2 月；移除限制不会改变已有选中值。</p>
-    <c-button @click="limited = !limited">{{
-      limited ? "移除日期限制" : "恢复日期限制"
-    }}</c-button>
+    <c-button @click="limited = !limited">{{ limited ? '移除日期限制' : '恢复日期限制' }}</c-button>
     <c-space wrap>
       <c-button @click="week = 0">周日起始</c-button>
       <c-button @click="week = 1">周一起始</c-button>

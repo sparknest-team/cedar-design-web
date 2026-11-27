@@ -1,11 +1,13 @@
 {
-  "extends": "../../packages/ui/tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "composite": false,
-    "emitDeclarationOnly": false,
-    "noEmit": true,
-    "types": []
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "jsx": "preserve",
+    "skipLibCheck": true,
+    "types": ["vite/client"]
   },
+  "contentMappers": [{ "package": "@vue/content-mapper", "extensions": [".vue"] }],
   "include": ["src/**/*.ts", "src/**/*.vue"]
 }

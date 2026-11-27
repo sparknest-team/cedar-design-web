@@ -9,18 +9,38 @@
 </template>
 
 <script lang="ts">
-import { anchorProps, type AnchorBoundaryPosition } from './props'
-import { computed, defineComponent, nextTick, onActivated, onBeforeUnmount, onDeactivated, onMounted, provide, reactive, ref, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  provide,
+  reactive,
+  ref,
+  watch,
+} from 'vue'
 import { compute as computeScrollIntoView } from 'compute-scroll-into-view'
+import { boundary } from 'compute-scroll-into-view/middleware'
+import { getElement, off, on } from '../_utils/dom'
 import { createNamespace } from '../_utils/global-config'
 import { isNumber } from '../_utils/is'
-import { getElement, off, on } from '../_utils/dom'
 import { useElementResize } from '../_utils/resize-observer'
-import { slide } from './utils'
 import { anchorInjectionKey } from './context'
+import { anchorProps, type AnchorBoundaryPosition } from './props'
+import { slide } from './utils'
 
-type Binding = { target: HTMLElement | Window; container: HTMLElement; view: Window; listener: () => void; cancelFrame: () => void }
-const isView = (value: unknown): value is Window => !!value && typeof value === 'object' && (value as Window).window === value
+type Binding = {
+  target: HTMLElement | Window
+  container: HTMLElement
+  view: Window
+  listener: () => void
+  cancelFrame: () => void
+}
+const isView = (value: unknown): value is Window =>
+  !!value && typeof value === 'object' && (value as Window).window === value
 
 export default defineComponent({
   name: createNamespace('anchor').name,
@@ -43,7 +63,10 @@ export default defineComponent({
       if (isNumber(value)) return Number.isFinite(value) ? value : 'start'
       return ['start', 'end', 'center', 'nearest'].includes(value) ? value : 'start'
     })
-    let active = true, disposed = false, operation = 0, changeGeneration = 0
+    let active = true,
+      disposed = false,
+      operation = 0,
+      changeGeneration = 0
     let binding: Binding | undefined
     let cancelScroll: (() => void) | undefined
     let isScrolling = false
@@ -53,7 +76,9 @@ export default defineComponent({
       const doc = ownerDocument()
       return doc ? getElement(hash, doc) : undefined
     }
-    const addLink = (hash: string, node: HTMLElement) => { if (hash && !disposed) links[hash] = node }
+    const addLink = (hash: string, node: HTMLElement) => {
+      if (hash && !disposed) links[hash] = node
+    }
     const removeLink = (hash: string, node: HTMLElement) => {
       if (links[hash] !== node) return
       delete links[hash]
@@ -110,27 +135,40 @@ export default defineComponent({
         const container = target && !isView(target) ? target : undefined
         // A declared element is the outermost scroll boundary, not permission to move the page.
         if (container && !container.contains(element)) return
-        const actions = computeScrollIntoView(element, { block, boundary: container })
-          .filter(action => Number.isFinite(action.top))
+        const actions = computeScrollIntoView(element, { block, middleware: [boundary(container)] }).filter((action) =>
+          Number.isFinite(action.top),
+        )
         if (!current() || !actions.length) return
         const last = actions.length - 1
         const cancellations: Array<() => void> = []
         let pending = actions.length
         isScrolling = true
-        const cancelAll = () => cancellations.forEach(cancel => cancel())
+        const cancelAll = () => cancellations.forEach((cancel) => cancel())
         cancelScroll = cancelAll
         for (const [index, action] of actions.entries()) {
           if (!current()) break
           // The numeric offset applies at the outer boundary only.
-          const cancel = slide(action.el as HTMLElement, action.top - (index === last ? diff : 0), () => {
-            if (!current()) return
-            if (--pending === 0) { isScrolling = false; cancelScroll = undefined }
-          }, current)
+          const cancel = slide(
+            action.el as HTMLElement,
+            action.top - (index === last ? diff : 0),
+            () => {
+              if (!current()) return
+              if (--pending === 0) {
+                isScrolling = false
+                cancelScroll = undefined
+              }
+            },
+            current,
+          )
           cancellations.push(cancel)
         }
         if (!current()) cancelAll()
       } catch (error) {
-        if (current()) { cancelScroll?.(); isScrolling = false; cancelScroll = undefined }
+        if (current()) {
+          cancelScroll?.()
+          isScrolling = false
+          cancelScroll = undefined
+        }
         // eslint-disable-next-line no-console
         console.error(error)
       }
@@ -150,7 +188,9 @@ export default defineComponent({
 
     const updateIndicator = () => {
       if (!available()) return
-      const link = links[currentLink.value], slider = lineSliderRef.value, background = linkBackgroundRef.value
+      const link = links[currentLink.value],
+        slider = lineSliderRef.value,
+        background = linkBackgroundRef.value
       const request = operation
       if (!link || (!props.showLine && !props.showBackground)) return
       const top = link.offsetTop
@@ -158,12 +198,15 @@ export default defineComponent({
       if (!available() || request !== operation || links[currentLink.value] !== link) return
       for (const node of [slider, background]) {
         if (!available() || request !== operation) return
-        if (node) { node.style.top = `${top}px`; node.style.height = `${height}px` }
+        if (node) {
+          node.style.top = `${top}px`
+          node.style.height = `${height}px`
+        }
       }
     }
     watch([currentLink, () => props.showLine, () => props.showBackground], updateIndicator, { flush: 'post' })
     useElementResize(
-      () => [anchorRef.value, ...Object.values(links).flatMap(link => [link, link.firstElementChild])],
+      () => [anchorRef.value, ...Object.values(links).flatMap((link) => [link, link.firstElementChild])],
       () => props.showLine || props.showBackground,
       updateIndicator,
     )
@@ -193,9 +236,12 @@ export default defineComponent({
       const container = isView(target) ? target.document.documentElement : target
       const view = isView(target) ? target : container?.ownerDocument.defaultView
       if (!target || !container || !view) return
-      let frame: number | undefined, sequence = 0
+      let frame: number | undefined,
+        sequence = 0
       const bound: Binding = {
-        target, container, view,
+        target,
+        container,
+        view,
         cancelFrame: () => {
           sequence++
           if (frame !== undefined) view.cancelAnimationFrame(frame)
@@ -210,7 +256,8 @@ export default defineComponent({
             if (!available() || binding !== bound || request !== sequence || revision !== operation) return
             frame = undefined
             const consumed = ++sequence
-            const current = () => available() && binding === bound && consumed === sequence && revision === operation && !isScrolling
+            const current = () =>
+              available() && binding === bound && consumed === sequence && revision === operation && !isScrolling
             const element = getFirstInViewportEle(bound, current)
             if (element?.id && current()) handleAnchorChange(`#${element.id}`)
           })
@@ -230,17 +277,52 @@ export default defineComponent({
       bind()
       const rawHash = ownerDocument()?.defaultView?.location.hash ?? ''
       let hash = rawHash
-      try { hash = decodeURIComponent(rawHash) } catch { /* Preserve literal malformed fragments. */ }
-      if (hash) { scrollIntoView(hash); handleAnchorChange(hash) }
+      try {
+        hash = decodeURIComponent(rawHash)
+      } catch {
+        /* Preserve literal malformed fragments. */
+      }
+      if (hash) {
+        scrollIntoView(hash)
+        handleAnchorChange(hash)
+      }
       setDefaultLink()
     })
-    onDeactivated(() => { active = false; cancelWork(); unbind() })
-    onBeforeUnmount(() => { disposed = true; active = false; cancelWork(); unbind() })
-    onActivated(() => { if (!active && !disposed) { active = true; bind(); setDefaultLink() } })
-    watch(() => [props.scrollContainer, props.boundary], () => { if (available()) bind() }, { flush: 'sync' })
+    onDeactivated(() => {
+      active = false
+      cancelWork()
+      unbind()
+    })
+    onBeforeUnmount(() => {
+      disposed = true
+      active = false
+      cancelWork()
+      unbind()
+    })
+    onActivated(() => {
+      if (!active && !disposed) {
+        active = true
+        bind()
+        setDefaultLink()
+      }
+    })
+    watch(
+      () => [props.scrollContainer, props.boundary],
+      () => {
+        if (available()) bind()
+      },
+      { flush: 'sync' },
+    )
 
     provide(anchorInjectionKey, reactive({ currentLink, addLink, removeLink, handleClick }))
-    const cls = computed(() => classes(n(), [props.showLine, n('--show-line')], [props.showBackground, n('--show-background')], [currentLink.value, n('--active')]))
+    const cls = computed(() =>
+      classes(
+        n(),
+        [props.showLine, n('--show-line')],
+        [props.showBackground, n('--show-background')],
+        [currentLink.value, n('--active')],
+      ),
+    )
     return { n, classes, cls, anchorRef, lineSliderRef, linkBackgroundRef }
   },
 })

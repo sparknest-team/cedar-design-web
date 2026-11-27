@@ -43,12 +43,18 @@
             @dragleave="handleDragLeave"
             @drop="draggable && handleDrop($event)"
           >
-            <slot name="trigger" :choose-file="chooseFile" :disabled="disabledState" :drag-over="dragOver" :described-by="describeError($attrs['aria-describedby'])">
+            <slot
+              name="trigger"
+              :choose-file="chooseFile"
+              :disabled="disabledState"
+              :drag-over="dragOver"
+              :described-by="describeError($attrs['aria-describedby'])"
+            >
               <span aria-hidden="true">＋</span><span>{{ draggable ? text.dropFiles : text.upload }}</span>
             </slot>
           </div>
         </template>
-        <div v-else-if="showFileList" :class="n('list')">
+        <div v-if="section === 'list' && showFileList" :class="n('list')">
           <template v-for="(file, index) in fileList" :key="file.uid">
             <slot name="item" v-bind="itemScope(file, index)">
               <div :class="classes(n('item'), n('item--' + file.status), formatElevation(elevation, 2))">
@@ -66,12 +72,22 @@
                     :alt="file.name"
                     :style="{ objectFit: file.fit || imageFit }"
                   /><span v-else>{{ file.name?.slice(0, 1) || 'F' }}</span>
-                  <span v-if="isVideo(file) && formatVideoDuration(file.duration)" :class="n('duration')" :aria-label="`${text.duration} ${formatVideoDuration(file.duration)}`">{{ formatVideoDuration(file.duration) }}</span>
+                  <span
+                    v-if="isVideo(file) && formatVideoDuration(file.duration)"
+                    :class="n('duration')"
+                    :aria-label="`${text.duration} ${formatVideoDuration(file.duration)}`"
+                    >{{ formatVideoDuration(file.duration) }}</span
+                  >
                 </button>
                 <div :class="n('meta')">
-                  <span :class="n('name')">{{ file.name }}</span
-                  ><span :class="n('size')">{{ formatSize(file.size) }}</span>
-                  <span v-if="listType === 'text' && isVideo(file) && formatVideoDuration(file.duration)" :aria-label="`${text.duration} ${formatVideoDuration(file.duration)}`">{{ formatVideoDuration(file.duration) }}</span>
+                  <span :class="n('name')">{{ file.name }}</span><span :class="n('size')">{{
+                    formatSize(file.size)
+                  }}</span>
+                  <span
+                    v-if="listType === 'text' && isVideo(file) && formatVideoDuration(file.duration)"
+                    :aria-label="`${text.duration} ${formatVideoDuration(file.duration)}`"
+                    >{{ formatVideoDuration(file.duration) }}</span
+                  >
                   <progress
                     v-if="file.status === 'uploading'"
                     :class="n('progress')"
@@ -124,7 +140,16 @@
                   >
                     <IconRefresh />
                   </button>
-                  <button v-if="reupload" type="button" :class="n('action')" :disabled="disabledState" :aria-label="text.replace" @click="chooseReplacement(file, $event)"><IconRefresh /></button>
+                  <button
+                    v-if="reupload"
+                    type="button"
+                    :class="n('action')"
+                    :disabled="disabledState"
+                    :aria-label="text.replace"
+                    @click="chooseReplacement(file, $event)"
+                  >
+                    <IconRefresh />
+                  </button>
                   <slot v-if="showRemoveButton" name="remove-button" v-bind="itemScope(file, index)"
                     ><button
                       type="button"
@@ -142,31 +167,37 @@
         </div>
       </template>
     </div>
-    <PreviewPresentation :popup-container="popupContainer" :file="video" :label="text.preview" @close="closePreview" @closed="releaseClosedVideos" />
+    <PreviewPresentation
+      :popup-container="popupContainer"
+      :file="video"
+      :label="text.preview"
+      @close="closePreview"
+      @closed="releaseClosedVideos"
+    />
   </div>
 </template>
 <script setup lang="ts">
 import type { ComponentPublicInstance } from 'vue'
-import PendingFeedback from '../_components/pending-feedback/PendingFeedback.vue'
 import { inject, onBeforeUnmount, ref, watch } from 'vue'
-import { fieldEditorControlPending } from '../_components/field-presentation/editor-pending'
 import { IconClose, IconDownload, IconEye, IconRefresh } from '@cedar-design/icons-vue'
+import { fieldEditorControlPending } from '../_components/field-presentation/editor-pending'
+import PendingFeedback from '../_components/pending-feedback/PendingFeedback.vue'
 import { createNamespace, formatElevation } from '../_utils/global-config'
+import { useFormErrorDescription } from '../form/error-description'
 // Keep preview types erased from runtime dependencies.
 import type { ImagePreviewHandle } from '../image/api'
 // Internal controls depend on the preview service, not the installed Image family.
 import { previewImage } from '../image/preview-api'
 import Ripple from '../ripple'
 import { useUploader } from './composables/use-uploader'
-import { useFormErrorDescription } from '../form/error-description'
 import { useUploadForm } from './form-adapter'
 // Vue's input type omits the empty-attribute form used for capture=true.
 import type { UploadCapture, UploadEmits, UploadExpose, UploadFileItem, UploadSlots } from './interfaces'
 import PreviewPresentation from './preview-presentation.vue'
 import { uploadProps } from './props'
-import { useUploadLocale } from './use-upload-locale'
 import { useUploadTrigger } from './use-trigger'
-import { isVideo, formatVideoDuration } from './utils/video-duration'
+import { useUploadLocale } from './use-upload-locale'
+import { formatVideoDuration, isVideo } from './utils/video-duration'
 
 defineOptions({ name: createNamespace('upload').name })
 const props = defineProps(uploadProps)
@@ -195,7 +226,7 @@ function releaseClosedVideos() {
   closedVideos.splice(0).forEach((release) => release())
 }
 const uploader = useUploader({
-  modelValue: () => props.modelValue === null ? [] : props.modelValue,
+  modelValue: () => (props.modelValue === null ? [] : props.modelValue),
   defaultValue: () => props.defaultValue,
   accept: () => props.accept,
   capture: () => props.capture,
@@ -268,9 +299,13 @@ const uploader = useUploader({
   },
 })
 const editorPending = inject(fieldEditorControlPending, undefined)
-watch(uploader.editorPending, (value) => {
-  if (editorPending) editorPending.value = value
-}, { flush: 'sync' })
+watch(
+  uploader.editorPending,
+  (value) => {
+    if (editorPending) editorPending.value = value
+  },
+  { flush: 'sync' },
+)
 onBeforeUnmount(() => {
   if (editorPending) editorPending.value = false
 })
@@ -288,7 +323,9 @@ const {
   handleDragLeave,
   handleDrop,
 } = uploader
-const { triggerRef, hasInteractiveTrigger, captureClick, claim, chooser, isClaimed } = useUploadTrigger(Boolean(slots.trigger && props.initialTriggerInteractive))
+const { triggerRef, hasInteractiveTrigger, captureClick, claim, chooser, isClaimed } = useUploadTrigger(
+  Boolean(slots.trigger && props.initialTriggerInteractive),
+)
 function setTriggerRef(element: Element | ComponentPublicInstance | null) {
   triggerRef.value = element ? (element as HTMLElement) : undefined
 }
@@ -320,7 +357,9 @@ async function chooseReplacement(file: UploadFileItem, event: Event) {
     const choose = chooser(() => uploader.replace(file), event)
     if (props.requestChoose) await props.requestChoose(choose, event)
     else await choose()
-  } catch { /* A rejected chooser preserves the previous attachment. */ }
+  } catch {
+    /* A rejected chooser preserves the previous attachment. */
+  }
 }
 async function choose(event: Event, ownKeydown = false) {
   if (disabledState.value || isClaimed(event) || (!ownKeydown && event.defaultPrevented)) {

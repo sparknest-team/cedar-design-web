@@ -3,56 +3,23 @@ packages:
   - 'tests/vue-compat/*'
 
 catalog:
-  typescript: 5.3.3
-  vue: 3.5.45
-  '@vue/runtime-core': 3.5.45
-  '@vue/compiler-sfc': 3.5.45
-  '@vue/server-renderer': 3.5.45
-  tsup: 7.2.0
-  '@types/node': ^26.0.0
+  typescript: 7.1.0-beta
+  tsdown: 0.23.7
+  vue: 3.5.46
+  '@vue/runtime-core': 3.5.46
+  '@vue/compiler-sfc': 3.5.46
+  '@vue/server-renderer': 3.5.46
+  tsup: 9.0.0
+  '@types/node': ^26.6.11
 
-overrides:
-  '@sparknest/ui-build-vue': link:../design-ui/packages/ui-build
-  '@sparknest/ui-doc-preview-vue': link:../design-ui/packages/ui-doc-preview
-  '@sparknest/ui-icons-vue': link:../design-ui/packages/ui-icons
-  '@sparknest/theme-contract-vue': link:../design-ui/packages/theme-contract
-  '@vueuse/core': 12.8.2
-  '@vueuse/shared': 12.8.2
-  '@vuepress/helper': 2.0.0-rc.63
-  '@vuepress/plugin-active-header-links': 2.0.0-rc.63
-  '@vuepress/plugin-back-to-top': 2.0.0-rc.63
-  '@vuepress/plugin-blog': 2.0.0-rc.63
-  '@vuepress/plugin-catalog': 2.0.0-rc.63
-  '@vuepress/plugin-comment': 2.0.0-rc.63
-  '@vuepress/plugin-copy-code': 2.0.0-rc.63
-  '@vuepress/plugin-copyright': 2.0.0-rc.63
-  '@vuepress/plugin-git': 2.0.0-rc.62
-  '@vuepress/plugin-links-check': 2.0.0-rc.63
-  '@vuepress/plugin-markdown-ext': 2.0.0-rc.63
-  '@vuepress/plugin-markdown-hint': 2.0.0-rc.63
-  '@vuepress/plugin-markdown-image': 2.0.0-rc.63
-  '@vuepress/plugin-markdown-include': 2.0.0-rc.63
-  '@vuepress/plugin-markdown-math': 2.0.0-rc.63
-  '@vuepress/plugin-markdown-stylize': 2.0.0-rc.63
-  '@vuepress/plugin-markdown-tab': 2.0.0-rc.63
-  '@vuepress/plugin-medium-zoom': 2.0.0-rc.63
-  '@vuepress/plugin-notice': 2.0.0-rc.63
-  '@vuepress/plugin-nprogress': 2.0.0-rc.63
-  '@vuepress/plugin-palette': 2.0.0-rc.63
-  '@vuepress/plugin-photo-swipe': 2.0.0-rc.63
-  '@vuepress/plugin-prismjs': 2.0.0-rc.63
-  '@vuepress/plugin-reading-time': 2.0.0-rc.63
-  '@vuepress/plugin-redirect': 2.0.0-rc.63
-  '@vuepress/plugin-rtl': 2.0.0-rc.63
-  '@vuepress/plugin-sass-palette': 2.0.0-rc.63
-  '@vuepress/plugin-seo': 2.0.0-rc.63
-  '@vuepress/plugin-sitemap': 2.0.0-rc.63
-  '@vuepress/plugin-slimsearch': 2.0.0-rc.63
-  '@vuepress/plugin-theme-data': 2.0.0-rc.64
-  '@vuepress/plugin-watermark': 2.0.0-rc.63
+packageExtensions:
+  '@vue/compiler-sfc@3.5.46':
+    dependencies:
+      typescript: 6.0.3
 
 patchedDependencies:
-  '@vuepress/plugin-slimsearch@2.0.0-rc.63': patches/@vuepress__plugin-slimsearch@2.0.0-rc.63.patch
+  vue@3.5.46: patches/vue-compiler-sfc-register-typescript.patch
+  '@vuepress/bundler-vite@2.0.0-rc.32': patches/vuepress-bundler-vite-main-entry.patch
   'source-map-js@1.2.2': patches/source-map-js@1.2.2.patch
 
 onlyBuiltDependencies:
@@ -61,3 +28,9 @@ onlyBuiltDependencies:
   - esbuild
   - loca-boot-common
   - loca-boot-core
+
+overrides:
+  # Use the tested release candidates until their versions are available from npm.
+  '@sparknest/ui-build-vue': file:vendor/sparknest/ui-build-vue-candidate.2.tgz
+  '@sparknest/ui-doc-preview-vue': file:vendor/sparknest/ui-doc-preview-vue-candidate.tgz
+  '@sparknest/vuepress-plugins-vue': file:vendor/sparknest/vuepress-plugins-vue-candidate.2.tgz

@@ -35,17 +35,17 @@
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
-    "lib",
-    "THIRD_PARTY_NOTICES"
+    "lib"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --out-dir=lib --dts --clean",
-    "dev": "tsup src/index.ts --format esm --out-dir=lib --watch --dts",
+    "build": "tsdown --config ../../scripts/tsdown.config.mjs --format esm --format cjs",
+    "dev": "tsdown --config ../../scripts/tsdown.config.mjs --format esm --watch",
     "test": "node --test ../../scripts/quality/shared-bundle.test.mjs"
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "tsup": "catalog:",
+    "esbuild": "0.28.2",
+    "tsdown": "catalog:",
     "typescript": "catalog:"
   },
   "publishConfig": {

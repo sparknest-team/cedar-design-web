@@ -19,11 +19,7 @@
     :style="[{ background }, attrs.style as StyleValue]"
   >
     <SearchInputGroup :size="mergedSize" :disabled="mergedDisabled" :readonly="mergedReadonly" :variant="variant">
-      <label
-        v-if="!fields.length && (label || slots.label)"
-        :for="getReferenceId()"
-        :class="n('label')"
-      >
+      <label v-if="!fields.length && (label || slots.label)" :for="getReferenceId()" :class="n('label')">
         <slot name="label">{{ label }}</slot>
       </label>
       <SearchSelect
@@ -57,7 +53,7 @@
           :input-attrs="getReferenceAttrs()"
           :error="error"
           :type="type"
-          :aria-label="getLabel()"
+          :ariaLabel="getLabel()"
           :max-length="maxLength"
           :autofocus="autofocus"
           :enterkeyhint="enterkeyhint || 'search'"
@@ -101,8 +97,14 @@
           <template v-if="slots['clear-icon']" #clear-icon="scope"><slot name="clear-icon" v-bind="scope" /></template>
         </SearchInput>
       </SearchDropdown>
-      <button v-if="!searchButton && editMode !== 'direct'" type="button" :class="n('icon-button')"
-        :aria-label="buttonText || searchText" :disabled="searchDisabled" @click="handleSearch">
+      <button
+        v-if="!searchButton && editMode !== 'direct'"
+        type="button"
+        :class="n('icon-button')"
+        :aria-label="buttonText || searchText"
+        :disabled="searchDisabled"
+        @click="handleSearch"
+      >
         <IconLoading v-if="loading && loadingMode !== 'line'" />
         <IconSearch v-else-if="searchIcon === 'search'" />
         <SearchIcon v-else :name="searchIcon" />
@@ -132,14 +134,13 @@
 </template>
 <script setup lang="ts">
 import { computed, reactive, ref, useAttrs, watch } from 'vue'
-import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
-
 import { IconLoading } from '@cedar-design/icons-vue/icon-loading'
 import { IconSearch } from '@cedar-design/icons-vue/icon-search'
 import { useFieldPresentation } from '../_components/field-presentation/context'
 import FieldPresentation from '../_components/field-presentation/FieldPresentation.vue'
 import { useEmptyValues } from '../_utils/empty-value'
 import { createNamespace } from '../_utils/global-config'
+import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
 import SearchButton from '../button/base'
 import SearchIcon from '../icon'
 import SearchInput from '../input/input.vue'
@@ -163,14 +164,17 @@ const presentationState = useFieldPresentation(
   () => props.readPretty,
 )
 const readPretty = presentationState.readPretty
-const control = useSearchControl(props, emit, inputRef, () => readPretty.value, () => presentationState.editMode.value)
+const control = useSearchControl(
+  props,
+  emit,
+  inputRef,
+  () => readPretty.value,
+  () => presentationState.editMode.value,
+)
 const editMode = presentationState.editMode
 const emptyPolicy = useEmptyValues(props, undefined, Boolean(presentationState.item))
 const state = reactive(control)
-const { getReferenceId, getLabel, getReferenceAttrs } = useSearchInput(
-  props,
-  () => attrs,
-)
+const { getReferenceId, getLabel, getReferenceAttrs } = useSearchInput(props, () => attrs)
 watch(
   readPretty,
   (reading) => {

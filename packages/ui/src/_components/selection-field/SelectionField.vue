@@ -110,17 +110,20 @@
 
 <script setup lang="ts">
 import { computed, ref, watch, type AriaAttributes, type VNodeChild } from 'vue'
-import { useId } from '../../_utils/vue-compat'
 import { IconDown, IconSearch } from '@cedar-design/icons-vue'
-import FieldDecorator from '../../field-decorator/FieldDecorator.vue'
+import { createNamespace } from '../../_utils/global-config'
+import type { WithNativeListeners } from '../../_utils/native-listener-types'
+import { useId } from '../../_utils/vue-compat'
+import FieldDecoratorComponent from '../../field-decorator/FieldDecorator.vue'
 import { fieldDecoratorProps } from '../../field-decorator/props'
 import { useFormErrorDescription } from '../../form/error-description'
 import Tag from '../../tag'
-import { createNamespace } from '../../_utils/global-config'
 import { useFieldTexts } from '../field-presentation/texts'
 import { blockFieldOpenClick, isFieldOpenClick } from '../picker-field/open-trigger'
 import { selectionFieldProps, type SelectionFieldItem } from './props'
 import SelectionTagLabel from './SelectionTagLabel.vue'
+
+const FieldDecorator = FieldDecoratorComponent as WithNativeListeners<typeof FieldDecoratorComponent, 'onClick'>
 
 defineOptions({ name: createNamespace('selection-field').name, inheritAttrs: false })
 const { select: selectText } = useFieldTexts()

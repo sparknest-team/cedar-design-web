@@ -3,8 +3,8 @@
     <div :class="`${prefixCls}-header`">
       <slot
         name="title"
-        :count-total="dataInfo.data.length"
-        :count-selected="dataInfo.selected.length"
+        :count-total="panelState.data.length"
+        :count-selected="panelState.selected.length"
         :search-value="filter"
         :checked="checked"
         :indeterminate="indeterminate"
@@ -12,10 +12,7 @@
         :on-clear="handleClear"
       >
         <span :class="`${prefixCls}-header-title`">
-          <span
-            v-if="clearable || simple || !showSelectAll"
-            :class="`${prefixCls}-header-title-simple`"
-          >
+          <span v-if="clearable || simple || !showSelectAll" :class="`${prefixCls}-header-title-simple`">
             {{ title }}
           </span>
           <checkbox
@@ -29,13 +26,13 @@
             {{ title }}
           </checkbox>
           <span v-if="clearable" :class="`${prefixCls}-header-selected-count`">
-            <strong>{{ dataInfo.data.length }}</strong> / {{ total }}
+            <strong>{{ panelState.data.length }}</strong> / {{ total }}
           </span>
         </span>
         <button
           v-if="clearable && clearText"
           type="button"
-          :disabled="disabled || dataInfo.data.length === 0"
+          :disabled="disabled || panelState.data.length === 0"
           :class="`${prefixCls}-header-clear-text`"
           @click="handleClear"
         >
@@ -44,7 +41,7 @@
         <button
           v-else-if="clearable"
           type="button"
-          :disabled="disabled || dataInfo.data.length === 0"
+          :disabled="disabled || panelState.data.length === 0"
           :aria-label="t('transfer.clear')"
           :class="`${prefixCls}-header-clear-btn`"
           @click="handleClear"
@@ -52,13 +49,14 @@
           <icon-hover><icon-delete /></icon-hover>
         </button>
         <span v-else-if="!simple" :class="`${prefixCls}-header-count`">
-          {{ dataInfo.selected.length }} / {{ dataInfo.data.length }}
+          {{ panelState.selected.length }} / {{ panelState.data.length }}
         </span>
       </slot>
     </div>
     <div v-if="showSearch" :class="`${prefixCls}-search`">
       <Search
-        v-model="filter"
+        :model-value="filter"
+        @update:model-value="filter = $event ?? ''"
         :disabled="disabled"
         v-bind="searchProps"
         @input="handleSearch"
@@ -81,10 +79,7 @@
           :estimated-size="36"
         >
           <template #item="{ item }">
-            <div
-              v-if="showGroupTitle(item)"
-              :class="`${prefixCls}-group-title`"
-            >
+            <div v-if="showGroupTitle(item)" :class="`${prefixCls}-group-title`">
               {{ item.group }}
             </div>
             <transfer-list-item
@@ -93,11 +88,7 @@
               :simple="simple"
               :clearable="clearable"
               :operation-mode="targetOperation"
-              :disabled="
-                disabled ||
-                item.disabled ||
-                (type === 'source' && item.required)
-              "
+              :disabled="disabled || item.disabled || (type === 'source' && item.required)"
             />
           </template>
         </VirtualList>
@@ -118,17 +109,9 @@
               :disabled="disabled || item.disabled"
             />
           </div>
-          <list
-            v-else
-            :class="`${prefixCls}-list`"
-            :bordered="false"
-            :scrollbar="false"
-          >
+          <list v-else :class="`${prefixCls}-list`" :bordered="false" :scrollbar="false">
             <template v-for="(item, index) of filteredData" :key="item.value">
-              <div
-                v-if="showGroupTitle(item, index)"
-                :class="`${prefixCls}-group-title`"
-              >
+              <div v-if="showGroupTitle(item, index)" :class="`${prefixCls}-group-title`">
                 {{ item.group }}
               </div>
               <transfer-list-item
@@ -137,11 +120,7 @@
                 :simple="simple"
                 :clearable="clearable"
                 :operation-mode="targetOperation"
-                :disabled="
-                  disabled ||
-                  item.disabled ||
-                  (type === 'source' && item.required)
-                "
+                :disabled="disabled || item.disabled || (type === 'source' && item.required)"
               />
             </template>
           </list>
@@ -153,38 +132,24 @@
 </template>
 
 <script lang="ts">
-import { createNamespace } from "../_utils/global-config";
-import {
-  computed,
-  defineComponent,
-  inject,
-  onBeforeUnmount,
-  PropType,
-  ref,
-  watch,
-} from "vue";
-import Sortable from "sortablejs";
-import { getPrefixCls } from "../_utils/global-config";
-import Checkbox from "../checkbox";
-import IconHover from "../_components/IconHover.vue";
-import { IconDelete } from "@cedar-design/icons-vue/icon-delete";
-import Search from "../search";
-import List from "../list";
-import TransferListItem from "./transfer-list-item";
-import type {
-  DataInfo,
-  TransferFilter,
-  TransferItem,
-  TransferValue,
-} from "./types";
-import { transferInjectionKey } from "./context";
-import Scrollbar from "../scrollbar";
-import Empty from "../empty";
-import { useI18n } from "../locale";
-import VirtualList from "../_components/virtual-list-v2";
+import { computed, defineComponent, inject, onBeforeUnmount, PropType, ref, watch } from 'vue'
+import { IconDelete } from '@cedar-design/icons-vue/icon-delete'
+import Sortable from 'sortablejs'
+import IconHover from '../_components/IconHover.vue'
+import VirtualList from '../_components/virtual-list-v2'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import Checkbox from '../checkbox'
+import Empty from '../empty'
+import List from '../list'
+import { useI18n } from '../locale'
+import Scrollbar from '../scrollbar'
+import Search from '../search'
+import { transferInjectionKey } from './context'
+import TransferListItem from './transfer-list-item'
+import type { DataInfo, TransferFilter, TransferItem, TransferValue } from './types'
 
 export default defineComponent({
-  name: createNamespace("transfer-view").name,
+  name: createNamespace('transfer-view').name,
   components: {
     Empty,
     Checkbox,
@@ -198,9 +163,9 @@ export default defineComponent({
   },
   props: {
     type: {
-      type: String as PropType<"source" | "target">,
+      type: String as PropType<'source' | 'target'>,
     },
-    dataInfo: {
+    panelState: {
       type: Object as PropType<DataInfo>,
       required: true,
     },
@@ -220,8 +185,8 @@ export default defineComponent({
     virtualScroll: Boolean,
     targetDraggable: Boolean,
     targetOperation: {
-      type: String as PropType<"remove" | "menu">,
-      default: "remove",
+      type: String as PropType<'remove' | 'menu'>,
+      default: 'remove',
     },
     total: Number,
     clearText: String,
@@ -234,118 +199,102 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["search"],
+  emits: ['search'],
   setup(props, { emit }) {
-    const { t } = useI18n();
-    const prefixCls = getPrefixCls("transfer-view");
-    const itemPrefixCls = getPrefixCls("transfer-list-item");
-    const filter = ref("");
-    const transferCtx = inject(transferInjectionKey, undefined);
-    const dragContainerRef = ref<HTMLElement>();
-    let sortable: Sortable | undefined;
-    const countSelected = computed(() => props.dataInfo.selected.length);
-    const countRendered = computed(() => props.dataInfo.data.length);
+    const { t } = useI18n()
+    const prefixCls = getPrefixCls('transfer-view')
+    const itemPrefixCls = getPrefixCls('transfer-list-item')
+    const filter = ref('')
+    const transferCtx = inject(transferInjectionKey, undefined)
+    const dragContainerRef = ref<HTMLElement>()
+    let sortable: Sortable | undefined
+    const countSelected = computed(() => props.panelState.selected.length)
+    const countRendered = computed(() => props.panelState.data.length)
 
     const filteredData = computed(() =>
-      props.dataInfo.data.filter(
-        (item) =>
-          !filter.value ||
-          props.filter(filter.value, item, props.type ?? "source"),
-      ),
-    );
+      props.panelState.data.filter((item) => !filter.value || props.filter(filter.value, item, props.type ?? 'source')),
+    )
     const filteredValidValues = computed(() =>
       filteredData.value
-        .filter((item) => !item.disabled && (props.type !== "source" || !item.required))
+        .filter((item) => !item.disabled && (props.type !== 'source' || !item.required))
         .map((item) => item.value),
-    );
+    )
     const filteredSelectedValues = computed(() =>
-      filteredValidValues.value.filter((value) =>
-        props.selected.includes(value),
-      ),
-    );
+      filteredValidValues.value.filter((value) => props.selected.includes(value)),
+    )
     const checked = computed(
       () =>
         filteredValidValues.value.length > 0 &&
-        filteredSelectedValues.value.length ===
-          filteredValidValues.value.length,
-    );
+        filteredSelectedValues.value.length === filteredValidValues.value.length,
+    )
     const indeterminate = computed(
       () =>
         filteredSelectedValues.value.length > 0 &&
         filteredSelectedValues.value.length < filteredValidValues.value.length,
-    );
+    )
 
-    const handleSelectAllChange = (
-      checked: boolean | (string | number | boolean)[] | null,
-    ) => {
-      if (props.disabled) return;
-      const isChecked = Array.isArray(checked) ? checked.length > 0 : checked;
+    const handleSelectAllChange = (checked: boolean | (string | number | boolean)[] | null) => {
+      if (props.disabled) return
+      const isChecked = Array.isArray(checked) ? checked.length > 0 : checked
       if (isChecked) {
-        transferCtx?.onSelect([
-          ...new Set([...props.selected, ...filteredValidValues.value]),
-        ]);
+        transferCtx?.onSelect([...new Set([...props.selected, ...filteredValidValues.value])])
       } else {
-        transferCtx?.onSelect(
-          props.selected.filter(
-            (value) => !filteredValidValues.value.includes(value),
-          ),
-        );
+        transferCtx?.onSelect(props.selected.filter((value) => !filteredValidValues.value.includes(value)))
       }
-    };
+    }
 
     const handleSearch = (value: string) => {
-      emit("search", value, props.type);
-    };
+      emit('search', value, props.type)
+    }
 
     const handleClear = () => {
-      transferCtx?.moveTo(props.dataInfo.allValidValues, "source");
-    };
+      transferCtx?.moveTo(props.panelState.allValidValues, 'source')
+    }
 
     const showGroupTitle = (item: TransferItem, index?: number) => {
-      if (props.type !== "source" || !item.group) return false;
-      const itemIndex = index ?? filteredData.value.indexOf(item);
-      return (
-        itemIndex === 0 ||
-        filteredData.value[itemIndex - 1]?.group !== item.group
-      );
-    };
+      if (props.type !== 'source' || !item.group) return false
+      const itemIndex = index ?? filteredData.value.indexOf(item)
+      return itemIndex === 0 || filteredData.value[itemIndex - 1]?.group !== item.group
+    }
 
-    const handleTargetOrder = (
-      items: TransferItem[],
-      detail: { oldValue?: TransferItem; newValue?: TransferItem },
-    ) => transferCtx?.onReorder(items, detail);
+    const handleTargetOrder = (items: TransferItem[], detail: { oldValue?: TransferItem; newValue?: TransferItem }) =>
+      transferCtx?.onReorder(items, detail)
 
     const destroySortable = () => {
-      sortable?.destroy();
-      sortable = undefined;
-    };
+      sortable?.destroy()
+      sortable = undefined
+    }
 
     const initSortable = () => {
-      destroySortable();
-      if (!props.targetDraggable || props.type !== "target") return;
-      if (!dragContainerRef.value) return;
+      destroySortable()
+      if (!props.targetDraggable || props.type !== 'target') return
+      if (!dragContainerRef.value) return
       sortable = Sortable.create(dragContainerRef.value, {
         animation: 150,
         disabled: props.disabled,
         handle: `.${itemPrefixCls}-drag-handle`,
         onEnd: ({ oldIndex, newIndex }) => {
-          if (oldIndex == null || newIndex == null || oldIndex === newIndex)
-            return;
-          const items = [...filteredData.value];
-          if (oldIndex < 0 || newIndex < 0 || oldIndex >= items.length || newIndex >= items.length)
-            return;
-          const oldValue = items[oldIndex];
-          const newValue = items[newIndex];
-          const [item] = items.splice(oldIndex, 1);
-          items.splice(newIndex, 0, item);
-          handleTargetOrder(items, { oldValue, newValue });
+          if (oldIndex == null || newIndex == null || oldIndex === newIndex) return
+          const items = [...filteredData.value]
+          if (oldIndex < 0 || newIndex < 0 || oldIndex >= items.length || newIndex >= items.length) return
+          const oldValue = items[oldIndex]
+          const newValue = items[newIndex]
+          const [item] = items.splice(oldIndex, 1)
+          items.splice(newIndex, 0, item)
+          handleTargetOrder(items, { oldValue, newValue })
         },
-      });
-    };
+      })
+    }
 
-    watch([dragContainerRef, () => props.targetDraggable, () => props.type], initSortable, { immediate: true, flush: 'post' });
-    watch(() => props.disabled, (disabled) => sortable?.option('disabled', disabled));
-    onBeforeUnmount(destroySortable);
+    watch([dragContainerRef, () => props.targetDraggable, () => props.type], initSortable, {
+      immediate: true,
+      flush: 'post',
+    })
+    watch(
+      () => props.disabled,
+      (disabled) => sortable?.option('disabled', disabled),
+    )
+    onBeforeUnmount(destroySortable)
 
     return {
       t,
@@ -363,7 +312,7 @@ export default defineComponent({
       handleTargetOrder,
       dragContainerRef,
       transferCtx,
-    };
+    }
   },
-});
+})
 </script>

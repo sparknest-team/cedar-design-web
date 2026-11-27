@@ -1,22 +1,33 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
-import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs'
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  realpathSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs'
 import { createRequire } from 'node:module'
 import { tmpdir } from 'node:os'
-import { resolve } from 'node:path'
+import { dirname, resolve } from 'node:path'
 import test from 'node:test'
 import { fileURLToPath } from 'node:url'
 import { gzipSync } from 'node:zlib'
 
 const root = fileURLToPath(new URL('../../', import.meta.url))
-const isCedar = JSON.parse(readFileSync(resolve(root, 'packages/shared/package.json'), 'utf8')).name.startsWith('@cedar-design/')
+const isCedar = JSON.parse(readFileSync(resolve(root, 'packages/shared/package.json'), 'utf8')).name.startsWith(
+  '@cedar-design/',
+)
 const sharedDirectory = 'shared'
 const uiDirectory = 'ui'
 const brand = isCedar ? 'Cedar' : 'Maple'
 const sharedRoot = resolve(root, 'packages', sharedDirectory)
 const require = createRequire(resolve(sharedRoot, 'package.json'))
-const esbuild = createRequire(require.resolve('tsup/package.json'))('esbuild')
-const ts = require('typescript')
+const esbuild = require('esbuild')
+const ts = createRequire(resolve(root, 'packages/ui/package.json'))('typescript-js')
 
 // Deliberate public surface: keep repository consumers, remove the old wholesale re-export.
 const expectedExports = [
@@ -89,10 +100,13 @@ test('local shared utilities: published runtime, types, behavior and bundle size
     execFileSync(
       process.execPath,
       [
-        require.resolve('tsup/dist/cli-default.js'),
-        'src/index.ts',
+        resolve(dirname(require.resolve('tsdown/package.json')), 'dist/run.mjs'),
+        '--config',
+        '../../scripts/tsdown.config.mjs',
         '--format',
-        'esm,cjs',
+        'esm',
+        '--format',
+        'cjs',
         '--dts',
         '--out-dir',
         output,
@@ -106,7 +120,7 @@ test('local shared utilities: published runtime, types, behavior and bundle size
 
     await t.test('ESM/CJS expose only used tools and self-contained types', () => {
       const sharedManifest = JSON.parse(readFileSync(resolve(sharedRoot, 'package.json'), 'utf8'))
-      assert.ok(sharedManifest.files.includes('THIRD_PARTY_NOTICES'))
+      assert.ok(sharedManifest.files.includes('lib'))
       assert.deepEqual(Object.keys(esm).sort(), expectedExports)
       assert.deepEqual(Object.keys(cjs).sort(), expectedExports)
       for (const file of ['index.js', 'index.cjs', 'index.d.ts', 'index.d.cts']) {
@@ -133,8 +147,19 @@ test('local shared utilities: published runtime, types, behavior and bundle size
         copyFileSync(resolve(output, file), resolve(packageRoot, 'lib', file))
       }
       const options = { module: ts.ModuleKind.NodeNext, moduleResolution: ts.ModuleResolutionKind.NodeNext }
-      for (const [extension, mode, expected] of [['mts', ts.ModuleKind.ESNext, 'index.d.ts'], ['cts', ts.ModuleKind.CommonJS, 'index.d.cts']]) {
-        const resolved = ts.resolveModuleName(manifest.name, resolve(consumer, `entry.${extension}`), options, ts.sys, undefined, undefined, mode).resolvedModule
+      for (const [extension, mode, expected] of [
+        ['mts', ts.ModuleKind.ESNext, 'index.d.ts'],
+        ['cts', ts.ModuleKind.CommonJS, 'index.d.cts'],
+      ]) {
+        const resolved = ts.resolveModuleName(
+          manifest.name,
+          resolve(consumer, `entry.${extension}`),
+          options,
+          ts.sys,
+          undefined,
+          undefined,
+          mode,
+        ).resolvedModule
         assert.ok(resolved)
         assert.equal(realpathSync(resolved.resolvedFileName), realpathSync(resolve(packageRoot, 'lib', expected)))
       }

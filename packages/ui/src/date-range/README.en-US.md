@@ -7,6 +7,8 @@ permalink: /en/components/date-range/
 
 A date range field. The bound model is an array; use DateRangePicker for a standalone panel.
 
+A selected range contains two endpoints. Each endpoint is a string for a format pattern, a `Date` for `value-format="Date"`, or a number for `value-format="timestamp"`. Clearing returns the configured empty value.
+
 ## String range models
 
 Set format="MM-DD" and value-format="MM-DD" to get ['09-10', '10-10'] directly. These values have no year; parsing uses the current year and cannot preserve cross-year ordering. For real bookings store YYYY-MM-DD and map the payload in application code. format only changes display, while value-format changes the model and events.
@@ -34,16 +36,15 @@ Toggle disabled, read-only and error states, then interact with the same instanc
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| -------------- | ------------------------------------------------------- | ---------------------------- |
-| `clearable` | Show the clear action | Mode, Separator |
+| Configuration  | Purpose                                                                | Related examples                    |
+| -------------- | ---------------------------------------------------------------------- | ----------------------------------- |
+| `clearable`    | Show the clear action                                                  | Mode, Separator                     |
 | `value-format` | Model and event value format: a date format string, Date, or timestamp | Appearance configuration comparison |
-| `type` | Mode | Mode |
-| `separator` | Range separator | Separator |
-| `placeholder` | Placeholder | Separator |
+| `type`         | Mode                                                                   | Mode                                |
+| `separator`    | Range separator                                                        | Separator                           |
+| `placeholder`  | Placeholder                                                            | Separator                           |
 
 <!-- demo-config-notes:end -->
-
 
 Choose a dimension to compare all its values side by side while keeping other settings and content identical. Change the other settings to inspect combinations; input specimens share one model.
 
@@ -65,16 +66,15 @@ Choose a dimension to compare all its values side by side while keeping other se
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --------------- | ------------------------------------------------------- | ---------------------- |
-| `format` | Display format | Show Time, Boundaries |
-| `show-time` | Include time selection | Show Time |
-| `clearable` | Show the clear action | Show Time |
-| `value-format` | Model and event value format: a date format string, Date, or timestamp | Boundaries |
-| `disabled-date` | Return true to disable a date | Boundaries |
+| Configuration   | Purpose                                                                | Related examples      |
+| --------------- | ---------------------------------------------------------------------- | --------------------- |
+| `format`        | Display format                                                         | Show Time, Boundaries |
+| `show-time`     | Include time selection                                                 | Show Time             |
+| `clearable`     | Show the clear action                                                  | Show Time             |
+| `value-format`  | Model and event value format: a date format string, Date, or timestamp | Boundaries            |
+| `disabled-date` | Return true to disable a date                                          | Boundaries            |
 
 <!-- demo-config-notes:end -->
-
 
 <demo src="./__demos__/show-time.vue"></demo>
 
@@ -90,14 +90,13 @@ Choose a dimension to compare all its values side by side while keeping other se
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| -------------- | ------------------------------------------------------- | -------------------------------------------------- |
-| `format` | Display format | String Values, Text Entry |
-| `value-format` | Model and event value format: a date format string, Date, or timestamp | String Values |
-| `disabled` | Disable interaction | Text Entry |
+| Configuration  | Purpose                                                                | Related examples          |
+| -------------- | ---------------------------------------------------------------------- | ------------------------- |
+| `format`       | Display format                                                         | String Values, Text Entry |
+| `value-format` | Model and event value format: a date format string, Date, or timestamp | String Values             |
+| `disabled`     | Disable interaction                                                    | Text Entry                |
 
 <!-- demo-config-notes:end -->
-
 
 <demo src="./__demos__/en-US/string-values.vue"></demo>
 
@@ -113,17 +112,16 @@ Choose a dimension to compare all its values side by side while keeping other se
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ------------------------- | ------------------------------------------------------- | ------------------------------------ |
-| `open` | Controlled popup visibility | Rejected Close, Passthrough Options |
-| `date-range-picker-props` | Panel presentation options | Field Panel Tools, Entry Boundary |
-| `value-format` | Model and event value format: a date format string, Date, or timestamp | Api Review |
-| `readonly` | Read-only interaction | Api Review |
-| `format` | Display format | Field Panel Tools |
-| `popup-props` | Trigger presentation options; cannot override owned visibility or date rules | Passthrough Options |
+| Configuration             | Purpose                                                                      | Related examples                    |
+| ------------------------- | ---------------------------------------------------------------------------- | ----------------------------------- |
+| `open`                    | Controlled popup visibility                                                  | Rejected Close, Passthrough Options |
+| `date-range-picker-props` | Panel presentation options                                                   | Field Panel Tools, Entry Boundary   |
+| `value-format`            | Model and event value format: a date format string, Date, or timestamp       | Api Review                          |
+| `readonly`                | Read-only interaction                                                        | Api Review                          |
+| `format`                  | Display format                                                               | Field Panel Tools                   |
+| `popup-props`             | Trigger presentation options; cannot override owned visibility or date rules | Passthrough Options                 |
 
 <!-- demo-config-notes:end -->
-
 
 </details>
 
@@ -147,23 +145,23 @@ Choose a dimension to compare all its values side by side while keeping other se
 
 ### Props
 
-| Arguments | Description | Type | Default |
+| Arguments                 | Description                                                                                                                      | Type                                       | Default   |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | --------- |
-| `open-trigger-target` | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available. | `'field' \| 'icon'` | `'field'` |
-| `model-value` | Bound value | `(Date \| string \| number)[]` | `-` |
-| `type` | Date precision | `date \| week \| month \| year \| quarter` | `date` |
-| `open` | Controlled popup visibility | `boolean` | `-` |
-| `clearable` | Show the clear action | `boolean` | `true` |
-| `disabled` | Disable interaction | `boolean \| boolean[]` | `-` |
-| `readonly` | Read-only interaction | `boolean` | `false` |
-| `size` | Component size | `xs \| sm \| md \| lg \| xl` | `-` |
-| `variant` | Field appearance | `filled \| outline \| standard` | `outline` |
-| `separator` | Range separator | `string` | `-` |
-| `placeholder` | Placeholder | `string[]` | `-` |
-| `disabled-date` | Return true to disable a date | `Function` | `-` |
-| `format` | Display format | `string` | `-` |
-| `show-time` | Include time selection | `boolean` | `false` |
-| `date-range-picker-props` | Panel presentation options | `DateRangePickerOptions` | `{}` |
+| `open-trigger-target`     | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available. | `'field' \| 'icon'`                        | `'field'` |
+| `model-value`             | Bound value                                                                                                                      | `(Date \| string \| number)[]`             | `-`       |
+| `type`                    | Date precision                                                                                                                   | `date \| week \| month \| year \| quarter` | `date`    |
+| `open`                    | Controlled popup visibility                                                                                                      | `boolean`                                  | `-`       |
+| `clearable`               | Show the clear action                                                                                                            | `boolean`                                  | `true`    |
+| `disabled`                | Disable interaction                                                                                                              | `boolean \| boolean[]`                     | `-`       |
+| `readonly`                | Read-only interaction                                                                                                            | `boolean`                                  | `false`   |
+| `size`                    | Component size                                                                                                                   | `xs \| sm \| md \| lg \| xl`               | `-`       |
+| `variant`                 | Field appearance                                                                                                                 | `filled \| outline \| standard`            | `outline` |
+| `separator`               | Range separator                                                                                                                  | `string`                                   | `-`       |
+| `placeholder`             | Placeholder                                                                                                                      | `string[]`                                 | `-`       |
+| `disabled-date`           | Return true to disable a date                                                                                                    | `Function`                                 | `-`       |
+| `format`                  | Display format                                                                                                                   | `string`                                   | `-`       |
+| `show-time`               | Include time selection                                                                                                           | `boolean`                                  | `false`   |
+| `date-range-picker-props` | Panel presentation options                                                                                                       | `DateRangePickerOptions`                   | `{}`      |
 
 #### Copying and editing
 
@@ -185,10 +183,10 @@ Range values remain `[start, end]`; changing reading direction does not swap end
 
 `empty-values` recognizes empty data; `empty-value` keeps existing clear output. `empty-text` defaults to `'-'` under `read-pretty`, with Field > FormItem > Form precedence and custom read slots first. With explicit `empty-values`, built-in required uses the policy; custom validators receive original data. See the [shared guide](/en/guide/empty-values/).
 
-| Prop | Type | Default and scope |
-| ------------ | ------------------ | ----------------------------------------------------- |
+| Prop         | Type               | Default and scope                                                           |
+| ------------ | ------------------ | --------------------------------------------------------------------------- |
 | empty-values | readonly unknown[] | Field > FormItem > Form > component-family default; replaces the whole list |
-| empty-text | string | Field > FormItem > Form > '-'; explicit '' is valid |
+| empty-text   | string             | Field > FormItem > Form > '-'; explicit '' is valid                         |
 
 These props belong to field presentation; pure panels do not gain reading mode. Form and FormItem provide inherited settings. The existing empty-value type and clear fallback remain component-specific.
 
@@ -198,64 +196,64 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 When FormItem's `label-attrs.for` explicitly targets one input, unnamed range endpoints use the form label together with localized start/end names. Explicit accessible names supplied through `input-attrs` or the field take precedence. Older custom locales can provide `fieldPresentation.rangeStart` and `fieldPresentation.rangeEnd`; when absent, the existing date or time start/end labels are used.
 
-| Prop | Description | Type | Default behavior |
-| --- | --- | --- | --- |
-| `before-commit` | Explicit field-save guard using payload, done and context | `BeforeFieldCommit` | `undefined` |
-| `blur-color` | Color while unfocused | `string` | Theme default |
-| `clearable` | Allow clearing with disabled, readonly and pending guards | `boolean` | `true` |
-| `date-range-picker-props` | Range-panel presentation options, with model/rules/type owned by the field | `DateRangePickerOptions` | `{}` |
-| `default-open` | Initial uncontrolled opening, read only at creation | `boolean` | `false` |
-| `default-value` | Initial uncontrolled value, read only at creation | `(DateValue \| undefined)[]` | `undefined` |
-| `disable-confirm` | Commit on selection; false retains draft for confirmation | `boolean` | `false` |
-| `disabled` | Disable all or lock start/end separately; fields inherit FormItem/Form when unset | `boolean \| boolean[]` | Inherited, finally false |
-| `disabled-date` | Return true to disable the date; side is start/end | `(date: Date, side: DateSide) => boolean`<br>`DateSide: 'end' \| 'start'` | `undefined` |
-| `disabled-time` | Return disabled hour/minute/second lists for a date and endpoint | `(date: Date, side: DateSide) => DateDisabledTime`<br>`DateSide: 'end' \| 'start'` | `undefined` |
-| `edit-mode` | Field editing mode, inherited from FormItem/Form when unset | `FieldEditMode`<br>`'direct' \| 'click' \| 'dblclick'` | Inherited, finally direct |
-| `empty-text` | Empty text in read-pretty mode | `string` | Inherited, finally '-' |
-| `empty-value` | Clear output or synchronous factory, independent of emptyValues recognition | `(DateValue \| undefined)[] \| null \| (() => (DateValue \| undefined)[] \| null \| undefined)` | `undefined` |
-| `empty-values` | Empty-value recognition list, replaced rather than merged | `readonly unknown[]` | Inherited/family default |
-| `error` | Field error presentation, inherited when unset | `boolean` | Inherited, finally false |
-| `focus-color` | Color while focused | `string` | Theme default |
-| `format` | Display/text-input format; a function only formats without reverse text parsing | `string \| ((date: Date) => string)` | From precision/time settings |
-| `hint` | Floating placeholder hint, suppressed by an outer Form label | `boolean` | `false` |
-| `input-editable` | Allow text input without removing panel selection | `boolean` | `true` |
-| `input-attrs` | Native attributes for the start and end inputs, in order; per-input names override shared names | `RangeInputAttributes[]` | `undefined` |
-| `line` | Show the field border or underline | `boolean` | `true` |
-| `loading` | Manual loading feedback, independent of event return values | `boolean` | `false` |
-| `loading-mode` | Field loading presentation mode | `default \| line` | default |
-| `max` | Inclusive maximum; a supplied invalid boundary is not silently ignored | `DateValue` | `undefined` |
-| `min` | Inclusive minimum; a supplied invalid boundary is not silently ignored | `DateValue` | `undefined` |
-| `model-value` | External date value; undefined is uncontrolled, null is explicitly empty | `(DateValue \| undefined)[] \| null` | `undefined` |
-| `open` | Controlled field editor opening | `boolean` | `undefined` |
-| `open-trigger-target` | Open by field or icon click, without restricting keyboard opening | `field \| icon` | field |
-| `placeholder` | A range string applies to both endpoints, arrays configure each; omitted follows Locale | `string \| string[]` | `undefined` |
-| `popup-container` | Editor container; false renders in place | `PopupContainer` | Shared container default |
-| `popup-props` | Trigger presentation options, filtering owned state/model/rules/control listeners at runtime | `Record<string, unknown>` | `{}` |
-| `read-pretty` | Read-pretty presentation without an editor, independent of readonly | `boolean` | Inherited, finally false |
-| `readonly` | Readonly; fields allow focus/copy without value changes or opening editing | `boolean` | Inherited, finally false |
-| `separator` | Separator text for joined/range display, including an empty string | `string` | ` ~ ` |
-| `show-time` | Enable time precision/selection, with visible precision controlled by format | `boolean` | `false` |
-| `size` | Five sizes, following field Form inheritance | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | Inherited, finally md |
-| `text-color` | Content text color | `string` | Theme default |
-| `time-picker-props` | Presentation options for the Cedar embedded time panel, excluding date model/rules | `DateTimePickerOptions` | `{}` |
-| `time-zone` | IANA time zone; an invalid zone does not fall back to a valid selectable value | `string` | System local time zone |
-| `type` | Date precision; Cedar includes week/quarter, while Maple supports date/month/year | `date \| month \| year \| week \| quarter` | `date` |
-| `value-format` | Serialized model format: Date, timestamp or format tokens, independent of display format | `string` | From precision/time settings |
-| `variant` | Field appearance | `filled \| outline \| standard` | `outline` |
+| Prop                      | Description                                                                                     | Type                                                                                            | Default behavior             |
+| ------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------- |
+| `before-commit`           | Explicit field-save guard using payload, done and context                                       | `BeforeFieldCommit`                                                                             | `undefined`                  |
+| `blur-color`              | Color while unfocused                                                                           | `string`                                                                                        | Theme default                |
+| `clearable`               | Allow clearing with disabled, readonly and pending guards                                       | `boolean`                                                                                       | `true`                       |
+| `date-range-picker-props` | Range-panel presentation options, with model/rules/type owned by the field                      | `DateRangePickerOptions`                                                                        | `{}`                         |
+| `default-open`            | Initial uncontrolled opening, read only at creation                                             | `boolean`                                                                                       | `false`                      |
+| `default-value`           | Initial uncontrolled value, read only at creation                                               | `(DateValue \| undefined)[]`                                                                    | `undefined`                  |
+| `disable-confirm`         | Commit on selection; false retains draft for confirmation                                       | `boolean`                                                                                       | `false`                      |
+| `disabled`                | Disable all or lock start/end separately; fields inherit FormItem/Form when unset               | `boolean \| boolean[]`                                                                          | Inherited, finally false     |
+| `disabled-date`           | Return true to disable the date; side is start/end                                              | `(date: Date, side: DateSide) => boolean`<br>`DateSide: 'end' \| 'start'`                       | `undefined`                  |
+| `disabled-time`           | Return disabled hour/minute/second lists for a date and endpoint                                | `(date: Date, side: DateSide) => DateDisabledTime`<br>`DateSide: 'end' \| 'start'`              | `undefined`                  |
+| `edit-mode`               | Field editing mode, inherited from FormItem/Form when unset                                     | `FieldEditMode`<br>`'direct' \| 'click' \| 'dblclick'`                                          | Inherited, finally direct    |
+| `empty-text`              | Empty text in read-pretty mode                                                                  | `string`                                                                                        | Inherited, finally '-'       |
+| `empty-value`             | Clear output or synchronous factory, independent of emptyValues recognition                     | `(DateValue \| undefined)[] \| null \| (() => (DateValue \| undefined)[] \| null \| undefined)` | `undefined`                  |
+| `empty-values`            | Empty-value recognition list, replaced rather than merged                                       | `readonly unknown[]`                                                                            | Inherited/family default     |
+| `error`                   | Field error presentation, inherited when unset                                                  | `boolean`                                                                                       | Inherited, finally false     |
+| `focus-color`             | Color while focused                                                                             | `string`                                                                                        | Theme default                |
+| `format`                  | Display/text-input format; a function only formats without reverse text parsing                 | `string \| ((date: Date) => string)`                                                            | From precision/time settings |
+| `hint`                    | Floating placeholder hint, suppressed by an outer Form label                                    | `boolean`                                                                                       | `false`                      |
+| `input-editable`          | Allow text input without removing panel selection                                               | `boolean`                                                                                       | `true`                       |
+| `input-attrs`             | Native attributes for the start and end inputs, in order; per-input names override shared names | `RangeInputAttributes[]`                                                                        | `undefined`                  |
+| `line`                    | Show the field border or underline                                                              | `boolean`                                                                                       | `true`                       |
+| `loading`                 | Manual loading feedback, independent of event return values                                     | `boolean`                                                                                       | `false`                      |
+| `loading-mode`            | Field loading presentation mode                                                                 | `default \| line`                                                                               | default                      |
+| `max`                     | Inclusive maximum; a supplied invalid boundary is not silently ignored                          | `DateValue`                                                                                     | `undefined`                  |
+| `min`                     | Inclusive minimum; a supplied invalid boundary is not silently ignored                          | `DateValue`                                                                                     | `undefined`                  |
+| `model-value`             | External date value; undefined is uncontrolled, null is explicitly empty                        | `(DateValue \| undefined)[] \| null`                                                            | `undefined`                  |
+| `open`                    | Controlled field editor opening                                                                 | `boolean`                                                                                       | `undefined`                  |
+| `open-trigger-target`     | Open by field or icon click, without restricting keyboard opening                               | `field \| icon`                                                                                 | field                        |
+| `placeholder`             | A range string applies to both endpoints, arrays configure each; omitted follows Locale         | `string \| string[]`                                                                            | `undefined`                  |
+| `popup-container`         | Editor container; false renders in place                                                        | `PopupContainer`                                                                                | Shared container default     |
+| `popup-props`             | Trigger presentation options, filtering owned state/model/rules/control listeners at runtime    | `Record<string, unknown>`                                                                       | `{}`                         |
+| `read-pretty`             | Read-pretty presentation without an editor, independent of readonly                             | `boolean`                                                                                       | Inherited, finally false     |
+| `readonly`                | Readonly; fields allow focus/copy without value changes or opening editing                      | `boolean`                                                                                       | Inherited, finally false     |
+| `separator`               | Separator text for joined/range display, including an empty string                              | `string`                                                                                        | `~`                          |
+| `show-time`               | Enable time precision/selection, with visible precision controlled by format                    | `boolean`                                                                                       | `false`                      |
+| `size`                    | Five sizes, following field Form inheritance                                                    | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                                       | Inherited, finally md        |
+| `text-color`              | Content text color                                                                              | `string`                                                                                        | Theme default                |
+| `time-picker-props`       | Presentation options for the Cedar embedded time panel, excluding date model/rules              | `DateTimePickerOptions`                                                                         | `{}`                         |
+| `time-zone`               | IANA time zone; an invalid zone does not fall back to a valid selectable value                  | `string`                                                                                        | System local time zone       |
+| `type`                    | Date precision; Cedar includes week/quarter, while Maple supports date/month/year               | `date \| month \| year \| week \| quarter`                                                      | `date`                       |
+| `value-format`            | Serialized model format: Date, timestamp or format tokens, independent of display format        | `string`                                                                                        | From precision/time settings |
+| `variant`                 | Field appearance                                                                                | `filled \| outline \| standard`                                                                 | `outline`                    |
 
 ### Shared date-family contract
 
-| Prop | Description | Type | Default |
-| ----------------- | ------------------------------------------------------- | -------------------------------------------------- | ------- |
-| `default-value` | Uncontrolled initial value, read once | DateValue / DateValue[] | — |
-| `value-format` | Model and event value format: a date format string, Date, or timestamp | string | Follows type |
-| `min` | Inclusive minimum date; string bounds use value-format | DateValue | — |
-| `max` | Inclusive maximum date; string bounds use value-format | DateValue | — |
-| `disabled-time` | Disabled times for the current date and endpoint | (date: Date, side: DateSide) => DateDisabledTime<br>`DateSide: 'end' \| 'start'` | — |
-| `disable-confirm` | Commit immediately | boolean | false |
-| `default-open` | Uncontrolled initial open state | boolean | false |
-| `popup-props` | Trigger presentation options; cannot override owned visibility or date rules | object | {} |
-| `popup-container` | Portal target; the top-level value wins, including false for inline rendering | string / HTMLElement / (() => HTMLElement) / false | — |
+| Prop              | Description                                                                   | Type                                                                             | Default      |
+| ----------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------ |
+| `default-value`   | Uncontrolled initial value, read once                                         | DateValue / DateValue[]                                                          | —            |
+| `value-format`    | Model and event value format: a date format string, Date, or timestamp        | string                                                                           | Follows type |
+| `min`             | Inclusive minimum date; string bounds use value-format                        | DateValue                                                                        | —            |
+| `max`             | Inclusive maximum date; string bounds use value-format                        | DateValue                                                                        | —            |
+| `disabled-time`   | Disabled times for the current date and endpoint                              | (date: Date, side: DateSide) => DateDisabledTime<br>`DateSide: 'end' \| 'start'` | —            |
+| `disable-confirm` | Commit immediately                                                            | boolean                                                                          | false        |
+| `default-open`    | Uncontrolled initial open state                                               | boolean                                                                          | false        |
+| `popup-props`     | Trigger presentation options; cannot override owned visibility or date rules  | object                                                                           | {}           |
+| `popup-container` | Portal target; the top-level value wins, including false for inline rendering | string / HTMLElement / (() => HTMLElement) / false                               | —            |
 
 `DateValue = Date | string | number`. Clearing a single value produces undefined; clearing a range produces [].
 The date argument of `disabledDate(date, side)` and `disabledTime(date, side)` is always a Date; side is start/end.
@@ -273,33 +271,33 @@ Desktop supports keyboard editing. The default panel edits a draft before confir
 
 ### DateRangePicker Props
 
-| Prop | Description | Type | Default behavior |
-| --- | --- | --- | --- |
-| `abbreviation` | Use abbreviated month-grid names; false uses full month names | `boolean` | `true` |
-| `day-start-of-week` | First day of week for calendars, an integer from 0 to 6 | `DateWeekStart` | `0` |
-| `default-picker-value` | Initial calendar viewport, read once; selected values take precedence over the current date | `DateSelection` | `undefined` |
-| `default-value` | Initial uncontrolled value, read only at creation | `(DateValue \| undefined)[]` | `undefined` |
-| `disable-confirm` | Commit on selection; false retains draft for confirmation | `boolean` | `true` |
-| `disabled` | Disable all or lock start/end separately; fields inherit FormItem/Form when unset | `boolean \| boolean[]` | `false` |
-| `disabled-date` | Return true to disable the date; side is start/end | `(date: Date, side: DateSide) => boolean`<br>`DateSide: 'end' \| 'start'` | `undefined` |
-| `disabled-time` | Return disabled hour/minute/second lists for a date and endpoint | `(date: Date, side: DateSide) => DateDisabledTime`<br>`DateSide: 'end' \| 'start'` | `undefined` |
-| `empty-value` | Clear output or synchronous factory, independent of emptyValues recognition | `(DateValue \| undefined)[] \| null \| (() => (DateValue \| undefined)[] \| null \| undefined)` | `undefined` |
-| `exchange-time` | When interactive candidates reverse, swap times together with dates; model/text/shortcut values are not reordered | `boolean` | `true` |
-| `format` | Display/text-input format; a function only formats without reverse text parsing | `string \| ((date: Date) => string)` | From precision/time settings |
-| `max` | Inclusive maximum; a supplied invalid boundary is not silently ignored | `DateValue` | `undefined` |
-| `min` | Inclusive minimum; a supplied invalid boundary is not silently ignored | `DateValue` | `undefined` |
-| `model-value` | External date value; undefined is uncontrolled, null is explicitly empty | `(DateValue \| undefined)[] \| null` | `undefined` |
-| `picker-value` | Controlled calendar viewport, separate from selection; range viewports contain two dates | `DateSelection` | `undefined` |
-| `preview-shortcut` | Preview shortcuts on hover/focus without committing | `boolean` | `true` |
-| `readonly` | Readonly panel without candidate changes or commits | `boolean` | `false` |
-| `shortcuts` | Shortcuts with values or on-demand synchronous value factories, optional format/disabled | `DateShortcut[]` | `[]` |
-| `shortcuts-position` | Shortcut position | `left \| bottom \| right` | `bottom` |
-| `show-current` | Highlight the current date without changing selection or model | `boolean` | `true` |
-| `show-time` | Enable time precision/selection, with visible precision controlled by format | `boolean` | `false` |
-| `time-picker-props` | Presentation options for the Cedar embedded time panel, excluding date model/rules | `DateTimePickerOptions` | `{}` |
-| `time-zone` | IANA time zone; an invalid zone does not fall back to a valid selectable value | `string` | System local time zone |
-| `type` | Date precision; Cedar includes week/quarter, while Maple supports date/month/year | `date \| month \| year \| week \| quarter` | `date` |
-| `value-format` | Serialized model format: Date, timestamp or format tokens, independent of display format | `string` | From precision/time settings |
+| Prop                   | Description                                                                                                       | Type                                                                                                 | Default behavior             |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `abbreviation`         | Use abbreviated month-grid names; false uses full month names                                                     | `boolean`                                                                                            | `true`                       |
+| `day-start-of-week`    | First day of week for calendars, an integer from 0 to 6                                                           | `DateWeekStart`                                                                                      | `0`                          |
+| `default-picker-value` | Initial calendar viewport, read once; selected values take precedence over the current date                       | `Date \| string \| number \| (Date \| string \| number \| null \| undefined)[] \| null \| undefined` | `undefined`                  |
+| `default-value`        | Initial uncontrolled value, read only at creation                                                                 | `(DateValue \| undefined)[]`                                                                         | `undefined`                  |
+| `disable-confirm`      | Commit on selection; false retains draft for confirmation                                                         | `boolean`                                                                                            | `true`                       |
+| `disabled`             | Disable all or lock start/end separately; fields inherit FormItem/Form when unset                                 | `boolean \| boolean[]`                                                                               | `false`                      |
+| `disabled-date`        | Return true to disable the date; side is start/end                                                                | `(date: Date, side: DateSide) => boolean`<br>`DateSide: 'end' \| 'start'`                            | `undefined`                  |
+| `disabled-time`        | Return disabled hour/minute/second lists for a date and endpoint                                                  | `(date: Date, side: DateSide) => DateDisabledTime`<br>`DateSide: 'end' \| 'start'`                   | `undefined`                  |
+| `empty-value`          | Clear output or synchronous factory, independent of emptyValues recognition                                       | `(DateValue \| undefined)[] \| null \| (() => (DateValue \| undefined)[] \| null \| undefined)`      | `undefined`                  |
+| `exchange-time`        | When interactive candidates reverse, swap times together with dates; model/text/shortcut values are not reordered | `boolean`                                                                                            | `true`                       |
+| `format`               | Display/text-input format; a function only formats without reverse text parsing                                   | `string \| ((date: Date) => string)`                                                                 | From precision/time settings |
+| `max`                  | Inclusive maximum; a supplied invalid boundary is not silently ignored                                            | `DateValue`                                                                                          | `undefined`                  |
+| `min`                  | Inclusive minimum; a supplied invalid boundary is not silently ignored                                            | `DateValue`                                                                                          | `undefined`                  |
+| `model-value`          | External date value; undefined is uncontrolled, null is explicitly empty                                          | `(DateValue \| undefined)[] \| null`                                                                 | `undefined`                  |
+| `picker-value`         | Controlled calendar viewport, separate from selection; range viewports contain two dates                          | `Date \| string \| number \| (Date \| string \| number \| null \| undefined)[] \| null \| undefined` | `undefined`                  |
+| `preview-shortcut`     | Preview shortcuts on hover/focus without committing                                                               | `boolean`                                                                                            | `true`                       |
+| `readonly`             | Readonly panel without candidate changes or commits                                                               | `boolean`                                                                                            | `false`                      |
+| `shortcuts`            | Shortcuts with values or on-demand synchronous value factories, optional format/disabled                          | `DateShortcut[]`                                                                                     | `[]`                         |
+| `shortcuts-position`   | Shortcut position                                                                                                 | `left \| bottom \| right`                                                                            | `bottom`                     |
+| `show-current`         | Highlight the current date without changing selection or model                                                    | `boolean`                                                                                            | `true`                       |
+| `show-time`            | Enable time precision/selection, with visible precision controlled by format                                      | `boolean`                                                                                            | `false`                      |
+| `time-picker-props`    | Presentation options for the Cedar embedded time panel, excluding date model/rules                                | `DateTimePickerOptions`                                                                              | `{}`                         |
+| `time-zone`            | IANA time zone; an invalid zone does not fall back to a valid selectable value                                    | `string`                                                                                             | System local time zone       |
+| `type`                 | Date precision; Cedar includes week/quarter, while Maple supports date/month/year                                 | `date \| month \| year \| week \| quarter`                                                           | `date`                       |
+| `value-format`         | Serialized model format: Date, timestamp or format tokens, independent of display format                          | `string`                                                                                             | From precision/time settings |
 
 ## Configuring the cleared value
 
@@ -329,20 +327,20 @@ Bounds are inclusive. Invalid supplied bounds block confirmation instead of bein
 
 ### Field event parameter types
 
-| Event | Arguments |
-| --- | --- |
-| `update:modelValue` | `DateRangeEmits['update:modelValue']` |
-| `change` | `DateRangeEmits['change']` |
-| `select` | `DateRangeEmits['select']` |
-| `clear` | `DateRangeEmits['clear']` |
-| `click` | `DateRangeEmits['click']` |
-| `focus` | `DateRangeEmits['focus']` |
-| `blur` | `DateRangeEmits['blur']` |
-| `update:open` | `DateRangeEmits['update:open']` |
-| `open-change` | `DateRangeEmits['open-change']` |
-| `update:pickerValue` | `DateRangeEmits['update:pickerValue']` |
+| Event                 | Arguments                               |
+| --------------------- | --------------------------------------- |
+| `update:modelValue`   | `DateRangeEmits['update:modelValue']`   |
+| `change`              | `DateRangeEmits['change']`              |
+| `select`              | `DateRangeEmits['select']`              |
+| `clear`               | `DateRangeEmits['clear']`               |
+| `click`               | `DateRangeEmits['click']`               |
+| `focus`               | `DateRangeEmits['focus']`               |
+| `blur`                | `DateRangeEmits['blur']`                |
+| `update:open`         | `DateRangeEmits['update:open']`         |
+| `open-change`         | `DateRangeEmits['open-change']`         |
+| `update:pickerValue`  | `DateRangeEmits['update:pickerValue']`  |
 | `picker-value-change` | `DateRangeEmits['picker-value-change']` |
-| `select-shortcut` | `DateRangeEmits['select-shortcut']` |
+| `select-shortcut`     | `DateRangeEmits['select-shortcut']`     |
 
 Field value/viewport notifications use the corresponding public Emits tuples; DateChangeArgs contains value, date(s) and text(s). Listener Promises are not awaited and do not drive loading. beforeCommit uses payload/done/context, with value/previousValue in payload and signal/optional event in context; undefined waits for done.
 
@@ -350,15 +348,15 @@ Field value/viewport notifications use the corresponding public Emits tuples; Da
 
 Standalone panels have the seven events below, without the old preview event. Navigation uses picker-value-change and update:pickerValue. Navigation/shortcut hover-focus preview does not imply selection or commit. Confirmation only notifies when valid; select draft is separate from committed change.
 
-| Event | Arguments |
-| --- | --- |
-| `update:modelValue` | `DateRangePickerEmits['update:modelValue']` |
-| `change` | `DateRangePickerEmits['change']` |
-| `select` | `DateRangePickerEmits['select']` |
-| `confirm` | `DateRangePickerEmits['confirm']` |
-| `update:pickerValue` | `DateRangePickerEmits['update:pickerValue']` |
+| Event                 | Arguments                                     |
+| --------------------- | --------------------------------------------- |
+| `update:modelValue`   | `DateRangePickerEmits['update:modelValue']`   |
+| `change`              | `DateRangePickerEmits['change']`              |
+| `select`              | `DateRangePickerEmits['select']`              |
+| `confirm`             | `DateRangePickerEmits['confirm']`             |
+| `update:pickerValue`  | `DateRangePickerEmits['update:pickerValue']`  |
 | `picker-value-change` | `DateRangePickerEmits['picker-value-change']` |
-| `select-shortcut` | `DateRangePickerEmits['select-shortcut']` |
+| `select-shortcut`     | `DateRangePickerEmits['select-shortcut']`     |
 
 ### DateRangePicker Slots / Methods
 
@@ -381,9 +379,18 @@ A range placeholder string applies to both endpoints; arrays configure each and 
 ### Type imports
 
 ```ts
-import { DateRange, DateRangePicker, type DateRangeProps, type DateRangePickerProps,
-  type DateRangeEmits, type DateRangePickerEmits, type DateValue, type DateSelection,
-  type DateChangeArgs, type DateRules, type DateShortcut } from '@cedar-design/ui-vue'
+import {
+  DateRange,
+  DateRangePicker,
+  type DateChangeArgs,
+  type DateRangeEmits,
+  type DateRangePickerEmits,
+  type DateRangePickerProps,
+  type DateRangeProps,
+  type DateRules,
+  type DateShortcut,
+  type DateValue,
+} from '@cedar-design/ui-vue'
 ```
 
 <!-- date-contract:end -->

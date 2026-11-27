@@ -1,0 +1,2 @@
+# Unified diff context lines begin with a space before upstream tabs.
+patches/vuepress-bundler-vite-main-entry.patch whitespace=-space-before-tab

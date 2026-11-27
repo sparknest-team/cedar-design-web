@@ -158,8 +158,23 @@ body {
 
 .vp-sidebar {
   padding-inline-start: 0;
-  scrollbar-color: auto;
-  scrollbar-width: auto;
+}
+
+.cedar-docs-tools .docs-select__options,
+.theme-container .vp-sidebar {
+  --docs-scroll-thumb: color-mix(in srgb, var(--c-color-text-3) 45%, transparent);
+  scrollbar-color: var(--docs-scroll-thumb) transparent;
+  scrollbar-width: thin;
+}
+
+.cedar-docs-tools .docs-select__options::-webkit-scrollbar-thumb,
+.vp-sidebar::-webkit-scrollbar-thumb {
+  background: var(--docs-scroll-thumb);
+}
+
+.cedar-docs-tools .docs-select__options::-webkit-scrollbar-thumb:active,
+.vp-sidebar::-webkit-scrollbar-thumb:active {
+  background: var(--c-color-text-3);
 }
 
 .vp-hero-action.primary {

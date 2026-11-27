@@ -27,13 +27,12 @@ Preview configuration: `value="1"`.
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ---------- | ------------------------------- | ---------------------- |
-| `value` | Option identifier in array/group mode | Option declaration comparison, Grid |
-| `disabled` | Disabled state; inherits from the form/group when omitted | Grid |
+| Configuration | Purpose                                                   | Related examples                    |
+| ------------- | --------------------------------------------------------- | ----------------------------------- |
+| `value`       | Option identifier in array/group mode                     | Option declaration comparison, Grid |
+| `disabled`    | Disabled state; inherits from the form/group when omitted | Grid                                |
 
 <!-- demo-config-notes:end -->
-
 
 Compare child-component declarations with options data. Both use a group model; field mapping and asynchronous data are separate.
 
@@ -59,15 +58,14 @@ Preview configuration: `:default-value="['a']"`, `:options="options"`, `:readonl
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --------------- | ------------------------------- | ---------------------- |
-| `default-value` | Initial uncontrolled value | Control Value, Controlled Mode |
-| `value` | Option identifier in array/group mode | Control Value |
-| `readonly` | Readonly state; inherits from the form/group when omitted | Control Value |
-| `disabled` | Disabled state; inherits from the form/group when omitted | Control Value |
+| Configuration   | Purpose                                                   | Related examples               |
+| --------------- | --------------------------------------------------------- | ------------------------------ |
+| `default-value` | Initial uncontrolled value                                | Control Value, Controlled Mode |
+| `value`         | Option identifier in array/group mode                     | Control Value                  |
+| `readonly`      | Readonly state; inherits from the form/group when omitted | Control Value                  |
+| `disabled`      | Disabled state; inherits from the form/group when omitted | Control Value                  |
 
 <!-- demo-config-notes:end -->
-
 
 - `readonly`: Displays the current value without allowing edits.
 - `disabled`: Prevents user interaction.
@@ -94,16 +92,15 @@ Preview configuration: `:model-value="true"`, `:model-value="checked2"`, `:defau
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --------------- | ------------------------------- | ---------------------------- |
-| `value` | Option identifier in array/group mode | Max Checked, Checked All Indeterminate |
-| `disabled` | Disabled state; inherits from the form/group when omitted | Max Checked, Interaction state comparison |
-| `indeterminate` | Whether to display an indeterminate state | Checked All Indeterminate |
-| `readonly` | Readonly state; inherits from the form/group when omitted | Interaction state comparison |
-| `error` | Error state; inherits from the form/group when omitted | Interaction state comparison |
+| Configuration   | Purpose                                                   | Related examples                          |
+| --------------- | --------------------------------------------------------- | ----------------------------------------- |
+| `value`         | Option identifier in array/group mode                     | Max Checked, Checked All Indeterminate    |
+| `disabled`      | Disabled state; inherits from the form/group when omitted | Max Checked, Interaction state comparison |
+| `indeterminate` | Whether to display an indeterminate state                 | Checked All Indeterminate                 |
+| `readonly`      | Readonly state; inherits from the form/group when omitted | Interaction state comparison              |
+| `error`         | Error state; inherits from the form/group when omitted    | Interaction state comparison              |
 
 <!-- demo-config-notes:end -->
-
 
 - `disabled`: Prevents user interaction.
 
@@ -135,17 +132,16 @@ Toggle the state, interact with the component, and restore editing using the con
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --------------- | ------------------------------- | -------------- |
-| `name` | Native field name; inherits from Group when omitted | Native Control |
-| `indeterminate` | Whether to display an indeterminate state | Native Control |
-| `aria-label` | Accessible name when no visible label exists | Native Control |
-| `default-value` | Initial uncontrolled value | Native Control |
-| `readonly` | Readonly state; inherits from the form/group when omitted | Native Control |
-| `disabled` | Disabled state; inherits from the form/group when omitted | Native Control |
+| Configuration   | Purpose                                                   | Related examples |
+| --------------- | --------------------------------------------------------- | ---------------- |
+| `name`          | Native field name; inherits from Group when omitted       | Native Control   |
+| `indeterminate` | Whether to display an indeterminate state                 | Native Control   |
+| `aria-label`    | Accessible name when no visible label exists              | Native Control   |
+| `default-value` | Initial uncontrolled value                                | Native Control   |
+| `readonly`      | Readonly state; inherits from the form/group when omitted | Native Control   |
+| `disabled`      | Disabled state; inherits from the form/group when omitted | Native Control   |
 
 <!-- demo-config-notes:end -->
-
 
 - `readonly`: Displays the current value without allowing edits.
 - `disabled`: Prevents user interaction.
@@ -216,143 +212,143 @@ During an explicit options request both group roots announce aria-busy and emit 
 
 `empty-values` recognizes empty data; `empty-value` keeps existing clear output. `empty-text` defaults to `'-'` under `read-pretty`, with Field > FormItem > Form precedence and custom read slots first. With explicit `empty-values`, built-in required uses the policy; custom validators receive original data. See the [shared guide](/en/guide/empty-values/).
 
-| Prop | Type | Default and scope |
-| ------------ | ------------------ | ----------------------------------------------------- |
+| Prop         | Type               | Default and scope                                                           |
+| ------------ | ------------------ | --------------------------------------------------------------------------- |
 | empty-values | readonly unknown[] | Field > FormItem > Form > component-family default; replaces the whole list |
-| empty-text | string | Field > FormItem > Form > '-'; explicit '' is valid |
+| empty-text   | string             | Field > FormItem > Form > '-'; explicit '' is valid                         |
 
 These props belong to field presentation; pure panels do not gain reading mode. Form and FormItem provide inherited settings. The existing empty-value type and clear fallback remain component-specific.
 
-`ChoiceValue = string | number | boolean`；`CheckboxModel = boolean | ChoiceValue[] | null`；`RadioModel = ChoiceValue | null`。
+`string | number | boolean = string | number | boolean`；`boolean | (string | number | boolean)[] | null = boolean | (string | number | boolean)[] | null`；`string | number | boolean | null = string | number | boolean | null`。
 
 ### Checkbox Props
 
-| Prop | Description | Type | Default |
-| ---------------------- | ---------------------------------- | ------------------------ | --------- |
-| model-value (v-model) | Controlled value | CheckboxModel | undefined |
-| default-value | Initial uncontrolled value | CheckboxModel | false |
-| value | Option identifier in array/group mode | string\|number\|boolean | true |
-| disabled | Disabled state; inherits from the form/group when omitted | boolean | undefined |
-| readonly | Readonly state; inherits from the form/group when omitted | boolean | undefined |
-| error | Error state; inherits from the form/group when omitted | boolean | undefined |
-| indeterminate | Whether to display an indeterminate state | boolean | false |
-| checked-color | Instance checked color; error/disabled states take precedence | string | undefined |
-| unchecked-color | Instance unchecked color; error/disabled states take precedence | string | undefined |
-| icon-size | Positive length; invalid values diagnose and fall back to the theme | number \| string | undefined |
-| ripple | Whether to enable ripple feedback | boolean | true |
-| uninject-group-context | Ignore surrounding CheckboxGroup; form state still applies | boolean | false |
-| name | Native field name; inherits from Group when omitted | string | undefined |
-| aria-label | Accessible name when no visible label exists | string | undefined |
-| edit-mode | Editing mode, inherited from FormItem and Form | `'direct' \| 'click' \| 'dblclick'` | `'direct'` |
-| read-pretty | Independent read presentation; explicit false overrides the parent | `boolean` | `false` |
-| clearable | Deferred editor clearing; does not change native deselection | `boolean` | `false` |
-| empty-value | Explicit presentation clear output; does not control native unchecking | `CheckboxModel \| (() => CheckboxModel)` | `false` |
-| empty-values | Empty-value recognition; field takes precedence over FormItem and Form | `readonly unknown[]` | `-` |
-| empty-text | Read empty text; an explicit empty string is valid | `string` | `'-'` |
-| before-commit | Guard before saving a deferred edit; return a boolean or Promise, or complete via done | `(payload: { value: unknown; previousValue: unknown }, done: (allow?: boolean) => void, context: { signal: AbortSignal; event?: Event }) => void \| boolean \| Promise<void \| boolean>` | `-` |
-| open | Controlled editor visibility, separate from native input focus | `boolean` | `-` |
-| default-open | Initial visibility of an uncontrolled editor | `boolean` | `false` |
-| popup-container | Editor mount container | `string \| HTMLElement \| false` | `-` |
+| Prop                   | Description                                                                            | Type                                                                                                                                                                                     | Default    |
+| ---------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| model-value (v-model)  | Controlled value                                                                       | boolean \| (string \| number \| boolean)[] \| null                                                                                                                                       | undefined  |
+| default-value          | Initial uncontrolled value                                                             | boolean \| (string \| number \| boolean)[] \| null                                                                                                                                       | false      |
+| value                  | Option identifier in array/group mode                                                  | string\|number\|boolean                                                                                                                                                                  | true       |
+| disabled               | Disabled state; inherits from the form/group when omitted                              | boolean                                                                                                                                                                                  | undefined  |
+| readonly               | Readonly state; inherits from the form/group when omitted                              | boolean                                                                                                                                                                                  | undefined  |
+| error                  | Error state; inherits from the form/group when omitted                                 | boolean                                                                                                                                                                                  | undefined  |
+| indeterminate          | Whether to display an indeterminate state                                              | boolean                                                                                                                                                                                  | false      |
+| checked-color          | Instance checked color; error/disabled states take precedence                          | string                                                                                                                                                                                   | undefined  |
+| unchecked-color        | Instance unchecked color; error/disabled states take precedence                        | string                                                                                                                                                                                   | undefined  |
+| icon-size              | Positive length; invalid values diagnose and fall back to the theme                    | number \| string                                                                                                                                                                         | undefined  |
+| ripple                 | Whether to enable ripple feedback                                                      | boolean                                                                                                                                                                                  | true       |
+| uninject-group-context | Ignore surrounding CheckboxGroup; form state still applies                             | boolean                                                                                                                                                                                  | false      |
+| name                   | Native field name; inherits from Group when omitted                                    | string                                                                                                                                                                                   | undefined  |
+| aria-label             | Accessible name when no visible label exists                                           | string                                                                                                                                                                                   | undefined  |
+| edit-mode              | Editing mode, inherited from FormItem and Form                                         | `'direct' \| 'click' \| 'dblclick'`                                                                                                                                                      | `'direct'` |
+| read-pretty            | Independent read presentation; explicit false overrides the parent                     | `boolean`                                                                                                                                                                                | `false`    |
+| clearable              | Deferred editor clearing; does not change native deselection                           | `boolean`                                                                                                                                                                                | `false`    |
+| empty-value            | Explicit presentation clear output; does not control native unchecking                 | `boolean \| (string \| number \| boolean)[] \| null \| (() => boolean \| (string \| number \| boolean)[] \| null)`                                                                       | `false`    |
+| empty-values           | Empty-value recognition; field takes precedence over FormItem and Form                 | `readonly unknown[]`                                                                                                                                                                     | `-`        |
+| empty-text             | Read empty text; an explicit empty string is valid                                     | `string`                                                                                                                                                                                 | `'-'`      |
+| before-commit          | Guard before saving a deferred edit; return a boolean or Promise, or complete via done | `(payload: { value: unknown; previousValue: unknown }, done: (allow?: boolean) => void, context: { signal: AbortSignal; event?: Event }) => void \| boolean \| Promise<void \| boolean>` | `-`        |
+| open                   | Controlled editor visibility, separate from native input focus                         | `boolean`                                                                                                                                                                                | `-`        |
+| default-open           | Initial visibility of an uncontrolled editor                                           | `boolean`                                                                                                                                                                                | `false`    |
+| popup-container        | Editor mount container                                                                 | `string \| HTMLElement \| false`                                                                                                                                                         | `-`        |
 
 ### Checkbox Events
 
-| Event | Description | Arguments |
-| ------------------ | ---------------- | ----------------------------------- |
-| update:modelValue | Proposes a new value | value: CheckboxModel |
-| change | Value change | value: CheckboxModel, event?: Event |
-| click | Click; not emitted while disabled | event: MouseEvent |
-| focus | Focus | event: FocusEvent |
-| blur | Blur | event: FocusEvent |
-| update:open | Controlled editor visibility update | open: boolean |
-| open-change | Actual editor visibility change | open: boolean |
+| Event             | Description                         | Arguments                                                                |
+| ----------------- | ----------------------------------- | ------------------------------------------------------------------------ |
+| update:modelValue | Proposes a new value                | value: boolean \| (string \| number \| boolean)[] \| null                |
+| change            | Value change                        | value: boolean \| (string \| number \| boolean)[] \| null, event?: Event |
+| click             | Click; not emitted while disabled   | event: MouseEvent                                                        |
+| focus             | Focus                               | event: FocusEvent                                                        |
+| blur              | Blur                                | event: FocusEvent                                                        |
+| update:open       | Controlled editor visibility update | open: boolean                                                            |
+| open-change       | Actual editor visibility change     | open: boolean                                                            |
 
 ### Checkbox Methods
 
-| Method | Arguments | Returns |
-| ------ | ---------------------- | ------ |
-| toggle | checked?: boolean | void |
-| focus | options?: FocusOptions | void |
-| blur | - | void |
+| Method | Arguments              | Returns |
+| ------ | ---------------------- | ------- |
+| toggle | checked?: boolean      | void    |
+| focus  | options?: FocusOptions | void    |
+| blur   | -                      | void    |
 
 ### Checkbox Slots
 
-| Slot | Description | Prop |
-| ------------------ | ------------------ | ----------------------------------------------------------- |
-| checkbox | Customize the complete control appearance | checked: boolean, disabled: boolean, indeterminate: boolean |
-| checked-icon | Checked icon | - |
-| unchecked-icon | Unchecked icon | - |
-| indeterminate-icon | Half icon | - |
-| default | Label | checked: boolean |
-| read | Custom read content, taking precedence over empty-text | value: CheckboxModel, text: string |
+| Slot               | Description                                            | Prop                                                                    |
+| ------------------ | ------------------------------------------------------ | ----------------------------------------------------------------------- |
+| checkbox           | Customize the complete control appearance              | checked: boolean, disabled: boolean, indeterminate: boolean             |
+| checked-icon       | Checked icon                                           | -                                                                       |
+| unchecked-icon     | Unchecked icon                                         | -                                                                       |
+| indeterminate-icon | Half icon                                              | -                                                                       |
+| default            | Label                                                  | checked: boolean                                                        |
+| read               | Custom read content, taking precedence over empty-text | value: boolean \| (string \| number \| boolean)[] \| null, text: string |
 
 ### CheckboxGroup Props
 
-| Prop | Description | Type | Default |
-| --------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ------------ |
-| model-value (v-model) | Controlled value | ChoiceValue[] \| null | undefined |
-| default-value | Initial uncontrolled value | ChoiceValue[] | [] |
-| max | Maximum selection count | number | undefined |
-| options | Options; replaces default slot when supplied | Array<ChoiceValue \| CheckboxOption \| Record<string, unknown>> / `(query, { signal }) => Array / Promise` | `undefined` |
-| orientation | Horizontal/vertical arrangement of checkbox-group options, default horizontal; not text reading direction | Orientation<br>`'horizontal' \| 'vertical'` | 'horizontal' |
-| disabled | Disabled state; inherits from the form/group when omitted | boolean | undefined |
-| readonly | Readonly state; inherits from the form/group when omitted | boolean | undefined |
-| error | Error state; inherits from the form/group when omitted | boolean | undefined |
-| field-names | Option field mapping | ChoiceFieldNames | undefined |
-| name | Native input name within the group | string | undefined |
-| aria-label | Accessible group name | string | undefined |
-| edit-mode | Editing mode, inherited from FormItem and Form | `'direct' \| 'click' \| 'dblclick'` | `'direct'` |
-| read-pretty | Independent read presentation; explicit false overrides the parent | `boolean` | `false` |
-| clearable | Deferred editor clearing; does not change native deselection | `boolean` | `false` |
-| empty-value | Explicit presentation clear output; does not control native unchecking | `ChoiceValue[] \| null \| (() => ChoiceValue[] \| null)` | `[]` |
-| empty-values | Empty-value recognition; field takes precedence over FormItem and Form | `readonly unknown[]` | `-` |
-| empty-text | Read empty text; an explicit empty string is valid | `string` | `'-'` |
-| before-commit | Guard before saving a deferred edit; return a boolean or Promise, or complete via done | `(payload: { value: unknown; previousValue: unknown }, done: (allow?: boolean) => void, context: { signal: AbortSignal; event?: Event }) => void \| boolean \| Promise<void \| boolean>` | `-` |
-| open | Controlled editor visibility, separate from native input focus | `boolean` | `-` |
-| default-open | Initial visibility of an uncontrolled editor | `boolean` | `false` |
-| popup-container | Editor mount container | `string \| HTMLElement \| false` | `-` |
+| Prop                  | Description                                                                                               | Type                                                                                                                                                                                     | Default      |
+| --------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| model-value (v-model) | Controlled value                                                                                          | (string \| number \| boolean)[] \| null                                                                                                                                                  | undefined    |
+| default-value         | Initial uncontrolled value                                                                                | (string \| number \| boolean)[]                                                                                                                                                          | []           |
+| max                   | Maximum selection count                                                                                   | number                                                                                                                                                                                   | undefined    |
+| options               | Options; replaces default slot when supplied                                                              | Array<string \| number \| boolean \| CheckboxOption \| Record<string, unknown>> / `(query, { signal }) => Array / Promise`                                                               | `undefined`  |
+| orientation           | Horizontal/vertical arrangement of checkbox-group options, default horizontal; not text reading direction | Orientation<br>`'horizontal' \| 'vertical'`                                                                                                                                              | 'horizontal' |
+| disabled              | Disabled state; inherits from the form/group when omitted                                                 | boolean                                                                                                                                                                                  | undefined    |
+| readonly              | Readonly state; inherits from the form/group when omitted                                                 | boolean                                                                                                                                                                                  | undefined    |
+| error                 | Error state; inherits from the form/group when omitted                                                    | boolean                                                                                                                                                                                  | undefined    |
+| field-names           | Option field mapping                                                                                      | ChoiceFieldNames                                                                                                                                                                         | undefined    |
+| name                  | Native input name within the group                                                                        | string                                                                                                                                                                                   | undefined    |
+| aria-label            | Accessible group name                                                                                     | string                                                                                                                                                                                   | undefined    |
+| edit-mode             | Editing mode, inherited from FormItem and Form                                                            | `'direct' \| 'click' \| 'dblclick'`                                                                                                                                                      | `'direct'`   |
+| read-pretty           | Independent read presentation; explicit false overrides the parent                                        | `boolean`                                                                                                                                                                                | `false`      |
+| clearable             | Deferred editor clearing; does not change native deselection                                              | `boolean`                                                                                                                                                                                | `false`      |
+| empty-value           | Explicit presentation clear output; does not control native unchecking                                    | `(string \| number \| boolean)[] \| null \| (() => (string \| number \| boolean)[] \| null)`                                                                                             | `[]`         |
+| empty-values          | Empty-value recognition; field takes precedence over FormItem and Form                                    | `readonly unknown[]`                                                                                                                                                                     | `-`          |
+| empty-text            | Read empty text; an explicit empty string is valid                                                        | `string`                                                                                                                                                                                 | `'-'`        |
+| before-commit         | Guard before saving a deferred edit; return a boolean or Promise, or complete via done                    | `(payload: { value: unknown; previousValue: unknown }, done: (allow?: boolean) => void, context: { signal: AbortSignal; event?: Event }) => void \| boolean \| Promise<void \| boolean>` | `-`          |
+| open                  | Controlled editor visibility, separate from native input focus                                            | `boolean`                                                                                                                                                                                | `-`          |
+| default-open          | Initial visibility of an uncontrolled editor                                                              | `boolean`                                                                                                                                                                                | `false`      |
+| popup-container       | Editor mount container                                                                                    | `string \| HTMLElement \| false`                                                                                                                                                         | `-`          |
 
 ### CheckboxGroup Methods
 
-| Method | Arguments | Returns |
-| ---------- | ---- | ------------- |
-| checkAll | - | ChoiceValue[] |
-| inverseAll | - | ChoiceValue[] |
+| Method     | Arguments | Returns                         |
+| ---------- | --------- | ------------------------------- |
+| checkAll   | -         | (string \| number \| boolean)[] |
+| inverseAll | -         | (string \| number \| boolean)[] |
 
 ### CheckboxGroup Events
 
-| Event | Description | Arguments |
-| ------------------ | --------------------------- | -------------------------------------------------- |
-| update:modelValue | Proposes a new value | value: ChoiceValue[] \| null |
-| change | Value change proposal | value: ChoiceValue[] \| null, event?: Event |
-| update:open | Controlled editor visibility update | open: boolean |
-| open-change | Actual editor visibility change | open: boolean |
-| load-error | Explicit option loading failed; does not change the model | error: unknown |
+| Event             | Description                                               | Arguments                                                     |
+| ----------------- | --------------------------------------------------------- | ------------------------------------------------------------- |
+| update:modelValue | Proposes a new value                                      | value: (string \| number \| boolean)[] \| null                |
+| change            | Value change proposal                                     | value: (string \| number \| boolean)[] \| null, event?: Event |
+| update:open       | Controlled editor visibility update                       | open: boolean                                                 |
+| open-change       | Actual editor visibility change                           | open: boolean                                                 |
+| load-error        | Explicit option loading failed; does not change the model | error: unknown                                                |
 
 ### CheckboxGroup Slots
 
-| Slot | Description | Prop |
-| -------- | ----------------- | -------------------------------------- |
-| checkbox | Custom checkbox | checked: boolean<br/>disabled: boolean<br/>indeterminate: boolean |
-| label | Checkbox label content | data: CheckboxOption, checked: boolean |
-| read | Custom read content, taking precedence over empty-text | value: ChoiceValue[] \| null, text: string |
-| default | Native child options when options is omitted | - |
+| Slot     | Description                                            | Prop                                                              |
+| -------- | ------------------------------------------------------ | ----------------------------------------------------------------- |
+| checkbox | Custom checkbox                                        | checked: boolean<br/>disabled: boolean<br/>indeterminate: boolean |
+| label    | Checkbox label content                                 | data: CheckboxOption, checked: boolean                            |
+| read     | Custom read content, taking precedence over empty-text | value: (string \| number \| boolean)[] \| null, text: string      |
+| default  | Native child options when options is omitted           | -                                                                 |
 
 ## Types
 
 ### CheckboxOption
 
-| Field | Description | Type |
-| ------------- | -------------- | -------------------------------------------------------------------- |
-| value | Option identity | ChoiceValue |
-| label | Label or render function | VNodeChild \| (data: CheckboxOption, checked: boolean) => VNodeChild |
-| disabled | Disable interaction | boolean |
-| readonly | Read-only interaction | boolean |
-| indeterminate | Display-only indeterminate state | boolean |
+| Field         | Description                      | Type                                                                 |
+| ------------- | -------------------------------- | -------------------------------------------------------------------- |
+| value         | Option identity                  | string \| number \| boolean                                          |
+| label         | Label or render function         | VNodeChild \| (data: CheckboxOption, checked: boolean) => VNodeChild |
+| disabled      | Disable interaction              | boolean                                                              |
+| readonly      | Read-only interaction            | boolean                                                              |
+| indeterminate | Display-only indeterminate state | boolean                                                              |
 
 The component exports the following types
 
 ```ts
-import type { CheckboxProps } from "@cedar-design/ui-vue";
+import type { CheckboxProps } from '@cedar-design/ui-vue'
 ```
 
 ### ChoiceFieldNames
@@ -375,22 +371,22 @@ Use these variables to customize the component. Defaults may vary by the selecto
 
 <div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
-| Variable | Default / condition | Affected styles |
-| --- | --- | --- |
-| `--c-checkbox-action-padding` | `5px` | `padding` |
-| `--c-checkbox-animation-duration` | `var(--c-transition-duration-3)` | `transition` |
-| `--c-checkbox-control-border-radius` | `2px` | `border-radius` |
-| `--c-checkbox-control-color` | `var(--c-sys-color-border-default)` | `color` |
-| `--c-checkbox-control-color-checked` | `var(--c-sys-color-action-primary)` | `color` |
-| `--c-checkbox-control-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
-| `--c-checkbox-control-color-error` | `var(--c-sys-color-content-danger)` | `color` |
-| `--c-checkbox-control-size` | `14px` | `height`, `width` |
-| `--c-checkbox-group-gap` | `var(--c-spacing-7)` | `gap` |
-| `--c-checkbox-label-font-size` | `var(--c-font-size-body-3)` | `font-size` |
-| `--c-checkbox-label-gap` | `var(--c-spacing-4)` | `margin-inline-start` |
-| `--c-checkbox-label-text-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-checkbox-label-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
-| `--c-checkbox-mark-color` | `var(--c-sys-color-surface-default)` | `background-color`, `color` |
+| Variable                                 | Default / condition                   | Affected styles             |
+| ---------------------------------------- | ------------------------------------- | --------------------------- |
+| `--c-checkbox-action-padding`            | `5px`                                 | `padding`                   |
+| `--c-checkbox-animation-duration`        | `var(--c-transition-duration-3)`      | `transition`                |
+| `--c-checkbox-control-border-radius`     | `2px`                                 | `border-radius`             |
+| `--c-checkbox-control-color`             | `var(--c-sys-color-border-default)`   | `color`                     |
+| `--c-checkbox-control-color-checked`     | `var(--c-sys-color-action-primary)`   | `color`                     |
+| `--c-checkbox-control-color-disabled`    | `var(--c-sys-color-content-disabled)` | `color`                     |
+| `--c-checkbox-control-color-error`       | `var(--c-sys-color-content-danger)`   | `color`                     |
+| `--c-checkbox-control-size`              | `14px`                                | `height`, `width`           |
+| `--c-checkbox-group-gap`                 | `var(--c-spacing-7)`                  | `gap`                       |
+| `--c-checkbox-label-font-size`           | `var(--c-font-size-body-3)`           | `font-size`                 |
+| `--c-checkbox-label-gap`                 | `var(--c-spacing-4)`                  | `margin-inline-start`       |
+| `--c-checkbox-label-text-color`          | `var(--c-sys-color-content-primary)`  | `color`                     |
+| `--c-checkbox-label-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color`                     |
+| `--c-checkbox-mark-color`                | `var(--c-sys-color-surface-default)`  | `background-color`, `color` |
 
 </div>
 

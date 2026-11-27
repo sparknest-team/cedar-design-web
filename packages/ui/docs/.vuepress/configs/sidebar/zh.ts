@@ -1,26 +1,7 @@
 import type { SidebarArrayOptions, SidebarOptions } from "vuepress-theme-hope";
-import componentReuse from "./component-reuse.json";
 import catalog from "../component-navigation.json";
 
-const reuseLabels: Record<string, { label: string }> = componentReuse;
-function markReuse(items: SidebarArrayOptions): SidebarArrayOptions {
-  return items.map((item) => {
-    if (typeof item === "string") return item;
-    const name = ("link" in item ? item.link : undefined)?.match(
-      /^\/components\/([^/]+)\/$/,
-    )?.[1];
-    const reuse = name ? reuseLabels[name] : undefined;
-    return {
-      ...item,
-      ...(reuse && item.text ? { text: `${item.text} [${reuse.label}]` } : {}),
-      ...("children" in item && Array.isArray(item.children)
-        ? { children: markReuse(item.children) }
-        : {}),
-    };
-  });
-}
-
-export const showcaseSideBar: SidebarArrayOptions = [
+const showcaseSideBar: SidebarArrayOptions = [
   {
     text: "特色与场景",
     link: "/showcase/",
@@ -52,14 +33,12 @@ export const showcaseSideBar: SidebarArrayOptions = [
   },
 ];
 
-export const componentSideBar: SidebarArrayOptions = markReuse([
-  ...catalog.groups.map((group) => ({
-    text: group.label,
-    children: catalog.components
-      .filter((component) => component.group === group.id && component.id !== "theme-provider")
-      .map((component) => ({ text: component.name, link: component.route })),
-  })),
-]);
+export const componentSideBar: SidebarArrayOptions = catalog.groups.map((group) => ({
+  text: group.label,
+  children: catalog.components
+    .filter((component) => component.group === group.id && component.id !== "theme-provider")
+    .map((component) => ({ text: component.name, link: component.route })),
+}));
 
 export const startSideBar: SidebarArrayOptions = [
   { text: "开始使用", children: [
@@ -128,9 +107,10 @@ export const startSideBar: SidebarArrayOptions = [
       },
     ],
   },
+  ...showcaseSideBar,
   { text: "更新与迁移", children: [
     { text: "更新与迁移", link: "/guide/updates/" },
-    { text: "更新日志", link: "/changelog/" },
+    { text: "变更记录", link: "/changelog/" },
     { text: "Roadmap", link: "/guide/roadmap/" },
   ] },
 ];
@@ -143,8 +123,8 @@ export const aiSideBar: SidebarArrayOptions = [{ text: "AI 与工具", children:
   { text: "LLM 文档", link: "/guide/llms/" },
 ]}];
 export const zhSideBar: SidebarOptions = {
-  "/showcase/": showcaseSideBar,
-  "/practices/": showcaseSideBar,
+  "/showcase/": startSideBar,
+  "/practices/": startSideBar,
   "/practices/utility-spec/": componentSideBar,
   "/practices/accessibility-spec.html": componentSideBar,
   "/practices/ai-collaboration.html": componentSideBar,

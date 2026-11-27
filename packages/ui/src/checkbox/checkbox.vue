@@ -15,10 +15,7 @@
     :aria-disabled="mergedDisabled || undefined"
     @click="handleClick"
   >
-    <span
-      v-ripple="{ disabled: mergedDisabled || mergedReadonly || !ripple }"
-      :class="n('control')"
-    >
+    <span v-ripple="{ disabled: mergedDisabled || mergedReadonly || !ripple }" :class="n('control')">
       <input
         ref="input"
         v-bind="nativeAttrs"
@@ -32,7 +29,11 @@
         :aria-label="ariaLabel ?? nativeAttrs['aria-label']"
         :aria-checked="undefined"
         :aria-readonly="mergedReadonly || undefined"
-        :aria-describedby="group?.formErrorId === errorId ? nativeAttrs['aria-describedby'] : describeError(nativeAttrs['aria-describedby'])"
+        :aria-describedby="
+          group?.formErrorId === errorId
+            ? nativeAttrs['aria-describedby']
+            : describeError(nativeAttrs['aria-describedby'])
+        "
         :aria-invalid="mergedError ? true : nativeAttrs['aria-invalid']"
         @change="handleChange"
         @keydown="keyboard.keydown"
@@ -68,9 +69,9 @@
 import { computed, inject, nextTick, ref, useSlots, watch, type CSSProperties } from 'vue'
 import { createNamespace } from '../_utils/global-config'
 import { positiveLength } from '../_utils/size-length'
+import { useFormErrorDescription } from '../form/error-description'
 import vRipple from '../ripple'
 import { ChoiceLabel } from './choice-label'
-import type { CheckboxModel } from './choice-value-props'
 import { checkboxGroupKey } from './context'
 import { checkboxProps } from './props'
 import type { CheckboxSlots } from './types'
@@ -78,7 +79,6 @@ import { useChoiceRegistration } from './use-checkbox-group-methods'
 import { useCheckboxControl } from './use-choice-control'
 import { useChoiceForm } from './use-choice-form'
 import { useChoiceKeyboard } from './use-choice-keyboard'
-import { useFormErrorDescription } from '../form/error-description'
 import { useChoiceNativeAttrs } from './use-choice-native-attrs'
 
 defineOptions({ name: createNamespace('checkbox').name, inheritAttrs: false })
@@ -88,8 +88,8 @@ defineSlots<CheckboxSlots>()
 const emit = defineEmits<{
   'update:open': [open: boolean]
   'open-change': [open: boolean]
-  'update:modelValue': [value: CheckboxModel]
-  change: [value: CheckboxModel, event?: Event]
+  'update:modelValue': [value: boolean | (string | number | boolean)[] | null]
+  change: [value: boolean | (string | number | boolean)[] | null, event?: Event]
   click: [event: MouseEvent]
   focus: [event: FocusEvent]
   blur: [event: FocusEvent]

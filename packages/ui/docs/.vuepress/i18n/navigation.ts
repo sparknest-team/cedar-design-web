@@ -65,7 +65,7 @@ const labels: Record<string, string> = {
   默认值与全局配置: "Defaults and global configuration",
   工程与工具: "Engineering and tools",
   国际化: "Internationalization",
-  更新日志: "Changelog",
+  变更记录: "Changelog",
   样式: "Styles",
   主题定制: "Theming",
   通用: "General",

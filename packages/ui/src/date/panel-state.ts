@@ -1,11 +1,10 @@
 import type { EmptyValue } from '../_utils/empty-value'
 import type { DateRules } from './date-rules'
-import type { DateSelection } from './date-value'
 import type { DateWeekStart } from './panel-props'
 import type { DateShortcut, DateShortcutsPosition } from './panel-tools-props'
 
 export interface DatePanelOptions extends DateRules {
-  emptyValue?: EmptyValue<DateSelection>
+  emptyValue?: EmptyValue<Date | string | number | (Date | string | number | null | undefined)[] | null | undefined>
   dayStartOfWeek?: DateWeekStart
   abbreviation?: boolean
   showCurrent?: boolean
@@ -14,10 +13,10 @@ export interface DatePanelOptions extends DateRules {
   shortcuts?: DateShortcut[]
   shortcutsPosition?: DateShortcutsPosition
   previewShortcut?: boolean
-  pickerValue?: DateSelection
-  defaultPickerValue?: DateSelection
-  modelValue?: DateSelection
-  defaultValue?: DateSelection
+  pickerValue?: Date | string | number | (Date | string | number | null | undefined)[] | null | undefined
+  defaultPickerValue?: Date | string | number | (Date | string | number | null | undefined)[] | null | undefined
+  modelValue?: Date | string | number | (Date | string | number | null | undefined)[] | null | undefined
+  defaultValue?: Date | string | number | (Date | string | number | null | undefined)[] | null | undefined
   disabled?: boolean | boolean[]
   readonly?: boolean
   multiple?: boolean
@@ -26,8 +25,8 @@ export interface DatePanelOptions extends DateRules {
 }
 export interface DatePanelContentProps {
   options: DatePanelOptions
-  value: DateSelection
-  pickerValue?: DateSelection
+  value: Date | string | number | (Date | string | number | null | undefined)[] | null | undefined
+  pickerValue?: Date | string | number | (Date | string | number | null | undefined)[] | null | undefined
   range: boolean
   canConfirm: boolean
 }

@@ -3,7 +3,7 @@
     {
       "name": "model-value",
       "description": "受控值",
-      "type": "ChoiceValue[]",
+      "type": "(string | number | boolean)[]",
       "defaultValue": "undefined",
       "kind": "json",
       "initial": "[]"
@@ -11,7 +11,7 @@
     {
       "name": "default-value",
       "description": "非受控初始值",
-      "type": "ChoiceValue[]",
+      "type": "(string | number | boolean)[]",
       "defaultValue": "[]",
       "kind": "json",
       "initial": "[]"
@@ -26,7 +26,7 @@
     {
       "name": "options",
       "description": "选项；传入时替代默认插槽",
-      "type": "Array<ChoiceValue | CheckboxOption | Record<string, unknown>>",
+      "type": "Array<string | number | boolean | CheckboxOption | Record<string, unknown>>",
       "defaultValue": "undefined",
       "kind": "json",
       "initial": "{}"
@@ -37,10 +37,7 @@
       "type": "Orientation",
       "defaultValue": "'horizontal'",
       "kind": "enum",
-      "options": [
-        "horizontal",
-        "vertical"
-      ],
+      "options": ["horizontal", "vertical"],
       "initial": "horizontal"
     },
     {
@@ -87,18 +84,9 @@
       "kind": "string"
     }
   ],
-  "methodNames": [
-    "check-all",
-    "inverse-all"
-  ],
-  "events": [
-    "update:modelValue",
-    "change"
-  ],
-  "slotNames": [
-    "label",
-    "checkbox"
-  ],
+  "methodNames": ["check-all", "inverse-all"],
+  "events": ["update:modelValue", "change"],
+  "slotNames": ["label", "checkbox"],
   "slotDefaults": {
     "label": true,
     "checkbox": false

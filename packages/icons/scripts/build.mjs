@@ -1,21 +1,27 @@
-import { downlevelVueDeclarations } from '../../../../design-ui/packages/ui-build/src/vue-declarations.mjs'
-import { rm } from 'node:fs/promises'
 import { spawn } from 'node:child_process'
+import { rm } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import {
+  browserTargets,
+  downlevelVueDeclarations,
+  normalizeVueTypeFiles,
+  writeDualDeclarations,
+} from '@sparknest/ui-build-vue'
 import vue from '@vitejs/plugin-vue'
-import ts from 'typescript'
+import ts from 'typescript-js'
 import { build } from 'vite'
-import { browserTargets } from '../../../../design-ui/packages/ui-build/src/browser-targets.mjs'
-import { writeDualDeclarations } from '../../../../design-ui/packages/ui-build/src/dual-declarations.mjs'
 
 const root = resolve(import.meta.dirname, '..')
 
 function generateTypes() {
   return new Promise((resolvePromise, reject) => {
-    const child = spawn('vue-tsc', ['-p', 'tsconfig.build.json'], { cwd: root, stdio: 'inherit' })
+    const child = spawn('tsc', ['--runExternalCode', '-p', 'tsconfig.build.json'], {
+      cwd: root,
+      stdio: 'inherit',
+    })
     child.on('error', reject)
     child.on('exit', (code) =>
-      code === 0 ? resolvePromise() : reject(new Error(`vue-tsc exited with code ${code}`)),
+      code === 0 ? resolvePromise() : reject(new Error(`TypeScript exited with code ${code}`)),
     )
   })
 }
@@ -49,10 +55,8 @@ async function buildModules(format, outDir, extension) {
   })
 }
 
-await Promise.all([
-  buildModules('es', 'es', 'mjs'),
-  buildModules('cjs', 'lib', 'cjs'),
-  generateTypes(),
-])
+await generateTypes()
+await Promise.all([buildModules('es', 'es', 'mjs'), buildModules('cjs', 'lib', 'cjs')])
+await normalizeVueTypeFiles(resolve(root, 'types'))
 downlevelVueDeclarations(root, 'types', ts)
 writeDualDeclarations(resolve(root, 'types'), ts)

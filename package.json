@@ -52,7 +52,7 @@
     "test": "pnpm --filter @cedar-design/ui-vue test",
     "test:shard": "pnpm --dir packages/ui exec vitest run --shard=\"${SHARD:?Set SHARD like 1/4}\" && pnpm --dir packages/ui exec vitest run --config docs/.vuepress/vitest.config.mts --shard=\"$SHARD\"",
     "test:watch": "pnpm --filter @cedar-design/ui-vue test:watch",
-    "typecheck": "pnpm --filter @cedar-design/ui-vue typecheck && pnpm --dir packages/ui exec vue-tsc --noEmit -p tsconfig.p1-api.json",
+    "typecheck": "pnpm --filter @cedar-design/ui-vue typecheck && pnpm --dir packages/ui exec tsc --runExternalCode --noEmit -p tsconfig.p1-api.json",
     "ui:gen": "pnpm --filter @cedar-design/ui-vue ui:gen",
     "version-packages": "node ../design-ui/bin/check-major-release.mjs && changeset version && pnpm install --lockfile-only --ignore-scripts",
     "watch": "pnpm --filter @cedar-design/ui-vue watch"
@@ -63,20 +63,20 @@
   },
   "devDependencies": {
     "@cedar-design/cli-vue": "workspace:*",
-    "@changesets/changelog-github": "^0.5.1",
-    "@changesets/cli": "^2.29.7",
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.3",
     "@configurajs/prettier": "^0.1.5",
-    "@sparknest/theme-contract-vue": "link:../design-ui/packages/theme-contract",
+    "@sparknest/theme-contract-vue": "^1.4.3",
     "@vue/compiler-sfc": "catalog:",
     "@vue/server-renderer": "catalog:",
     "nano-staged": "^1.0.2",
     "nanospinner": "^1.2.2",
-    "picomatch": "4.0.4",
-    "playwright": "1.62.0",
-    "tinyexec": "npm:tinyexec@^0.3.0",
+    "picomatch": "4.0.7",
+    "playwright": "1.65.1",
+    "tinyexec": "1.4.0",
     "vue": "catalog:",
     "vue-compat-min": "npm:vue@3.2.47",
-    "yaml": "2.9.0"
+    "yaml": "2.9.1"
   },
   "packageManager": "pnpm@10.23.0+sha512.21c4e5698002ade97e4efe8b8b4a89a8de3c85a37919f957e7a0f30f38fbc5bbdd05980ffe29179b2fb6e6e691242e098d945d1601772cad0fef5fb6411e2a4b",
   "engines": {

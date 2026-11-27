@@ -7,6 +7,7 @@ Read the quick start and the relevant component page before generating code. Fol
 Documentation language: zh-CN.
 
 - [Full documentation](./llms-full.zh-CN.txt)
+- [变更记录](./llms/zh-CN/changelog.md): /changelog/
 - [Affix](./llms/zh-CN/components/affix.md): /components/affix/
 - [Alert](./llms/zh-CN/components/alert.md): /components/alert/
 - [Anchor](./llms/zh-CN/components/anchor.md): /components/anchor/

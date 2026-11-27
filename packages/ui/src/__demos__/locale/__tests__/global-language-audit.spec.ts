@@ -3,7 +3,7 @@ import { globSync, readdirSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { parse as parseTemplate } from '@vue/compiler-dom'
 import { compileScript, compileTemplate, parse } from '@vue/compiler-sfc'
-import ts from 'typescript'
+import ts from 'typescript-js'
 import { describe, expect, it } from 'vitest'
 import normalizedDemos from './normalized-demos.json'
 

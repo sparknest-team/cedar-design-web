@@ -3,11 +3,11 @@ import { createRequire } from 'node:module'
 import { dirname, extname, resolve } from 'node:path'
 import { expect, test } from 'vitest'
 import { bundleThemeClient } from '../theme-client'
+import { getHopeClientDir } from '../hope-client'
 
 test('theme presentation shares chunks while providers stay native, and edits invalidate the server-local build', async () => {
-  const require = createRequire(import.meta.url)
-  const client = resolve(dirname(require.resolve('vuepress-theme-hope/package.json')), 'lib/client')
-  const entry = resolve(client, 'layouts/Layout.js')
+  const client = getHopeClientDir()
+  const entry = resolve(client, 'layouts/base/Layout.js')
   const watched: string[] = []
   let resolutions = 0
   const context = {
@@ -44,7 +44,7 @@ test('theme presentation shares chunks while providers stay native, and edits in
 test('server-local theme bundles change entry URLs on restart and cannot be cached as immutable dependencies', () => {
   const first = bundleThemeClient() as any
   const second = bundleThemeClient() as any
-  const entry = 'vuepress-theme-hope/layouts/Layout.js'
+  const entry = 'vuepress-theme-hope/layouts/base/Layout'
   const resolved = first.resolveId(entry)
   expect(resolved).toContain('cedar-theme-build=')
   expect(second.resolveId(entry)).not.toBe(resolved)

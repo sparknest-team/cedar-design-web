@@ -8,8 +8,7 @@
     "skipLibCheck": true,
     "outDir": "./lib",
     "declaration": true,
-    "declarationDir": "./lib",
-    "downlevelIteration": true
+    "declarationDir": "./lib"
   },
   "include": ["src"]
 }

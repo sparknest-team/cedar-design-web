@@ -16,19 +16,21 @@
 </template>
 
 <script lang="ts">
+import type { Ref } from 'vue'
 import { computed, defineComponent, provide, reactive, ref, toRefs, watch } from 'vue'
 import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { isNull, isUndefined } from '../_utils/is'
 import { getKeyDownHandler, KEYBOARD_KEY } from '../_utils/keyboard'
+import type { WithNativeListeners } from '../_utils/native-listener-types'
 import { BaseType, UnionType } from '../_utils/types'
-import BaseCascaderPanel from './base-cascader-panel'
-import { useLazyOptions } from './use-lazy-options'
-import { startKeyboardLazy } from './use-keyboard-lazy'
-import { useCascaderFocus } from './use-cascader-focus'
+import BaseCascaderPanelComponent from './base-cascader-panel'
 import { cascaderInjectionKey } from './context'
 import { useSelectedPath } from './hooks/use-selected-path'
 import { cascaderPanelProps } from './panel-props'
 import { CascaderBaseValue, CascaderOption, CascaderOptionInfo } from './types'
+import { useCascaderFocus } from './use-cascader-focus'
+import { startKeyboardLazy } from './use-keyboard-lazy'
+import { useLazyOptions } from './use-lazy-options'
 import {
   getCheckedStatus,
   getLeafOptionInfos,
@@ -37,6 +39,11 @@ import {
   getValidValues,
   getValueKey,
 } from './utils'
+
+const BaseCascaderPanel = BaseCascaderPanelComponent as WithNativeListeners<
+  typeof BaseCascaderPanelComponent,
+  'onKeydown'
+>
 
 export default defineComponent({
   name: createNamespace('cascader-panel').name,
@@ -85,7 +92,7 @@ export default defineComponent({
       },
     )
 
-    const optionInfos = ref<CascaderOptionInfo[]>([])
+    const optionInfos: Ref<CascaderOptionInfo[]> = ref<CascaderOptionInfo[]>([])
     const totalLevel = ref(1)
 
     const optionMap = reactive(new Map<string, CascaderOptionInfo>())
@@ -152,7 +159,7 @@ export default defineComponent({
       )
     })
 
-    const filteredLeafOptions = computed(() =>
+    const filteredLeafOptions = computed<CascaderOptionInfo[]>(() =>
       props.checkStrictly ? Array.from(optionMap.values()) : Array.from(leafOptionSet),
     )
 
@@ -197,7 +204,11 @@ export default defineComponent({
     }
 
     const handleClickOption = (option: CascaderOptionInfo, checked?: boolean) => {
-      if (option.disabled || (props.multiple && option.selectionDisabled) || (!props.multiple && !props.checkStrictly && !option.isLeaf)) {
+      if (
+        option.disabled ||
+        (props.multiple && option.selectionDisabled) ||
+        (!props.multiple && !props.checkStrictly && !option.isLeaf)
+      ) {
         return
       }
       if (props.multiple) {
@@ -207,12 +218,20 @@ export default defineComponent({
       }
     }
 
-    const { activeKey, activeOption, selectedPath, displayColumns, setActiveKey, setSelectedPath, getNextActiveNode, navigateLevel } =
-      useSelectedPath(optionInfos, {
-        optionMap,
-        filteredLeafOptions,
-        expandChild,
-      })
+    const {
+      activeKey,
+      activeOption,
+      selectedPath,
+      displayColumns,
+      setActiveKey,
+      setSelectedPath,
+      getNextActiveNode,
+      navigateLevel,
+    } = useSelectedPath(optionInfos, {
+      optionMap,
+      filteredLeafOptions,
+      expandChild,
+    })
 
     const loadLazyOption = useLazyOptions({
       options: () => props.options,
@@ -236,7 +255,7 @@ export default defineComponent({
         setActiveKey,
         setSelectedPath,
         expandOption,
-      isOptionLoading: loadLazyOption.isPending,
+        isOptionLoading: loadLazyOption.isPending,
         slots,
         valueMap: computedValueMap,
         expandTrigger,
@@ -260,10 +279,7 @@ export default defineComponent({
 
     const dispatchKeyDown = getKeyDownHandler(
       new Map([
-        [
-          KEYBOARD_KEY.ENTER,
-          activateKeyDown,
-        ],
+        [KEYBOARD_KEY.ENTER, activateKeyDown],
         [
           KEYBOARD_KEY.SPACE,
           (ev: Event) => {
@@ -275,7 +291,11 @@ export default defineComponent({
           KEYBOARD_KEY.ARROW_DOWN,
           (ev: Event) => {
             ev.preventDefault()
-            const activeNode = getNextActiveNode('next', (ev.target as Element | null)?.closest?.('[data-cascader-key]')?.getAttribute('data-cascader-key') ?? undefined)
+            const activeNode = getNextActiveNode(
+              'next',
+              (ev.target as Element | null)?.closest?.('[data-cascader-key]')?.getAttribute('data-cascader-key') ??
+                undefined,
+            )
             setActiveKey(activeNode?.key)
           },
         ],
@@ -283,7 +303,11 @@ export default defineComponent({
           KEYBOARD_KEY.ARROW_UP,
           (ev: Event) => {
             ev.preventDefault()
-            const activeNode = getNextActiveNode('preview', (ev.target as Element | null)?.closest?.('[data-cascader-key]')?.getAttribute('data-cascader-key') ?? undefined)
+            const activeNode = getNextActiveNode(
+              'preview',
+              (ev.target as Element | null)?.closest?.('[data-cascader-key]')?.getAttribute('data-cascader-key') ??
+                undefined,
+            )
             setActiveKey(activeNode?.key)
           },
         ],
@@ -297,13 +321,18 @@ export default defineComponent({
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.defaultPrevented || event.isComposing || event.keyCode === 229) return
       const target = event.target as Element | null
-      const option = target?.closest?.('[role="menuitem"][data-cascader-key], [role="menuitemradio"][data-cascader-key], [role="menuitemcheckbox"][data-cascader-key], [role="option"][data-cascader-key]')
+      const option = target?.closest?.(
+        '[role="menuitem"][data-cascader-key], [role="menuitemradio"][data-cascader-key], [role="menuitemcheckbox"][data-cascader-key], [role="option"][data-cascader-key]',
+      )
       if (event.key === ' ' && !option) return
       const panelSelector = `.${getPrefixCls('cascader')}-panel, .${getPrefixCls('cascader')}-editor-panel`
       const originPanel = option?.closest(panelSelector)
       if (option && originPanel !== event.currentTarget) return
       // Nested inputs and buttons own their own keyboard interaction.
-      if (option?.getAttribute('aria-disabled') === 'true' && ['Enter', ' ', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+      if (
+        option?.getAttribute('aria-disabled') === 'true' &&
+        ['Enter', ' ', 'ArrowLeft', 'ArrowRight'].includes(event.key)
+      ) {
         event.preventDefault()
         return
       }
@@ -314,9 +343,16 @@ export default defineComponent({
       }
       const root = panelRef.value?.$el
       const lazyTask = startKeyboardLazy(
-        event, activeOption.value, Boolean(props.loadMore), false, expandOption,
-        (key) => activeKey.value === key && selectedPath.value.includes(key), navigateLevel,
-        () => { if (root && option) focusOption(root, option, originPanel, panelSelector) },
+        event,
+        activeOption.value,
+        Boolean(props.loadMore),
+        false,
+        expandOption,
+        (key) => activeKey.value === key && selectedPath.value.includes(key),
+        navigateLevel,
+        () => {
+          if (root && option) focusOption(root, option, originPanel, panelSelector)
+        },
       )
       dispatchKeyDown(event)
       if (option && ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key) && root) {

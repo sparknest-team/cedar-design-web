@@ -1,4 +1,4 @@
-import { createMarkdown } from '@vuepress/markdown'
+import { createMarkdown } from 'vuepress/markdown'
 import { prismjsPlugin } from '@vuepress/plugin-prismjs'
 import { expect, test } from 'vitest'
 

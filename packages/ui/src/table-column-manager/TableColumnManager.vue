@@ -1,7 +1,8 @@
 <template>
   <component :is="props.inline ? 'div' : Drawer" v-bind="props.inline ? {} : drawerProps">
     <Transfer
-      v-model="targetItems"
+      :model-value="targetItems"
+      @update:model-value="targetItems = $event ?? []"
       :class="prefixCls"
       :data="transferData"
       :disabled="loading"
@@ -23,25 +24,46 @@
     @confirm="handleInsertConfirm"
   >
     <div v-if="!insertableItems.length" style="color: var(--c-color-text-3)">没有可插入的列</div>
-    <c-checkbox-group v-else v-model="insertSelected" orientation="vertical">
+    <c-checkbox-group
+      v-else
+      :model-value="insertSelected"
+      orientation="vertical"
+      @update:model-value="updateInsertSelected"
+    >
       <c-checkbox v-for="item in insertableItems" :key="item.dataIndex" :value="item.dataIndex">
         {{ item.title }}
       </c-checkbox>
     </c-checkbox-group>
   </c-dialog>
 
-  <c-dialog v-if="ctx" v-model:open="editVisible" title="编辑列" :width="480" unmount-on-close @confirm="handleEditConfirm">
+  <c-dialog
+    v-if="ctx"
+    v-model:open="editVisible"
+    title="编辑列"
+    :width="480"
+    unmount-on-close
+    @confirm="handleEditConfirm"
+  >
     <div style="display: flex; flex-direction: column; gap: 16px">
       <div>
         <div style="margin-bottom: 8px">一级分组标题</div>
-        <c-input v-model="editGroupTitle" placeholder="留空表示不分组" clearable />
+        <c-input
+          :model-value="editGroupTitle"
+          @update:model-value="editGroupTitle = $event ?? ''"
+          placeholder="留空表示不分组"
+          clearable
+        />
         <div style="margin-top: 6px; color: var(--c-color-text-3); font-size: 12px">
           相邻列的一级标题相同时会自动合并为同一分组
         </div>
       </div>
       <div>
         <div style="margin-bottom: 8px">列名称</div>
-        <c-input v-model="editColumnTitle" placeholder="请输入列名称" />
+        <c-input
+          :model-value="editColumnTitle"
+          @update:model-value="editColumnTitle = $event ?? ''"
+          placeholder="请输入列名称"
+        />
       </div>
     </div>
   </c-dialog>
@@ -49,19 +71,19 @@
 
 <script lang="ts" setup>
 import { computed, inject, onBeforeUnmount, ref, watch } from 'vue'
-import { createRequestGuard } from '../_utils/async-request'
 import { cloneDeep, isEqual } from 'lodash-es'
-import Drawer from '../drawer'
-import CDialog from '../dialog'
+import { createRequestGuard } from '../_utils/async-request'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import CCheckbox, { CheckboxGroup as CCheckboxGroup } from '../checkbox'
+import CDialog from '../dialog'
+import Drawer from '../drawer'
 import CInput from '../input'
 import Transfer from '../transfer'
 import type { TransferItem, TransferTargetItem, TransferValue } from '../transfer'
-import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import type { TableColumnManagerDrawerProps } from './props'
 import type { ColumnCatalog, ColumnManagerItem, ColumnManagerResult } from './types'
-import { buildColumnsResult, isColumnCatalogGroup } from './utils'
 import { TableColumnManagerContextKey } from './use-table-column-manager'
+import { buildColumnsResult, isColumnCatalogGroup } from './utils'
 
 defineOptions({ name: createNamespace('table-column-manager').name })
 
@@ -230,8 +252,20 @@ const handleSearch = async (value: string, type: 'source' | 'target') => {
     if (isCurrent()) searchPending.value = false
   }
 }
-watch(() => props.loadOptions, () => { void loadCatalog().catch(() => {}) }, { immediate: true })
-watch(() => props.remoteSearch, () => { searchRequest.invalidate(); searchPending.value = false })
+watch(
+  () => props.loadOptions,
+  () => {
+    void loadCatalog().catch(() => {})
+  },
+  { immediate: true },
+)
+watch(
+  () => props.remoteSearch,
+  () => {
+    searchRequest.invalidate()
+    searchPending.value = false
+  },
+)
 
 const insertVisible = computed({
   get: () => ctx?.insertVisible.value ?? false,
@@ -247,6 +281,9 @@ const insertSelected = computed({
     if (ctx) ctx.insertSelected.value = value
   },
 })
+function updateInsertSelected(keys: (string | number | boolean)[] | null | undefined) {
+  insertSelected.value = (keys ?? []).filter((key): key is string => typeof key === 'string')
+}
 const editVisible = computed({
   get: () => ctx?.editVisible.value ?? false,
   set: (value) => {
@@ -277,17 +314,15 @@ watch(
     catalogPending.value = false
     innerCatalog.value = cloneDeep(value ?? [])
   },
-  { deep: true }
+  { deep: true },
 )
 watch(
   () => props.modelValue,
   (value) => {
     if (value) innerItems.value = cloneDeep(value)
   },
-  { deep: true }
+  { deep: true },
 )
-
-
 
 defineExpose({
   getResult,

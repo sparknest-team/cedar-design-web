@@ -4,7 +4,7 @@
 const plugins = ['utc', 'timezone', 'advancedFormat', 'customParseFormat', 'isBetween', 'quarterOfYear', 'weekOfYear', 'weekYear']
 const locales = ['zh-cn', 'zh-tw', 'zh-hk', 'ja', 'fa']
 export const docsDevDependencies = [
-  'vue', 'vue-router', '@vueuse/core',
+  'vue', 'vue-router', 'vue-router/experimental', '@vueuse/core',
   'b-validate', 'b-tween', 'rrule', '@js-temporal/polyfill', 'dayjs',
   'decimal.js', 'number-precision', 'resize-observer-polyfill', 'zod', 'lodash-es', 'scroll-into-view-if-needed', 'sortablejs',
   ...[...plugins.map(name => `dayjs/plugin/${name}`), ...locales.map(name => `dayjs/locale/${name}`)]

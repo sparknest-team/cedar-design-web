@@ -1,19 +1,19 @@
 import { connectComponentLanguage } from './i18n/client'
-import { defineClientConfig, useRouter } from '@vuepress/client'
+import { defineClientConfig, useRouter } from 'vuepress/client'
 import './configs/styles/index.scss'
 import 'prismjs/themes/prism.css'
 import { vLoading } from '../../src/loading'
 import { vTooltip } from '../../src/tooltip'
 import { themeConfig, docsTheme } from './theme-config'
 import { ThemeProvider } from '../../src/theme-provider'
-import HopeLayout from 'vuepress-theme-hope/layouts/Layout.js'
-import HopeNotFound from 'vuepress-theme-hope/layouts/NotFound.js'
+import HopeLayout from 'vuepress-theme-hope/layouts/base/Layout'
+import HopeNotFound from 'vuepress-theme-hope/layouts/base/NotFound'
 import '../../src/style/index.less'
 import '../../src/loading/style'
 import '../../src/tooltip/style'
 import { defineAsyncComponent, defineComponent, h, onBeforeUnmount, onMounted } from 'vue'
 import CedarThemeMenu from './components/CedarThemeMenu.vue'
-import { installScrollHash } from './scroll-hash'
+import { installScrollHash } from '@sparknest/vuepress-plugins-vue/scroll-hash'
 import ShowcaseOverview from './components/ShowcaseOverview.vue'
 
 const themedLayout = (Layout: any) => defineComponent({
@@ -39,7 +39,7 @@ export default defineClientConfig({
       // Polyfill global
       window.global = window
       stopThemeSync = themeConfig()
-      stopScrollHash = installScrollHash(router)
+      stopScrollHash = installScrollHash(router, '.theme-hope-content')
     })
     onBeforeUnmount(() => {
       stopScrollHash?.()

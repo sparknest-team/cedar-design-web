@@ -1,6 +1,13 @@
 <template>
   <div :class="classNames">
-    <Input ref="inputRef" auto-size :model-value="text" :input-attrs="inputAttrs" @blur="onBlur" @input="onChange" @press-enter="onPressEnter" />
+    <Input
+      ref="inputRef"
+      :model-value="text"
+      :input-attrs="inputAttrs"
+      @blur="onBlur"
+      @input="onChange"
+      @press-enter="onPressEnter"
+    />
   </div>
 </template>
 
@@ -37,7 +44,9 @@ export default defineComponent({
       if (ending) return
       ending = true
       emit('end', reason)
-      nextTick(() => { ending = false })
+      nextTick(() => {
+        ending = false
+      })
     }
 
     onMounted(() => {

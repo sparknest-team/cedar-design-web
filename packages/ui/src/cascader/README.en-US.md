@@ -10,7 +10,7 @@ Hierarchical option selection with single, multiple and path models.
 When cascading multiple selections, toggling a parent affects only selectable descendants; already selected disabled descendants are retained.
 
 ```ts
-import type { CascaderProps, CascaderInstance } from "@cedar-design/ui-vue";
+import type { CascaderInstance, CascaderProps } from '@cedar-design/ui-vue'
 ```
 
 `empty-value` accepts explicit `null` (or `() => null`). Clearing publishes null unchanged; omitted values preserve the existing default. Editors render null as blank without converting ordinary empty-string input to null. In confirmation mode, clearing changes the draft; confirm commits it and cancel preserves the original model. Without confirmation, clearing commits directly.
@@ -35,17 +35,16 @@ Inherits source dir. Child columns, expansion icons and separators follow readin
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ------------- | ------------------------------------------------------ | ------------------------------ |
-| `options` | Tree options; leaf values must be unique in scalar mode; paths distinguish branches | Appearance configuration comparison, Control Sizes |
-| `clearable` | Allow clearing; preserve disabled selections | Appearance configuration comparison, Control Sizes |
-| `size` | Supports all five sizes; inherits group/form settings | Control Sizes |
-| `variant` | filled, outline, standard; inherits InputGroup | Control Sizes |
-| `placeholder` | Placeholder | Control Sizes |
-| `multiple` | Multiple selection; enables search by default | Control Sizes |
+| Configuration | Purpose                                                                             | Related examples                                   |
+| ------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `options`     | Tree options; leaf values must be unique in scalar mode; paths distinguish branches | Appearance configuration comparison, Control Sizes |
+| `clearable`   | Allow clearing; preserve disabled selections                                        | Appearance configuration comparison, Control Sizes |
+| `size`        | Supports all five sizes; inherits group/form settings                               | Control Sizes                                      |
+| `variant`     | filled, outline, standard; inherits InputGroup                                      | Control Sizes                                      |
+| `placeholder` | Placeholder                                                                         | Control Sizes                                      |
+| `multiple`    | Multiple selection; enables search by default                                       | Control Sizes                                      |
 
 <!-- demo-config-notes:end -->
-
 
 Choose an axis to compare its available values with the same content and model. Other settings remain unchanged while comparing.
 
@@ -68,17 +67,16 @@ Choose an axis to compare its available values with the same content and model. 
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ---------------- | ------------------------------------------------------ | -------------------------------- |
-| `options` | Tree options; leaf values must be unique in scalar mode; paths distinguish branches | Multiple, Check Strictly, Path Mode |
-| `placeholder` | Placeholder | Multiple, Check Strictly, Path Mode |
-| `multiple` | Multiple selection; enables search by default | Multiple, Check Strictly |
-| `default-value` | Default value (uncontrolled state) | Check Strictly, Path Mode |
-| `expand-trigger` | Menu / List expansion: click or hover | Check Strictly, Path Mode |
-| `check-strictly` | Allow parent selection; unlink parent/child checks | Check Strictly |
+| Configuration    | Purpose                                                                             | Related examples                    |
+| ---------------- | ----------------------------------------------------------------------------------- | ----------------------------------- |
+| `options`        | Tree options; leaf values must be unique in scalar mode; paths distinguish branches | Multiple, Check Strictly, Path Mode |
+| `placeholder`    | Placeholder                                                                         | Multiple, Check Strictly, Path Mode |
+| `multiple`       | Multiple selection; enables search by default                                       | Multiple, Check Strictly            |
+| `default-value`  | Default value (uncontrolled state)                                                  | Check Strictly, Path Mode           |
+| `expand-trigger` | Menu / List expansion: click or hover                                               | Check Strictly, Path Mode           |
+| `check-strictly` | Allow parent selection; unlink parent/child checks                                  | Check Strictly                      |
 
 <!-- demo-config-notes:end -->
-
 
 - `options`: Options for cascader
 - `placeholder`: Placeholder
@@ -120,16 +118,15 @@ Choose an axis to compare its available values with the same content and model. 
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ---------------- | ------------------------------------------------------ | -------------------------------------------- |
-| `options` | Tree options; leaf values must be unique in scalar mode; paths distinguish branches | Filterable, Case Sensitive, Format Label |
-| `placeholder` | Placeholder | Filterable, Case Sensitive, Format Label |
-| `filterable` | Enable search | Filterable, Case Sensitive |
-| `case-sensitive` | Case-sensitive built-in filtering; custom filters take priority | Case Sensitive |
-| `format-label` | Format selected labels; use label slot for VNodes | Format Label |
+| Configuration    | Purpose                                                                             | Related examples                         |
+| ---------------- | ----------------------------------------------------------------------------------- | ---------------------------------------- |
+| `options`        | Tree options; leaf values must be unique in scalar mode; paths distinguish branches | Filterable, Case Sensitive, Format Label |
+| `placeholder`    | Placeholder                                                                         | Filterable, Case Sensitive, Format Label |
+| `filterable`     | Enable search                                                                       | Filterable, Case Sensitive               |
+| `case-sensitive` | Case-sensitive built-in filtering; custom filters take priority                     | Case Sensitive                           |
+| `format-label`   | Format selected labels; use label slot for VNodes                                   | Format Label                             |
 
 <!-- demo-config-notes:end -->
-
 
 - `options`: Options for cascader
 - `placeholder`: Placeholder
@@ -161,14 +158,13 @@ Choose an axis to compare its available values with the same content and model. 
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ----------- | ------------------------------------------------------ | ------------ |
-| `options` | Tree options; leaf values must be unique in scalar mode; paths distinguish branches | Interaction state comparison |
-| `clearable` | Allow clearing; preserve disabled selections | Interaction state comparison |
-| `disabled` | Whether disabled | Interaction state comparison |
+| Configuration | Purpose                                                                             | Related examples             |
+| ------------- | ----------------------------------------------------------------------------------- | ---------------------------- |
+| `options`     | Tree options; leaf values must be unique in scalar mode; paths distinguish branches | Interaction state comparison |
+| `clearable`   | Allow clearing; preserve disabled selections                                        | Interaction state comparison |
+| `disabled`    | Whether disabled                                                                    | Interaction state comparison |
 
 <!-- demo-config-notes:end -->
-
 
 Toggle the state, interact with the component, and restore editing using the controls outside the specimen. Error appearance alone does not run validation.
 
@@ -182,16 +178,15 @@ Toggle the state, interact with the component, and restore editing using the con
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --------------------- | -------------------------------------------------------------------------------------- | -------------------------------- |
-| `edit-mode` | Presentation | Passthrough Options, Copying and editing |
-| `options` | Tree options; leaf values must be unique in scalar mode; paths distinguish branches | Passthrough Options, Copying and editing |
-| `trigger-props` | Menu Trigger props; field owns open state | Passthrough Options |
-| `open-trigger-target` | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available. | Copying and editing |
-| `filterable` | Enable search | Copying and editing |
+| Configuration         | Purpose                                                                                                                          | Related examples                         |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `edit-mode`           | Presentation                                                                                                                     | Passthrough Options, Copying and editing |
+| `options`             | Tree options; leaf values must be unique in scalar mode; paths distinguish branches                                              | Passthrough Options, Copying and editing |
+| `trigger-props`       | Menu Trigger props; field owns open state                                                                                        | Passthrough Options                      |
+| `open-trigger-target` | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available. | Copying and editing                      |
+| `filterable`          | Enable search                                                                                                                    | Copying and editing                      |
 
 <!-- demo-config-notes:end -->
-
 
 - `open`: Whether to show the dropdown
 - `options`: Options for cascader
@@ -213,17 +208,16 @@ With open-trigger-target="icon", use the input area to edit or copy and the suff
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ------------- | --------------------------------------------------------------------- | ---------------------------------------- |
-| `options` | Tree options; leaf values must be unique in scalar mode; paths distinguish branches | Loading, Load More, Async Devices |
-| `placeholder` | Placeholder | Loading, Load More, Async Devices |
-| `loading` | Loading state; blocks selection and confirmation | Loading, Async Devices |
-| `load-more` | Load children asynchronously; call done(children), or done() to allow retry | Load More |
-| `path-mode` | Return a complete path instead of a node value | Async Devices |
-| `filterable` | Enable search | Async Devices |
+| Configuration | Purpose                                                                             | Related examples                  |
+| ------------- | ----------------------------------------------------------------------------------- | --------------------------------- |
+| `options`     | Tree options; leaf values must be unique in scalar mode; paths distinguish branches | Loading, Load More, Async Devices |
+| `placeholder` | Placeholder                                                                         | Loading, Load More, Async Devices |
+| `loading`     | Loading state; blocks selection and confirmation                                    | Loading, Async Devices            |
+| `load-more`   | Load children asynchronously; call done(children), or done() to allow retry         | Load More                         |
+| `path-mode`   | Return a complete path instead of a node value                                      | Async Devices                     |
+| `filterable`  | Enable search                                                                       | Async Devices                     |
 
 <!-- demo-config-notes:end -->
-
 
 - `options`: Options for cascader
 - `placeholder`: Placeholder
@@ -262,10 +256,10 @@ When options are added or removed at the end of a virtual column, options still 
 
 `empty-values` recognizes empty data; `empty-value` keeps existing clear output. `empty-text` defaults to `'-'` under `read-pretty`, with Field > FormItem > Form precedence and custom read slots first. With explicit `empty-values`, built-in required uses the policy; custom validators receive original data. See the [shared guide](/en/guide/empty-values/).
 
-| Prop | Type | Default and scope |
-| ------------ | ------------------ | ----------------------------------------------------- |
+| Prop         | Type               | Default and scope                                                           |
+| ------------ | ------------------ | --------------------------------------------------------------------------- |
 | empty-values | readonly unknown[] | Field > FormItem > Form > component-family default; replaces the whole list |
-| empty-text | string | Field > FormItem > Form > '-'; explicit '' is valid |
+| empty-text   | string             | Field > FormItem > Form > '-'; explicit '' is valid                         |
 
 These props belong to field presentation; pure panels do not gain reading mode. Form and FormItem provide inherited settings. The existing empty-value type and clear fallback remain component-specific.
 
@@ -273,59 +267,59 @@ These props belong to field presentation; pure panels do not gain reading mode. 
 
 Use `v-model`, `v-model:open` and `v-model:input-value` for controlled state. Clear values are `''` for single selection and `[]` for multiple selection. Select uses `undefined` when an actual empty-string option exists.
 
-| Prop | Description | Type | Default |
-| --------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------- | ------------------------ |
-| need-confirm | Applies only to overlay editing. Single selection commits and closes on choice by default; true keeps a draft until confirmation. Multiple selection defaults to confirmation. Submission still runs form validation and before-commit; rejection keeps the editor open. | `boolean` | Single `false`; multiple `true` |
-| `open-trigger-target` | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available. | `'field' \| 'icon'` | `'field'` |
-| `model-value` | Controlled selected value; supports v-model | `CascaderBaseValue` | `undefined` |
-| `default-value` | Initial uncontrolled selection; read once | `CascaderBaseValue` | Single: `undefined` with path-mode, otherwise `''`; multiple: `[]` |
-| `open` | Controlled open state; supports v-model:open | `boolean` | `undefined` |
-| `default-open` | Initial uncontrolled open state; read only at initialization | `boolean` | `false` |
-| `input-value` | Controlled search text, independent of selection; supports v-model:input-value | `string` | `undefined` |
-| `default-input-value` | Initial uncontrolled search text, independent of selection; read only at initialization | `string` | `''` |
-| `multiple` | Multiple selection; enables search by default | `boolean` | `false` |
-| `size` | Supports all five sizes; inherits group/form settings | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
-| `variant` | filled, outline, standard; inherits InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `outline` |
-| `disabled` | Disabled state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
-| `readonly` | Read-only state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
-| `error` | Error state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
-| `placeholder` | Placeholder | `string` | `—` |
-| `hint` | Enable the floating hint | `boolean` | `false` |
-| `line` | Show the underline in the standard variant | `boolean` | `true` |
-| `text-color` | Custom per-instance text color; prefer tokens for static themes | `string` | `—` |
-| `focus-color` | Custom per-instance focused color; prefer tokens for static themes | `string` | `—` |
-| `blur-color` | Custom per-instance unfocused color; prefer tokens for static themes | `string` | `—` |
-| `loading` | Loading pauses selection, clearing, tag removal and confirmation; retains values while search and closing remain available. | `boolean` | `false` |
-| `loading-mode` | Field loading presentation: default indicator or bottom indeterminate line. | `default / line` | `default` |
-| `search-fields` | Fields used by built-in path search; defaults to label; custom filtering callbacks take precedence. | `readonly OptionSearchField[]`<br>`OptionSearchField: 'label' \| 'value'` | `['label']` |
-| `read-pretty` | Common pure-reading state, inherited from FormItem / Form when omitted; independent of readonly and disabled. | `boolean` | `undefined` |
-| `empty-value` | Clear output override; does not change empty-value recognition. | `CascaderProps['emptyValue']` | `undefined` |
-| `before-commit` | Before confirmation, calls ({ value, previousValue }, done, { signal }); complete with a boolean, Promise or done; synchronous undefined waits for done. | `BeforeFieldCommit` | `undefined` |
-| `show-tags` | Show tags; false displays separated text | `boolean` | `true` |
-| `separator` | Separator when show-tags=false | `string` | `,` |
-| `text-align` | Physical text alignment: left / center / right. When omitted, inherits FormItem content-align; standalone fields default to logical start | `'left' \| 'center' \| 'right'` | `-` |
-| `max-tag-count` | Finite nonnegative integer; 0 leaves the displayed tag count unlimited. | `number` | `0` |
-| `tag-nowrap` | Keep tags on one line with ellipsis and preserved removal icons; overflow scrolls horizontally; hover, focus or tap truncated text to preview it | `boolean` | `false` |
-| `popup-container` | Selector, element, element resolver, or false for inline rendering | `PopupContainer` | `—` |
-| `trigger-props` | Menu Trigger props; field owns open state | `TriggerProps` | `—` |
-| `virtual-list-props` | Pass the virtual list attribute, pass in this parameter to turn on virtual scrolling [VirtualListProps](#VirtualListProps) | `VirtualListProps` | `—` |
-| `search-delay` | Finite nonnegative search debounce delay in milliseconds. | `number` | `500` |
-| `format-label` | Format selected labels; use label slot for VNodes | `function` | `—` |
-| `clearable` | Allow clearing; preserve disabled selections | `boolean` | `false` |
-| `options` | Tree options; leaf values must be unique in scalar mode; paths distinguish branches | `CascaderOption[]` / `(query, { signal }) => Array / Promise` | `undefined` |
-| `field-names` | Map value, label, disabled, children, isLeaf, tagProps, render | `CascaderFieldNames` | `—` |
-| `path-mode` | Return a complete path instead of a node value | `boolean` | `false` |
-| `check-strictly` | Allow parent selection; unlink parent/child checks | `boolean` | `false` |
-| `filterable` | Enable search | `boolean` | `Single: false; multiple: true` |
-| case-sensitive | Case-sensitive built-in filtering; custom filters take priority | boolean | false |
-| `filter-option` | Receives query and raw node | `(input, option) => boolean` | `—` |
-| `expand-trigger` | Menu / List expansion: click or hover | `string` | `click` |
-| `expand-child` | Expand to first child | `boolean` | `false` |
-| `load-more` | Load children asynchronously; call done(children), or done() to allow retry | `(option, done) => void` | `—` |
-| `fallback-option` | Display unresolved values | `boolean or (value) => { value, label }` | `true` |
-| `search-option-only-label` | Show node label only in search results | `boolean` | `false` |
-| `auto-fit-popup-width` | Match Menu width to field | `boolean` | `false` |
-| `edit-mode` | Field presentation; inherits FormItem / Form when omitted. | `direct / click / dblclick` | `direct` |
+| Prop                       | Description                                                                                                                                                                                                                                                              | Type                                                                      | Default                                                            |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| need-confirm               | Applies only to overlay editing. Single selection commits and closes on choice by default; true keeps a draft until confirmation. Multiple selection defaults to confirmation. Submission still runs form validation and before-commit; rejection keeps the editor open. | `boolean`                                                                 | Single `false`; multiple `true`                                    |
+| `open-trigger-target`      | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available.                                                                                                                                         | `'field' \| 'icon'`                                                       | `'field'`                                                          |
+| `model-value`              | Controlled selected value; supports v-model                                                                                                                                                                                                                              | `CascaderBaseValue`                                                       | `undefined`                                                        |
+| `default-value`            | Initial uncontrolled selection; read once                                                                                                                                                                                                                                | `CascaderBaseValue`                                                       | Single: `undefined` with path-mode, otherwise `''`; multiple: `[]` |
+| `open`                     | Controlled open state; supports v-model:open                                                                                                                                                                                                                             | `boolean`                                                                 | `undefined`                                                        |
+| `default-open`             | Initial uncontrolled open state; read only at initialization                                                                                                                                                                                                             | `boolean`                                                                 | `false`                                                            |
+| `input-value`              | Controlled search text, independent of selection; supports v-model:input-value                                                                                                                                                                                           | `string`                                                                  | `undefined`                                                        |
+| `default-input-value`      | Initial uncontrolled search text, independent of selection; read only at initialization                                                                                                                                                                                  | `string`                                                                  | `''`                                                               |
+| `multiple`                 | Multiple selection; enables search by default                                                                                                                                                                                                                            | `boolean`                                                                 | `false`                                                            |
+| `size`                     | Supports all five sizes; inherits group/form settings                                                                                                                                                                                                                    | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                 | `md`                                                               |
+| `variant`                  | filled, outline, standard; inherits InputGroup                                                                                                                                                                                                                           | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'`             | `outline`                                                          |
+| `disabled`                 | Disabled state; explicit values override inherited Form / Group state                                                                                                                                                                                                    | `boolean`                                                                 | `undefined`                                                        |
+| `readonly`                 | Read-only state; explicit values override inherited Form / Group state                                                                                                                                                                                                   | `boolean`                                                                 | `undefined`                                                        |
+| `error`                    | Error state; explicit values override inherited Form / Group state                                                                                                                                                                                                       | `boolean`                                                                 | `undefined`                                                        |
+| `placeholder`              | Placeholder                                                                                                                                                                                                                                                              | `string`                                                                  | `—`                                                                |
+| `hint`                     | Enable the floating hint                                                                                                                                                                                                                                                 | `boolean`                                                                 | `false`                                                            |
+| `line`                     | Show the underline in the standard variant                                                                                                                                                                                                                               | `boolean`                                                                 | `true`                                                             |
+| `text-color`               | Custom per-instance text color; prefer tokens for static themes                                                                                                                                                                                                          | `string`                                                                  | `—`                                                                |
+| `focus-color`              | Custom per-instance focused color; prefer tokens for static themes                                                                                                                                                                                                       | `string`                                                                  | `—`                                                                |
+| `blur-color`               | Custom per-instance unfocused color; prefer tokens for static themes                                                                                                                                                                                                     | `string`                                                                  | `—`                                                                |
+| `loading`                  | Loading pauses selection, clearing, tag removal and confirmation; retains values while search and closing remain available.                                                                                                                                              | `boolean`                                                                 | `false`                                                            |
+| `loading-mode`             | Field loading presentation: default indicator or bottom indeterminate line.                                                                                                                                                                                              | `default / line`                                                          | `default`                                                          |
+| `search-fields`            | Fields used by built-in path search; defaults to label; custom filtering callbacks take precedence.                                                                                                                                                                      | `readonly OptionSearchField[]`<br>`OptionSearchField: 'label' \| 'value'` | `['label']`                                                        |
+| `read-pretty`              | Common pure-reading state, inherited from FormItem / Form when omitted; independent of readonly and disabled.                                                                                                                                                            | `boolean`                                                                 | `undefined`                                                        |
+| `empty-value`              | Clear output override; does not change empty-value recognition.                                                                                                                                                                                                          | `CascaderProps['emptyValue']`                                             | `undefined`                                                        |
+| `before-commit`            | Before confirmation, calls ({ value, previousValue }, done, { signal }); complete with a boolean, Promise or done; synchronous undefined waits for done.                                                                                                                 | `BeforeFieldCommit`                                                       | `undefined`                                                        |
+| `show-tags`                | Show tags; false displays separated text                                                                                                                                                                                                                                 | `boolean`                                                                 | `true`                                                             |
+| `separator`                | Separator when show-tags=false                                                                                                                                                                                                                                           | `string`                                                                  | `,`                                                                |
+| `text-align`               | Physical text alignment: left / center / right. When omitted, inherits FormItem content-align; standalone fields default to logical start                                                                                                                                | `'left' \| 'center' \| 'right'`                                           | `-`                                                                |
+| `max-tag-count`            | Finite nonnegative integer; 0 leaves the displayed tag count unlimited.                                                                                                                                                                                                  | `number`                                                                  | `0`                                                                |
+| `tag-nowrap`               | Keep tags on one line with ellipsis and preserved removal icons; overflow scrolls horizontally; hover, focus or tap truncated text to preview it                                                                                                                         | `boolean`                                                                 | `false`                                                            |
+| `popup-container`          | Selector, element, element resolver, or false for inline rendering                                                                                                                                                                                                       | `PopupContainer`                                                          | `—`                                                                |
+| `trigger-props`            | Menu Trigger props; field owns open state                                                                                                                                                                                                                                | `TriggerProps`                                                            | `—`                                                                |
+| `virtual-list-props`       | Pass the virtual list attribute, pass in this parameter to turn on virtual scrolling [VirtualListProps](/en/components/table/#virtuallistprops)                                                                                                                          | `VirtualListProps`                                                        | `—`                                                                |
+| `search-delay`             | Finite nonnegative search debounce delay in milliseconds.                                                                                                                                                                                                                | `number`                                                                  | `500`                                                              |
+| `format-label`             | Format selected labels; use label slot for VNodes                                                                                                                                                                                                                        | `function`                                                                | `—`                                                                |
+| `clearable`                | Allow clearing; preserve disabled selections                                                                                                                                                                                                                             | `boolean`                                                                 | `false`                                                            |
+| `options`                  | Tree options; leaf values must be unique in scalar mode; paths distinguish branches                                                                                                                                                                                      | `CascaderOption[]` / `(query, { signal }) => Array / Promise`             | `undefined`                                                        |
+| `field-names`              | Map value, label, disabled, children, isLeaf, tagProps, render                                                                                                                                                                                                           | `CascaderFieldNames`                                                      | `—`                                                                |
+| `path-mode`                | Return a complete path instead of a node value                                                                                                                                                                                                                           | `boolean`                                                                 | `false`                                                            |
+| `check-strictly`           | Allow parent selection; unlink parent/child checks                                                                                                                                                                                                                       | `boolean`                                                                 | `false`                                                            |
+| `filterable`               | Enable search                                                                                                                                                                                                                                                            | `boolean`                                                                 | `Single: false; multiple: true`                                    |
+| case-sensitive             | Case-sensitive built-in filtering; custom filters take priority                                                                                                                                                                                                          | boolean                                                                   | false                                                              |
+| `filter-option`            | Receives query and raw node                                                                                                                                                                                                                                              | `(input, option) => boolean`                                              | `—`                                                                |
+| `expand-trigger`           | Menu / List expansion: click or hover                                                                                                                                                                                                                                    | `string`                                                                  | `click`                                                            |
+| `expand-child`             | Expand to first child                                                                                                                                                                                                                                                    | `boolean`                                                                 | `false`                                                            |
+| `load-more`                | Load children asynchronously; call done(children), or done() to allow retry                                                                                                                                                                                              | `(option, done) => void`                                                  | `—`                                                                |
+| `fallback-option`          | Display unresolved values                                                                                                                                                                                                                                                | `boolean or (value) => { value, label }`                                  | `true`                                                             |
+| `search-option-only-label` | Show node label only in search results                                                                                                                                                                                                                                   | `boolean`                                                                 | `false`                                                            |
+| `auto-fit-popup-width`     | Match Menu width to field                                                                                                                                                                                                                                                | `boolean`                                                                 | `false`                                                            |
+| `edit-mode`                | Field presentation; inherits FormItem / Form when omitted.                                                                                                                                                                                                               | `direct / click / dblclick`                                               | `direct`                                                           |
 
 ### Cascader Events / Methods
 
@@ -352,49 +346,49 @@ Buttons, links, input controls, list options, tree nodes, grid cells, elements w
 
 ### CascaderPanel Props
 
-| Parameter | Description | Type | Default |
-| ------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------: |
-| path-mode | Return a complete path instead of a node value | `boolean` | `false` |
-| multiple | Multiple selection; enables search by default | `boolean` | `false` |
-| model-value **(v-model)** | Bound value | `string\| number\| Record<string, any>\| (    \| string    \| number    \| Record<string, any>    \| (string \| number \| Record<string, any>)[]  )[]\| undefined` | `-` |
-| default-value | Default value (uncontrolled state) | `string\| number\| Record<string, any>\| (    \| string    \| number    \| Record<string, any>    \| (string \| number \| Record<string, any>)[]  )[]\| undefined` | `'' \| undefined \| []` |
-| options | Tree options; leaf values must be unique in scalar mode; paths distinguish branches | `CascaderOption[]` | `[]` |
-| expand-trigger | Menu / List expansion: click or hover | `string` | `'click'` |
-| check-strictly | Allow parent selection; unlink parent/child checks | `boolean` | `false` |
-| load-more | Load children asynchronously; call done(children), or done() to allow retry | `(  option: CascaderOption,  done: (children?: CascaderOption[]) => void) => void` | `-` |
-| field-names | Customize fields in `CascaderOption`; when option `value` is an object, `value` is also used as the key property | `CascaderFieldNames` | `-` |
-| expand-child | Expand to first child | `boolean` | `false` |
+| Parameter                 | Description                                                                                                      | Type                                                                                                                                                               |         Default         |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :---------------------: |
+| path-mode                 | Return a complete path instead of a node value                                                                   | `boolean`                                                                                                                                                          |         `false`         |
+| multiple                  | Multiple selection; enables search by default                                                                    | `boolean`                                                                                                                                                          |         `false`         |
+| model-value **(v-model)** | Bound value                                                                                                      | `string\| number\| Record<string, any>\| (    \| string    \| number    \| Record<string, any>    \| (string \| number \| Record<string, any>)[]  )[]\| undefined` |           `-`           |
+| default-value             | Default value (uncontrolled state)                                                                               | `string\| number\| Record<string, any>\| (    \| string    \| number    \| Record<string, any>    \| (string \| number \| Record<string, any>)[]  )[]\| undefined` | `'' \| undefined \| []` |
+| options                   | Tree options; leaf values must be unique in scalar mode; paths distinguish branches                              | `CascaderOption[]`                                                                                                                                                 |          `[]`           |
+| expand-trigger            | Menu / List expansion: click or hover                                                                            | `string`                                                                                                                                                           |        `'click'`        |
+| check-strictly            | Allow parent selection; unlink parent/child checks                                                               | `boolean`                                                                                                                                                          |         `false`         |
+| load-more                 | Load children asynchronously; call done(children), or done() to allow retry                                      | `(  option: CascaderOption,  done: (children?: CascaderOption[]) => void) => void`                                                                                 |           `-`           |
+| field-names               | Customize fields in `CascaderOption`; when option `value` is an object, `value` is also used as the key property | `CascaderFieldNames`                                                                                                                                               |           `-`           |
+| expand-child              | Expand to first child                                                                                            | `boolean`                                                                                                                                                          |         `false`         |
 
 ### CascaderPanel Events
 
-| Event | Description | Arguments |
-| ------ | ---------------- | -------------------------------------------------------------------------------------- |
+| Event  | Description                             | Arguments                                                                              |
+| ------ | --------------------------------------- | -------------------------------------------------------------------------------------- |
 | change | Emitted when the selected value changes | value: `string \| number \| (string \| number \| (string \| number)[])[] \| undefined` |
 
 ### CascaderPanel Slots
 
-| Slot | Description | Prop |
-| ------ | :------------------: | ---- |
-| empty | Content displayed when no options are available | - |
+| Slot  |                   Description                   | Prop |
+| ----- | :---------------------------------------------: | ---- |
+| empty | Content displayed when no options are available | -    |
 
 ## Types
 
 ### CascaderOption
 
-| Parameter | Description | Type | Default |
-| -------- | -------------- | ----------------------------------------- | :-----: |
-| value | Option value | `string \| number \| Record<string, any>` | `-` |
-| label | Option text | `string` | `-` |
-| render | Custom render function | `RenderFunction` | `-` |
-| disabled | Whether disabled | `boolean` | `false` |
-| tagProps | Property used for the displayed label | `TagProps` | `-` |
-| children | Child options | `CascaderOption[]` | `-` |
-| isLeaf | Whether this is a leaf node | `boolean` | `false` |
+| Parameter | Description                           | Type                                      | Default |
+| --------- | ------------------------------------- | ----------------------------------------- | :-----: |
+| value     | Option value                          | `string \| number \| Record<string, any>` |   `-`   |
+| label     | Option text                           | `string`                                  |   `-`   |
+| render    | Custom render function                | `RenderFunction`                          |   `-`   |
+| disabled  | Whether disabled                      | `boolean`                                 | `false` |
+| tagProps  | Property used for the displayed label | `TagProps`                                |   `-`   |
+| children  | Child options                         | `CascaderOption[]`                        |   `-`   |
+| isLeaf    | Whether this is a leaf node           | `boolean`                                 | `false` |
 
 The component exports the following types
 
 ```ts
-import type { CascaderProps } from "@cedar-design/ui-vue";
+import type { CascaderProps } from '@cedar-design/ui-vue'
 ```
 
 ### Editing and confirmation
@@ -455,37 +449,37 @@ Use these variables to customize the component. Defaults may vary by the selecto
 
 <div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
-| Variable | Default / condition | Affected styles |
-| --- | --- | --- |
-| `--c-cascader-checkbox-bg-hover` | `var(--c-color-fill-3)` | `background-color` |
-| `--c-cascader-font-item-size` | `var(--c-sys-font-size-md)` | `font-size` |
-| `--c-cascader-item-bg-active` | `transparent` | `background`, `background-color` |
-| `--c-cascader-item-bg-disabled` | `transparent` | `background-color` |
-| `--c-cascader-item-bg-disabled-active` | `var(--c-color-fill-2)` | `background-color` |
-| `--c-cascader-item-bg-hover` | `var(--c-color-fill-2)` | `background`, `background-color` |
-| `--c-cascader-item-check-color` | `var(--c-sys-color-action-primary)` | `color` |
-| `--c-cascader-item-check-size` | `var(--c-sys-font-size-md)` | `height`, `width` |
-| `--c-cascader-item-icon-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-cascader-item-text-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-cascader-item-text-color-active` | `var(--c-sys-color-action-primary)` | `color` |
-| `--c-cascader-item-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
-| `--c-cascader-item-text-color-disabled-active` | `var(--c-sys-color-content-disabled)` | `color` |
-| `--c-cascader-item-text-color-hover` | `var(--c-cascader-item-text-color)` | `color` |
-| `--c-cascader-margin-checkbox-right` | `var(--c-sys-space-4)` | `margin-inline-end` |
-| `--c-cascader-margin-item-icon-left` | `var(--c-sys-space-5)` | `margin-inline-start` |
-| `--c-cascader-option-min-width` | `100px` | `min-width` |
-| `--c-cascader-padding-item-left` | `var(--c-sys-space-5)` | `padding-inline-end`, `padding-inline-start` |
-| `--c-cascader-padding-item-right` | `var(--c-sys-space-5)` | `margin-inline-end`, `padding-inline-end` |
-| `--c-cascader-panel-column-max-height` | `200px` | `max-height` |
-| `--c-cascader-panel-column-min-width` | `120px` | `min-width` |
-| `--c-cascader-popup-border-radius` | `var(--c-sys-radius-md)` | `border-radius` |
-| `--c-cascader-popup-box-shadow` | `0 4px 10px rgba(0, 0, 0, 0.1)` | `box-shadow` |
-| `--c-cascader-popup-color-border` | `var(--c-color-fill-3)` | `border`, `border-inline-end`, `border-top` |
-| `--c-cascader-popup-max-height` | `200px` | `height` |
-| `--c-cascader-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding`, `padding-block-end` |
-| `--c-cascader-size-item-height` | `36px` | `height`, `line-height` |
-| `--c-cascader-size-item-icon` | `12px` | `height`, `width` |
-| `--c-cascader-slide-margin` | `120px` | `margin-inline-start` |
+| Variable                                       | Default / condition                    | Affected styles                              |
+| ---------------------------------------------- | -------------------------------------- | -------------------------------------------- |
+| `--c-cascader-checkbox-bg-hover`               | `var(--c-color-fill-3)`                | `background-color`                           |
+| `--c-cascader-font-item-size`                  | `var(--c-sys-font-size-md)`            | `font-size`                                  |
+| `--c-cascader-item-bg-active`                  | `transparent`                          | `background`, `background-color`             |
+| `--c-cascader-item-bg-disabled`                | `transparent`                          | `background-color`                           |
+| `--c-cascader-item-bg-disabled-active`         | `var(--c-color-fill-2)`                | `background-color`                           |
+| `--c-cascader-item-bg-hover`                   | `var(--c-color-fill-2)`                | `background`, `background-color`             |
+| `--c-cascader-item-check-color`                | `var(--c-sys-color-action-primary)`    | `color`                                      |
+| `--c-cascader-item-check-size`                 | `var(--c-sys-font-size-md)`            | `height`, `width`                            |
+| `--c-cascader-item-icon-color`                 | `var(--c-sys-color-content-secondary)` | `color`                                      |
+| `--c-cascader-item-text-color`                 | `var(--c-sys-color-content-primary)`   | `color`                                      |
+| `--c-cascader-item-text-color-active`          | `var(--c-sys-color-action-primary)`    | `color`                                      |
+| `--c-cascader-item-text-color-disabled`        | `var(--c-sys-color-content-disabled)`  | `color`                                      |
+| `--c-cascader-item-text-color-disabled-active` | `var(--c-sys-color-content-disabled)`  | `color`                                      |
+| `--c-cascader-item-text-color-hover`           | `var(--c-cascader-item-text-color)`    | `color`                                      |
+| `--c-cascader-margin-checkbox-right`           | `var(--c-sys-space-4)`                 | `margin-inline-end`                          |
+| `--c-cascader-margin-item-icon-left`           | `var(--c-sys-space-5)`                 | `margin-inline-start`                        |
+| `--c-cascader-option-min-width`                | `100px`                                | `min-width`                                  |
+| `--c-cascader-padding-item-left`               | `var(--c-sys-space-5)`                 | `padding-inline-end`, `padding-inline-start` |
+| `--c-cascader-padding-item-right`              | `var(--c-sys-space-5)`                 | `margin-inline-end`, `padding-inline-end`    |
+| `--c-cascader-panel-column-max-height`         | `200px`                                | `max-height`                                 |
+| `--c-cascader-panel-column-min-width`          | `120px`                                | `min-width`                                  |
+| `--c-cascader-popup-border-radius`             | `var(--c-sys-radius-md)`               | `border-radius`                              |
+| `--c-cascader-popup-box-shadow`                | `0 4px 10px rgba(0, 0, 0, 0.1)`        | `box-shadow`                                 |
+| `--c-cascader-popup-color-border`              | `var(--c-color-fill-3)`                | `border`, `border-inline-end`, `border-top`  |
+| `--c-cascader-popup-max-height`                | `200px`                                | `height`                                     |
+| `--c-cascader-popup-padding-vertical`          | `var(--c-sys-space-2)`                 | `padding`, `padding-block-end`               |
+| `--c-cascader-size-item-height`                | `36px`                                 | `height`, `line-height`                      |
+| `--c-cascader-size-item-icon`                  | `12px`                                 | `height`, `width`                            |
+| `--c-cascader-slide-margin`                    | `120px`                                | `margin-inline-start`                        |
 
 </div>
 
