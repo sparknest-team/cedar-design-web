@@ -49,14 +49,14 @@
     </slot>
   </button>
 </template>
-<script>
-import { defineComponent, computed } from 'vue'
-import Tooltip from '../tooltip'
+<script lang="ts">
+import { computed, defineComponent } from 'vue'
 import { IconCheckCircleFill } from '@cedar-design/icons-vue/icon-check-circle-fill'
 import { IconCopy } from '@cedar-design/icons-vue/icon-copy'
 import { IconEdit } from '@cedar-design/icons-vue/icon-edit'
 import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { useI18n } from '../locale'
+import Tooltip from '../tooltip'
 
 export default defineComponent({
   name: createNamespace('typography-operations').name,

@@ -1,4 +1,4 @@
-import { readdir, readFile, rm, writeFile, mkdir } from 'node:fs/promises'
+import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { basename, dirname, relative, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { optimize } from 'svgo'
@@ -10,14 +10,21 @@ const check = process.argv.includes('--check')
 
 async function walk(root) {
   const entries = await readdir(root, { withFileTypes: true })
-  return (await Promise.all(entries.map(async (entry) => {
-    const path = resolve(root, entry.name)
-    return entry.isDirectory() ? walk(path) : [path]
-  }))).flat()
+  return (
+    await Promise.all(
+      entries.map(async (entry) => {
+        const path = resolve(root, entry.name)
+        return entry.isDirectory() ? walk(path) : [path]
+      }),
+    )
+  ).flat()
 }
 
 function pascalCase(value) {
-  return value.split(/[-_\s]+/).map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join('')
+  return value
+    .split(/[-_\s]+/)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('')
 }
 
 function kebabCase(value) {
@@ -42,7 +49,9 @@ async function expectedFiles() {
   const seen = new Map()
   const icons = []
   const files = new Map()
-  files.set('_utils/icon-component.ts', `import type { AllowedComponentProps, App, ComponentCustomProps, ComponentOptionsMixin, DefineComponent, VNodeProps } from 'vue'
+  files.set(
+    '_utils/icon-component.ts',
+    `import type { AllowedComponentProps, App, ComponentCustomProps, ComponentOptionsMixin, DefineComponent, SVGAttributes, VNodeProps } from 'vue'
 
 export interface IconProps {
   size?: string | number
@@ -65,11 +74,15 @@ type IconDefaults = {
 export type IconComponent = DefineComponent<
   IconProps, {}, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, IconEmits, string,
   VNodeProps & AllowedComponentProps & ComponentCustomProps,
-  Readonly<IconProps> & Readonly<{ onClick?: (event: MouseEvent) => any }>,
+  Readonly<IconProps> & Pick<SVGAttributes, 'aria-hidden'> & Readonly<{ onClick?: (event: MouseEvent) => any }>,
   IconDefaults
 > & { install(app: App): void }
-`)
-  files.set('../style.css', "svg.c-icon-spin {\n  animation: c-svg-icon-spin var(--c-icon-spin-duration, 1s) infinite linear;\n}\n\n@keyframes c-svg-icon-spin {\n  from { rotate: 0deg; }\n  to { rotate: 360deg; }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  svg.c-icon-spin { animation: none; }\n}\n")
+`,
+  )
+  files.set(
+    '../style.css',
+    'svg.c-icon-spin {\n  animation: c-svg-icon-spin var(--c-icon-spin-duration, 1s) infinite linear;\n}\n\n@keyframes c-svg-icon-spin {\n  from { rotate: 0deg; }\n  to { rotate: 360deg; }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  svg.c-icon-spin { animation: none; }\n}\n',
+  )
 
   for (const path of svgFiles) {
     // Public icon subpaths must always be lowercase kebab-case. Resolver names
@@ -84,21 +97,38 @@ export type IconComponent = DefineComponent<
     const result = optimize(source, {
       path,
       plugins: [
-        { name: 'preset-default', params: { overrides: { removeViewBox: false } } },
+        'preset-default',
         'removeStyleElement',
-        'removeScriptElement',
+        'removeScripts',
         'removeDimensions',
-        { name: 'removeAttrs', params: { attrs: ['class', 'style', 'stroke-width', 'stroke-linecap', 'stroke-linejoin'] } },
-        { name: 'addAttributesToSVGElement', params: { attributes: [
-          { width: '1em' }, { height: '1em' },
-          ...(forceFillRendering ? [{ style: 'fill:currentColor;stroke:none' }] : []),
-          { ':class': 'cls' }, { ':style': 'innerStyle' }, { ':stroke-width': 'props.strokeWidth' },
-          { ':stroke-linecap': 'props.strokeLinecap' }, { ':stroke-linejoin': 'props.strokeLinejoin' },
-          { ':aria-hidden': '!props.title' }, { role: 'img' }, { '@click': 'emit(\'click\', $event)' },
-        ] } },
+        {
+          name: 'removeAttrs',
+          params: { attrs: ['class', 'style', 'stroke-width', 'stroke-linecap', 'stroke-linejoin'] },
+        },
+        {
+          name: 'addAttributesToSVGElement',
+          params: {
+            attributes: [
+              { width: '1em' },
+              { height: '1em' },
+              ...(forceFillRendering ? [{ style: 'fill:currentColor;stroke:none' }] : []),
+              { ':class': 'cls' },
+              { ':style': 'innerStyle' },
+              { ':stroke-width': 'props.strokeWidth' },
+              { ':stroke-linecap': 'props.strokeLinecap' },
+              { ':stroke-linejoin': 'props.strokeLinejoin' },
+              { ':aria-hidden': '!props.title' },
+              { role: 'img' },
+              { '@click': "emit('click', $event)" },
+            ],
+          },
+        },
       ],
     })
-    const accessibleSvg = result.data.replace(/<svg([^>]*)>/, `<svg$1><title v-if="props.title">{{ props.title }}</title>`)
+    const accessibleSvg = result.data.replace(
+      /<svg([^>]*)>/,
+      `<svg$1><title v-if="props.title">{{ props.title }}</title>`,
+    )
     icons.push({ name, componentName, category: relative(svgRoot, path).split(sep)[0] })
     files.set(`${name}/${name}.vue`, iconVue(name, `CIcon${componentName}`, accessibleSvg))
     files.set(`${name}/index.ts`, componentIndex(name, componentName))
@@ -107,11 +137,20 @@ export type IconComponent = DefineComponent<
   const imports = icons.map(({ name, componentName }) => `import { Icon${componentName} } from './${name}'`).join('\n')
   const members = icons.map(({ componentName }) => `  Icon${componentName},`).join('\n')
   const exports = icons.map(({ name, componentName }) => `export { Icon${componentName} } from './${name}'`).join('\n')
-  files.set('cedar-vue-icon.ts', `import type { App } from 'vue'\n${imports}\n\nconst icons = {\n${members}\n}\n\nexport default {\n  ...icons,\n  install(app: App) {\n    Object.values(icons).forEach((icon) => app.use(icon))\n  },\n}\n`)
+  files.set(
+    'cedar-vue-icon.ts',
+    `import type { App } from 'vue'\n${imports}\n\nconst icons = {\n${members}\n}\n\nexport default {\n  ...icons,\n  install(app: App) {\n    Object.values(icons).forEach((icon) => app.use(icon))\n  },\n}\n`,
+  )
   const iconNames = icons.map(({ name }) => name.slice('icon-'.length))
-  files.set('index.ts', `export { default } from './cedar-vue-icon'\nexport type { IconComponent, IconProps } from './_utils/icon-component'\nexport const iconNames = ${JSON.stringify(iconNames)} as const\n${exports}\n`)
+  files.set(
+    'index.ts',
+    `export { default } from './cedar-vue-icon'\nexport type { IconComponent, IconProps } from './_utils/icon-component'\nexport const iconNames = ${JSON.stringify(iconNames)} as const\n${exports}\n`,
+  )
   files.set('icons.json', `${JSON.stringify(icons, null, 2)}\n`)
-  files.set('icon-components.ts', `// @ts-nocheck\n\ndeclare module 'vue' {\n  export interface GlobalComponents {\n${icons.map(({ componentName }) => `    Icon${componentName}: typeof import('./index')['Icon${componentName}'];`).join('\n')}\n  }\n}\n\nexport {}\n`)
+  files.set(
+    'icon-components.ts',
+    `// @ts-nocheck\n\ndeclare module 'vue' {\n  export interface GlobalComponents {\n${icons.map(({ componentName }) => `    Icon${componentName}: typeof import('./index')['Icon${componentName}'];`).join('\n')}\n  }\n}\n\nexport {}\n`,
+  )
   return files
 }
 
@@ -121,7 +160,7 @@ for (const [target, content] of files) {
   const path = resolve(sourceRoot, target)
   if (check) {
     try {
-      if (await readFile(path, 'utf8') !== content) failures.push(target)
+      if ((await readFile(path, 'utf8')) !== content) failures.push(target)
     } catch {
       failures.push(target)
     }
@@ -132,7 +171,9 @@ for (const [target, content] of files) {
 }
 
 const sourceEntries = await readdir(sourceRoot, { withFileTypes: true })
-const expectedIconDirs = new Set([...files.keys()].filter((path) => path.startsWith('icon-')).map((path) => path.split('/')[0]))
+const expectedIconDirs = new Set(
+  [...files.keys()].filter((path) => path.startsWith('icon-')).map((path) => path.split('/')[0]),
+)
 for (const entry of sourceEntries) {
   if (entry.isDirectory() && entry.name.startsWith('icon-') && !expectedIconDirs.has(entry.name)) {
     if (check) failures.push(entry.name)
@@ -144,4 +185,6 @@ if (failures.length) {
   throw new Error(`Generated icon sources are stale:\n${failures.join('\n')}\nRun pnpm generate.`)
 }
 
-console.log(`${check ? 'Checked' : 'Generated'} ${files.size} files from ${[...files.keys()].filter((path) => path.endsWith('.vue')).length} SVG icons.`)
+console.log(
+  `${check ? 'Checked' : 'Generated'} ${files.size} files from ${[...files.keys()].filter((path) => path.endsWith('.vue')).length} SVG icons.`,
+)

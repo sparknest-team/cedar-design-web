@@ -171,7 +171,7 @@ bg-color 兜底和 danger 填充均使用红色背景与白色文字：浅色主
 
 ## CSS Variables
 
-以下为组件使用的 css 变量，可以使用 [ThemeProvider 组件](#/zh-CN/theme-provider) 进行样式定制。
+以下为组件使用的 css 变量，可以使用 [ThemeProvider 组件](/themes/) 进行样式定制。
 
 填充徽标的文字配色以 Button 为准：primary、info、success、warning、danger、secondary 使用 `content-on-dark`；tertiary 在亮色使用 `content-on-dark`，暗色使用 `content-on-bright`。默认通知徽标使用红底白字，中性背景 `#e0e0e0` 为固定浅灰色。
 

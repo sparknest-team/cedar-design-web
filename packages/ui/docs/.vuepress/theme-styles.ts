@@ -3,12 +3,13 @@ import { dirname, resolve } from 'node:path'
 import { createRequire } from 'node:module'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import type { Plugin } from 'vite'
+import { getHopeClientDir } from './hope-client'
 
 // Only the shell styles listed in this entry are combined. CSS modules and
 // optional theme features keep their normal imports. Production is unchanged.
 export function bundleThemeStyles(entry: string): Plugin {
   const require = createRequire(import.meta.url)
-  const client = resolve(dirname(require.resolve('vuepress-theme-hope/package.json')), 'lib/client')
+  const client = getHopeClientDir()
   const styles = new Set([...readFileSync(entry, 'utf8').matchAll(/@use "cedar-theme\/([^"]+)"/g)]
     .map(match => resolve(client, match[1])))
   return {

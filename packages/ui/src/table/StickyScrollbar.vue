@@ -18,11 +18,18 @@
   </Scrollbar>
 </template>
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onActivated, onDeactivated, ref, watch } from 'vue'
-import { useDirection, inlineScrollLeft, setInlineScrollLeft } from '../_utils/direction'
-import { useElementResize } from '../_utils/resize-observer'
-import Scrollbar from '../scrollbar'
+import { computed, nextTick, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from 'vue'
+import { inlineScrollLeft, setInlineScrollLeft, useDirection } from '../_utils/direction'
 import { createNamespace } from '../_utils/global-config'
+import type { WithNativeAttributes } from '../_utils/native-listener-types'
+import { useElementResize } from '../_utils/resize-observer'
+import ScrollbarComponent from '../scrollbar'
+
+const Scrollbar = ScrollbarComponent as WithNativeAttributes<
+  typeof ScrollbarComponent,
+  'onKeydown' | 'dir' | 'role' | 'tabindex' | 'aria-label'
+>
+
 defineOptions({ name: createNamespace('table-sticky-scrollbar').name })
 const props = defineProps<{ container?: HTMLElement; active?: boolean; layoutWidth?: number }>()
 const { dir } = useDirection(() => props.container)
@@ -51,18 +58,36 @@ function scrollBody() {
   }
 }
 function onKeydown(event: KeyboardEvent) {
-  if (event.target !== event.currentTarget || !rail.value || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
+  if (
+    event.target !== event.currentTarget ||
+    !rail.value ||
+    !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)
+  )
+    return
   event.preventDefault()
-  const element = rail.value, max = Math.max(0, element.scrollWidth - element.clientWidth)
+  const element = rail.value,
+    max = Math.max(0, element.scrollWidth - element.clientWidth)
   const grow = dir.value === 'rtl' ? 'ArrowLeft' : 'ArrowRight'
-  setInlineScrollLeft(element, event.key === 'Home' ? 0 : event.key === 'End' ? max : inlineScrollLeft(element) + (event.key === grow ? 40 : -40))
+  setInlineScrollLeft(
+    element,
+    event.key === 'Home' ? 0 : event.key === 'End' ? max : inlineScrollLeft(element) + (event.key === grow ? 40 : -40),
+  )
   scrollBody()
 }
-watch([dir, rail], () => { void nextTick(sync) }, { flush: 'post' })
+watch(
+  [dir, rail],
+  () => {
+    void nextTick(sync)
+  },
+  { flush: 'post' },
+)
 let active = true
 function measure() {
   const container = props.container
-  if (!active || !container) { width.value = 0; return }
+  if (!active || !container) {
+    width.value = 0
+    return
+  }
   width.value = container.scrollWidth
   viewport.value = container.clientWidth
   void nextTick(() => {
@@ -73,18 +98,35 @@ function measure() {
 }
 // Column layout can clamp scrollLeft before the resize observer delivers its callback.
 watch(() => props.layoutWidth, measure, { flush: 'post' })
-useElementResize(() => [props.container, props.container?.firstElementChild], () => active && !!props.container, measure)
+useElementResize(
+  () => [props.container, props.container?.firstElementChild],
+  () => active && !!props.container,
+  measure,
+)
 function bind() {
   cleanup?.()
   cleanup = undefined
   const container = props.container
-  if (!active || !container) { width.value = 0; return }
+  if (!active || !container) {
+    width.value = 0
+    return
+  }
   container.addEventListener('scroll', sync, { passive: true })
   cleanup = () => container.removeEventListener('scroll', sync)
   measure()
 }
 watch(() => props.container, bind, { immediate: true, flush: 'post' })
-onDeactivated(() => { active = false; cleanup?.(); cleanup = undefined })
-onActivated(() => { active = true; bind() })
-onBeforeUnmount(() => { active = false; cleanup?.() })
+onDeactivated(() => {
+  active = false
+  cleanup?.()
+  cleanup = undefined
+})
+onActivated(() => {
+  active = true
+  bind()
+})
+onBeforeUnmount(() => {
+  active = false
+  cleanup?.()
+})
 </script>

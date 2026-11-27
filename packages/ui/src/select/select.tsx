@@ -1,74 +1,60 @@
+import { defineComponent, h, inject, reactive, ref } from 'vue'
+import FieldPresentation from '../_components/field-presentation/FieldPresentation.vue'
+import { useFieldTexts } from '../_components/field-presentation/texts'
+import { selectionEditorSurface } from '../_components/selected-options/context'
+import SelectedOptions from '../_components/selected-options/SelectedOptions.vue'
+import SelectionEditor from '../_components/selected-options/SelectionEditor.vue'
+import MenuPresentation from '../_components/selection-field/MenuPresentation.vue'
+import type { SelectionFieldItem } from '../_components/selection-field/props'
+import SelectionField from '../_components/selection-field/SelectionField.vue'
+import { createNamespace } from '../_utils/global-config'
+import { isFunction } from '../_utils/is'
+import type { WithNativeAttributes } from '../_utils/native-listener-types'
 import type { CompatibleStyleValue as StyleValue } from '../_utils/style-value'
-import NativeEditorOwner from './native-editor-owner';
-import {
-  defineComponent,
-  h,
-  inject,
-  reactive,
-  ref,
-} from "vue";
-import FieldPresentation from "../_components/field-presentation/FieldPresentation.vue";
-import { useFieldTexts } from "../_components/field-presentation/texts";
-import { selectionEditorSurface } from "../_components/selected-options/context";
-import SelectedOptions from "../_components/selected-options/SelectedOptions.vue";
-import SelectionEditor from "../_components/selected-options/SelectionEditor.vue";
-import MenuPresentation from "../_components/selection-field/MenuPresentation.vue";
-import type { SelectionFieldItem } from "../_components/selection-field/props";
-import SelectionField from "../_components/selection-field/SelectionField.vue";
-import { isFunction } from "../_utils/is";
-import Input from "../input/base";
-import InputFeedback from "../input/InputFeedback.vue";
-import { createNamespace } from "../_utils/global-config";
-import { selectEmits } from "./emits";
-import { selectProps } from "./props";
-import SelectMenu from "./SelectMenu";
-import { useSelectController } from "./use-select-controller";
+import Input from '../input/base'
+import InputFeedback from '../input/InputFeedback.vue'
+import { selectEmits } from './emits'
+import NativeEditorOwner from './native-editor-owner'
+import { selectProps } from './props'
+import SelectMenu from './SelectMenu'
+import { useSelectController } from './use-select-controller'
 
 const Select = defineComponent({
-  name: createNamespace("select").name,
+  name: createNamespace('select').name,
   inheritAttrs: false,
   props: selectProps,
   emits: selectEmits,
   setup(props, context) {
-    const { slots, attrs, emit, expose } = context;
-    const { n, classes } = createNamespace("select");
-    const controller = reactive(useSelectController(props, context));
-    const texts = reactive(useFieldTexts());
-    const fieldRef = ref<InstanceType<typeof SelectionField>>();
-    const presentationRef = ref<InstanceType<typeof FieldPresentation>>();
+    const { slots, attrs, emit, expose } = context
+    const { n, classes } = createNamespace('select')
+    const controller = reactive(useSelectController(props, context))
+    const texts = reactive(useFieldTexts())
+    const fieldRef = ref<InstanceType<typeof SelectionField>>()
+    const presentationRef = ref<InstanceType<typeof FieldPresentation>>()
     controller.registerPresentation({
       active: () => controller.computedOpen && controller.deferred,
       cancel: () => {
-        controller.handleOpenChange(false);
-        controller.session.reset();
+        controller.handleOpenChange(false)
+        controller.session.reset()
       },
-      focus: () =>
-        controller.editMode === "direct"
-          ? fieldRef.value?.focus()
-          : presentationRef.value?.focus(),
-    });
+      focus: () => (controller.editMode === 'direct' ? fieldRef.value?.focus() : presentationRef.value?.focus()),
+    })
     expose({
       refresh: () => controller.refresh(),
-      focus: () =>
-        controller.editMode === "direct"
-          ? fieldRef.value?.focus()
-          : presentationRef.value?.focus(),
-      blur: () => controller.editMode === 'direct' ? fieldRef.value?.blur() : presentationRef.value?.blur(),
-    });
+      focus: () => (controller.editMode === 'direct' ? fieldRef.value?.focus() : presentationRef.value?.focus()),
+      blur: () => (controller.editMode === 'direct' ? fieldRef.value?.blur() : presentationRef.value?.blur()),
+    })
     const renderLabel = ({ data }: { data: SelectionFieldItem }) => {
       if ((slots.label || isFunction(props.formatLabel)) && data) {
-        const optionInfo = controller.optionInfoMap.get(String(data.key));
+        const optionInfo = controller.optionInfoMap.get(String(data.key))
         if (optionInfo?.raw) {
-          return (
-            slots.label?.({ data: optionInfo.raw }) ??
-            props.formatLabel?.(optionInfo.raw)
-          );
+          return slots.label?.({ data: optionInfo.raw }) ?? props.formatLabel?.(optionInfo.raw)
         }
       }
-      return data?.label ?? "";
-    };
+      return data?.label ?? ''
+    }
 
-    const editor = inject(selectionEditorSurface, undefined);
+    const editor = inject(selectionEditorSurface, undefined)
     const handleFieldKeydown = (event: KeyboardEvent) => {
       emit('keydown', event)
       if (!event.defaultPrevented) {
@@ -86,10 +72,8 @@ const Select = defineComponent({
           label: renderLabel({ data: item }),
         }))}
         disabled={
-          controller.mergedDisabled ||
-          controller.mergedReadonly ||
-          controller.session.pending
-         || controller.loading}
+          controller.mergedDisabled || controller.mergedReadonly || controller.session.pending || controller.loading
+        }
         limit={props.limit}
         onRemove={(key) => controller.handleRemove(String(key))}
         onClear={controller.clearSelection}
@@ -102,63 +86,59 @@ const Select = defineComponent({
             variant="outline"
             disabled={controller.mergedDisabled || controller.session.pending}
             readonly={controller.mergedReadonly}
-            inputAttrs={{role:'combobox','aria-haspopup':'listbox','aria-expanded':controller.computedOpen,'aria-controls':controller.computedOpen ? controller.listboxId : undefined,'aria-activedescendant':controller.activeDescendant,'aria-autocomplete':'list'}}
+            inputAttrs={{
+              role: 'combobox',
+              'aria-haspopup': 'listbox',
+              'aria-expanded': controller.computedOpen,
+              'aria-controls': controller.computedOpen ? controller.listboxId : undefined,
+              'aria-activedescendant': controller.activeDescendant,
+              'aria-autocomplete': 'list',
+            }}
             ariaLabel={texts.search}
             placeholder={texts.search}
             clearable
-            onUpdate:modelValue={(value: string | null) =>
-              controller.handleInputValueChange(value ?? "")
-            }
+            onUpdate:modelValue={(value: string | null) => controller.handleInputValueChange(value ?? '')}
             onKeydown={handleFieldKeydown}
           />
         )}
         <SelectMenu controller={controller} v-slots={slots} />
       </SelectedOptions>
-    );
+    )
 
     return () => {
       if (editor) {
-        return renderEditor();
+        return renderEditor()
       }
-      const { class: className, style, ...restAttrs } = attrs;
+      const { class: className, style, ...restAttrs } = attrs
       const explicitControls = restAttrs['aria-controls']
       const explicitActive = restAttrs['aria-activedescendant']
       const popupRole = restAttrs['aria-haspopup']
-      const ownsListbox = (popupRole == null || popupRole === 'listbox') &&
+      const ownsListbox =
+        (popupRole == null || popupRole === 'listbox') &&
         (explicitControls === undefined || explicitControls === controller.listboxId)
-      const controls = explicitControls === undefined
-        ? (ownsListbox && controller.computedOpen ? controller.listboxId : undefined)
-        : explicitControls
-      const activeDescendant = explicitActive === undefined
-        ? (ownsListbox ? controller.activeDescendant : undefined)
-        : explicitActive
+      const controls =
+        explicitControls === undefined
+          ? ownsListbox && controller.computedOpen
+            ? controller.listboxId
+            : undefined
+          : explicitControls
+      const activeDescendant =
+        explicitActive === undefined ? (ownsListbox ? controller.activeDescendant : undefined) : explicitActive
 
-
-      const Presentation = MenuPresentation;
+      const Presentation = MenuPresentation
       const text = controller.fieldItems
         .map((item) => {
-          const raw = controller.optionInfoMap.get(String(item.key))?.raw;
-          const formatted =
-            raw && isFunction(props.formatLabel)
-              ? props.formatLabel(raw)
-              : item.label;
-          return String(
-            typeof formatted === "string" || typeof formatted === "number"
-              ? formatted
-              : (item.label ?? ""),
-          );
+          const raw = controller.optionInfoMap.get(String(item.key))?.raw
+          const formatted = raw && isFunction(props.formatLabel) ? props.formatLabel(raw) : item.label
+          return String(typeof formatted === 'string' || typeof formatted === 'number' ? formatted : (item.label ?? ''))
         })
-        .join(props.separator);
-      if (controller.editMode !== "direct" || controller.readPretty) {
+        .join(props.separator)
+      if (controller.editMode !== 'direct' || controller.readPretty) {
         return (
           <FieldPresentation
             loading={controller.loading}
             ref={presentationRef}
-            style={
-              props.textAlign
-                ? { "--c-form-content-align": props.textAlign }
-                : undefined
-            }
+            style={props.textAlign ? { '--c-form-content-align': props.textAlign } : undefined}
             editMode={controller.editMode}
             openTriggerTarget={props.openTriggerTarget}
             readPretty={controller.readPretty}
@@ -185,46 +165,47 @@ const Select = defineComponent({
             commit={() => controller.session.commit()}
             onConfirm={() => controller.session.commit()}
             v-slots={{
-              read: slots.read
-                ? () => slots.read?.({ value: controller.committedValue, text })
-                : undefined,
+              read: slots.read ? () => slots.read?.({ value: controller.committedValue, text }) : undefined,
               default: () =>
                 controller.nativeEditor ? (
-                  controller.computedOpen &&
-                  <NativeEditorOwner install={controller.provideNativeEditorOwner}>
-                    {() => h(
-                    Select,
-                    {
-                      ...props,
-                      ...attrs,
-                      editMode: "direct",
-                      readPretty: false,
-                      beforeCommit: undefined,
-                      open: controller.needConfirm ? undefined : true,
-                      defaultOpen: true,
-                      modelValue: controller.session.value,
-                      disabled:
-                        controller.mergedDisabled || controller.session.pending,
-                      readonly: controller.mergedReadonly,
-                      "onUpdate:modelValue": controller.session.update,
-                      onKeydown: (event: KeyboardEvent) => emit('keydown', event),
-                      onSearch: (...args: any[]) =>
-                        (emit as any)("search", ...args),
-                      onChange: () => {},
-                      onClear: () => { if (!controller.needConfirm) void controller.session.commit() },
-                      onRemove: () => { if (!controller.needConfirm) void controller.session.commit() },
-                    },
-                    slots,
-                  )}
-                  </NativeEditorOwner>
+                  controller.computedOpen && (
+                    <NativeEditorOwner install={controller.provideNativeEditorOwner}>
+                      {() =>
+                        h(
+                          Select,
+                          {
+                            ...props,
+                            ...attrs,
+                            editMode: 'direct',
+                            readPretty: false,
+                            beforeCommit: undefined,
+                            open: controller.needConfirm ? undefined : true,
+                            defaultOpen: true,
+                            modelValue: controller.session.value,
+                            disabled: controller.mergedDisabled || controller.session.pending,
+                            readonly: controller.mergedReadonly,
+                            'onUpdate:modelValue': controller.session.update,
+                            onKeydown: (event: KeyboardEvent) => emit('keydown', event),
+                            onSearch: (...args: any[]) => (emit as any)('search', ...args),
+                            onChange: () => {},
+                            onClear: () => {
+                              if (!controller.needConfirm) void controller.session.commit()
+                            },
+                            onRemove: () => {
+                              if (!controller.needConfirm) void controller.session.commit()
+                            },
+                          },
+                          slots,
+                        )
+                      }
+                    </NativeEditorOwner>
+                  )
                 ) : (
-                  <SelectionEditor kind="select">
-                    {renderEditor()}
-                  </SelectionEditor>
+                  <SelectionEditor kind="select">{renderEditor()}</SelectionEditor>
                 ),
             }}
           />
-        );
+        )
       }
       return (
         <Presentation
@@ -242,8 +223,9 @@ const Select = defineComponent({
                 disabled={
                   controller.mergedDisabled ||
                   controller.mergedReadonly ||
-                  controller.session.pending
-                 || controller.loading}
+                  controller.session.pending ||
+                  controller.loading
+                }
                 limit={props.limit}
                 onRemove={(key) => controller.handleRemove(String(key))}
                 onClear={controller.clearSelection}
@@ -253,10 +235,7 @@ const Select = defineComponent({
             ),
             reference: () =>
               slots.trigger?.() ?? (
-                <div
-                  class={[classes(n()), className]}
-                  style={style as StyleValue}
-                >
+                <div class={[classes(n()), className]} style={style as StyleValue}>
                   <SelectionField
                     ref={fieldRef}
                     openTriggerTarget={props.openTriggerTarget}
@@ -272,15 +251,13 @@ const Select = defineComponent({
                       label: renderLabel,
                       selected: slots.selected,
                       prefix: slots.prefix,
-                      "arrow-icon": slots["arrow-icon"],
-                      "loading-icon": slots["loading-icon"],
-                      "search-icon": slots["search-icon"],
+                      'arrow-icon': slots['arrow-icon'],
+                      'loading-icon': slots['loading-icon'],
+                      'search-icon': slots['search-icon'],
                       suffix: () =>
                         slots.suffix?.() ??
-                        (controller.feedback ? (
-                          <InputFeedback status={controller.feedback} />
-                        ) : null),
-                      "clear-icon": slots["clear-icon"],
+                        (controller.feedback ? <InputFeedback status={controller.feedback} /> : null),
+                      'clear-icon': slots['clear-icon'],
                     }}
                     items={controller.fieldItems}
                     inputValue={controller.computedInputValue}
@@ -306,22 +283,21 @@ const Select = defineComponent({
                     aria-controls={controls as string | undefined}
                     aria-activedescendant={activeDescendant as string | undefined}
                     onFocus={(event) => {
-                      emit("focus", event);
-                      controller.eventHandlers?.onFocus?.(event);
+                      emit('focus', event)
+                      controller.eventHandlers?.onFocus?.(event)
                     }}
                     onBlur={(event) => {
-                      emit("blur", event);
-                      !controller.deferred &&
-                        controller.eventHandlers?.onBlur?.(event);
+                      emit('blur', event)
+                      !controller.deferred && controller.eventHandlers?.onBlur?.(event)
                     }}
                   />
                 </div>
               ),
           }}
         />
-      );
-    };
+      )
+    }
   },
-});
+})
 
-export default Select;
+export default Select as WithNativeAttributes<typeof Select, 'aria-label'>

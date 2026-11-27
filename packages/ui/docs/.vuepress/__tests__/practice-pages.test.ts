@@ -40,7 +40,7 @@ test('project data remains consistent across filtering, creation, selection and 
   expect(data.done.value).toBe(1)
 })
 
-test('practice pages use showcase menus while standards stay in the component menu', () => {
+test('practice pages use the getting started menu while standards stay in the component menu', () => {
   const zh = zhSideBar as Record<string, unknown>
   const en = enSideBar as Record<string, unknown>
   expect(JSON.stringify(componentSideBar)).not.toContain('"link":"/practices/"')
@@ -48,11 +48,12 @@ test('practice pages use showcase menus while standards stay in the component me
   expect(zh['/practices/utility-spec/']).toBe(componentSideBar)
   expect(JSON.stringify(en['/en/practices/'])).toContain('/en/practices/form/')
   const items = zhNavBar as Array<{text: string, activeMatch: string}>
-  const showcase = new RegExp(items.find(item => item.text === '特色与场景')!.activeMatch)
+  expect(items.map(item => item.text)).toEqual(['开始使用', '组件', 'AI 与工具'])
+  const start = new RegExp(items.find(item => item.text === '开始使用')!.activeMatch)
   const components = new RegExp(items.find(item => item.text === '组件')!.activeMatch)
   for (const prefix of ['', '/en']) {
     for (const slug of modes) {
-      expect(showcase.test(`${prefix}/practices/${slug}/`)).toBe(true)
+      expect(start.test(`${prefix}/practices/${slug}/`)).toBe(true)
       expect(components.test(`${prefix}/practices/${slug}/`)).toBe(false)
     }
     expect(components.test(`${prefix}/practices/utility-spec/`)).toBe(true)

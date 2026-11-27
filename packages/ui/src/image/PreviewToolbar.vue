@@ -17,7 +17,10 @@
 <script lang="ts">
 import { computed, defineComponent, type Component, type PropType } from 'vue'
 import { createNamespace } from '../_utils/global-config'
-import PreviewAction from './PreviewAction.vue'
+import type { WithNativeListeners } from '../_utils/native-listener-types'
+import PreviewActionComponent from './PreviewAction.vue'
+
+const PreviewAction = PreviewActionComponent as WithNativeListeners<typeof PreviewActionComponent, 'onClick'>
 
 export interface ActionType {
   key: string

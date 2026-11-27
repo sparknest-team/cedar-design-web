@@ -20,13 +20,16 @@
 </template>
 
 <script lang="ts">
-import { createNamespace } from '../../../_utils/global-config'
 import { defineComponent, PropType } from 'vue'
-import { ShortcutType } from '../types'
-import Button from '../../../button/base'
 import RenderFunction from '../../../_components/render-function'
+import { createNamespace } from '../../../_utils/global-config'
 import { isFunction } from '../../../_utils/is'
+import type { WithNativeListeners } from '../../../_utils/native-listener-types'
+import ButtonComponent from '../../../button/base'
 import useInjectDatePickerTransform from '../hooks/use-inject-datepicker-transform'
+import { ShortcutType } from '../types'
+
+const Button = ButtonComponent as WithNativeListeners<typeof ButtonComponent, 'onMouseenter' | 'onMouseleave'>
 
 export interface ShortcutsProps {
   prefixCls: string

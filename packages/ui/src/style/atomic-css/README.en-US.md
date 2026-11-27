@@ -57,12 +57,12 @@ pnpm add -D @cedar-design/preset-unocss-vue unocss
 
 ```js
 // uno.config.ts
-import { defineConfig } from "unocss";
-import { presetCedar } from "@cedar-design/preset-unocss-vue";
+import { presetCedar } from '@cedar-design/preset-unocss-vue'
+import { defineConfig } from 'unocss'
 
 export default defineConfig({
   presets: [presetCedar()],
-});
+})
 ```
 
 Optional `presetCedar({ colors, fontSize, breakpoints })`; `false` disables a section.
@@ -70,7 +70,8 @@ Optional `presetCedar({ colors, fontSize, breakpoints })`; `false` disables a se
 ### Load theme variables first
 
 ```js
-import "@cedar-design/ui-vue/style";
+import '@cedar-design/ui-vue/style'
+
 // Or import a theme stylesheet containing --c-* variables
 ```
 
@@ -88,30 +89,32 @@ pnpm add -D @cedar-design/preset-tailwindcss-vue tailwindcss
 
 ```js
 // tailwind.config.js
-import { presetCedar } from "@cedar-design/preset-tailwindcss-vue";
+import { presetCedar } from '@cedar-design/preset-tailwindcss-vue'
 
 export default {
-  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   presets: [presetCedar()],
-};
+}
 ```
 
 ### Tailwind v4
 
 ```js
 // tailwind.config.js
-import { presetCedar } from "@cedar-design/preset-tailwindcss-vue";
+import { presetCedar } from '@cedar-design/preset-tailwindcss-vue'
 
 export default {
-  presets: [presetCedar()],
-};
+  presets: [presetCedar({ tailwindVersion: 4 })],
+}
 ```
 
 ```css
 /* src/style.css */
-@import "tailwindcss";
+@import 'tailwindcss';
 @config '../tailwind.config.js';
 ```
+
+In v4, write `c:p-4`, `c:bg-primary` and `c:sm:p-4`. The preset sets the prefix. Keep the CSS import as shown.
 
 ---
 
@@ -127,7 +130,7 @@ presetCedar({
   breakpoints: true,
   // TW:
   // screens: true,
-});
+})
 ```
 
 ### Custom theme mapping
@@ -137,13 +140,13 @@ presetCedar({
 ```js
 presetCedar({
   colors: {
-    primary: "var(--app-color-brand)",
-    danger: "var(--app-color-error)",
+    primary: 'var(--app-color-brand)',
+    danger: 'var(--app-color-error)',
   },
   fontSize: {
-    md: "15px",
+    md: '15px',
   },
-});
+})
 ```
 
 `false` disables the corresponding Cedar theme mapping. Generator-native utilities may still exist but are independent of Cedar variables.
@@ -155,12 +158,12 @@ presetCedar({
 Maple's UnoCSS preset includes `presetUno` with an `mp-` prefix:
 
 ```js
-import { defineConfig } from "unocss";
-import { presetMaple } from "@nio-pow/preset-unocss";
+import { presetMaple } from '@nio-pow/preset-unocss'
+import { defineConfig } from 'unocss'
 
 export default defineConfig({
   presets: [presetMaple()],
-});
+})
 ```
 
 Both Maple UnoCSS/Tailwind presets generate `mp-bg-primary`, `mp-text-primary` and `mp-border mp-border-primary` without unprefixed aliases.

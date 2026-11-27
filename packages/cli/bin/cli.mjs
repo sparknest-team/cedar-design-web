@@ -1,8 +1,9 @@
 #!/usr/bin/env node
-
 import { resolve } from 'node:path'
-import { buildLibrary } from '../src/index.mjs'
+import { pathToFileURL } from 'node:url'
+import { x } from 'tinyexec'
 import { generateLibraryEntry } from '../src/generateLibraryEntry.mjs'
+import { buildLibrary } from '../src/index.mjs'
 
 const [command, configPath = 'ui-build.config.mjs'] = process.argv.slice(2)
 
@@ -11,9 +12,14 @@ if (command !== 'compile') {
   process.exitCode = 1
 } else {
   process.env.NODE_ENV = 'production'
-  const configUrl = new URL(`file://${resolve(process.cwd(), configPath)}`)
-  const configModule = await import(configUrl.href)
-  const config = configModule.default
+  const configUrl = pathToFileURL(resolve(configPath))
+  const { default: config } = await import(configUrl.href)
   await generateLibraryEntry({ root: config.root ?? process.cwd() })
+  if (config.releaseCheck) {
+    await x('tsc', ['--runExternalCode', '-p', config.releaseCheck], {
+      nodeOptions: { cwd: config.root, stdio: 'inherit' },
+      throwOnError: true,
+    })
+  }
   await buildLibrary(config)
 }

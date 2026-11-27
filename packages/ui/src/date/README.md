@@ -14,6 +14,8 @@ permalink: /components/date/
 
 纯面板请使用 [`DatePicker`](/components/date-picker/)（默认无触发器）。日期范围字段请使用 [`DateRange`](/components/date-range/)。
 
+单选时，格式字符串对应字符串值，`value-format="Date"` 返回日期对象，`value-format="timestamp"` 返回数字时间戳。范围和多选使用数组；清空时返回配置的空值。
+
 ## 基础示例
 
 ### 基本用法
@@ -198,7 +200,7 @@ Cedar 字段使用桌面日历，通过 `date-picker-props` 或 `date-range-pick
 
 | 事件                  | 说明                             | 参数                              |
 | --------------------- | -------------------------------- | --------------------------------- |
-| `update:picker-value` | 请求日历视口更新，不改变选择模型 | value: DateSelection              |
+| `update:picker-value` | 请求日历视口更新，不改变选择模型 | value: Date \| string \| number \| (Date \| string \| number \| null \| undefined)[] \| null \| undefined              |
 | `picker-value-change` | 已请求的视口及展示通知           | value, date(s), formatted text(s) |
 | `select-shortcut`     | 接受的快捷项，仍遵守字段确认策略 | shortcut: DateShortcut            |
 
@@ -376,7 +378,7 @@ Date 字段默认从输入框下方 bottom-start 打开。需要时通过 popupP
 | --- | --- | --- | --- |
 | `abbreviation` | 月份网格使用缩写，false 使用完整月份名 | `boolean` | `true` |
 | `day-start-of-week` | 每周第一天，仅日历展示，整数 0～6 | `DateWeekStart` | `0` |
-| `default-picker-value` | 初始日历视口，仅初始化读取；优先已选值，再用当前日期 | `DateSelection` | `undefined` |
+| `default-picker-value` | 初始日历视口，仅初始化读取；优先已选值，再用当前日期 | `Date \| string \| number \| (Date \| string \| number \| null \| undefined)[] \| null \| undefined` | `undefined` |
 | `default-value` | 非受控初始值，仅创建时读取 | `DateValue` | `undefined` |
 | `disable-confirm` | 选择后立即提交；false 保留草稿待确认 | `boolean` | `true` |
 | `disabled` | 禁用面板选择和提交 | `boolean` | `false` |
@@ -387,7 +389,7 @@ Date 字段默认从输入框下方 bottom-start 打开。需要时通过 popupP
 | `max` | 包含上界，非法的已提供边界不会被静默忽略 | `DateValue` | `undefined` |
 | `min` | 包含下界，非法的已提供边界不会被静默忽略 | `DateValue` | `undefined` |
 | `model-value` | 外部日期值；undefined 为非受控，null 为显式空值 | `DateValue \| null` | `undefined` |
-| `picker-value` | 受控日历视口，不是选中值；范围视口含两个日期 | `DateSelection` | `undefined` |
+| `picker-value` | 受控日历视口，不是选中值；范围视口含两个日期 | `Date \| string \| number \| (Date \| string \| number \| null \| undefined)[] \| null \| undefined` | `undefined` |
 | `preview-shortcut` | 悬停/聚焦快捷项时预览，不提交 | `boolean` | `true` |
 | `readonly` | 只读面板，不改变候选或提交 | `boolean` | `false` |
 | `shortcuts` | 快捷项；值或按需执行的同步值工厂，可含 format/disabled | `DateShortcut[]` | `[]` |
@@ -473,8 +475,9 @@ datePickerProps/dateRangePickerProps 只配置展示，不能覆盖根模型、�
 
 ```ts
 import { Date as DateField, DatePicker, type DateProps, type DatePickerProps,
-  type DateEmits, type DatePickerEmits, type DateValue, type DateSelection,
-  type DateChangeArgs, type DateRules, type DateShortcut } from '@cedar-design/ui-vue'
+  type DateEmits, type DatePickerEmits, type DateValue,
+  type DateChangeArgs, type DateRules, type DateShortcut
+} from '@cedar-design/ui-vue'
 ```
 
 <!-- date-contract:end -->

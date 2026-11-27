@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import ts from 'typescript'
+import ts from 'typescript-js'
 import type { Plugin } from 'vite'
 import { CedarResolver } from '@cedar-design/resolver-vue'
 

@@ -1,9 +1,18 @@
 <template>
-  <div ref="root" :class="classNames" role="tree" :tabindex="externallyManaged ? undefined : 0" :aria-multiselectable="multiple || undefined" :aria-activedescendant="externallyManaged ? undefined : activeDescendant" @keydown="onKeydown" @focus="onTreeFocus">
+  <div
+    ref="root"
+    :class="classNames"
+    role="tree"
+    :tabindex="externallyManaged ? undefined : 0"
+    :aria-multiselectable="multiple || undefined"
+    :aria-activedescendant="externallyManaged ? undefined : activeDescendant"
+    @keydown="onKeydown"
+    @focus="onTreeFocus"
+  >
     <VirtualList
       v-if="virtualListProps"
       ref="virtualListRef"
-      v-bind="(virtualListProps as any)"
+      v-bind="virtualListProps as any"
       :data="visibleTreeNodeList"
       item-key="key"
     >
@@ -18,36 +27,49 @@
 </template>
 
 <script lang="ts">
+import {
+  computed,
+  defineComponent,
+  inject,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  PropType,
+  provide,
+  reactive,
+  ref,
+  toRefs,
+  watch,
+} from 'vue'
 import { useDirection } from '@cedar-design/use-vue'
-import { treeProps } from './props'
-import { createNamespace } from '../_utils/global-config'
-import { matchesOptionText } from '../_utils/option-data'
-import { defineComponent, computed, provide, reactive, PropType, toRefs, ref, onBeforeUnmount, onDeactivated, onActivated, watch, nextTick, inject } from 'vue'
-import { useId } from '../_utils/vue-compat'
-import { getPrefixCls } from '../_utils/global-config'
-import { TreeInjectionKey, TreeKeyboardOwnerKey } from './context'
+import VirtualList from '../_components/virtual-list-v2'
+import type { ScrollIntoViewOptions, VirtualListProps, VirtualListRef } from '../_components/virtual-list-v2/interface'
+import useMergeState from '../_hooks/use-merge-state'
 import usePickSlots from '../_hooks/use-pick-slots'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import { isArray, isFunction, isUndefined } from '../_utils/is'
+import { matchesOptionText } from '../_utils/option-data'
+import { useId } from '../_utils/vue-compat'
+import { TreeInjectionKey, TreeKeyboardOwnerKey, type TreeContext } from './context'
+import useCheckedState from './hooks/use-checked-state'
+import useTreeData from './hooks/use-tree-data'
+import TreeNode from './node'
+import { treeProps } from './props'
 import type {
+  CheckedStrategy,
+  DropPosition,
+  FilterTreeNode,
+  Node,
   TreeFieldNames,
   TreeNodeData,
-  FilterTreeNode,
-  DropPosition,
   TreeNodeValue,
-  CheckedStrategy,
-  Node,
 } from './types'
 import { isLeafNode, isNodeExpandable, isNodeSelectable } from './utils'
 import { getCheckedStateByCheck, isNodeCheckable } from './utils/check-utils'
-import TreeNode from './node'
-import { isArray, isFunction, isUndefined } from '../_utils/is'
-import useMergeState from '../_hooks/use-merge-state'
-import useCheckedState from './hooks/use-checked-state'
-import useTreeData from './hooks/use-tree-data'
-import VirtualList from '../_components/virtual-list-v2'
-import type { VirtualListProps, VirtualListRef, ScrollIntoViewOptions } from '../_components/virtual-list-v2/interface'
 
 export default defineComponent({
-  name: createNamespace("tree").name,
+  name: createNamespace('tree').name,
   components: {
     VirtualList,
     TreeNode,
@@ -112,28 +134,28 @@ export default defineComponent({
      * @param {DragEvent} ev
      * @param {TreeNodeData} node
      */
-    "drag-start": (ev: DragEvent, node: TreeNodeData) => true,
+    'drag-start': (ev: DragEvent, node: TreeNodeData) => true,
     /**
      * @zh 节点结束拖拽
      * @en Node end drag
      * @param {DragEvent} ev
      * @param {TreeNodeData} node
      */
-    "drag-end": (ev: DragEvent, node: TreeNodeData) => true,
+    'drag-end': (ev: DragEvent, node: TreeNodeData) => true,
     /**
      * @zh 节点被拖拽至可释放目标
      * @en The node is dragged to the releasable target
      * @param {DragEvent} ev
      * @param {TreeNodeData} node
      */
-    "drag-over": (ev: DragEvent, node: TreeNodeData) => true,
+    'drag-over': (ev: DragEvent, node: TreeNodeData) => true,
     /**
      * @zh 节点离开可释放目标
      * @en Node leaves to release the target
      * @param {DragEvent} ev
      * @param {TreeNodeData} node
      */
-    "drag-leave": (ev: DragEvent, node: TreeNodeData) => true,
+    'drag-leave': (ev: DragEvent, node: TreeNodeData) => true,
     /**
      * @zh 节点在可释放目标上释放
      * @en The node is released on a releasable target
@@ -319,7 +341,7 @@ export default defineComponent({
         if (predicate && !predicate(node.treeNodeData)) continue
         if (query && !matchesOptionText(node.treeNodeData[labelField], query)) continue
         keys.add(node.key)
-        node.pathParentKeys.forEach(key => keys.add(key))
+        node.pathParentKeys.forEach((key) => keys.add(key))
       }
       return keys
     })
@@ -345,7 +367,7 @@ export default defineComponent({
       })
     })
 
-    const focusableNodes = computed(() => visibleTreeNodeList.value.filter(node => !node.disabled))
+    const focusableNodes = computed(() => visibleTreeNodeList.value.filter((node) => !node.disabled))
     const mountedVirtualNodes = reactive(new Set<TreeNodeValue>())
     function setVirtualNode(key: TreeNodeValue, instance: unknown) {
       if (instance) mountedVirtualNodes.add(key)
@@ -359,7 +381,7 @@ export default defineComponent({
     )
     function focusNode(key: TreeNodeValue) {
       if (externallyManaged) return
-      if (!focusableNodes.value.some(node => node.key === key)) return
+      if (!focusableNodes.value.some((node) => node.key === key)) return
       focusedValue.value = key
       virtualListRef.value?.scrollTo({ key, align: 'auto' })
       root.value?.focus({ preventScroll: true })
@@ -370,18 +392,31 @@ export default defineComponent({
     }
     function onTreeFocus(event: FocusEvent) {
       if (event.target !== root.value || focusedValue.value !== undefined) return
-      const node = focusableNodes.value.find(node => selectedValues.value.includes(node.key)) ?? focusableNodes.value[0]
+      const node =
+        focusableNodes.value.find((node) => selectedValues.value.includes(node.key)) ?? focusableNodes.value[0]
       if (node) focusNode(node.key)
     }
-    watch(focusableNodes, nodes => {
-      if (focusedValue.value === undefined || nodes.some(node => node.key === focusedValue.value)) return
+    watch(focusableNodes, (nodes) => {
+      if (focusedValue.value === undefined || nodes.some((node) => node.key === focusedValue.value)) return
       const old = key2TreeNode.value.get(focusedValue.value)
-      focusedValue.value = [...(old?.pathParentKeys ?? [])].reverse().find(key => nodes.some(node => node.key === key)) ?? nodes[0]?.key
+      focusedValue.value =
+        [...(old?.pathParentKeys ?? [])].reverse().find((key) => nodes.some((node) => node.key === key)) ??
+        nodes[0]?.key
     })
     function onKeydown(event: KeyboardEvent) {
-      if (externallyManaged || event.isComposing || event.keyCode === 229 || event.defaultPrevented || event.target !== root.value || event.altKey || event.ctrlKey || event.metaKey) return
+      if (
+        externallyManaged ||
+        event.isComposing ||
+        event.keyCode === 229 ||
+        event.defaultPrevented ||
+        event.target !== root.value ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey
+      )
+        return
       const nodes = focusableNodes.value
-      const index = nodes.findIndex(node => node.key === focusedValue.value)
+      const index = nodes.findIndex((node) => node.key === focusedValue.value)
       const node = nodes[index < 0 ? 0 : index]
       if (!node) return
       const forward = isRtl.value ? 'ArrowLeft' : 'ArrowRight'
@@ -389,22 +424,24 @@ export default defineComponent({
       if (!['ArrowDown', 'ArrowUp', forward, backward, 'Home', 'End', 'Enter', ' '].includes(event.key)) return
       event.preventDefault()
       if (event.key === 'Home' || event.key === 'End') focusNode(nodes[event.key === 'Home' ? 0 : nodes.length - 1].key)
-      else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') focusNode(nodes[Math.max(0, Math.min(nodes.length - 1, index + (event.key === 'ArrowDown' ? 1 : -1)))].key)
+      else if (event.key === 'ArrowDown' || event.key === 'ArrowUp')
+        focusNode(nodes[Math.max(0, Math.min(nodes.length - 1, index + (event.key === 'ArrowDown' ? 1 : -1)))].key)
       else if (event.key === forward && !node.isLeaf) {
         if (!expandedValues.value.includes(node.key)) {
           if (!node.children?.length && onLoadMore.value) void onLoadMore.value(node.key)
           else onExpand(true, node.key, event)
         } else {
-          const child = nodes.find(child => child.parentKey === node.key)
+          const child = nodes.find((child) => child.parentKey === node.key)
           if (child) focusNode(child.key)
         }
       } else if (event.key === backward) {
         if (expandedValues.value.includes(node.key) && !node.isLeaf) onExpand(false, node.key, event)
         else {
-          const parent = [...node.pathParentKeys].reverse().find(key => nodes.some(node => node.key === key))
+          const parent = [...node.pathParentKeys].reverse().find((key) => nodes.some((node) => node.key === key))
           if (parent !== undefined) focusNode(parent)
         }
-      } else if (event.key === ' ' && isNodeCheckable(node)) onCheck(!checkedValues.value.includes(node.key), node.key, event)
+      } else if (event.key === ' ' && isNodeCheckable(node))
+        onCheck(!checkedValues.value.includes(node.key), node.key, event)
       else if ((event.key === 'Enter' || event.key === ' ') && isNodeSelectable(node)) onSelect(node.key, event)
     }
 
@@ -660,14 +697,28 @@ export default defineComponent({
     }
     onBeforeUnmount(retireLoads)
     onDeactivated(retireLoads)
-    onActivated(() => { loadActive = true })
-    watch(loadMore, () => { loadEpoch++; loadingKeys.value = []; loadOwners.clear() }, { flush: 'sync' })
-    watch(key2TreeNode, (nodes) => {
-      for (const [key, node] of loadOwners) {
-        if (nodes.get(key)?.treeNodeData !== node) loadOwners.delete(key)
-      }
-      loadingKeys.value = loadingKeys.value.filter((key) => loadOwners.has(key))
-    }, { flush: 'sync' })
+    onActivated(() => {
+      loadActive = true
+    })
+    watch(
+      loadMore,
+      () => {
+        loadEpoch++
+        loadingKeys.value = []
+        loadOwners.clear()
+      },
+      { flush: 'sync' },
+    )
+    watch(
+      key2TreeNode,
+      (nodes) => {
+        for (const [key, node] of loadOwners) {
+          if (nodes.get(key)?.treeNodeData !== node) loadOwners.delete(key)
+        }
+        loadingKeys.value = loadingKeys.value.filter((key) => loadOwners.has(key))
+      },
+      { flush: 'sync' },
+    )
     const onLoadMore = computed(() =>
       loadMore?.value
         ? async (key: TreeNodeValue) => {
@@ -684,7 +735,13 @@ export default defineComponent({
 
             try {
               await loader(treeNodeData)
-              if (!loadActive || epoch !== loadEpoch || loader !== loadMore.value || loadOwners.get(key) !== treeNodeData) return
+              if (
+                !loadActive ||
+                epoch !== loadEpoch ||
+                loader !== loadMore.value ||
+                loadOwners.get(key) !== treeNodeData
+              )
+                return
               loadOwners.delete(key)
               loadingKeys.value = loadingKeys.value.filter((v) => v !== key)
               if (key2TreeNode.value.get(key)?.treeNodeData !== treeNodeData) return
@@ -702,7 +759,7 @@ export default defineComponent({
         : undefined,
     )
 
-    const treeContext = reactive({
+    const treeContext: TreeContext = reactive({
       treeProps: props,
       externallyManaged,
       focusedValue,

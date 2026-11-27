@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
-import ts from 'typescript'
+import ts from 'typescript-js'
 import type { Plugin, ViteDevServer } from 'vite'
 
 /** Inline import-only style facades; CSS still uses Vite's normal pipeline. */

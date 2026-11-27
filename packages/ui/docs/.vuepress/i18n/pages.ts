@@ -1,20 +1,16 @@
-import { createPage, preparePageChunk, preparePageComponent, type Plugin, type App, type Page } from '@vuepress/core'
+import { createPage, preparePageChunk, resolvePageChunkInfo, type Plugin, type App, type Page } from '@vuepress/core'
+import groups from '@sparknest/vuepress-plugins-vue/demo-groups.json' with { type: 'json' }
 import { readFile } from 'node:fs/promises'
 
 // Native /en/ pages share example files; untranslated prose is explicitly marked.
 // An authored /en/ page takes precedence over this fallback.
 export function localizedPages(): Plugin {
   let initialized = false
-  const groupLabels = readFile(new URL('../../../../../../design-ui/configs/demo-groups.json', import.meta.url), 'utf8')
-    .then(source => {
-      const components = JSON.parse(source) as Record<string, { title: string; en: string }[]>
-      return new Map(Object.values(components).flatMap(groups => groups.map(group => [group.title, group.en] as const)))
-    })
+  const labels = new Map(Object.values(groups).flatMap(entries => entries.map(group => [group.title, group.en] as const)))
   async function translate(app: App, page: Page) {
     const path = `/en${page.path}`
     let content = await readFile(page.filePath!, 'utf8')
     content = content.replace(/^---[\s\S]*?---\s*/, '')
-    const labels = await groupLabels
     content = content.replace(/^## (.+)$/gm, (heading, title) => title === '案例' ? '## Examples' : labels.has(title) ? `## ${labels.get(title)}` : heading)
       .replace('两端使用同一份实现和示例，组件前缀、主题基础变量与注册入口各自保留。', 'Both libraries share implementation and examples, with separate prefixes, theme tokens and registration.')
     content = `> Some documentation on this page is available in Chinese only. Component built-in messages follow English; untranslated example text remains in its original language.\n\n${content}`
@@ -26,6 +22,12 @@ export function localizedPages(): Plugin {
     // Chinese URL must not become a redirect to this English fallback.
     translated.pathInferred = path
     translated.pathLocale = '/en/'
+    // Reuse the source path while resolving relative demos, then give the
+    // generated translation its own route module.
+    translated.filePath = null
+    Object.assign(translated, resolvePageChunkInfo({
+      app, filePath: null, filePathRelative: null, htmlFilePathRelative: translated.htmlFilePathRelative,
+    }))
     return translated
   }
   return {
@@ -55,7 +57,6 @@ export function localizedPages(): Plugin {
       if (index < 0) return // Never replace an authored English page.
       const translated = await translate(app, page)
       app.pages.splice(index, 1, translated)
-      await preparePageComponent(app, translated)
       await preparePageChunk(app, translated)
     },
   }

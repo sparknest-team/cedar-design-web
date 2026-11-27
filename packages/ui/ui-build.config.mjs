@@ -7,6 +7,7 @@ const pkg = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'))
 
 export default defineConfig({
   root,
+  releaseCheck: 'tsconfig.release-check.json',
   name: '@cedar-design/ui-vue',
   globalName: 'Cedar',
   bundleName: 'cedar',

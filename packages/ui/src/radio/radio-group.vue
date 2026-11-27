@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { computed, provide, reactive, useSlots, type HTMLAttributes } from 'vue'
-import { useFormErrorDescription } from '../form/error-description'
 import { useOptionRequest } from '../_hooks/use-option-request'
 import { createNamespace } from '../_utils/global-config'
 import { ChoiceLabel } from '../checkbox/choice-label'
 import { normalizeChoiceOptions } from '../checkbox/choice-options'
 import { useChoiceState } from '../checkbox/choice-state'
-import type { RadioModel } from '../checkbox/choice-value-props'
+import { useFormErrorDescription } from '../form/error-description'
 import { radioGroupKey } from './context'
 import { useRadioForm } from './form-adapter'
 import Radio from './presentation'
@@ -25,8 +24,8 @@ const emit = defineEmits<{
   'update:open': [open: boolean]
   'open-change': [open: boolean]
   'load-error': [error: unknown]
-  'update:modelValue': [value: RadioModel]
-  change: [value: RadioModel, event?: Event]
+  'update:modelValue': [value: string | number | boolean | null]
+  change: [value: string | number | boolean | null, event?: Event]
 }>()
 const { mergedDisabled, mergedReadonly, mergedError, mergedSize, eventHandlers } = useRadioForm(props)
 const source = useOptionRequest(

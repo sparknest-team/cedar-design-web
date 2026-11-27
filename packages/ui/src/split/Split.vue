@@ -33,20 +33,34 @@
   </component>
 </template>
 <script lang="ts">
+import { computed, defineComponent, onMounted, reactive, ref, toRefs, watch } from 'vue'
 import { useDirection } from '@cedar-design/use-vue'
-import { useResizeGesture } from '../_hooks/use-resize-gesture'
-import { useElementResize } from '../_utils/resize-observer'
-import { splitProps } from './props'
-import { createNamespace } from '../_utils/global-config'
-import { computed, defineComponent, reactive, ref, toRefs, onMounted, watch } from 'vue'
-import ResizeTrigger from '../_components/ResizeTrigger.vue'
+import ResizeTriggerComponent from '../_components/ResizeTrigger.vue'
 import useMergeState from '../_hooks/use-merge-state'
-import { getPrefixCls } from '../_utils/global-config'
-import { legalSplitSize, parseSplitSize, splitBounds, splitSizeToPx } from './sizing'
+import { useResizeGesture } from '../_hooks/use-resize-gesture'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import type { WithNativeAttributes } from '../_utils/native-listener-types'
+import { useElementResize } from '../_utils/resize-observer'
 import { useI18n } from '../locale'
+import { splitProps } from './props'
+import { legalSplitSize, parseSplitSize, splitBounds, splitSizeToPx } from './sizing'
+
+const ResizeTrigger = ResizeTriggerComponent as WithNativeAttributes<
+  typeof ResizeTriggerComponent,
+  | 'onKeydown'
+  | 'onMousedown'
+  | 'onPointerdown'
+  | 'role'
+  | 'tabindex'
+  | 'aria-label'
+  | 'aria-orientation'
+  | 'aria-valuemin'
+  | 'aria-valuemax'
+  | 'aria-valuenow'
+>
 
 export default defineComponent({
-  name: createNamespace("split").name,
+  name: createNamespace('split').name,
   components: {
     ResizeTrigger,
   },
@@ -56,7 +70,7 @@ export default defineComponent({
      * @zh 开始拖拽之前触发
      * @en Triggered before dragging
      * */
-    "move-start": (ev: MouseEvent) => true,
+    'move-start': (ev: MouseEvent) => true,
     /**
      * @zh 拖拽时触发
      * @en Triggered when dragging
@@ -66,7 +80,7 @@ export default defineComponent({
      * @zh 拖拽结束之后触发
      * @en Triggered after dragging ends
      */
-    "move-end": (ev: MouseEvent) => true,
+    'move-end': (ev: MouseEvent) => true,
     'update:size': (size: number | string) => true,
   },
   /**
@@ -114,9 +128,11 @@ export default defineComponent({
         [`${prefixCls}-vertical`]: !isHorizontal.value,
       },
     ])
-    const effectiveSize = computed(() => extent.value > 0
-      ? legalSplitSize(size.value, min.value, max.value, extent.value)
-      : splitSizeToPx(size.value, 1, 0.5))
+    const effectiveSize = computed(() =>
+      extent.value > 0
+        ? legalSplitSize(size.value, min.value, max.value, extent.value)
+        : splitSizeToPx(size.value, 1, 0.5),
+    )
     const firstPaneStyles = computed(() => {
       const { value, isPx } = sizeConfig.value
       const amount = extent.value > 0 ? effectiveSize.value / (isPx ? 1 : extent.value) : value
@@ -153,21 +169,33 @@ export default defineComponent({
       if (props.disabled) triggerSize.value = 0
       else if (rect) triggerSize.value = isHorizontal.value ? rect.width : rect.height
     }
-    useElementResize(() => [wrapperRef.value, triggerRef.value?.$el], () => true, measure)
+    useElementResize(
+      () => [wrapperRef.value, triggerRef.value?.$el],
+      () => true,
+      measure,
+    )
     watch([orientation, () => props.disabled], measure, { flush: 'post' })
-    watch([size, min, max, extent], () => {
-      if (extent.value <= 0) return
-      const raw = splitSizeToPx(size.value, extent.value, 0.5)
-      if (!parseSplitSize(size.value) || raw !== effectiveSize.value) updateSize(effectiveSize.value, extent.value)
-    }, { flush: 'post' })
+    watch(
+      [size, min, max, extent],
+      () => {
+        if (extent.value <= 0) return
+        const raw = splitSizeToPx(size.value, extent.value, 0.5)
+        if (!parseSplitSize(size.value) || raw !== effectiveSize.value) updateSize(effectiveSize.value, extent.value)
+      },
+      { flush: 'post' },
+    )
     const separatorRange = computed(() => {
       const total = extent.value || 1
       const bounds = splitBounds(min.value, max.value, total)
-      return { min: bounds.min / total * 100, max: bounds.max / total * 100, now: legalSplitSize(size.value, min.value, max.value, total) / total * 100 }
+      return {
+        min: (bounds.min / total) * 100,
+        max: (bounds.max / total) * 100,
+        now: (legalSplitSize(size.value, min.value, max.value, total) / total) * 100,
+      }
     })
     const gesture = useResizeGesture({
       element: () => wrapperRef.value,
-      cursor: () => isHorizontal.value ? 'col-resize' : 'row-resize',
+      cursor: () => (isHorizontal.value ? 'col-resize' : 'row-resize'),
       start(event) {
         if (props.disabled) return false
         measure()
@@ -180,11 +208,14 @@ export default defineComponent({
       move(dx, dy, event) {
         const delta = isHorizontal.value ? (isRtl.value ? -dx : dx) : dy
         const initial = Number(record.startSize)
-        updateSize(legalSplitSize(`${Math.max(0, initial + delta)}px`, min.value, max.value, record.startContainerSize), record.startContainerSize)
+        updateSize(
+          legalSplitSize(`${Math.max(0, initial + delta)}px`, min.value, max.value, record.startContainerSize),
+          record.startContainerSize,
+        )
         emit('moving', event)
       },
-      end: event => emit('move-end', event),
-      cancel: event => emit('move-end', event),
+      end: (event) => emit('move-end', event),
+      cancel: (event) => emit('move-end', event),
     })
     watch([dir, orientation, min, max, () => props.disabled], gesture.cancel, { flush: 'sync' })
     function onKeydown(event: KeyboardEvent) {
@@ -196,7 +227,12 @@ export default defineComponent({
       measure()
       const total = extent.value
       const current = effectiveSize.value
-      const next = event.key === 'Home' ? 0 : event.key === 'End' ? total : current + (event.key === grow ? 1 : -1) * (event.shiftKey ? 50 : 10)
+      const next =
+        event.key === 'Home'
+          ? 0
+          : event.key === 'End'
+            ? total
+            : current + (event.key === grow ? 1 : -1) * (event.shiftKey ? 50 : 10)
       updateSize(legalSplitSize(`${Math.max(0, next)}px`, min.value, max.value, total), total)
     }
 

@@ -19,11 +19,11 @@ import { provideRangeField } from '../_components/picker-field/range-field-conte
 import { useFieldFocus } from '../_components/picker-field/use-field-focus'
 import { useFieldOpen } from '../_components/picker-field/use-field-open'
 import { useFieldValue } from '../_components/picker-field/use-field-value'
-import { createNamespace } from '../_utils/global-config'
 import { resolveEmptyValue, useEmptyValues } from '../_utils/empty-value'
+import { createNamespace } from '../_utils/global-config'
 import { scopeDateOptions } from './date-locale'
 import { isDateEndpointSelectionValid } from './date-rules'
-import { dateEventPayload, formatDateValue, outputDateValue, parseDateText, type DateSelection } from './date-value'
+import { dateEventPayload, formatDateValue, outputDateValue, parseDateText } from './date-value'
 import { dateFieldPanelOptions } from './field-panel-options'
 import type { DateFieldControlProps, DateFieldProps, DateFieldState } from './field-state'
 import DateFieldContent from './presentation/DateFieldContent.vue'
@@ -63,7 +63,7 @@ const fieldProps = computed(() =>
 )
 const content = ref<InstanceType<typeof DateFieldContent>>()
 const rangeIndex = provideRangeField()
-const model = useFieldValue<DateSelection>({
+const model = useFieldValue<Date | string | number | (Date | string | number | null | undefined)[] | null | undefined>({
   value: () => fieldProps.value.modelValue,
   defaultValue: () => fieldProps.value.defaultValue,
 })
@@ -95,7 +95,11 @@ const open = useFieldOpen({
   },
 })
 const selection = useDateSelection({
-  emptyValue: () => resolveEmptyValue<DateSelection>(fieldProps.value, props.range ? [] : undefined),
+  emptyValue: () =>
+    resolveEmptyValue<Date | string | number | (Date | string | number | null | undefined)[] | null | undefined>(
+      fieldProps.value,
+      props.range ? [] : undefined,
+    ),
   value: () => viewValue.value,
   rules: () => fieldProps.value,
   range: () => props.range,

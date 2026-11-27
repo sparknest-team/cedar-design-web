@@ -176,7 +176,7 @@ TreeSelect 的搜索、远程候选和大小写规则由 TreeSelect 自身管理
 | `load-more` | 异步加载数据的回调，返回一个 `Promise` | 动态加载 |
 | `block-node` | 节点是否占据一行 | 虚拟列表 |
 | `checkable` | 是否在节点前添加复选框 | 虚拟列表 |
-| `virtual-list-props` | 传递虚拟列表属性，传入此参数以开启虚拟滚动，[VirtualListProps](#VirtualListProps) | 虚拟列表 |
+| `virtual-list-props` | 传递虚拟列表属性，传入此参数以开启虚拟滚动，[VirtualListProps](#virtuallistprops) | 虚拟列表 |
 <!-- demo-config-notes:end -->
 
 动态加载节点。
@@ -217,7 +217,7 @@ TreeSelect 的搜索、远程候选和大小写规则由 TreeSelect 自身管理
 | allow-drop                      | 拖拽时是否允许在某节点上释放                                                                                    | `(options: {  dropNode: TreeNodeData;  dropPosition: -1 \| 0 \| 1;}) => boolean`                               |   `-`   |
 | filter-tree-node                | 筛选节点，保留匹配节点的祖先                                                                                     | `(node: TreeNodeData) => boolean`                                                                                |   `-`   |
 | search-value                    | 按节点标签搜索，不区分大小写                                                                                    | `string`                                                                                                        | `''`    |
-| virtual-list-props              | 传递虚拟列表属性，传入此参数以开启虚拟滚动，[VirtualListProps](#VirtualListProps)                               | `VirtualListProps`                                                                                             |   `-`   |
+| virtual-list-props              | 传递虚拟列表属性，传入此参数以开启虚拟滚动，[VirtualListProps](#virtuallistprops)                               | `VirtualListProps`                                                                                             |   `-`   |
 | default-expand-selected         | 是否默认展开已选中节点的父节点                                                                                  | `boolean`                                                                                                      | `false` |
 | default-expand-checked          | 是否默认展开已选中复选框节点的父节点                                                                            | `boolean`                                                                                                      | `false` |
 | auto-expand-parent              | 是否自动展开已展开节点的父节点                                                                                  | `boolean`                                                                                                      | `true`  |

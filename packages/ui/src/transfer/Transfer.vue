@@ -1,10 +1,30 @@
 <template>
-  <div ref="root" :data-form-composite="hasFormLabel ? '' : undefined" v-bind="$attrs" :role="typeof $attrs.role === 'string' ? $attrs.role : (describeError($attrs['aria-describedby']) || autoLabelId || $attrs['aria-label'] || $attrs['aria-labelledby'] ? 'group' : undefined)" :aria-labelledby="'aria-labelledby' in $attrs ? ($attrs['aria-labelledby'] as string | undefined) : ('aria-label' in $attrs || $attrs.role === 'presentation' || $attrs.role === 'none' ? undefined : autoLabelId)" :aria-describedby="describeError($attrs['aria-describedby'])" :class="cls">
+  <div
+    ref="root"
+    :data-form-composite="hasFormLabel ? '' : undefined"
+    v-bind="$attrs"
+    :role="
+      typeof $attrs.role === 'string'
+        ? $attrs.role
+        : describeError($attrs['aria-describedby']) || autoLabelId || $attrs['aria-label'] || $attrs['aria-labelledby']
+          ? 'group'
+          : undefined
+    "
+    :aria-labelledby="
+      'aria-labelledby' in $attrs
+        ? ($attrs['aria-labelledby'] as string | undefined)
+        : 'aria-label' in $attrs || $attrs.role === 'presentation' || $attrs.role === 'none'
+          ? undefined
+          : autoLabelId
+    "
+    :aria-describedby="describeError($attrs['aria-describedby'])"
+    :class="cls"
+  >
     <transfer-view
       type="source"
       :class="`${prefixCls}-view-source`"
       :title="sourceTitle"
-      :data-info="dataInfo.sourceInfo"
+      :panel-state="dataInfo.sourceInfo"
       :data="dataInfo.sourceInfo.data"
       :disabled="mergedDisabled"
       :selected="computedSelected"
@@ -28,7 +48,7 @@
       type="target"
       :class="`${prefixCls}-view-target`"
       :title="targetTitle"
-      :data-info="dataInfo.targetInfo"
+      :panel-state="dataInfo.targetInfo"
       :data="dataInfo.targetInfo.data"
       :disabled="mergedDisabled"
       :selected="computedSelected"
@@ -52,7 +72,6 @@
         <slot name="target-title" v-bind="titleProps" />
       </template>
     </transfer-view>
-
   </div>
   <Dialog
     :open="renameVisible"
@@ -63,32 +82,42 @@
     @update:open="renameVisible = $event"
     @confirm="commitRename"
   >
-    <Input v-model="renameDraft" placeholder="请输入名称" @press-enter="commitRename" />
+    <Input
+      :model-value="renameDraft"
+      @update:model-value="renameDraft = $event ?? ''"
+      placeholder="请输入名称"
+      @press-enter="commitRename"
+    />
   </Dialog>
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, PropType, provide, reactive, ref, toRef } from 'vue'
 import { useDirection } from '@cedar-design/use-vue'
+import { useFormItem } from '../_hooks/use-form-item'
 import { useOptionRequest } from '../_hooks/use-option-request'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
+import Dialog from '../dialog'
 import { provideFormErrorDescriptionBoundary, useFormErrorDescription } from '../form/error-description'
 import { useFormItemLabel } from '../form/label-context'
-import { transferProps } from './props'
-import { createNamespace } from '../_utils/global-config'
-import { computed, defineComponent, PropType, provide, reactive, ref, toRef } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
-import TransferView from './TransferView.vue'
-import type { DataInfo, TransferFilter, TransferItem, TransferTargetItem, TransferValue } from './types'
-import { transferInjectionKey } from './context'
-import { useFormItem } from '../_hooks/use-form-item'
-import Dialog from '../dialog'
 import Input from '../input'
-import type { TransferFixed, TransferTargetAction } from './types'
+import { transferInjectionKey } from './context'
+import { transferProps } from './props'
+import TransferView from './TransferView.vue'
+import type {
+  DataInfo,
+  TransferFilter,
+  TransferFixed,
+  TransferItem,
+  TransferTargetAction,
+  TransferTargetItem,
+  TransferValue,
+} from './types'
 
 export default defineComponent({
-  name: createNamespace("transfer").name,
+  name: createNamespace('transfer').name,
   inheritAttrs: false,
   components: {
-
     TransferView,
     Dialog,
     Input,
@@ -99,7 +128,7 @@ export default defineComponent({
     /**
      * @zh 目标选择框的值改变时触发
      * @en Triggered when the value of the target selection box changes
-   * @property {TransferTargetItem[]} value
+     * @property {TransferTargetItem[]} value
      */
     change: (value: TransferTargetItem[] | null) => true,
     /**
@@ -108,10 +137,10 @@ export default defineComponent({
      * @property {string} value
      * @property {'target'|'source'} type
      */
-    "load-error": (error: unknown) => true,
+    'load-error': (error: unknown) => true,
     search: (value: string, type: 'target' | 'source') => true,
     rename: (value: TransferValue, label: string) => true,
-    "target-action": (key: string, item: TransferItem) => true,
+    'target-action': (key: string, item: TransferItem) => true,
   },
   /**
    * @zh 选项
@@ -163,14 +192,24 @@ export default defineComponent({
   setup(props, { emit, slots }) {
     const { describe: describeError } = useFormErrorDescription()
     const formLabel = useFormItemLabel()
-    const autoLabelId = computed(() => formLabel?.value?.target ? undefined : formLabel?.value?.id)
+    const autoLabelId = computed(() => (formLabel?.value?.target ? undefined : formLabel?.value?.id))
     provideFormErrorDescriptionBoundary()
-    const { mergedDisabled: inheritedDisabled, mergedReadonly, eventHandlers } = useFormItem({
+    const {
+      mergedDisabled: inheritedDisabled,
+      mergedReadonly,
+      eventHandlers,
+    } = useFormItem({
       disabled: toRef(props, 'disabled'),
       readonly: toRef(props, 'readonly'),
     })
     const mergedDisabled = computed(() => inheritedDisabled.value || mergedReadonly.value)
-    const source = useOptionRequest(() => props.data, () => inheritedDisabled.value, error => emit('load-error', error), () => 0, transferProps)
+    const source = useOptionRequest(
+      () => props.data,
+      () => inheritedDisabled.value,
+      (error) => emit('load-error', error),
+      () => 0,
+      transferProps,
+    )
     const data = source.options
     const root = ref<HTMLElement>()
     const { dir } = useDirection(() => root.value)
@@ -180,14 +219,17 @@ export default defineComponent({
     const renameVisible = ref(false)
     const renamingValue = ref<TransferValue>()
     const renameDraft = ref('')
-    const computedTarget = computed(() => props.modelValue === null ? [] : props.modelValue ?? _target.value)
+    const computedTarget = computed(() => (props.modelValue === null ? [] : (props.modelValue ?? _target.value)))
     const computedTargetValues = computed(() => computedTarget.value.map((item) => item.value))
     const sourceTitle = computed(() => props.sourceTitle ?? props.title?.[0])
     const targetTitle = computed(() => props.targetTitle ?? props.title?.[1])
     const sourceShowSearch = computed(() => props.showSearch || props.sourceFilterable)
     const targetShowSearch = computed(() => props.showSearch || props.targetFilterable)
-    const mergedFilter = computed(() => props.filter ?? ((value: string, item: TransferItem) => item.label.toLowerCase().includes(value.toLowerCase())))
-    const sourceFilter = computed(() => source.remote.value && !props.filter ? () => true : mergedFilter.value)
+    const mergedFilter = computed(
+      () =>
+        props.filter ?? ((value: string, item: TransferItem) => item.label.toLowerCase().includes(value.toLowerCase())),
+    )
+    const sourceFilter = computed(() => (source.remote.value && !props.filter ? () => true : mergedFilter.value))
     const mergedSourceSearchProps = computed(() => ({
       ...props.sourceSearchProps,
       placeholder: props.sourceFilterPlaceholder ?? props.sourceSearchProps?.placeholder,
@@ -384,7 +426,7 @@ export default defineComponent({
         onRename: startRename,
         onTargetAction: handleTargetAction,
         targetActions: computed(() => props.targetActions),
-      })
+      }),
     )
 
     const cls = computed(() => [prefixCls, { [`${prefixCls}-disabled`]: mergedDisabled.value }])

@@ -29,14 +29,16 @@ permalink: /components/date-picker/
 ### 选择类型
 
 <!-- demo-config-notes:start -->
+
 #### 本组配置对照
 
-| 配置 | 作用 | 相关示例 |
-| --- | --- | --- |
-| `type` | 面板类型 | 选择类型、月份标签、日期语言的实例隔离 |
-| `disable-confirm` | 选择后立即提交 | 月份标签、窄屏与组合面板 |
-| `day-start-of-week` | 每周第一天（仅日历），整数 0～6 | 日期语言的实例隔离 |
-| `show-time` | 选择时间 | 窄屏与组合面板 |
+| 配置                | 作用                            | 相关示例                               |
+| ------------------- | ------------------------------- | -------------------------------------- |
+| `type`              | 面板类型                        | 选择类型、月份标签、日期语言的实例隔离 |
+| `disable-confirm`   | 选择后立即提交                  | 月份标签、窄屏与组合面板               |
+| `day-start-of-week` | 每周第一天（仅日历），整数 0～6 | 日期语言的实例隔离                     |
+| `show-time`         | 选择时间                        | 窄屏与组合面板                         |
+
 <!-- demo-config-notes:end -->
 
 通过 `type` 切换面板类型。
@@ -78,16 +80,18 @@ DatePicker / DateRangePicker 独立使用时自带表面背景和操作区；act
 ### 带时间
 
 <!-- demo-config-notes:start -->
+
 #### 本组配置对照
 
-| 配置 | 作用 | 相关示例 |
-| --- | --- | --- |
-| `show-time` | 选择时间 | 带时间、禁用部分日期、内嵌时间与滚轮展示 |
-| `format` | 展示格式 | 带时间、内嵌时间与滚轮展示 |
-| `value-format` | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | 当前日期与范围策略、内嵌时间与滚轮展示 |
-| `default-value` | 非受控初始值，仅初始化读取 | 带时间 |
-| `disabled-date` | 禁用日期 | 禁用部分日期 |
-| `disabled-time` | 当前日期、端点的时间禁用列表 | 禁用部分日期 |
+| 配置            | 作用                                                    | 相关示例                                 |
+| --------------- | ------------------------------------------------------- | ---------------------------------------- |
+| `show-time`     | 选择时间                                                | 带时间、禁用部分日期、内嵌时间与滚轮展示 |
+| `format`        | 展示格式                                                | 带时间、内嵌时间与滚轮展示               |
+| `value-format`  | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | 当前日期与范围策略、内嵌时间与滚轮展示   |
+| `default-value` | 非受控初始值，仅初始化读取                              | 带时间                                   |
+| `disabled-date` | 禁用日期                                                | 禁用部分日期                             |
+| `disabled-time` | 当前日期、端点的时间禁用列表                            | 禁用部分日期                             |
+
 <!-- demo-config-notes:end -->
 
 <demo src="./__demos__/show-time.vue"></demo>
@@ -122,13 +126,15 @@ DateRangePicker 的 `exchange-time` 默认 true。反序交互日期在 true 时
 ### 预设快捷选择
 
 <!-- demo-config-notes:start -->
+
 #### 本组配置对照
 
-| 配置 | 作用 | 相关示例 |
-| --- | --- | --- |
-| `disable-confirm` | 选择后立即提交 | 快捷选项与日历视口、字段与嵌入式面板 |
-| `show-time` | 选择时间 | 预设快捷选择 |
-| `day-start-of-week` | 每周第一天（仅日历），整数 0～6 | 字段与嵌入式面板 |
+| 配置                | 作用                            | 相关示例                             |
+| ------------------- | ------------------------------- | ------------------------------------ |
+| `disable-confirm`   | 选择后立即提交                  | 快捷选项与日历视口、字段与嵌入式面板 |
+| `show-time`         | 选择时间                        | 预设快捷选择                         |
+| `day-start-of-week` | 每周第一天（仅日历），整数 0～6 | 字段与嵌入式面板                     |
+
 <!-- demo-config-notes:end -->
 
 <demo src="./__demos__/short-cuts.vue"></demo>
@@ -165,46 +171,46 @@ DateRangePicker 的 `exchange-time` 默认 true。反序交互日期在 true 时
 
 纯面板不接收 open/default-open、popup-container、placement、trigger-props、placeholder、variant、clearable 等字段/浮层属性。浮层配置请使用 Date/DateRange 的 popup-props；输入可编辑性使用字段 input-editable。确认区只由 disable-confirm 控制。
 
-| 参数 | 说明 | 类型 | 缺省说明 |
-| --- | --- | --- | --- |
-| `abbreviation` | 月份网格使用缩写，false 使用完整月份名 | `boolean` | `true` |
-| `day-start-of-week` | 每周第一天，仅日历展示，整数 0～6 | `DateWeekStart` | `0` |
-| `default-picker-value` | 初始日历视口，仅初始化读取；优先已选值，再用当前日期 | `DateSelection` | `undefined` |
-| `default-value` | 非受控初始值，仅创建时读取 | `DateValue` | `undefined` |
-| `disable-confirm` | 选择后立即提交；false 保留草稿待确认 | `boolean` | `true` |
-| `disabled` | 禁用面板选择和提交 | `boolean` | `false` |
-| `disabled-date` | 返回 true 禁用当前日期，side 为 start/end | `(date: Date, side: DateSide) => boolean`<br>`DateSide: 'end' \| 'start'` | `undefined` |
-| `disabled-time` | 按日期与端点返回禁用小时、分钟、秒列表 | `(date: Date, side: DateSide) => DateDisabledTime`<br>`DateSide: 'end' \| 'start'` | `undefined` |
-| `empty-value` | 清空输出或同步工厂，不改变 emptyValues 识别 | `DateValue \| null \| (() => DateValue \| null \| undefined)` | `undefined` |
-| `format` | 显示与手输格式；函数只展示，无反向手输解析 | `string \| ((date: Date) => string)` | 按精度/时间配置 |
-| `max` | 包含上界，非法的已提供边界不会被静默忽略 | `DateValue` | `undefined` |
-| `min` | 包含下界，非法的已提供边界不会被静默忽略 | `DateValue` | `undefined` |
-| `model-value` | 外部日期值；undefined 为非受控，null 为显式空值 | `DateValue \| null` | `undefined` |
-| `picker-value` | 受控日历视口，不是选中值；范围视口含两个日期 | `DateSelection` | `undefined` |
-| `preview-shortcut` | 悬停/聚焦快捷项时预览，不提交 | `boolean` | `true` |
-| `readonly` | 只读面板，不改变候选或提交 | `boolean` | `false` |
-| `shortcuts` | 快捷项；值或按需执行的同步值工厂，可含 format/disabled | `DateShortcut[]` | `[]` |
-| `shortcuts-position` | 快捷项位置 | `left \| bottom \| right` | `bottom` |
-| `show-current` | 仅高亮当前日期，不改变选择或模型 | `boolean` | `true` |
-| `show-now-button` | 显示此刻操作；范围能力按各端实际面板定义 | `boolean` | `true` |
-| `show-time` | 启用时刻精度和时间选择，可见精度由格式决定 | `boolean` | `false` |
-| `time-picker-props` | Cedar 日期内时间面板展示配置，不接管日期模型/规则 | `DateTimePickerOptions` | `{}` |
-| `time-zone` | IANA 时区；无效时区不会回退成有效可选值 | `string` | 系统本地时区 |
-| `type` | 日期精度；Cedar 支持周/季度，Maple 支持日期/月/年 | `date \| month \| year \| week \| quarter` | `date` |
-| `value-format` | 序列化模型格式，支持 Date、timestamp 或格式字符串；独立于 format | `string` | 按精度/时间配置 |
+| 参数                   | 说明                                                             | 类型                                                                                                 | 缺省说明        |
+| ---------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------- |
+| `abbreviation`         | 月份网格使用缩写，false 使用完整月份名                           | `boolean`                                                                                            | `true`          |
+| `day-start-of-week`    | 每周第一天，仅日历展示，整数 0～6                                | `DateWeekStart`                                                                                      | `0`             |
+| `default-picker-value` | 初始日历视口，仅初始化读取；优先已选值，再用当前日期             | `Date \| string \| number \| (Date \| string \| number \| null \| undefined)[] \| null \| undefined` | `undefined`     |
+| `default-value`        | 非受控初始值，仅创建时读取                                       | `DateValue`                                                                                          | `undefined`     |
+| `disable-confirm`      | 选择后立即提交；false 保留草稿待确认                             | `boolean`                                                                                            | `true`          |
+| `disabled`             | 禁用面板选择和提交                                               | `boolean`                                                                                            | `false`         |
+| `disabled-date`        | 返回 true 禁用当前日期，side 为 start/end                        | `(date: Date, side: DateSide) => boolean`<br>`DateSide: 'end' \| 'start'`                            | `undefined`     |
+| `disabled-time`        | 按日期与端点返回禁用小时、分钟、秒列表                           | `(date: Date, side: DateSide) => DateDisabledTime`<br>`DateSide: 'end' \| 'start'`                   | `undefined`     |
+| `empty-value`          | 清空输出或同步工厂，不改变 emptyValues 识别                      | `DateValue \| null \| (() => DateValue \| null \| undefined)`                                        | `undefined`     |
+| `format`               | 显示与手输格式；函数只展示，无反向手输解析                       | `string \| ((date: Date) => string)`                                                                 | 按精度/时间配置 |
+| `max`                  | 包含上界，非法的已提供边界不会被静默忽略                         | `DateValue`                                                                                          | `undefined`     |
+| `min`                  | 包含下界，非法的已提供边界不会被静默忽略                         | `DateValue`                                                                                          | `undefined`     |
+| `model-value`          | 外部日期值；undefined 为非受控，null 为显式空值                  | `DateValue \| null`                                                                                  | `undefined`     |
+| `picker-value`         | 受控日历视口，不是选中值；范围视口含两个日期                     | `Date \| string \| number \| (Date \| string \| number \| null \| undefined)[] \| null \| undefined` | `undefined`     |
+| `preview-shortcut`     | 悬停/聚焦快捷项时预览，不提交                                    | `boolean`                                                                                            | `true`          |
+| `readonly`             | 只读面板，不改变候选或提交                                       | `boolean`                                                                                            | `false`         |
+| `shortcuts`            | 快捷项；值或按需执行的同步值工厂，可含 format/disabled           | `DateShortcut[]`                                                                                     | `[]`            |
+| `shortcuts-position`   | 快捷项位置                                                       | `left \| bottom \| right`                                                                            | `bottom`        |
+| `show-current`         | 仅高亮当前日期，不改变选择或模型                                 | `boolean`                                                                                            | `true`          |
+| `show-now-button`      | 显示此刻操作；范围能力按各端实际面板定义                         | `boolean`                                                                                            | `true`          |
+| `show-time`            | 启用时刻精度和时间选择，可见精度由格式决定                       | `boolean`                                                                                            | `false`         |
+| `time-picker-props`    | Cedar 日期内时间面板展示配置，不接管日期模型/规则                | `DateTimePickerOptions`                                                                              | `{}`            |
+| `time-zone`            | IANA 时区；无效时区不会回退成有效可选值                          | `string`                                                                                             | 系统本地时区    |
+| `type`                 | 日期精度；Cedar 支持周/季度，Maple 支持日期/月/年                | `date \| month \| year \| week \| quarter`                                                           | `date`          |
+| `value-format`         | 序列化模型格式，支持 Date、timestamp 或格式字符串；独立于 format | `string`                                                                                             | 按精度/时间配置 |
 
 桌面日历展示能力（快捷选择、页脚和单元格插槽）保留在独立的 presentation 实现中。
 
 ### 日期族统一契约
 
-| 参数              | 说明                                                    | 类型                                             | 默认值  |
-| ----------------- | ------------------------------------------------------- | ------------------------------------------------ | ------- |
-| `default-value`   | 非受控初始值，仅初始化读取                              | DateValue / DateValue[]                          | —       |
-| `value-format`    | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | string                                           | 随 type |
-| `min` | 最小日期，包含端点；字符串按 value-format 解析 | DateValue | — |
-| `max` | 最大日期，包含端点；字符串按 value-format 解析 | DateValue | — |
+| 参数              | 说明                                                    | 类型                                                                             | 默认值  |
+| ----------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------- | ------- |
+| `default-value`   | 非受控初始值，仅初始化读取                              | DateValue / DateValue[]                                                          | —       |
+| `value-format`    | 模型与事件的格式，可为自定义日期格式、Date 或 timestamp | string                                                                           | 随 type |
+| `min`             | 最小日期，包含端点；字符串按 value-format 解析          | DateValue                                                                        | —       |
+| `max`             | 最大日期，包含端点；字符串按 value-format 解析          | DateValue                                                                        | —       |
 | `disabled-time`   | 当前日期、端点的时间禁用列表                            | (date: Date, side: DateSide) => DateDisabledTime<br>`DateSide: 'end' \| 'start'` | —       |
-| `disable-confirm` | 选择后立即提交                                          | boolean                                          | true    |
+| `disable-confirm` | 选择后立即提交                                          | boolean                                                                          | true    |
 
 `DateValue = Date | string | number`。单值清除为 undefined，范围清除为 []。
 `disabledDate(date, side)` 和 `disabledTime(date, side)` 的 date 始终为 Date，side 为 start/end。
@@ -214,15 +220,15 @@ DateRangePicker 的 `exchange-time` 默认 true。反序交互日期在 true 时
 
 ### DatePicker Events
 
-| 事件 | 参数 |
-| --- | --- |
-| `update:modelValue` | `DatePickerEmits['update:modelValue']` |
-| `change` | `DatePickerEmits['change']` |
-| `select` | `DatePickerEmits['select']` |
-| `confirm` | `DatePickerEmits['confirm']` |
-| `update:pickerValue` | `DatePickerEmits['update:pickerValue']` |
+| 事件                  | 参数                                     |
+| --------------------- | ---------------------------------------- |
+| `update:modelValue`   | `DatePickerEmits['update:modelValue']`   |
+| `change`              | `DatePickerEmits['change']`              |
+| `select`              | `DatePickerEmits['select']`              |
+| `confirm`             | `DatePickerEmits['confirm']`             |
+| `update:pickerValue`  | `DatePickerEmits['update:pickerValue']`  |
 | `picker-value-change` | `DatePickerEmits['picker-value-change']` |
-| `select-shortcut` | `DatePickerEmits['select-shortcut']` |
+| `select-shortcut`     | `DatePickerEmits['select-shortcut']`     |
 
 设置 `:disable-confirm="false"` 显示确认区；`actions` 插槽提供 `{ confirm, disabled }`，自定义操作仍须调用 confirm 完成校验。
 
@@ -246,107 +252,107 @@ DateRangePicker 的 `exchange-time` 默认 true。反序交互日期在 true 时
 
 <div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
-| 变量 | 默认值／条件 | 影响的样式 |
-| --- | --- | --- |
-| `--c-date-picker-actions-padding` | `8px 12px` | `padding` |
-| `--c-date-picker-body-padding-horizontal` | `var(--c-spacing-7)` | `padding` |
-| `--c-date-picker-body-padding-vertical` | `14px` | `padding` |
-| `--c-date-picker-box-shadow` | `var(--c-shadow1-down)` | `box-shadow` |
-| `--c-date-picker-btn-confirm-margin-vertical` | `5px` | `margin` |
-| `--c-date-picker-cell-bg-disabled` | `var(--c-color-fill-1)` | `background-color` |
-| `--c-date-picker-cell-bg-hover-in-range` | `var(--c-color-fill-2)` | `background-color` |
-| `--c-date-picker-cell-bg-in-range` | `var(--c-color-primary-light-1)` | `background-color` |
-| `--c-date-picker-cell-font-size` | `var(--c-font-size-body-3)` | `font-size` |
-| `--c-date-picker-cell-font-weight-in-view` | `var(--c-font-weight-500)` | `font-weight` |
-| `--c-date-picker-cell-hover-range-boundary-bg` | `var(--c-color-fill-2)` | `background-color` |
-| `--c-date-picker-cell-hover-range-boundary-text-color` | `var(--c-color-text-1)` | `color` |
-| `--c-date-picker-cell-range-boundary-bg` | `rgb(var(--c-primary-6))` | `background-color` |
-| `--c-date-picker-cell-range-boundary-text-color` | `var(--c-color-white)` | `color` |
-| `--c-date-picker-cell-text-color-in-view` | `var(--c-color-text-1)` | `color` |
-| `--c-date-picker-cell-text-color-not-in-view` | `var(--c-color-text-4)` | `color` |
-| `--c-date-picker-container-border-radius` | `var(--c-border-radius-md)` | `border-radius` |
-| `--c-date-picker-container-min-height` | `var(--c-size-15)` | `min-height` |
-| `--c-date-picker-datetime-popover-width` | `calc(var(--c-date-picker-panel-date-width) + var(--c-date-picker-time-panel-min-width) + 2px)` | `flex`, `width` |
-| `--c-date-picker-footer-btn-wrapper-padding-horizontal` | `var(--c-spacing-4)` | `padding` |
-| `--c-date-picker-footer-btn-wrapper-padding-vertical` | `3px` | `padding` |
-| `--c-date-picker-footer-extra-font-size` | `var(--c-font-size-body-1)` | `font-size` |
-| `--c-date-picker-footer-extra-padding-horizontal` | `var(--c-spacing-9)` | `padding` |
-| `--c-date-picker-footer-extra-padding-vertical` | `var(--c-spacing-4)` | `padding` |
-| `--c-date-picker-footer-now-height` | `var(--c-size-9)` | `height`, `line-height` |
-| `--c-date-picker-header-label-border-radius` | `var(--c-border-radius-sm)` | `border-radius` |
-| `--c-date-picker-header-label-padding` | `var(--c-spacing-1)` | `padding` |
-| `--c-date-picker-header-padding-horizontal` | `var(--c-spacing-7)` | `padding` |
-| `--c-date-picker-header-padding-vertical` | `var(--c-spacing-4)` | `padding` |
-| `--c-date-picker-header-title-font-size` | `var(--c-font-size-body-3)` | `font-size` |
-| `--c-date-picker-header-title-line-height` | `var(--c-size-6)` | `line-height` |
-| `--c-date-picker-panel-background` | `var(--c-sys-color-surface-overlay)` | `background` |
-| `--c-date-picker-panel-border` | `var(--c-color-border-2)` | `border` |
-| `--c-date-picker-panel-border-color` | `var(--c-color-neutral-3)` | `border`, `border-bottom`, `border-inline-end`, `border-inline-start`, `border-left`, `border-right`, `border-top` |
-| `--c-date-picker-panel-cell-bg-hover` | `var(--c-color-fill-3)` | `background-color` |
-| `--c-date-picker-panel-cell-bg-selected` | `rgb(var(--c-primary-6))` | `background-color` |
-| `--c-date-picker-panel-cell-border-radius` | `var(--c-date-picker-panel-cell-circle-height)` | `border-end-end-radius`, `border-end-start-radius`, `border-start-end-radius`, `border-start-start-radius` |
-| `--c-date-picker-panel-cell-boundary-border-radius` | `var(--c-date-picker-panel-cell-circle-height)` | `border-end-end-radius`, `border-end-start-radius`, `border-radius`, `border-start-end-radius`, `border-start-start-radius` |
-| `--c-date-picker-panel-cell-circle-height` | `var(--c-size-6)` | `border-end-end-radius`, `border-end-start-radius`, `border-radius`, `border-start-end-radius`, `border-start-start-radius`, `height`, `line-height`, `min-width`, `width` |
-| `--c-date-picker-panel-cell-padding-vertical` | `var(--c-spacing-2)` | `padding`, `padding-inline-end`, `padding-inline-start` |
-| `--c-date-picker-panel-cell-selected-border-radius` | `var(--c-border-radius-circle)` | `border-radius` |
-| `--c-date-picker-panel-cell-text-color-hover` | `var(--c-color-text-1)` | `color` |
-| `--c-date-picker-panel-cell-text-color-selected` | `var(--c-color-white)` | `color` |
-| `--c-date-picker-panel-current-time-dot-color` | `rgb(var(--c-primary-6))` | `background-color` |
-| `--c-date-picker-panel-date-width` | `265px` | `flex`, `min-width`, `width` |
-| `--c-date-picker-panel-label-bg-hover` | `var(--c-color-fill-3)` | `background-color` |
-| `--c-date-picker-panel-month-width` | `265px` | `width` |
-| `--c-date-picker-panel-preferred-width` | `var(--c-date-picker-popover-width)` | `flex`, `width` |
-| `--c-date-picker-panel-quarter-width` | `265px` | `width` |
-| `--c-date-picker-panel-radius` | `8px` | `border-radius` |
-| `--c-date-picker-panel-time-cell-spacing-horizontal` | `var(--c-spacing-2)` | `padding` |
-| `--c-date-picker-panel-time-cell-width` | `var(--c-size-9)` | `width` |
-| `--c-date-picker-panel-time-padding` | `var(--c-spacing-3)` | `padding` |
-| `--c-date-picker-panel-time-padding-horizontal` | `var(--c-spacing-5)` | `padding-inline-start` |
-| `--c-date-picker-panel-week-width` | `298px` | `flex`, `width` |
-| `--c-date-picker-panel-year-width` | `265px` | `width` |
-| `--c-date-picker-popover-gap` | `32px` | `max-height`, `max-width` |
-| `--c-date-picker-popover-max-height` | `calc(100dvh - var(--c-date-picker-popover-gap))` | `max-height` |
-| `--c-date-picker-popover-width` | `calc(var(--c-date-picker-panel-date-width) + 2px)` | `flex`, `width` |
-| `--c-date-picker-preview-outline` | `1px dashed var(--c-color-primary)` | `outline` |
-| `--c-date-picker-range-panel-min-width` | `224px` | `min-width` |
-| `--c-date-picker-range-popover-width` | `calc(var(--c-date-picker-panel-date-width) * 2 + 2px)` | `flex`, `width` |
-| `--c-date-picker-row-padding-vertical` | `var(--c-spacing-1)` | `padding` |
-| `--c-date-picker-shortcuts-active-text-color` | `var(--c-sys-color-action-primary)` | `color` |
-| `--c-date-picker-shortcuts-column-width` | `128px` | `flex`, `width` |
-| `--c-date-picker-shortcuts-inline-item-margin-right` | `var(--c-spacing-5)` | `margin-inline` |
-| `--c-date-picker-shortcuts-inline-item-margin-vertical` | `5px` | `margin-block` |
-| `--c-date-picker-shortcuts-item-padding-horizontal` | `var(--c-spacing-7)` | `padding` |
-| `--c-date-picker-shortcuts-item-padding-vertical` | `var(--c-spacing-3)` | `padding` |
-| `--c-date-picker-shortcuts-margin-top` | `var(--c-spacing-5)` | `margin` |
-| `--c-date-picker-shortcuts-max-height` | `300px` | `max-height` |
-| `--c-date-picker-shortcuts-placement-item-margin-vertical` | `5px` | `margin` |
-| `--c-date-picker-shortcuts-placement-padding-horizontal` | `var(--c-spacing-4)` | `padding` |
-| `--c-date-picker-shortcuts-placement-padding-vertical` | `5px` | `padding` |
-| `--c-date-picker-shortcuts-width` | `106px` | `width` |
-| `--c-date-picker-switch-icon-bg` | `var(--c-color-bg-popup)` | `background-color` |
-| `--c-date-picker-switch-icon-bg-hover` | `var(--c-color-fill-3)` | `background-color` |
-| `--c-date-picker-switch-icon-border-radius` | `var(--c-border-radius-circle)` | `border-radius` |
-| `--c-date-picker-switch-icon-color` | `var(--c-color-text-2)` | `color` |
-| `--c-date-picker-switch-icon-font-size` | `var(--c-font-size-body-1)` | `font-size` |
-| `--c-date-picker-switch-icon-margin` | `var(--c-spacing-1)` | `margin-left`, `margin-right` |
-| `--c-date-picker-switch-icon-size` | `var(--c-size-6)` | `height`, `width` |
-| `--c-date-picker-time-panel-min-width` | `160px` | `flex`, `min-width`, `width` |
-| `--c-date-picker-timepicker-height` | `276px` | `height` |
-| `--c-date-picker-timepicker-title-font-size` | `var(--c-font-size-body-3)` | `font-size` |
-| `--c-date-picker-timepicker-title-height` | `var(--c-size-10)` | `height`, `line-height` |
-| `--c-date-picker-today-dot-offset` | `var(--c-spacing-1)` | `bottom`, `margin-left` |
-| `--c-date-picker-today-dot-size` | `var(--c-spacing-2)` | `height`, `width` |
-| `--c-date-picker-transition-duration-1` | `var(--c-transition-duration-1)` | `transition` |
-| `--c-date-picker-transition-timing-function-linear` | `var(--c-transition-timing-function-linear)` | `transition` |
-| `--c-date-picker-view-tab-pane-font-size` | `var(--c-font-size-body-3)` | `font-size` |
-| `--c-date-picker-view-tab-pane-text-color-active` | `var(--c-color-text-1)` | `color` |
-| `--c-date-picker-view-tab-pane-text-color-inactive` | `var(--c-color-text-4)` | `color` |
-| `--c-date-picker-view-tab-pane-text-icon-spacing` | `var(--c-spacing-4)` | `margin-inline-start` |
-| `--c-date-picker-view-tabs-height` | `50px` | `height`, `line-height` |
-| `--c-date-picker-week-list-item-color` | `var(--c-color-text-3)` | `color` |
-| `--c-date-picker-week-list-item-height` | `var(--c-size-8)` | `height`, `line-height` |
-| `--c-date-picker-week-popover-width` | `calc(var(--c-date-picker-panel-week-width) + 2px)` | `flex`, `width` |
-| `--c-date-picker-week-range-popover-width` | `calc(var(--c-date-picker-panel-week-width) * 2 + 2px)` | `flex`, `width` |
+| 变量                                                       | 默认值／条件                                                                                    | 影响的样式                                                                                                                                                                 |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--c-date-picker-actions-padding`                          | `8px 12px`                                                                                      | `padding`                                                                                                                                                                  |
+| `--c-date-picker-body-padding-horizontal`                  | `var(--c-spacing-7)`                                                                            | `padding`                                                                                                                                                                  |
+| `--c-date-picker-body-padding-vertical`                    | `14px`                                                                                          | `padding`                                                                                                                                                                  |
+| `--c-date-picker-box-shadow`                               | `var(--c-shadow1-down)`                                                                         | `box-shadow`                                                                                                                                                               |
+| `--c-date-picker-btn-confirm-margin-vertical`              | `5px`                                                                                           | `margin`                                                                                                                                                                   |
+| `--c-date-picker-cell-bg-disabled`                         | `var(--c-color-fill-1)`                                                                         | `background-color`                                                                                                                                                         |
+| `--c-date-picker-cell-bg-hover-in-range`                   | `var(--c-color-fill-2)`                                                                         | `background-color`                                                                                                                                                         |
+| `--c-date-picker-cell-bg-in-range`                         | `var(--c-color-primary-light-1)`                                                                | `background-color`                                                                                                                                                         |
+| `--c-date-picker-cell-font-size`                           | `var(--c-font-size-body-3)`                                                                     | `font-size`                                                                                                                                                                |
+| `--c-date-picker-cell-font-weight-in-view`                 | `var(--c-font-weight-500)`                                                                      | `font-weight`                                                                                                                                                              |
+| `--c-date-picker-cell-hover-range-boundary-bg`             | `var(--c-color-fill-2)`                                                                         | `background-color`                                                                                                                                                         |
+| `--c-date-picker-cell-hover-range-boundary-text-color`     | `var(--c-color-text-1)`                                                                         | `color`                                                                                                                                                                    |
+| `--c-date-picker-cell-range-boundary-bg`                   | `rgb(var(--c-primary-6))`                                                                       | `background-color`                                                                                                                                                         |
+| `--c-date-picker-cell-range-boundary-text-color`           | `var(--c-color-white)`                                                                          | `color`                                                                                                                                                                    |
+| `--c-date-picker-cell-text-color-in-view`                  | `var(--c-color-text-1)`                                                                         | `color`                                                                                                                                                                    |
+| `--c-date-picker-cell-text-color-not-in-view`              | `var(--c-color-text-4)`                                                                         | `color`                                                                                                                                                                    |
+| `--c-date-picker-container-border-radius`                  | `var(--c-border-radius-md)`                                                                     | `border-radius`                                                                                                                                                            |
+| `--c-date-picker-container-min-height`                     | `var(--c-size-15)`                                                                              | `min-height`                                                                                                                                                               |
+| `--c-date-picker-datetime-popover-width`                   | `calc(var(--c-date-picker-panel-date-width) + var(--c-date-picker-time-panel-min-width) + 2px)` | `flex`, `width`                                                                                                                                                            |
+| `--c-date-picker-footer-btn-wrapper-padding-horizontal`    | `var(--c-spacing-4)`                                                                            | `padding`                                                                                                                                                                  |
+| `--c-date-picker-footer-btn-wrapper-padding-vertical`      | `3px`                                                                                           | `padding`                                                                                                                                                                  |
+| `--c-date-picker-footer-extra-font-size`                   | `var(--c-font-size-body-1)`                                                                     | `font-size`                                                                                                                                                                |
+| `--c-date-picker-footer-extra-padding-horizontal`          | `var(--c-spacing-9)`                                                                            | `padding`                                                                                                                                                                  |
+| `--c-date-picker-footer-extra-padding-vertical`            | `var(--c-spacing-4)`                                                                            | `padding`                                                                                                                                                                  |
+| `--c-date-picker-footer-now-height`                        | `var(--c-size-9)`                                                                               | `height`, `line-height`                                                                                                                                                    |
+| `--c-date-picker-header-label-border-radius`               | `var(--c-border-radius-sm)`                                                                     | `border-radius`                                                                                                                                                            |
+| `--c-date-picker-header-label-padding`                     | `var(--c-spacing-1)`                                                                            | `padding`                                                                                                                                                                  |
+| `--c-date-picker-header-padding-horizontal`                | `var(--c-spacing-7)`                                                                            | `padding`                                                                                                                                                                  |
+| `--c-date-picker-header-padding-vertical`                  | `var(--c-spacing-4)`                                                                            | `padding`                                                                                                                                                                  |
+| `--c-date-picker-header-title-font-size`                   | `var(--c-font-size-body-3)`                                                                     | `font-size`                                                                                                                                                                |
+| `--c-date-picker-header-title-line-height`                 | `var(--c-size-6)`                                                                               | `line-height`                                                                                                                                                              |
+| `--c-date-picker-panel-background`                         | `var(--c-sys-color-surface-overlay)`                                                            | `background`                                                                                                                                                               |
+| `--c-date-picker-panel-border`                             | `var(--c-color-border-2)`                                                                       | `border`                                                                                                                                                                   |
+| `--c-date-picker-panel-border-color`                       | `var(--c-color-neutral-3)`                                                                      | `border`, `border-bottom`, `border-inline-end`, `border-inline-start`, `border-left`, `border-right`, `border-top`                                                         |
+| `--c-date-picker-panel-cell-bg-hover`                      | `var(--c-color-fill-3)`                                                                         | `background-color`                                                                                                                                                         |
+| `--c-date-picker-panel-cell-bg-selected`                   | `rgb(var(--c-primary-6))`                                                                       | `background-color`                                                                                                                                                         |
+| `--c-date-picker-panel-cell-border-radius`                 | `var(--c-date-picker-panel-cell-circle-height)`                                                 | `border-end-end-radius`, `border-end-start-radius`, `border-start-end-radius`, `border-start-start-radius`                                                                 |
+| `--c-date-picker-panel-cell-boundary-border-radius`        | `var(--c-date-picker-panel-cell-circle-height)`                                                 | `border-end-end-radius`, `border-end-start-radius`, `border-radius`, `border-start-end-radius`, `border-start-start-radius`                                                |
+| `--c-date-picker-panel-cell-circle-height`                 | `var(--c-size-6)`                                                                               | `border-end-end-radius`, `border-end-start-radius`, `border-radius`, `border-start-end-radius`, `border-start-start-radius`, `height`, `line-height`, `min-width`, `width` |
+| `--c-date-picker-panel-cell-padding-vertical`              | `var(--c-spacing-2)`                                                                            | `padding`, `padding-inline-end`, `padding-inline-start`                                                                                                                    |
+| `--c-date-picker-panel-cell-selected-border-radius`        | `var(--c-border-radius-circle)`                                                                 | `border-radius`                                                                                                                                                            |
+| `--c-date-picker-panel-cell-text-color-hover`              | `var(--c-color-text-1)`                                                                         | `color`                                                                                                                                                                    |
+| `--c-date-picker-panel-cell-text-color-selected`           | `var(--c-color-white)`                                                                          | `color`                                                                                                                                                                    |
+| `--c-date-picker-panel-current-time-dot-color`             | `rgb(var(--c-primary-6))`                                                                       | `background-color`                                                                                                                                                         |
+| `--c-date-picker-panel-date-width`                         | `265px`                                                                                         | `flex`, `min-width`, `width`                                                                                                                                               |
+| `--c-date-picker-panel-label-bg-hover`                     | `var(--c-color-fill-3)`                                                                         | `background-color`                                                                                                                                                         |
+| `--c-date-picker-panel-month-width`                        | `265px`                                                                                         | `width`                                                                                                                                                                    |
+| `--c-date-picker-panel-preferred-width`                    | `var(--c-date-picker-popover-width)`                                                            | `flex`, `width`                                                                                                                                                            |
+| `--c-date-picker-panel-quarter-width`                      | `265px`                                                                                         | `width`                                                                                                                                                                    |
+| `--c-date-picker-panel-radius`                             | `8px`                                                                                           | `border-radius`                                                                                                                                                            |
+| `--c-date-picker-panel-time-cell-spacing-horizontal`       | `var(--c-spacing-2)`                                                                            | `padding`                                                                                                                                                                  |
+| `--c-date-picker-panel-time-cell-width`                    | `var(--c-size-9)`                                                                               | `width`                                                                                                                                                                    |
+| `--c-date-picker-panel-time-padding`                       | `var(--c-spacing-3)`                                                                            | `padding`                                                                                                                                                                  |
+| `--c-date-picker-panel-time-padding-horizontal`            | `var(--c-spacing-5)`                                                                            | `padding-inline-start`                                                                                                                                                     |
+| `--c-date-picker-panel-week-width`                         | `298px`                                                                                         | `flex`, `width`                                                                                                                                                            |
+| `--c-date-picker-panel-year-width`                         | `265px`                                                                                         | `width`                                                                                                                                                                    |
+| `--c-date-picker-popover-gap`                              | `32px`                                                                                          | `max-height`, `max-width`                                                                                                                                                  |
+| `--c-date-picker-popover-max-height`                       | `calc(100dvh - var(--c-date-picker-popover-gap))`                                               | `max-height`                                                                                                                                                               |
+| `--c-date-picker-popover-width`                            | `calc(var(--c-date-picker-panel-date-width) + 2px)`                                             | `flex`, `width`                                                                                                                                                            |
+| `--c-date-picker-preview-outline`                          | `1px dashed var(--c-color-primary)`                                                             | `outline`                                                                                                                                                                  |
+| `--c-date-picker-range-panel-min-width`                    | `224px`                                                                                         | `min-width`                                                                                                                                                                |
+| `--c-date-picker-range-popover-width`                      | `calc(var(--c-date-picker-panel-date-width) * 2 + 2px)`                                         | `flex`, `width`                                                                                                                                                            |
+| `--c-date-picker-row-padding-vertical`                     | `var(--c-spacing-1)`                                                                            | `padding`                                                                                                                                                                  |
+| `--c-date-picker-shortcuts-active-text-color`              | `var(--c-sys-color-action-primary)`                                                             | `color`                                                                                                                                                                    |
+| `--c-date-picker-shortcuts-column-width`                   | `128px`                                                                                         | `flex`, `width`                                                                                                                                                            |
+| `--c-date-picker-shortcuts-inline-item-margin-right`       | `var(--c-spacing-5)`                                                                            | `margin-inline`                                                                                                                                                            |
+| `--c-date-picker-shortcuts-inline-item-margin-vertical`    | `5px`                                                                                           | `margin-block`                                                                                                                                                             |
+| `--c-date-picker-shortcuts-item-padding-horizontal`        | `var(--c-spacing-7)`                                                                            | `padding`                                                                                                                                                                  |
+| `--c-date-picker-shortcuts-item-padding-vertical`          | `var(--c-spacing-3)`                                                                            | `padding`                                                                                                                                                                  |
+| `--c-date-picker-shortcuts-margin-top`                     | `var(--c-spacing-5)`                                                                            | `margin`                                                                                                                                                                   |
+| `--c-date-picker-shortcuts-max-height`                     | `300px`                                                                                         | `max-height`                                                                                                                                                               |
+| `--c-date-picker-shortcuts-placement-item-margin-vertical` | `5px`                                                                                           | `margin`                                                                                                                                                                   |
+| `--c-date-picker-shortcuts-placement-padding-horizontal`   | `var(--c-spacing-4)`                                                                            | `padding`                                                                                                                                                                  |
+| `--c-date-picker-shortcuts-placement-padding-vertical`     | `5px`                                                                                           | `padding`                                                                                                                                                                  |
+| `--c-date-picker-shortcuts-width`                          | `106px`                                                                                         | `width`                                                                                                                                                                    |
+| `--c-date-picker-switch-icon-bg`                           | `var(--c-color-bg-popup)`                                                                       | `background-color`                                                                                                                                                         |
+| `--c-date-picker-switch-icon-bg-hover`                     | `var(--c-color-fill-3)`                                                                         | `background-color`                                                                                                                                                         |
+| `--c-date-picker-switch-icon-border-radius`                | `var(--c-border-radius-circle)`                                                                 | `border-radius`                                                                                                                                                            |
+| `--c-date-picker-switch-icon-color`                        | `var(--c-color-text-2)`                                                                         | `color`                                                                                                                                                                    |
+| `--c-date-picker-switch-icon-font-size`                    | `var(--c-font-size-body-1)`                                                                     | `font-size`                                                                                                                                                                |
+| `--c-date-picker-switch-icon-margin`                       | `var(--c-spacing-1)`                                                                            | `margin-left`, `margin-right`                                                                                                                                              |
+| `--c-date-picker-switch-icon-size`                         | `var(--c-size-6)`                                                                               | `height`, `width`                                                                                                                                                          |
+| `--c-date-picker-time-panel-min-width`                     | `160px`                                                                                         | `flex`, `min-width`, `width`                                                                                                                                               |
+| `--c-date-picker-timepicker-height`                        | `276px`                                                                                         | `height`                                                                                                                                                                   |
+| `--c-date-picker-timepicker-title-font-size`               | `var(--c-font-size-body-3)`                                                                     | `font-size`                                                                                                                                                                |
+| `--c-date-picker-timepicker-title-height`                  | `var(--c-size-10)`                                                                              | `height`, `line-height`                                                                                                                                                    |
+| `--c-date-picker-today-dot-offset`                         | `var(--c-spacing-1)`                                                                            | `bottom`, `margin-left`                                                                                                                                                    |
+| `--c-date-picker-today-dot-size`                           | `var(--c-spacing-2)`                                                                            | `height`, `width`                                                                                                                                                          |
+| `--c-date-picker-transition-duration-1`                    | `var(--c-transition-duration-1)`                                                                | `transition`                                                                                                                                                               |
+| `--c-date-picker-transition-timing-function-linear`        | `var(--c-transition-timing-function-linear)`                                                    | `transition`                                                                                                                                                               |
+| `--c-date-picker-view-tab-pane-font-size`                  | `var(--c-font-size-body-3)`                                                                     | `font-size`                                                                                                                                                                |
+| `--c-date-picker-view-tab-pane-text-color-active`          | `var(--c-color-text-1)`                                                                         | `color`                                                                                                                                                                    |
+| `--c-date-picker-view-tab-pane-text-color-inactive`        | `var(--c-color-text-4)`                                                                         | `color`                                                                                                                                                                    |
+| `--c-date-picker-view-tab-pane-text-icon-spacing`          | `var(--c-spacing-4)`                                                                            | `margin-inline-start`                                                                                                                                                      |
+| `--c-date-picker-view-tabs-height`                         | `50px`                                                                                          | `height`, `line-height`                                                                                                                                                    |
+| `--c-date-picker-week-list-item-color`                     | `var(--c-color-text-3)`                                                                         | `color`                                                                                                                                                                    |
+| `--c-date-picker-week-list-item-height`                    | `var(--c-size-8)`                                                                               | `height`, `line-height`                                                                                                                                                    |
+| `--c-date-picker-week-popover-width`                       | `calc(var(--c-date-picker-panel-week-width) + 2px)`                                             | `flex`, `width`                                                                                                                                                            |
+| `--c-date-picker-week-range-popover-width`                 | `calc(var(--c-date-picker-panel-week-width) * 2 + 2px)`                                         | `flex`, `width`                                                                                                                                                            |
 
 </div>
 

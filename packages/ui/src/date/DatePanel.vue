@@ -62,7 +62,7 @@ import { resolveEmptyValue } from '../_utils/empty-value'
 import { createNamespace } from '../_utils/global-config'
 import { currentDateValue, provideDateCurrent } from './date-current'
 import { provideDateLocale, scopeDateOptions } from './date-locale'
-import { dateEventPayload, type DateSelection } from './date-value'
+import { dateEventPayload } from './date-value'
 import DatePanelActions from './DatePanelActions.vue'
 import DateShortcuts from './DateShortcuts.vue'
 import type { DatePanelOptions } from './panel-state'
@@ -100,7 +100,7 @@ const forwardedSlots = computed(() => Object.keys(slots).filter((name) => name !
 provideRangePanel()
 provideDateCurrent(() => options.value.showCurrent !== false)
 const isRange = computed(() => props.range || Boolean(options.value.range))
-const model = useFieldValue<DateSelection>({
+const model = useFieldValue<Date | string | number | (Date | string | number | null | undefined)[] | null | undefined>({
   value: () => options.value.modelValue,
   defaultValue: () => options.value.defaultValue ?? (isRange.value || options.value.multiple ? [] : undefined),
 })
@@ -112,7 +112,10 @@ const blocked = computed(() =>
 )
 const selection = useDateSelection({
   emptyValue: () =>
-    resolveEmptyValue<DateSelection>(options.value, props.range || options.value.multiple ? [] : undefined),
+    resolveEmptyValue<Date | string | number | (Date | string | number | null | undefined)[] | null | undefined>(
+      options.value,
+      props.range || options.value.multiple ? [] : undefined,
+    ),
   value: () => model.value.value,
   rules: () => options.value,
   range: () => isRange.value,
@@ -149,7 +152,7 @@ const tools = useDatePanelTools({
     emit('picker-value-change', value, payload.dates, payload.texts)
   },
 })
-function select(value: DateSelection) {
+function select(value: Date | string | number | (Date | string | number | null | undefined)[] | null | undefined) {
   tools.endPreview()
   selection.select(value, options.value.disableConfirm !== false)
 }

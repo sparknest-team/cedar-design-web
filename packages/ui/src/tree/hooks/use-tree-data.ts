@@ -1,5 +1,6 @@
+import type { Ref } from 'vue'
 import { computed, ref, toRefs, watchEffect } from 'vue'
-import { TreeFieldNames, TreeNodeData, Node, LoadMore, CheckableType, SelectableType } from '../types'
+import { CheckableType, LoadMore, Node, SelectableType, TreeFieldNames, TreeNodeData } from '../types'
 import { getFlattenTreeData, getKey2TreeNode } from '../utils'
 import { generateTreeData } from '../utils/tree-data'
 
@@ -24,7 +25,7 @@ export default function useTreeData(props: {
     draggable,
   } = toRefs(props)
 
-  const treeData = ref<Node[]>([])
+  const treeData: Ref<Node[]> = ref<Node[]>([])
 
   watchEffect(() => {
     treeData.value = generateTreeData(propTreeData.value || [], {

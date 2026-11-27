@@ -24,7 +24,9 @@
     <p v-if="count !== undefined" role="status">
       {{ texts.selected.value }} {{ count }}{{ limit ? ` / ${limit}` : '' }}
     </p>
-    <p v-if="error" :id="localError && localError === error ? localId : undefined" role="alert" :class="n('error')">{{ error }}</p>
+    <p v-if="error" :id="localError && localError === error ? localId : undefined" role="alert" :class="n('error')">
+      {{ error }}
+    </p>
     <span v-if="localError && localError !== error" :id="localId" hidden>{{ localError }}</span>
     <footer v-if="needConfirm || auxiliaryActions || compact" :class="n('footer')">
       <div :class="n('auxiliary')">
@@ -69,13 +71,16 @@
 <script setup lang="ts">
 import { computed, provide, ref, shallowRef } from 'vue'
 import { createNamespace } from '../../_utils/global-config'
-import Button from '../../button/base'
+import type { WithNativeListeners } from '../../_utils/native-listener-types'
+import ButtonComponent from '../../button/base'
+import { provideEditorErrorDescription } from '../../form/error-description'
 import { useI18n } from '../../locale'
 import { fieldEditorBoundary, fieldEditorEnterSubmits, fieldEditorPanel } from './context'
 import { editorAuxiliaryActions } from './editor-actions'
-import { provideEditorErrorDescription } from '../../form/error-description'
 import { isolateEditorForm } from './form-bridge'
 import { useFieldTexts } from './texts'
+
+const Button = ButtonComponent as WithNativeListeners<typeof ButtonComponent, 'onMousedown'>
 
 const props = defineProps<{
   popupContainer?: string | HTMLElement | false
@@ -112,7 +117,10 @@ const auxiliaryActions = shallowRef<() => import('vue').VNodeChild>()
 if (!props.compact) provide(editorAuxiliaryActions, auxiliaryActions)
 provide(fieldEditorBoundary, true)
 provide(fieldEditorPanel, true)
-provide(fieldEditorEnterSubmits, computed(() => !!props.compact))
+provide(
+  fieldEditorEnterSubmits,
+  computed(() => !!props.compact),
+)
 isolateEditorForm()
 const { i18nMessage } = useI18n()
 const confirmText = computed(() => i18nMessage.value.dialog.confirmButtonText)
@@ -120,7 +128,10 @@ const texts = useFieldTexts()
 const closeText = texts.close
 const clearText = texts.clear
 const panelElement = ref<HTMLElement>()
-const { localId, text: localError } = provideEditorErrorDescription(() => panelElement.value, () => props.popupContainer)
+const { localId, text: localError } = provideEditorErrorDescription(
+  () => panelElement.value,
+  () => props.popupContainer,
+)
 const bodyElement = ref<HTMLElement>()
 defineExpose({
   focus: () => {

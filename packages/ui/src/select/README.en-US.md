@@ -19,11 +19,11 @@ empty-value sets the single-selection clear result. Omitted preserves the existi
 
 case-sensitive defaults to false. search-fields defaults to ['label']; ['value', 'label'] matches either field. Custom filters retain priority.
 
-| Variable | Default |
+| Variable                              | Default                             |
 | ------------------------------------- | ----------------------------------- |
 | `--c-select-popup-option-check-color` | `var(--c-sys-color-action-primary)` |
-| `--c-select-popup-option-check-size` | `var(--c-sys-font-size-md)` |
-| `--c-select-popup-option-check-gap` | `var(--c-sys-space-4)` |
+| `--c-select-popup-option-check-size`  | `var(--c-sys-font-size-md)`         |
+| `--c-select-popup-option-check-gap`   | `var(--c-sys-space-4)`              |
 
 ## Basic examples
 
@@ -39,17 +39,16 @@ case-sensitive defaults to false. search-fields defaults to ['label']; ['value',
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ------------- | --------------------------------------------------- | ------------------------------ |
-| `options` | Primitive, object or grouped options; one source for every presentation | Appearance configuration comparison, Control Sizes |
-| `clearable` | Allow clearing; preserve disabled selections | Appearance configuration comparison, Control Sizes |
-| `size` | Supports all five sizes; inherits group/form settings | Control Sizes |
-| `variant` | filled, outline, standard; inherits InputGroup | Control Sizes |
-| `placeholder` | Placeholder | Control Sizes |
-| `multiple` | Multiple selection; enables search by default | Control Sizes |
+| Configuration | Purpose                                                                 | Related examples                                   |
+| ------------- | ----------------------------------------------------------------------- | -------------------------------------------------- |
+| `options`     | Primitive, object or grouped options; one source for every presentation | Appearance configuration comparison, Control Sizes |
+| `clearable`   | Allow clearing; preserve disabled selections                            | Appearance configuration comparison, Control Sizes |
+| `size`        | Supports all five sizes; inherits group/form settings                   | Control Sizes                                      |
+| `variant`     | filled, outline, standard; inherits InputGroup                          | Control Sizes                                      |
+| `placeholder` | Placeholder                                                             | Control Sizes                                      |
+| `multiple`    | Multiple selection; enables search by default                           | Control Sizes                                      |
 
 <!-- demo-config-notes:end -->
-
 
 Choose a dimension to compare all its values side by side while keeping other settings and content identical. Change the other settings to inspect combinations; input specimens share one model.
 
@@ -67,17 +66,16 @@ Choose a dimension to compare all its values side by side while keeping other se
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ------------- | ------------------------------------------------ | ------------------------------------ |
-| `placeholder` | Placeholder | Multiple, Same Label, Optgroup |
-| `multiple` | Multiple selection; enables search by default | Multiple, Same Label, Optgroup |
-| `clearable` | Allow clearing; preserve disabled selections | Multiple, Same Label, Options Review |
-| `filterable` | Enable search; optionally retainInputValue | Same Label, Options Review |
-| `options` | Primitive, object or grouped options; one source for every presentation | Same Label, Group Spacing |
-| `scrollbar` | Whether to enable virtual scroll bar | Multiple |
+| Configuration | Purpose                                                                 | Related examples                     |
+| ------------- | ----------------------------------------------------------------------- | ------------------------------------ |
+| `placeholder` | Placeholder                                                             | Multiple, Same Label, Optgroup       |
+| `multiple`    | Multiple selection; enables search by default                           | Multiple, Same Label, Optgroup       |
+| `clearable`   | Allow clearing; preserve disabled selections                            | Multiple, Same Label, Options Review |
+| `filterable`  | Enable search; optionally retainInputValue                              | Same Label, Options Review           |
+| `options`     | Primitive, object or grouped options; one source for every presentation | Same Label, Group Spacing            |
+| `scrollbar`   | Whether to enable virtual scroll bar                                    | Multiple                             |
 
 <!-- demo-config-notes:end -->
-
 
 <demo src="./__demos__/multiple.vue"></demo>
 
@@ -119,17 +117,16 @@ Applies only to overlay editing. Single selection commits and closes on choice b
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ---------------- | ------------------------------------------------ | ------------------------------------ |
-| `placeholder` | Placeholder | Filterable, Search Matching, Dropdown Scroll |
-| `options` | Primitive, object or grouped options; one source for every presentation | Filterable, Search Matching, Virtual List |
-| `filterable` | Enable search; optionally retainInputValue | Filterable, Search Matching |
-| `loading` | Loading state; blocks selection and confirmation | Filterable |
-| `multiple` | Multiple selection; enables search by default | Filterable |
-| `case-sensitive` | Case-sensitive built-in filtering; custom filters take priority | Search Matching |
+| Configuration    | Purpose                                                                 | Related examples                             |
+| ---------------- | ----------------------------------------------------------------------- | -------------------------------------------- |
+| `placeholder`    | Placeholder                                                             | Filterable, Search Matching, Dropdown Scroll |
+| `options`        | Primitive, object or grouped options; one source for every presentation | Filterable, Search Matching, Virtual List    |
+| `filterable`     | Enable search; optionally retainInputValue                              | Filterable, Search Matching                  |
+| `loading`        | Loading state; blocks selection and confirmation                        | Filterable                                   |
+| `multiple`       | Multiple selection; enables search by default                           | Filterable                                   |
+| `case-sensitive` | Case-sensitive built-in filtering; custom filters take priority         | Search Matching                              |
 
 <!-- demo-config-notes:end -->
-
 
 <demo src="./__demos__/filterable.vue"></demo>
 
@@ -153,16 +150,15 @@ Applies only to overlay editing. Single selection commits and closes on choice b
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ------------- | ------------------------------------------------ | --------------------------------------------- |
-| `placeholder` | Placeholder | Tag Props, Custom Header, Custom Footer |
-| `multiple` | Multiple selection; enables search by default | Tag Props, Custom Header, Slots Review |
-| `options` | Primitive, object or grouped options; one source for every presentation | Tag Props, Slots Review |
-| `filterable` | Enable search; optionally retainInputValue | Custom Footer, Slots Review |
-| `clearable` | Allow clearing; preserve disabled selections | Slots Review |
+| Configuration | Purpose                                                                 | Related examples                        |
+| ------------- | ----------------------------------------------------------------------- | --------------------------------------- |
+| `placeholder` | Placeholder                                                             | Tag Props, Custom Header, Custom Footer |
+| `multiple`    | Multiple selection; enables search by default                           | Tag Props, Custom Header, Slots Review  |
+| `options`     | Primitive, object or grouped options; one source for every presentation | Tag Props, Slots Review                 |
+| `filterable`  | Enable search; optionally retainInputValue                              | Custom Footer, Slots Review             |
+| `clearable`   | Allow clearing; preserve disabled selections                            | Slots Review                            |
 
 <!-- demo-config-notes:end -->
-
 
 <demo src="./__demos__/tag-props.vue"></demo>
 
@@ -190,17 +186,16 @@ Applies only to overlay editing. Single selection commits and closes on choice b
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `options` | Primitive, object or grouped options; one source for every presentation | Selection Data Flow, Linkage, Empty recognition and clear output |
-| `clearable` | Allow clearing; preserve disabled selections | Empty recognition and clear output, Interaction state comparison |
-| `edit-mode` | Field presentation; inherits FormItem/Form when omitted | Selection Data Flow |
-| `default-active-first-option` | On opening, activate the first enabled candidate if no valid selected option exists. Highlighting does not update modelValue or emit change; an existing valid selection takes priority | Selection Data Flow |
-| `placeholder` | Placeholder | Selection Data Flow |
-| `empty-value` | Clear output override; return an array for multiple selection and preserve protected items | Empty recognition and clear output |
+| Configuration                 | Purpose                                                                                                                                                                                 | Related examples                                                 |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `options`                     | Primitive, object or grouped options; one source for every presentation                                                                                                                 | Selection Data Flow, Linkage, Empty recognition and clear output |
+| `clearable`                   | Allow clearing; preserve disabled selections                                                                                                                                            | Empty recognition and clear output, Interaction state comparison |
+| `edit-mode`                   | Field presentation; inherits FormItem/Form when omitted                                                                                                                                 | Selection Data Flow                                              |
+| `default-active-first-option` | On opening, activate the first enabled candidate if no valid selected option exists. Highlighting does not update modelValue or emit change; an existing valid selection takes priority | Selection Data Flow                                              |
+| `placeholder`                 | Placeholder                                                                                                                                                                             | Selection Data Flow                                              |
+| `empty-value`                 | Clear output override; return an array for multiple selection and preserve protected items                                                                                              | Empty recognition and clear output                               |
 
 <!-- demo-config-notes:end -->
-
 
 <demo src="./__demos__/selection-data-flow.en-US.vue"></demo>
 
@@ -228,17 +223,16 @@ Toggle disabled, read-only and error states, then interact with the same instanc
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --------------- | ------------------------------------------------ | ---------------------------------------------------------------------- |
-| `loading` | Loading state; blocks selection and confirmation | Loading, Search, Async Devices |
-| `options` | Primitive, object or grouped options; one source for every presentation | Search, Async Devices, Async Source |
-| `placeholder` | Placeholder | Loading, Search, Async Devices |
-| `filterable` | Enable search; optionally retainInputValue | Async Devices, Async Source, Async Data |
-| `multiple` | Multiple selection; enables search by default | Search, Async Devices |
-| `filter-option` | false disables local filtering; callback receives query and raw option | Search |
+| Configuration   | Purpose                                                                 | Related examples                        |
+| --------------- | ----------------------------------------------------------------------- | --------------------------------------- |
+| `loading`       | Loading state; blocks selection and confirmation                        | Loading, Search, Async Devices          |
+| `options`       | Primitive, object or grouped options; one source for every presentation | Search, Async Devices, Async Source     |
+| `placeholder`   | Placeholder                                                             | Loading, Search, Async Devices          |
+| `filterable`    | Enable search; optionally retainInputValue                              | Async Devices, Async Source, Async Data |
+| `multiple`      | Multiple selection; enables search by default                           | Search, Async Devices                   |
+| `filter-option` | false disables local filtering; callback receives query and raw option  | Search                                  |
 
 <!-- demo-config-notes:end -->
-
 
 <demo src="./__demos__/loading.en-US.vue"></demo>
 
@@ -266,16 +260,15 @@ Toggle disabled, read-only and error states, then interact with the same instanc
 
 #### Configuration reference for this comparison
 
-| Configuration | Purpose | Related examples |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| `options` | Primitive, object or grouped options; one source for every presentation | Passthrough Options, Scheduler Lifecycle, Copying and editing |
-| `edit-mode` | Field presentation; inherits FormItem/Form when omitted | Passthrough Options, Copying and editing |
-| `trigger-props` | Optional dropdown Trigger settings. Placement defaults to bottom-start and automatically adjusts when space is limited. The field owns open state; there is no top-level placement prop | Passthrough Options |
-| `open-trigger-target` | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available. | Copying and editing |
-| `filterable` | Enable search; optionally retainInputValue | Copying and editing |
+| Configuration         | Purpose                                                                                                                                                                                 | Related examples                                              |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `options`             | Primitive, object or grouped options; one source for every presentation                                                                                                                 | Passthrough Options, Scheduler Lifecycle, Copying and editing |
+| `edit-mode`           | Field presentation; inherits FormItem/Form when omitted                                                                                                                                 | Passthrough Options, Copying and editing                      |
+| `trigger-props`       | Optional dropdown Trigger settings. Placement defaults to bottom-start and automatically adjusts when space is limited. The field owns open state; there is no top-level placement prop | Passthrough Options                                           |
+| `open-trigger-target` | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available.                                                        | Copying and editing                                           |
+| `filterable`          | Enable search; optionally retainInputValue                                                                                                                                              | Copying and editing                                           |
 
 <!-- demo-config-notes:end -->
-
 
 <demo src="./__demos__/passthrough-options.vue"></demo>
 
@@ -299,10 +292,10 @@ With open-trigger-target="icon", use the input area to edit or copy and the suff
 
 `empty-values` recognizes empty data; `empty-value` keeps existing clear output. `empty-text` defaults to `'-'` under `read-pretty`, with Field > FormItem > Form precedence and custom read slots first. With explicit `empty-values`, built-in required uses the policy; custom validators receive original data. See the [shared guide](/en/guide/empty-values/).
 
-| Prop | Type | Default and scope |
-| ------------ | ------------------ | ----------------------------------------------------- |
+| Prop         | Type               | Default and scope                                                           |
+| ------------ | ------------------ | --------------------------------------------------------------------------- |
 | empty-values | readonly unknown[] | Field > FormItem > Form > component-family default; replaces the whole list |
-| empty-text | string | Field > FormItem > Form > '-'; explicit '' is valid |
+| empty-text   | string             | Field > FormItem > Form > '-'; explicit '' is valid                         |
 
 These props belong to field presentation; pure panels do not gain reading mode. Form and FormItem provide inherited settings. The existing empty-value type and clear fallback remain component-specific.
 
@@ -320,59 +313,59 @@ Root and component entries export `SelectValue` and `SelectEmptyValue`.
 
 Use `v-model`, `v-model:open` and `v-model:input-value` for controlled state. Clear values are `''` for single selection and `[]` for multiple selection. Select uses `undefined` when an actual empty-string option exists.
 
-| Prop | Description | Type | Default |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ---------------------------- |
-| need-confirm | Applies only to overlay editing. Single selection commits and closes on choice by default; true keeps a draft until confirmation. Multiple selection defaults to confirmation. Submission still runs form validation and before-commit; rejection keeps the editor open. | `boolean` | Single `false`; multiple `true` |
-| `open-trigger-target` | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available. | `'field' \| 'icon'` | `'field'` |
-| `model-value` | Controlled selected value; supports v-model | `Value \| null` | `undefined` |
-| `default-value` | Initial uncontrolled selection; read once | `Value` | Single: `''`; multiple: `[]` |
-| `open` | Controlled open state; supports v-model:open | `boolean` | `undefined` |
-| `default-open` | Initial uncontrolled open state; read only at initialization | `boolean` | `false` |
-| `input-value` | Controlled search text, independent of selection; supports v-model:input-value | `string` | `undefined` |
-| `default-input-value` | Initial uncontrolled search text, independent of selection; read only at initialization | `string` | `''` |
-| `multiple` | Multiple selection; enables search by default | `boolean` | `false` |
-| `size` | Supports all five sizes; inherits group/form settings | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `md` |
-| `variant` | filled, outline, standard; inherits InputGroup | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `outline` |
-| `disabled` | Disabled state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
-| `readonly` | Read-only state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
-| `error` | Error state; explicit values override inherited Form / Group state | `boolean` | `undefined` |
-| `placeholder` | Placeholder | `string` | `—` |
-| `hint` | Enable the floating hint | `boolean` | `false` |
-| `line` | Show the underline in the standard variant | `boolean` | `true` |
-| `text-color` | Custom per-instance text color; prefer tokens for static themes | `string` | `—` |
-| `focus-color` | Custom per-instance focused color; prefer tokens for static themes | `string` | `—` |
-| `blur-color` | Custom per-instance unfocused color; prefer tokens for static themes | `string` | `—` |
-| `loading` | Loading pauses selection, clearing, tag removal and confirmation; retains values while search and closing remain available. | `boolean` | `false` |
-| `loading-mode` | Loading layout: default indicator or bottom line | `default / line` | `default` |
-| `show-tags` | Show tags; false displays separated text | `boolean` | `true` |
-| `separator` | Separator when show-tags=false | `string` | `,` |
-| `text-align` | Physical text alignment: left / center / right. When omitted, inherits FormItem content-align; standalone fields default to logical start | `'left' \| 'center' \| 'right'` | `-` |
-| `max-tag-count` | Finite nonnegative integer; 0 leaves the displayed tag count unlimited. | `number` | `0` |
-| `tag-nowrap` | Keep tags on one line with ellipsis and preserved removal icons; overflow scrolls horizontally; hover, focus or tap truncated text to preview it | `boolean` | `false` |
-| `popup-container` | Selector, element, element resolver, or false for inline rendering | `PopupContainer` | `—` |
-| `trigger-props` | Optional dropdown Trigger settings. Placement defaults to bottom-start and automatically adjusts when space is limited. The field owns open state; there is no top-level placement prop | `TriggerProps` | `—` |
-| `virtual-list-props` | Pass the virtual list attribute, pass in this parameter to turn on virtual scrolling [VirtualListProps](#VirtualListProps) | `VirtualListProps` | `—` |
-| `search-delay` | Finite nonnegative search debounce delay in milliseconds. | `number` | `500` |
-| `format-label` | Format selected labels; use label slot for VNodes | `function` | `—` |
-| `clearable` | Allow clearing; preserve disabled selections | `boolean` | `true` |
-| `empty-value` | Clear override; multiple mode accepts arrays or recognized empty values and falls back to an empty array for invalid scalars; disabled selections take precedence. | `SelectEmptyValue` | `undefined` |
-| `options` | Primitive, object or grouped options; one source for every presentation | `SelectOption[]` / `(query, { signal }) => Array / Promise` | `undefined` |
-| `field-names` | Map value, label, disabled, tagProps, render; object values need a unique ID field | `SelectFieldNames` | `—` |
-| `filterable` | Enable search; optionally retainInputValue | `boolean or { retainInputValue?: boolean }` | `Single: false; multiple: true` |
-| case-sensitive | Case-sensitive built-in filtering; custom filters take priority | boolean | false |
-| `filter-option` | false disables local filtering; callback receives query and raw option | `boolean or (input, option) => boolean` | Automatic: enabled for arrays, disabled for loader functions |
-| `creatable` | Allow creating missing options | `boolean` | `false` |
-| `fallback-option` | Display unresolved values or return a complete fallback option | `boolean or (value) => SelectOptionData` | `true` |
-| `show-extra-options` | Display fallback/created options in the panel | `boolean` | `true` |
-| `limit` | Finite nonnegative integer; 0 leaves the selection count unlimited. | `number` | `0` |
-| `auto-fit-popup-width` | Match Menu width to the field | `boolean` | `true` |
-| `default-active-first-option` | On opening, activate the first enabled candidate if no valid selected option exists. Highlighting does not update modelValue or emit change; an existing valid selection takes priority | `boolean` | `true` |
-| `unmount-on-close` | Unmount Menu content when closed | `boolean` | `false` |
-| `scrollbar` | Whether to enable virtual scroll bar | `boolean or ScrollbarProps` | `true` |
-| `show-header-on-empty` | Show the header in the empty state | `boolean` | `false` |
-| `show-footer-on-empty` | Show the footer in the empty state | `boolean` | `false` |
-| `edit-mode` | Field presentation; inherits FormItem/Form when omitted | `direct / click / dblclick` | `direct` |
-| `before-commit` | Before confirmation, calls ({ value, previousValue }, done, { signal }); complete with a boolean, Promise or done; synchronous undefined waits for done. | `BeforeFieldCommit` | — |
+| Prop                          | Description                                                                                                                                                                                                                                                              | Type                                                          | Default                                                      |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------- | ------------------------------------------------------------ |
+| need-confirm                  | Applies only to overlay editing. Single selection commits and closes on choice by default; true keeps a draft until confirmation. Multiple selection defaults to confirmation. Submission still runs form validation and before-commit; rejection keeps the editor open. | `boolean`                                                     | Single `false`; multiple `true`                              |
+| `open-trigger-target`         | Pointer opening target: the whole field or only the suffix icon. Explicit keyboard opening and controlled open remain available.                                                                                                                                         | `'field' \| 'icon'`                                           | `'field'`                                                    |
+| `model-value`                 | Controlled selected value; supports v-model                                                                                                                                                                                                                              | `Value \| null`                                               | `undefined`                                                  |
+| `default-value`               | Initial uncontrolled selection; read once                                                                                                                                                                                                                                | `Value`                                                       | Single: `''`; multiple: `[]`                                 |
+| `open`                        | Controlled open state; supports v-model:open                                                                                                                                                                                                                             | `boolean`                                                     | `undefined`                                                  |
+| `default-open`                | Initial uncontrolled open state; read only at initialization                                                                                                                                                                                                             | `boolean`                                                     | `false`                                                      |
+| `input-value`                 | Controlled search text, independent of selection; supports v-model:input-value                                                                                                                                                                                           | `string`                                                      | `undefined`                                                  |
+| `default-input-value`         | Initial uncontrolled search text, independent of selection; read only at initialization                                                                                                                                                                                  | `string`                                                      | `''`                                                         |
+| `multiple`                    | Multiple selection; enables search by default                                                                                                                                                                                                                            | `boolean`                                                     | `false`                                                      |
+| `size`                        | Supports all five sizes; inherits group/form settings                                                                                                                                                                                                                    | `ComponentSize`<br>`'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`     | `md`                                                         |
+| `variant`                     | filled, outline, standard; inherits InputGroup                                                                                                                                                                                                                           | `FormControlVariant`<br>`'standard' \| 'filled' \| 'outline'` | `outline`                                                    |
+| `disabled`                    | Disabled state; explicit values override inherited Form / Group state                                                                                                                                                                                                    | `boolean`                                                     | `undefined`                                                  |
+| `readonly`                    | Read-only state; explicit values override inherited Form / Group state                                                                                                                                                                                                   | `boolean`                                                     | `undefined`                                                  |
+| `error`                       | Error state; explicit values override inherited Form / Group state                                                                                                                                                                                                       | `boolean`                                                     | `undefined`                                                  |
+| `placeholder`                 | Placeholder                                                                                                                                                                                                                                                              | `string`                                                      | `—`                                                          |
+| `hint`                        | Enable the floating hint                                                                                                                                                                                                                                                 | `boolean`                                                     | `false`                                                      |
+| `line`                        | Show the underline in the standard variant                                                                                                                                                                                                                               | `boolean`                                                     | `true`                                                       |
+| `text-color`                  | Custom per-instance text color; prefer tokens for static themes                                                                                                                                                                                                          | `string`                                                      | `—`                                                          |
+| `focus-color`                 | Custom per-instance focused color; prefer tokens for static themes                                                                                                                                                                                                       | `string`                                                      | `—`                                                          |
+| `blur-color`                  | Custom per-instance unfocused color; prefer tokens for static themes                                                                                                                                                                                                     | `string`                                                      | `—`                                                          |
+| `loading`                     | Loading pauses selection, clearing, tag removal and confirmation; retains values while search and closing remain available.                                                                                                                                              | `boolean`                                                     | `false`                                                      |
+| `loading-mode`                | Loading layout: default indicator or bottom line                                                                                                                                                                                                                         | `default / line`                                              | `default`                                                    |
+| `show-tags`                   | Show tags; false displays separated text                                                                                                                                                                                                                                 | `boolean`                                                     | `true`                                                       |
+| `separator`                   | Separator when show-tags=false                                                                                                                                                                                                                                           | `string`                                                      | `,`                                                          |
+| `text-align`                  | Physical text alignment: left / center / right. When omitted, inherits FormItem content-align; standalone fields default to logical start                                                                                                                                | `'left' \| 'center' \| 'right'`                               | `-`                                                          |
+| `max-tag-count`               | Finite nonnegative integer; 0 leaves the displayed tag count unlimited.                                                                                                                                                                                                  | `number`                                                      | `0`                                                          |
+| `tag-nowrap`                  | Keep tags on one line with ellipsis and preserved removal icons; overflow scrolls horizontally; hover, focus or tap truncated text to preview it                                                                                                                         | `boolean`                                                     | `false`                                                      |
+| `popup-container`             | Selector, element, element resolver, or false for inline rendering                                                                                                                                                                                                       | `PopupContainer`                                              | `—`                                                          |
+| `trigger-props`               | Optional dropdown Trigger settings. Placement defaults to bottom-start and automatically adjusts when space is limited. The field owns open state; there is no top-level placement prop                                                                                  | `TriggerProps`                                                | `—`                                                          |
+| `virtual-list-props`          | Pass the virtual list attribute, pass in this parameter to turn on virtual scrolling [VirtualListProps](/en/components/table/#virtuallistprops)                                                                                                                          | `VirtualListProps`                                            | `—`                                                          |
+| `search-delay`                | Finite nonnegative search debounce delay in milliseconds.                                                                                                                                                                                                                | `number`                                                      | `500`                                                        |
+| `format-label`                | Format selected labels; use label slot for VNodes                                                                                                                                                                                                                        | `function`                                                    | `—`                                                          |
+| `clearable`                   | Allow clearing; preserve disabled selections                                                                                                                                                                                                                             | `boolean`                                                     | `true`                                                       |
+| `empty-value`                 | Clear override; multiple mode accepts arrays or recognized empty values and falls back to an empty array for invalid scalars; disabled selections take precedence.                                                                                                       | `SelectEmptyValue`                                            | `undefined`                                                  |
+| `options`                     | Primitive, object or grouped options; one source for every presentation                                                                                                                                                                                                  | `SelectOption[]` / `(query, { signal }) => Array / Promise`   | `undefined`                                                  |
+| `field-names`                 | Map value, label, disabled, tagProps, render; object values need a unique ID field                                                                                                                                                                                       | `SelectFieldNames`                                            | `—`                                                          |
+| `filterable`                  | Enable search; optionally retainInputValue                                                                                                                                                                                                                               | `boolean or { retainInputValue?: boolean }`                   | `Single: false; multiple: true`                              |
+| case-sensitive                | Case-sensitive built-in filtering; custom filters take priority                                                                                                                                                                                                          | boolean                                                       | false                                                        |
+| `filter-option`               | false disables local filtering; callback receives query and raw option                                                                                                                                                                                                   | `boolean or (input, option) => boolean`                       | Automatic: enabled for arrays, disabled for loader functions |
+| `creatable`                   | Allow creating missing options                                                                                                                                                                                                                                           | `boolean`                                                     | `false`                                                      |
+| `fallback-option`             | Display unresolved values or return a complete fallback option                                                                                                                                                                                                           | `boolean or (value) => SelectOptionData`                      | `true`                                                       |
+| `show-extra-options`          | Display fallback/created options in the panel                                                                                                                                                                                                                            | `boolean`                                                     | `true`                                                       |
+| `limit`                       | Finite nonnegative integer; 0 leaves the selection count unlimited.                                                                                                                                                                                                      | `number`                                                      | `0`                                                          |
+| `auto-fit-popup-width`        | Match Menu width to the field                                                                                                                                                                                                                                            | `boolean`                                                     | `true`                                                       |
+| `default-active-first-option` | On opening, activate the first enabled candidate if no valid selected option exists. Highlighting does not update modelValue or emit change; an existing valid selection takes priority                                                                                  | `boolean`                                                     | `true`                                                       |
+| `unmount-on-close`            | Unmount Menu content when closed                                                                                                                                                                                                                                         | `boolean`                                                     | `false`                                                      |
+| `scrollbar`                   | Whether to enable virtual scroll bar                                                                                                                                                                                                                                     | `boolean or ScrollbarProps`                                   | `true`                                                       |
+| `show-header-on-empty`        | Show the header in the empty state                                                                                                                                                                                                                                       | `boolean`                                                     | `false`                                                      |
+| `show-footer-on-empty`        | Show the footer in the empty state                                                                                                                                                                                                                                       | `boolean`                                                     | `false`                                                      |
+| `edit-mode`                   | Field presentation; inherits FormItem/Form when omitted                                                                                                                                                                                                                  | `direct / click / dblclick`                                   | `direct`                                                     |
+| `before-commit`               | Before confirmation, calls ({ value, previousValue }, done, { signal }); complete with a boolean, Promise or done; synchronous undefined waits for done.                                                                                                                 | `BeforeFieldCommit`                                           | —                                                            |
 
 ### Select Events / Methods
 
@@ -392,87 +385,87 @@ An option’s `label` is plain text used for search. Use `render` or the `option
 
 Select additionally supports `header`, `footer`, `trigger`, and default `Option / Optgroup` children. Option props: `value`, `label`, `disabled`, `tagProps`, `index`; its default slot receives `selected`. Group data uses `{ isGroup: true, label, options }`. List and Picker also accept slot options; Picker displays their text labels.
 
-Single/multiple options both use popup-option-padding-horizontal. There is no implicit search-highlight DOM; custom option slots style their own highlighted fragments. 
+Single/multiple options both use popup-option-padding-horizontal. There is no implicit search-highlight DOM; custom option slots style their own highlighted fragments.
 
 `read-pretty` is an independent boolean alongside `readonly` and `disabled`. It inherits from field to FormItem to Form; explicit `false` overrides the parent. The default is `false`. Reading mode renders no editor.
 
 ### Option Props
 
-| Prop | Description | Type | Default |
-| --------- | ------------------------------------- | ------------------------------------------------------ | --------- |
-| value | Option Value | string \| number \| boolean \| Record<string, unknown> | undefined |
-| label | Option group title | string | undefined |
-| disabled | Whether to disable | boolean | false |
-| tag-props | Selected tag props, native attributes, and Tag event listeners | SelectOptionTagProps | undefined |
-| index | Explicit option order | number | undefined |
+| Prop      | Description                                                    | Type                                                   | Default   |
+| --------- | -------------------------------------------------------------- | ------------------------------------------------------ | --------- |
+| value     | Option Value                                                   | string \| number \| boolean \| Record<string, unknown> | undefined |
+| label     | Option group title                                             | string                                                 | undefined |
+| disabled  | Whether to disable                                             | boolean                                                | false     |
+| tag-props | Selected tag props, native attributes, and Tag event listeners | SelectOptionTagProps                                   | undefined |
+| index     | Explicit option order                                          | number                                                 | undefined |
 
 ### Option Slots
 
-| Slot | Description | Arguments |
-| ------- | -------------- | --------------------- |
+| Slot    | Description           | Arguments             |
+| ------- | --------------------- | --------------------- |
 | default | Custom option content | { selected: boolean } |
-| icon | Option icon | - |
-| suffix | Option suffix | - |
+| icon    | Option icon           | -                     |
+| suffix  | Option suffix         | -                     |
 
 ### Optgroup Props
 
-| Prop | Description | Type | Default |
-| ----- | -------- | ------ | --------- |
+| Prop  | Description        | Type   | Default   |
+| ----- | ------------------ | ------ | --------- |
 | label | Option group title | string | undefined |
 
 ### Optgroup Slots
 
-| Slot | Description | Arguments |
-| ------- | ---------------------- | ---- |
-| label | Option group title | - |
-| default | Option children inside a group | - |
+| Slot    | Description                    | Arguments |
+| ------- | ------------------------------ | --------- |
+| label   | Option group title             | -         |
+| default | Option children inside a group | -         |
 
 ### Select Slots
 
-| Slot | Description | Arguments |
-| ------------ | ------------------------ | --------------- |
-| default | Option / Optgroup children | - |
-| option | Custom option content | { data } |
-| label | Option group title | { data } |
-| selected | Replace the whole selected-value region | - |
-| header | Menu header | - |
-| footer | Menu footer | - |
-| trigger | Custom field trigger | - |
-| prefix | Field prefix | - |
-| suffix | Field suffix | - |
-| clear-icon | Custom clear action | { clear } |
-| arrow-icon | Dropdown arrow | - |
-| search-icon | Search icon | - |
-| loading-icon | Loading icon | - |
-| empty | Empty-state content | - |
-| read | Read-mode content | { value, text } |
+| Slot         | Description                             | Arguments       |
+| ------------ | --------------------------------------- | --------------- |
+| default      | Option / Optgroup children              | -               |
+| option       | Custom option content                   | { data }        |
+| label        | Option group title                      | { data }        |
+| selected     | Replace the whole selected-value region | -               |
+| header       | Menu header                             | -               |
+| footer       | Menu footer                             | -               |
+| trigger      | Custom field trigger                    | -               |
+| prefix       | Field prefix                            | -               |
+| suffix       | Field suffix                            | -               |
+| clear-icon   | Custom clear action                     | { clear }       |
+| arrow-icon   | Dropdown arrow                          | -               |
+| search-icon  | Search icon                             | -               |
+| loading-icon | Loading icon                            | -               |
+| empty        | Empty-state content                     | -               |
+| read         | Read-mode content                       | { value, text } |
 
 ### Select Events
 
-| Event | Description | Arguments |
-| --------------------- | ------------ | ------------ |
-| update:model-value | Request a model value update | value |
-| change | Option | value |
-| update:open | Request popup visibility | open |
-| open-change | Popup visibility changes | open |
-| update:input-value | Request search text update | text |
-| input-value-change | Search text changes | text |
-| search | Triggered when the user searches | text |
-| focus | Field gains focus | event |
-| blur | Field loses focus | event |
-| keydown | Field or editor search key; `preventDefault()` suppresses internal keyboard handling | event: KeyboardEvent |
-| clear | Triggered when the value of the input changes | event |
-| remove | Triggered when the delete button of the label is clicked | value |
-| exceed-limit | Selection would exceed the multiple-selection limit | value, event |
-| dropdown-scroll | Menu scrolls | event |
-| dropdown-reach-bottom | Menu reaches its bottom | event |
+| Event                 | Description                                                                          | Arguments            |
+| --------------------- | ------------------------------------------------------------------------------------ | -------------------- |
+| update:model-value    | Request a model value update                                                         | value                |
+| change                | Option                                                                               | value                |
+| update:open           | Request popup visibility                                                             | open                 |
+| open-change           | Popup visibility changes                                                             | open                 |
+| update:input-value    | Request search text update                                                           | text                 |
+| input-value-change    | Search text changes                                                                  | text                 |
+| search                | Triggered when the user searches                                                     | text                 |
+| focus                 | Field gains focus                                                                    | event                |
+| blur                  | Field loses focus                                                                    | event                |
+| keydown               | Field or editor search key; `preventDefault()` suppresses internal keyboard handling | event: KeyboardEvent |
+| clear                 | Triggered when the value of the input changes                                        | event                |
+| remove                | Triggered when the delete button of the label is clicked                             | value                |
+| exceed-limit          | Selection would exceed the multiple-selection limit                                  | value, event         |
+| dropdown-scroll       | Menu scrolls                                                                         | event                |
+| dropdown-reach-bottom | Menu reaches its bottom                                                              | event                |
 
 ### Select Methods
 
-| Method | Description | Arguments |
-| ----- | ---------------- | ---- |
-| focus | Focus the actual field | - |
-| blur | Blur the actual field | - |
+| Method | Description            | Arguments |
+| ------ | ---------------------- | --------- |
+| focus  | Focus the actual field | -         |
+| blur   | Blur the actual field  | -         |
 
 ### Type imports
 
@@ -522,40 +515,40 @@ Use these variables to customize the component. Defaults may vary by the selecto
 
 <div class="token-reference-table" style="max-width: 100%; overflow-x: auto;">
 
-| Variable | Default / condition | Affected styles |
-| --- | --- | --- |
-| `--c-select-popup-bg` | `var(--c-sys-color-surface-overlay)` | `background-color` |
-| `--c-select-popup-border-color` | `var(--c-sys-color-border-subtle)` | `border`, `border-bottom`, `border-top` |
-| `--c-select-popup-border-radius` | `var(--c-sys-radius-lg)` | `border-radius` |
-| `--c-select-popup-box-shadow` | `0 8px 24px rgba(0, 0, 0, 0.08)` | `box-shadow` |
-| `--c-select-popup-font-size` | `var(--c-sys-font-size-md)` | `font-size` |
-| `--c-select-popup-group-title-font-size` | `var(--c-sys-font-size-xs)` | `font-size` |
-| `--c-select-popup-group-title-height` | `20px` | `line-height` |
-| `--c-select-popup-group-title-padding-horizontal` | `var(--c-select-popup-option-padding-horizontal)` | `padding` |
-| `--c-select-popup-group-title-padding-top` | `var(--c-sys-space-4)` | `margin-top` |
-| `--c-select-popup-group-title-text-color` | `var(--c-sys-color-content-secondary)` | `color` |
-| `--c-select-popup-loading-min-height` | `50px` | `min-height` |
-| `--c-select-popup-max-height` | `200px` | `max-height` |
-| `--c-select-popup-option-bg` | `transparent` | `background-color` |
-| `--c-select-popup-option-bg-disabled` | `transparent` | `background-color` |
-| `--c-select-popup-option-bg-hover` | `var(--c-sys-color-state-hover)` | `background`, `background-color` |
-| `--c-select-popup-option-bg-selected` | `transparent` | `background`, `background-color` |
-| `--c-select-popup-option-bg-selected-hover` | `var(--c-select-popup-option-bg-hover)` | `background`, `background-color` |
-| `--c-select-popup-option-border-radius` | `0` | `border-radius` |
-| `--c-select-popup-option-check-color` | `var(--c-sys-color-action-primary)` | `color` |
-| `--c-select-popup-option-check-gap` | `var(--c-sys-space-4)` | `margin-inline-start` |
-| `--c-select-popup-option-check-size` | `var(--c-sys-font-size-md)` | `height`, `width` |
-| `--c-select-popup-option-font-weight-selected` | `var(--c-sys-font-weight-medium)` | `font-weight` |
-| `--c-select-popup-option-height` | `36px` | `line-height`, `min-height` |
-| `--c-select-popup-option-icon-margin-right` | `var(--c-sys-space-4)` | `margin-inline-end` |
-| `--c-select-popup-option-padding-horizontal` | `var(--c-sys-space-4)` | `padding`, `padding-inline` |
-| `--c-select-popup-option-suffix-icon-margin-left` | `var(--c-sys-space-5)` | `margin-inline-start` |
-| `--c-select-popup-option-text-color` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-select-popup-option-text-color-disabled` | `var(--c-sys-color-content-disabled)` | `color` |
-| `--c-select-popup-option-text-color-hover` | `var(--c-sys-color-content-primary)` | `color` |
-| `--c-select-popup-option-text-color-selected` | `var(--c-sys-color-action-primary)` | `color`, `outline`, `outline-color` |
-| `--c-select-popup-padding-horizontal` | `0` | `padding-inline`, `padding-inline-end`, `padding-inline-start` |
-| `--c-select-popup-padding-vertical` | `var(--c-sys-space-2)` | `padding`, `padding-block`, `padding-block-end`, `padding-block-start` |
+| Variable                                          | Default / condition                               | Affected styles                                                        |
+| ------------------------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------- |
+| `--c-select-popup-bg`                             | `var(--c-sys-color-surface-overlay)`              | `background-color`                                                     |
+| `--c-select-popup-border-color`                   | `var(--c-sys-color-border-subtle)`                | `border`, `border-bottom`, `border-top`                                |
+| `--c-select-popup-border-radius`                  | `var(--c-sys-radius-lg)`                          | `border-radius`                                                        |
+| `--c-select-popup-box-shadow`                     | `0 8px 24px rgba(0, 0, 0, 0.08)`                  | `box-shadow`                                                           |
+| `--c-select-popup-font-size`                      | `var(--c-sys-font-size-md)`                       | `font-size`                                                            |
+| `--c-select-popup-group-title-font-size`          | `var(--c-sys-font-size-xs)`                       | `font-size`                                                            |
+| `--c-select-popup-group-title-height`             | `20px`                                            | `line-height`                                                          |
+| `--c-select-popup-group-title-padding-horizontal` | `var(--c-select-popup-option-padding-horizontal)` | `padding`                                                              |
+| `--c-select-popup-group-title-padding-top`        | `var(--c-sys-space-4)`                            | `margin-top`                                                           |
+| `--c-select-popup-group-title-text-color`         | `var(--c-sys-color-content-secondary)`            | `color`                                                                |
+| `--c-select-popup-loading-min-height`             | `50px`                                            | `min-height`                                                           |
+| `--c-select-popup-max-height`                     | `200px`                                           | `max-height`                                                           |
+| `--c-select-popup-option-bg`                      | `transparent`                                     | `background-color`                                                     |
+| `--c-select-popup-option-bg-disabled`             | `transparent`                                     | `background-color`                                                     |
+| `--c-select-popup-option-bg-hover`                | `var(--c-sys-color-state-hover)`                  | `background`, `background-color`                                       |
+| `--c-select-popup-option-bg-selected`             | `transparent`                                     | `background`, `background-color`                                       |
+| `--c-select-popup-option-bg-selected-hover`       | `var(--c-select-popup-option-bg-hover)`           | `background`, `background-color`                                       |
+| `--c-select-popup-option-border-radius`           | `0`                                               | `border-radius`                                                        |
+| `--c-select-popup-option-check-color`             | `var(--c-sys-color-action-primary)`               | `color`                                                                |
+| `--c-select-popup-option-check-gap`               | `var(--c-sys-space-4)`                            | `margin-inline-start`                                                  |
+| `--c-select-popup-option-check-size`              | `var(--c-sys-font-size-md)`                       | `height`, `width`                                                      |
+| `--c-select-popup-option-font-weight-selected`    | `var(--c-sys-font-weight-medium)`                 | `font-weight`                                                          |
+| `--c-select-popup-option-height`                  | `36px`                                            | `line-height`, `min-height`                                            |
+| `--c-select-popup-option-icon-margin-right`       | `var(--c-sys-space-4)`                            | `margin-inline-end`                                                    |
+| `--c-select-popup-option-padding-horizontal`      | `var(--c-sys-space-4)`                            | `padding`, `padding-inline`                                            |
+| `--c-select-popup-option-suffix-icon-margin-left` | `var(--c-sys-space-5)`                            | `margin-inline-start`                                                  |
+| `--c-select-popup-option-text-color`              | `var(--c-sys-color-content-primary)`              | `color`                                                                |
+| `--c-select-popup-option-text-color-disabled`     | `var(--c-sys-color-content-disabled)`             | `color`                                                                |
+| `--c-select-popup-option-text-color-hover`        | `var(--c-sys-color-content-primary)`              | `color`                                                                |
+| `--c-select-popup-option-text-color-selected`     | `var(--c-sys-color-action-primary)`               | `color`, `outline`, `outline-color`                                    |
+| `--c-select-popup-padding-horizontal`             | `0`                                               | `padding-inline`, `padding-inline-end`, `padding-inline-start`         |
+| `--c-select-popup-padding-vertical`               | `var(--c-sys-space-2)`                            | `padding`, `padding-block`, `padding-block-end`, `padding-block-start` |
 
 </div>
 

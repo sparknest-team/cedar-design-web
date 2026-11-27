@@ -3,7 +3,9 @@ import _RadioGroup from './group-presentation'
 import _Radio from './presentation'
 import { radioGroupProps, radioProps } from './props'
 
-const Radio: import('../_utils/global-config').CedarComponentWithInstall<typeof _Radio & { Group: typeof _RadioGroup }> = withInstall(
+const Radio: import('../_utils/global-config').CedarComponentWithInstall<
+  typeof _Radio & { Group: typeof _RadioGroup }
+> = withInstall(
   _Radio,
   Object.assign(_Radio, {
     Group: _RadioGroup,
@@ -23,7 +25,7 @@ export const _RadioGroupComponent: typeof _RadioGroup = _RadioGroup
 
 export default Radio
 
-export type { RadioMethods, RadioModel } from './props'
+export type { RadioMethods } from './props'
 
 export type { RadioOption } from './types'
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onBeforeUnmount, shallowRef, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { DirectionToggle, DocsSelect, DocsSourceIcon } from '../../../../../../design-ui/packages/ui-doc-preview/src/index'
+import { DocsNavbarTools } from '@sparknest/ui-doc-preview-vue'
 import { getDocsTheme, setDocsTheme, type CedarDocsTheme } from '../theme-config'
 const route = useRoute()
 const router = useRouter()
@@ -30,18 +30,17 @@ onBeforeUnmount(() => { observer?.disconnect(); window.removeEventListener('ceda
 </script>
 <template>
   <Teleport v-if="navbarTarget" :to="navbarTarget">
-    <div class="cedar-docs-tools">
-      <DirectionToggle />
-      <a href="https://github.com/sparknest-team/cedar-design-web" target="_blank" rel="noopener noreferrer" :aria-label="english ? 'Source on GitHub' : 'GitHub 源码'" :title="english ? 'Source on GitHub' : 'GitHub 源码'" class="cedar-docs-source">
-        <DocsSourceIcon />
-      </a>
-      <DocsSelect icon="theme" :label="english ? 'Theme' : '主题'" :value="currentTheme" :options="themeOptions" @change="selectTheme" />
-      <DocsSelect icon="language" :label="english ? 'Language' : '语言'" :value="english ? 'en-US' : 'zh-CN'" :options="[{ value: 'zh-CN', label: '中文' }, { value: 'en-US', label: 'English' }]" @change="selectLanguage" />
-    </div>
+    <DocsNavbarTools
+      class="cedar-docs-tools"
+      repository="https://github.com/sparknest-team/cedar-design-web"
+      :language="english ? 'en-US' : 'zh-CN'"
+      :theme="currentTheme"
+      :themes="themeOptions"
+      @theme-change="selectTheme"
+      @language-change="selectLanguage"
+    />
   </Teleport>
 </template>
 <style scoped>
-.cedar-docs-tools { display: flex; align-items: center; gap: 4px; --docs-tools-text: var(--c-color-text-2); --docs-tools-bg: var(--c-color-bg-2); --docs-tools-border: var(--c-color-border-2); --docs-tools-hover: var(--c-color-fill-2); --docs-tools-brand: var(--c-sys-color-content-brand); }
-.cedar-docs-source { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; color: inherit; border-radius: 4px; }
-.cedar-docs-source:hover { background: var(--docs-tools-hover); }
+.cedar-docs-tools { --docs-tools-text: var(--c-color-text-2); --docs-tools-bg: var(--c-color-bg-2); --docs-tools-border: var(--c-color-border-2); --docs-tools-hover: var(--c-color-fill-2); --docs-tools-brand: var(--c-sys-color-content-brand); }
 </style>

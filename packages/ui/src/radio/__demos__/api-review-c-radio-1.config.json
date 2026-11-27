@@ -3,14 +3,14 @@
     {
       "name": "model-value",
       "description": "受控值",
-      "type": "ChoiceValue | null",
+      "type": "string | number | boolean | null",
       "defaultValue": "undefined",
       "kind": "scenario"
     },
     {
       "name": "default-value",
       "description": "非受控初始值",
-      "type": "ChoiceValue | null",
+      "type": "string | number | boolean | null",
       "defaultValue": "null",
       "kind": "scenario"
     },
@@ -28,10 +28,7 @@
       "type": "\"radio\" | \"button\"",
       "defaultValue": "'radio' as RadioVariant",
       "kind": "enum",
-      "options": [
-        "radio",
-        "button"
-      ],
+      "options": ["radio", "button"],
       "initial": "radio"
     },
     {
@@ -61,11 +58,7 @@
       "defaultValue": "undefined",
       "description": "字段编辑方式，字段 > FormItem > Form 继承；默认 direct。",
       "kind": "enum",
-      "options": [
-        "direct",
-        "click",
-        "dblclick"
-      ],
+      "options": ["direct", "click", "dblclick"],
       "initial": "direct"
     },
     {
@@ -177,20 +170,9 @@
       "kind": "string"
     }
   ],
-  "methodNames": [
-    "select",
-    "focus",
-    "blur"
-  ],
-  "events": [
-    "update:modelValue",
-    "change",
-    "focus",
-    "blur"
-  ],
-  "slotNames": [
-    "radio"
-  ],
+  "methodNames": ["select", "focus", "blur"],
+  "events": ["update:modelValue", "change", "focus", "blur"],
+  "slotNames": ["radio"],
   "slotDefaults": {
     "radio": true
   },

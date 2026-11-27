@@ -13,7 +13,12 @@
       )
     "
     :style="customStyle"
-    :role="($attrs.role as HTMLAttributes['role']) ?? (range && (rangeGroupLabel || (typeof $attrs['aria-labelledby'] === 'string' && $attrs['aria-labelledby'].trim())) ? 'group' : undefined)"
+    :role="
+      ($attrs.role as HTMLAttributes['role']) ??
+      (range && (rangeGroupLabel || (typeof $attrs['aria-labelledby'] === 'string' && $attrs['aria-labelledby'].trim()))
+        ? 'group'
+        : undefined)
+    "
     :aria-labelledby="($attrs['aria-labelledby'] as HTMLAttributes['aria-labelledby']) ?? rangeGroupLabel"
   >
     <div ref="track" :class="n('track')" @pointerdown="pointerDown($event)" @click="clickTrack">
@@ -52,7 +57,16 @@
         :aria-readonly="mergedReadonly || undefined"
         :aria-invalid="mergedError ? true : ($attrs['aria-invalid'] as HTMLAttributes['aria-invalid'])"
         :aria-description="typeof $attrs['aria-description'] === 'string' ? $attrs['aria-description'] : undefined"
-        :aria-describedby="describeError([typeof $attrs['aria-describedby'] === 'string' ? $attrs['aria-describedby'] : '', tooltipVisible(index) ? `${tooltipId}-${index}` : ''].filter(Boolean).join(' '))"
+        :aria-describedby="
+          describeError(
+            [
+              typeof $attrs['aria-describedby'] === 'string' ? $attrs['aria-describedby'] : '',
+              tooltipVisible(index) ? `${tooltipId}-${index}` : '',
+            ]
+              .filter(Boolean)
+              .join(' '),
+          )
+        "
         @pointerdown.stop="pointerDown($event, index)"
         @keydown="keydown($event, index)"
         @focus="onFocus(index)"
@@ -76,28 +90,27 @@
       :disabled="isDisabled"
       :readonly="mergedReadonly"
       :error="mergedError"
-      :aria-label="ariaLabel"
-      :aria-labelledby="singleLabelledBy"
-      :aria-describedby="($attrs['aria-describedby'] as HTMLAttributes['aria-describedby'])"
-      :aria-description="typeof $attrs['aria-description'] === 'string' ? $attrs['aria-description'] : undefined"
-      :aria-invalid="($attrs['aria-invalid'] as HTMLAttributes['aria-invalid'])"
+      :ariaLabel="ariaLabel"
+      :ariaLabelledby="singleLabelledBy"
+      :ariaDescribedby="$attrs['aria-describedby'] as HTMLAttributes['aria-describedby']"
+      :ariaDescription="typeof $attrs['aria-description'] === 'string' ? $attrs['aria-description'] : undefined"
+      :ariaInvalid="$attrs['aria-invalid'] as HTMLAttributes['aria-invalid']"
       @change="inputChange"
       @focus="eventHandlers?.onFocus?.()"
       @blur="eventHandlers?.onBlur?.()"
     />
-
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onDeactivated, ref, useAttrs, watch, type HTMLAttributes } from 'vue'
-import { useId } from '../_utils/vue-compat'
 import { useDirection } from '../_utils/direction'
 import { createNamespace } from '../_utils/global-config'
 import { positiveLength } from '../_utils/size-length'
-import { sliderBounds, sliderValues, snap, stepValue } from './model'
+import { useId } from '../_utils/vue-compat'
 import { useFormErrorDescription } from '../form/error-description'
 import { useFormItemLabel } from '../form/label-context'
+import { sliderBounds, sliderValues, snap, stepValue } from './model'
 import { sliderProps } from './props'
 import type { SliderEmits, SliderExpose, SliderSlots, SliderValue } from './props'
 import SliderInput from './SliderInput.vue'
@@ -110,7 +123,11 @@ const attrs = useAttrs()
 const formLabel = useFormItemLabel()
 const rangeGroupLabel = computed(() => {
   const label = formLabel?.value
-  return props.range && attrs.role == null && attrs['aria-labelledby'] == null && label?.target && label.target === attrs.id
+  return props.range &&
+    attrs.role == null &&
+    attrs['aria-labelledby'] == null &&
+    label?.target &&
+    label.target === attrs.id
     ? label.id
     : undefined
 })
@@ -152,11 +169,16 @@ const tooltipVisible = (index: number) =>
 const percent = (value: number) =>
   bounds.value.max === bounds.value.min ? 0 : ((value - bounds.value.min) / (bounds.value.max - bounds.value.min)) * 100
 const position = (value: number) =>
-  props.orientation === 'vertical' ? { bottom: percent(value) + '%' } : { left: (isRtl.value ? 100 - percent(value) : percent(value)) + '%' }
+  props.orientation === 'vertical'
+    ? { bottom: percent(value) + '%' }
+    : { left: (isRtl.value ? 100 - percent(value) : percent(value)) + '%' }
 const fillStyle = computed(() =>
   props.orientation === 'vertical'
     ? { bottom: percent(values.value[0]) + '%', height: percent(values.value[1]) - percent(values.value[0]) + '%' }
-    : { left: (isRtl.value ? 100 - percent(values.value[1]) : percent(values.value[0])) + '%', width: percent(values.value[1]) - percent(values.value[0]) + '%' },
+    : {
+        left: (isRtl.value ? 100 - percent(values.value[1]) : percent(values.value[0])) + '%',
+        width: percent(values.value[1]) - percent(values.value[0]) + '%',
+      },
 )
 const ticks = computed(() => {
   if (!props.showTicks) {
@@ -181,8 +203,7 @@ const customStyle = computed(() => ({
   '--c-slider-thumb-color': props.thumbColor,
   '--c-slider-tooltip-background': props.labelColor,
   '--c-slider-tooltip-color': props.labelTextColor,
-  '--c-slider-track-height':
-    props.trackHeight == null ? undefined : positiveLength(props.trackHeight, '') || undefined,
+  '--c-slider-track-height': props.trackHeight == null ? undefined : positiveLength(props.trackHeight, '') || undefined,
   '--c-slider-thumb-size': props.thumbSize == null ? undefined : positiveLength(props.thumbSize, '') || undefined,
 }))
 const publicValue = (pair = values.value): SliderValue => (props.range ? ([...pair] as [number, number]) : pair[1])
@@ -251,7 +272,9 @@ function coordinate(event: PointerEvent | MouseEvent) {
     return undefined
   }
   const ratio =
-    props.orientation === 'vertical' ? (rect.bottom - event.clientY) / length : (isRtl.value ? rect.right - event.clientX : event.clientX - rect.left) / length
+    props.orientation === 'vertical'
+      ? (rect.bottom - event.clientY) / length
+      : (isRtl.value ? rect.right - event.clientX : event.clientX - rect.left) / length
   return bounds.value.min + Math.min(1, Math.max(0, ratio)) * (bounds.value.max - bounds.value.min)
 }
 function nearest(value: number) {

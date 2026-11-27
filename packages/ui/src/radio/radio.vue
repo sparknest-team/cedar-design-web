@@ -6,13 +6,13 @@ import { positiveLength } from '../_utils/size-length'
 import { ChoiceLabel } from '../checkbox/choice-label'
 import { useRadioControl } from '../checkbox/use-choice-control'
 import { useChoiceKeyboard } from '../checkbox/use-choice-keyboard'
-import { useFormErrorDescription } from '../form/error-description'
 import { useChoiceNativeAttrs } from '../checkbox/use-choice-native-attrs'
+import { useFormErrorDescription } from '../form/error-description'
 import Ripple from '../ripple'
 import { radioGroupKey } from './context'
 import { useRadioForm } from './form-adapter'
 import { radioProps } from './props'
-import type { RadioMethods, RadioModel } from './props'
+import type { RadioMethods } from './props'
 import type { RadioSlots } from './types'
 import { useRadioRegistration } from './use-radio-navigation'
 
@@ -24,8 +24,8 @@ defineSlots<RadioSlots>()
 const emit = defineEmits<{
   'update:open': [open: boolean]
   'open-change': [open: boolean]
-  'update:modelValue': [value: RadioModel]
-  change: [value: RadioModel, event?: Event]
+  'update:modelValue': [value: string | number | boolean | null]
+  change: [value: string | number | boolean | null, event?: Event]
   click: [event: MouseEvent]
   focus: [event: FocusEvent]
   blur: [event: FocusEvent]
@@ -164,7 +164,11 @@ defineExpose<RadioMethods>({
       :aria-label="ariaLabel ?? nativeAttrs['aria-label']"
       :aria-checked="undefined"
       :aria-readonly="readonly || undefined"
-      :aria-describedby="group?.formErrorId === errorId ? nativeAttrs['aria-describedby'] : describeError(nativeAttrs['aria-describedby'])"
+      :aria-describedby="
+        group?.formErrorId === errorId
+          ? nativeAttrs['aria-describedby']
+          : describeError(nativeAttrs['aria-describedby'])
+      "
       :aria-invalid="error ? true : nativeAttrs['aria-invalid']"
       @change="handleChange"
       @keydown="keyboard.keydown"

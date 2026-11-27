@@ -13,15 +13,19 @@
     show-time
     :default-value="['2025-01-05 00:00:00', '2025-01-10 00:00:00']"
     @change="onChange"
-    @select="onSelect" />
+    @select="onSelect"
+  />
   <p>{{ feedback }}</p>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { DateSelection } from '@cedar-design/ui-vue'
 
 const feedback = ref('选择日期后查看事件值')
-const onSelect = (value: DateSelection) => { feedback.value = '选择：' + JSON.stringify(value) }
-const onChange = (value: DateSelection) => { feedback.value = '提交：' + JSON.stringify(value) }
+const onSelect = (value: Date | string | number | (Date | string | number | null | undefined)[] | null | undefined) => {
+  feedback.value = '选择：' + JSON.stringify(value)
+}
+const onChange = (value: Date | string | number | (Date | string | number | null | undefined)[] | null | undefined) => {
+  feedback.value = '提交：' + JSON.stringify(value)
+}
 </script>

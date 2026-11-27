@@ -1,8 +1,8 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import ts from 'typescript'
+import ts from 'typescript-js'
 
-const source = directory => fileURLToPath(new URL(`../../../${directory}/src/`, import.meta.url))
+const source = (directory) => fileURLToPath(new URL(`../../../${directory}/src/`, import.meta.url))
 const iconSource = source('icons')
 
 /** Unit tests run against workspace source, independently of package builds. */
@@ -18,12 +18,25 @@ export const testSourceAliases = [
 
 /** @returns {import("vite").Plugin} */
 export function createTestIconSourceImports() {
-  const entry = ts.createSourceFile('icons.ts', readFileSync(iconSource + 'index.ts', 'utf8'), ts.ScriptTarget.Latest, true)
+  const entry = ts.createSourceFile(
+    'icons.ts',
+    readFileSync(iconSource + 'index.ts', 'utf8'),
+    ts.ScriptTarget.Latest,
+    true,
+  )
   const icons = new Map()
   for (const statement of entry.statements) {
-    if (!ts.isExportDeclaration(statement) || !statement.moduleSpecifier || !ts.isStringLiteral(statement.moduleSpecifier)
-      || !statement.moduleSpecifier.text.startsWith('./icon-') || !statement.exportClause || !ts.isNamedExports(statement.exportClause)) continue
-    for (const item of statement.exportClause.elements) icons.set(item.name.text, '@cedar-design/icons-vue/' + statement.moduleSpecifier.text.slice(2))
+    if (
+      !ts.isExportDeclaration(statement) ||
+      !statement.moduleSpecifier ||
+      !ts.isStringLiteral(statement.moduleSpecifier) ||
+      !statement.moduleSpecifier.text.startsWith('./icon-') ||
+      !statement.exportClause ||
+      !ts.isNamedExports(statement.exportClause)
+    )
+      continue
+    for (const item of statement.exportClause.elements)
+      icons.set(item.name.text, '@cedar-design/icons-vue/' + statement.moduleSpecifier.text.slice(2))
   }
   return {
     name: 'cedar:test-icon-source-imports',
@@ -33,16 +46,26 @@ export function createTestIconSourceImports() {
       const tree = ts.createSourceFile(id, code, ts.ScriptTarget.Latest, true)
       const edits = []
       for (const statement of tree.statements) {
-        if (!ts.isImportDeclaration(statement) || !ts.isStringLiteral(statement.moduleSpecifier)
-          || statement.moduleSpecifier.text !== '@cedar-design/icons-vue' || statement.importClause?.isTypeOnly) continue
+        if (
+          !ts.isImportDeclaration(statement) ||
+          !ts.isStringLiteral(statement.moduleSpecifier) ||
+          statement.moduleSpecifier.text !== '@cedar-design/icons-vue' ||
+          statement.importClause?.isTypeOnly
+        )
+          continue
         const clause = statement.importClause
         if (!clause?.namedBindings || !ts.isNamedImports(clause.namedBindings)) continue
-        if (!clause.namedBindings.elements.some(item => !item.isTypeOnly && icons.has((item.propertyName ?? item.name).text))) continue
+        if (
+          !clause.namedBindings.elements.some(
+            (item) => !item.isTypeOnly && icons.has((item.propertyName ?? item.name).text),
+          )
+        )
+          continue
         const imports = []
         if (clause.name) imports.push(`import ${clause.name.text} from '@cedar-design/icons-vue';`)
         for (const item of clause.namedBindings.elements) {
           const name = (item.propertyName ?? item.name).text
-          const from = item.isTypeOnly ? '@cedar-design/icons-vue' : icons.get(name) ?? '@cedar-design/icons-vue'
+          const from = item.isTypeOnly ? '@cedar-design/icons-vue' : (icons.get(name) ?? '@cedar-design/icons-vue')
           imports.push(`import { ${item.getText(tree)} } from '${from}';`)
         }
         edits.push({ start: statement.getStart(tree), end: statement.end, code: imports.join('\n') })

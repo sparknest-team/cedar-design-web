@@ -6,9 +6,9 @@ permalink: /components/style/atomic-css/
 
 Cedar 提供两套能力：
 
-| 能力             | 包 / 入口                                                | 何时用                           |
-| ---------------- | -------------------------------------------------------- | -------------------------------- |
-| 固定工具类 `c-*` | `@cedar-design/ui-vue` 的 `style/utilities/index.less`            | 不接 Uno/TW 时使用               |
+| 能力             | 包 / 入口                                                                  | 何时用                           |
+| ---------------- | -------------------------------------------------------------------------- | -------------------------------- |
+| 固定工具类 `c-*` | `@cedar-design/ui-vue` 的 `style/utilities/index.less`                     | 不接 Uno/TW 时使用               |
 | Uno / TW preset  | `@cedar-design/preset-unocss-vue` / `@cedar-design/preset-tailwindcss-vue` | 使用带 `c-` 前缀的完整原子化体系 |
 
 Preset **不是组件**，是构建期配置：装好后即可写 `c-flex`、`c-p-16`、`c-bg-primary`、`c-text-md` 等。主题切换（暗色 / ThemeProvider）只改 CSS 变量，类名不变。日常分类速查见 [常用写法](/components/style/atomic-usage/)。
@@ -31,16 +31,12 @@ UnoCSS 和 Tailwind **二选一配置**，但组件里的类名完全相同。�
     <h3 class="c-m-0 c-text-lg c-text-primary">第一张原子化卡片</h3>
     <p class="c-m-0 c-text-sm">组合小类完成布局，不需要另外写组件样式。</p>
 
-    <div
-      class="c-flex c-items-center c-justify-between c-gap-8 c-rounded-md c-bg-gray-100 c-p-12"
-    >
+    <div class="c-flex c-items-center c-justify-between c-gap-8 c-rounded-md c-bg-gray-100 c-p-12">
       <code>c-flex c-items-center c-gap-8</code>
       <span class="c-text-success">Success</span>
     </div>
 
-    <c-button
-      class="c-rounded-md c-border-0 c-bg-primary c-px-16 c-py-8 c-text-white hover:c-opacity-80"
-    >
+    <c-button class="c-rounded-md c-border-0 c-bg-primary c-px-16 c-py-8 c-text-white hover:c-opacity-80">
       保存
     </c-button>
   </div>
@@ -148,9 +144,7 @@ UnoCSS / Tailwind 只扫描源码中完整出现的类名。不要用 `c-bg-${st
 <template>
   <div class="c-bg-body c-text-md">
     <span class="c-text-primary">primary</span>
-    <div class="c-bg-primary c-text-lg sm:c-bg-info md:c-bg-warning">
-      responsive
-    </div>
+    <div class="c-bg-primary c-text-lg sm:c-bg-info md:c-bg-warning">responsive</div>
   </div>
 </template>
 ```
@@ -171,12 +165,12 @@ pnpm add -D @cedar-design/preset-unocss-vue unocss
 
 ```js
 // uno.config.ts
-import { defineConfig } from "unocss";
-import { presetCedar } from "@cedar-design/preset-unocss-vue";
+import { presetCedar } from '@cedar-design/preset-unocss-vue'
+import { defineConfig } from 'unocss'
 
 export default defineConfig({
   presets: [presetCedar()],
-});
+})
 ```
 
 可选参数：`presetCedar({ colors, fontSize, breakpoints })`，设为 `false` 可关闭某一块。
@@ -184,7 +178,8 @@ export default defineConfig({
 ### 需已加载主题变量
 
 ```js
-import "@cedar-design/ui-vue/style";
+import '@cedar-design/ui-vue/style'
+
 // 或自行引入含 --c-* 的主题样式
 ```
 
@@ -202,30 +197,32 @@ pnpm add -D @cedar-design/preset-tailwindcss-vue tailwindcss
 
 ```js
 // tailwind.config.js
-import { presetCedar } from "@cedar-design/preset-tailwindcss-vue";
+import { presetCedar } from '@cedar-design/preset-tailwindcss-vue'
 
 export default {
-  content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   presets: [presetCedar()],
-};
+}
 ```
 
 ### Tailwind v4
 
 ```js
 // tailwind.config.js
-import { presetCedar } from "@cedar-design/preset-tailwindcss-vue";
+import { presetCedar } from '@cedar-design/preset-tailwindcss-vue'
 
 export default {
-  presets: [presetCedar()],
-};
+  presets: [presetCedar({ tailwindVersion: 4 })],
+}
 ```
 
 ```css
 /* src/style.css */
-@import "tailwindcss";
+@import 'tailwindcss';
 @config '../tailwind.config.js';
 ```
+
+v4 的写法是 `c:p-4`、`c:bg-primary` 和 `c:sm:p-4`。前缀由预设设置，CSS 入口按上例导入。
 
 ---
 
@@ -241,7 +238,7 @@ presetCedar({
   breakpoints: true,
   // TW:
   // screens: true,
-});
+})
 ```
 
 ### 自定义主题映射
@@ -251,13 +248,13 @@ presetCedar({
 ```js
 presetCedar({
   colors: {
-    primary: "var(--app-color-brand)",
-    danger: "var(--app-color-error)",
+    primary: 'var(--app-color-brand)',
+    danger: 'var(--app-color-error)',
   },
   fontSize: {
-    md: "15px",
+    md: '15px',
   },
-});
+})
 ```
 
 设为 `false` 会关闭 Cedar 对应的主题映射。生成器自身的默认 utility 仍可能存在，但与 Cedar CSS 变量相互独立。
@@ -269,12 +266,12 @@ presetCedar({
 Maple 的 UnoCSS preset 已内置带 `mp-` 前缀的 `presetUno`：
 
 ```js
-import { defineConfig } from "unocss";
-import { presetMaple } from "@nio-pow/preset-unocss";
+import { presetMaple } from '@nio-pow/preset-unocss'
+import { defineConfig } from 'unocss'
 
 export default defineConfig({
   presets: [presetMaple()],
-});
+})
 ```
 
 UnoCSS 和 Tailwind CSS 两套 Maple preset 均生成 `mp-bg-primary`、`mp-text-primary`、`mp-border mp-border-primary` 等类，不提供无前缀别名。

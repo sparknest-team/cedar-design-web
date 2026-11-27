@@ -6,10 +6,10 @@
       :list="hours"
       :prefix-cls="prefixCls"
       :visible="visible"
-      aria-label="Hours"
+      ariaLabel="Hours"
       @select="
         (value) => {
-          onSelect(value, 'hour');
+          onSelect(value, 'hour')
         }
       "
     />
@@ -19,10 +19,10 @@
       :list="minutes"
       :prefix-cls="prefixCls"
       :visible="visible"
-      aria-label="Minutes"
+      ariaLabel="Minutes"
       @select="
         (value) => {
-          onSelect(value, 'minute');
+          onSelect(value, 'minute')
         }
       "
     />
@@ -32,10 +32,10 @@
       :list="seconds"
       :prefix-cls="prefixCls"
       :visible="visible"
-      aria-label="Seconds"
+      ariaLabel="Seconds"
       @select="
         (value) => {
-          onSelect(value, 'second');
+          onSelect(value, 'second')
         }
       "
     />
@@ -45,62 +45,51 @@
       :list="ampmList"
       :prefix-cls="prefixCls"
       :visible="visible"
-      aria-label="AM/PM"
+      ariaLabel="AM/PM"
       @select="
         (value) => {
-          onSelect(value, 'ampm');
+          onSelect(value, 'ampm')
         }
       "
     />
   </div>
-  <div
-    v-if="$slots['extra-footer']"
-    :class="`${prefixCls}-footer-extra-wrapper`"
-  >
+  <div v-if="$slots['extra-footer']" :class="`${prefixCls}-footer-extra-wrapper`">
     <slot name="extra-footer"></slot>
   </div>
   <div v-if="!hideFooter || $slots.actions" :class="`${prefixCls}-footer-btn-wrapper`">
     <slot name="actions">
-    <Button v-if="!isRange" size="xs" @click="onSelectNow">
-      {{ t("datePicker.now") }}
-    </Button>
-    <Button
-      variant="text"
-      size="xs"
-      :disabled="confirmDisabled || confirmBtnDisabled || !selectedValue"
-      @click="onConfirm"
-    >
-      {{ t("datePicker.confirmButtonText") }}
-    </Button>
-  </slot>
+      <Button v-if="!isRange" size="xs" @click="onSelectNow">
+        {{ t('datePicker.now') }}
+      </Button>
+      <Button
+        variant="text"
+        size="xs"
+        :disabled="confirmDisabled || confirmBtnDisabled || !selectedValue"
+        @click="onConfirm"
+      >
+        {{ t('datePicker.confirmButtonText') }}
+      </Button>
+    </slot>
   </div>
 </template>
 
 <script lang="ts">
+import { computed, defineComponent, PropType, reactive, ref, toRefs, watch } from 'vue'
+import type { Dayjs } from 'dayjs'
+import { dayjs } from '../../_utils/date'
+import { createNamespace, getPrefixCls } from '../../_utils/global-config'
+import { isDayjs, isUndefined } from '../../_utils/is'
 import { navigateTemporalColumns } from '../../_utils/temporal-keyboard'
-import {
-  computed,
-  defineComponent,
-  PropType,
-  reactive,
-  ref,
-  toRefs,
-  watch,
-} from "vue";
-import type { Dayjs } from "dayjs";
-import TimeColumn from "./TimeColumn.vue";
-import Button from "../../button/base";
-import type { PanelProps } from "./types";
-import { isDayjs, isUndefined } from "../../_utils/is";
-import { dayjs } from "../../_utils/date";
-import { createNamespace, getPrefixCls } from "../../_utils/global-config";
-import useTimeList from "./hooks/use-time-list";
-import useTimeFormat from "./hooks/use-time-format";
-import useIsDisabledTime from "./hooks/use-is-disabled-time";
-import { useI18n } from "../../locale";
+import Button from '../../button/base'
+import { useI18n } from '../../locale'
+import useIsDisabledTime from './hooks/use-is-disabled-time'
+import useTimeFormat from './hooks/use-time-format'
+import useTimeList from './hooks/use-time-list'
+import TimeColumn from './TimeColumn.vue'
+import type { PanelProps } from './types'
 
 export default defineComponent({
-  name: createNamespace("time-picker-panel").name,
+  name: createNamespace('time-picker-panel').name,
   components: {
     TimeColumn,
     Button,
@@ -109,7 +98,7 @@ export default defineComponent({
     min: String,
     max: String,
     value: {
-      type: Object as PropType<PanelProps["value"]>,
+      type: Object as PropType<PanelProps['value']>,
     },
     visible: {
       type: Boolean,
@@ -121,16 +110,16 @@ export default defineComponent({
       type: Boolean,
     },
     step: {
-      type: Object as PropType<PanelProps["step"]>,
+      type: Object as PropType<PanelProps['step']>,
     },
     disabledHours: {
-      type: Function as unknown as PropType<PanelProps["disabledHours"]>,
+      type: Function as unknown as PropType<PanelProps['disabledHours']>,
     },
     disabledMinutes: {
-      type: Function as unknown as PropType<PanelProps["disabledMinutes"]>,
+      type: Function as unknown as PropType<PanelProps['disabledMinutes']>,
     },
     disabledSeconds: {
-      type: Function as unknown as PropType<PanelProps["disabledSeconds"]>,
+      type: Function as unknown as PropType<PanelProps['disabledSeconds']>,
     },
     hideDisabledOptions: {
       type: Boolean,
@@ -166,10 +155,10 @@ export default defineComponent({
       disabledMinutes,
       disabledSeconds,
       disabled,
-    } = toRefs(props);
+    } = toRefs(props)
 
-    const prefixCls = getPrefixCls("timepicker");
-    const { t } = useI18n();
+    const prefixCls = getPrefixCls('timepicker')
+    const { t } = useI18n()
 
     const {
       columns,
@@ -180,32 +169,32 @@ export default defineComponent({
         format,
         use12Hours,
       }),
-    );
+    )
 
-    const selectedValue = ref<Dayjs | undefined>(value?.value);
+    const selectedValue = ref<Dayjs | undefined>(value?.value)
     const setSelectedValue = (value: Dayjs | undefined) => {
-      selectedValue.value = value;
-    };
+      selectedValue.value = value
+    }
     // Synchronize selectedValue every time you open or change the value
     watch([visible, value], () => {
-      if (!visible.value) return;
-      setSelectedValue(value?.value);
-    });
+      if (!visible.value) return
+      setSelectedValue(value?.value)
+    })
 
     const selectedHour = computed(() => {
-      const _hour = selectedValue.value?.hour();
-      if (isUndefined(_hour) || !computedUse12Hours.value) return _hour;
+      const _hour = selectedValue.value?.hour()
+      if (isUndefined(_hour) || !computedUse12Hours.value) return _hour
       // Use 12-hour clock
-      if (_hour > 12) return _hour - 12;
-      if (_hour === 0) return 12;
-      return _hour;
-    });
-    const selectedMinute = computed(() => selectedValue.value?.minute());
-    const selectedSecond = computed(() => selectedValue.value?.second());
+      if (_hour > 12) return _hour - 12
+      if (_hour === 0) return 12
+      return _hour
+    })
+    const selectedMinute = computed(() => selectedValue.value?.minute())
+    const selectedSecond = computed(() => selectedValue.value?.second())
     const selectedAmpm = computed(() => {
-      const _hour = selectedValue.value?.hour();
-      return !isUndefined(_hour) && _hour >= 12 ? "pm" : "am";
-    });
+      const _hour = selectedValue.value?.hour()
+      return !isUndefined(_hour) && _hour >= 12 ? 'pm' : 'am'
+    })
 
     const { hours, minutes, seconds, ampmList } = useTimeList(
       reactive({
@@ -224,7 +213,7 @@ export default defineComponent({
         selectedAmpm,
         disabled,
       }),
-    );
+    )
 
     const isDisabledTime = useIsDisabledTime(
       reactive({
@@ -232,59 +221,54 @@ export default defineComponent({
         disabledMinutes,
         disabledSeconds,
       }),
-    );
-    const confirmBtnDisabled = computed(() =>
-      isDisabledTime(selectedValue.value),
-    );
+    )
+    const confirmBtnDisabled = computed(() => isDisabledTime(selectedValue.value))
 
     function emitConfirm(value: Dayjs | undefined) {
-      if (isUndefined(value)) return;
-      emit("confirm", value);
+      if (isUndefined(value)) return
+      emit('confirm', value)
     }
 
     function emitSelect(value: Dayjs) {
-      setSelectedValue(value);
-      emit("select", value);
+      setSelectedValue(value)
+      emit('select', value)
     }
 
     // 选中谁就更新谁
-    function onSelect(
-      value: number | string,
-      type: "hour" | "minute" | "second" | "ampm" = "hour",
-    ) {
-      let newValue;
-      const hour = selectedHour.value || "00";
-      const minute = selectedMinute.value || "00";
-      const second = selectedSecond.value || "00";
-      const ampm = selectedAmpm.value || "am";
+    function onSelect(value: number | string, type: 'hour' | 'minute' | 'second' | 'ampm' = 'hour') {
+      let newValue
+      const hour = selectedHour.value || '00'
+      const minute = selectedMinute.value || '00'
+      const second = selectedSecond.value || '00'
+      const ampm = selectedAmpm.value || 'am'
 
       switch (type) {
-        case "hour":
-          newValue = `${value}:${minute}:${second}`;
-          break;
-        case "minute":
-          newValue = `${hour}:${value}:${second}`;
-          break;
-        case "second":
-          newValue = `${hour}:${minute}:${value}`;
-          break;
-        case "ampm":
-          newValue = `${hour}:${minute}:${second} ${value}`;
-          break;
+        case 'hour':
+          newValue = `${value}:${minute}:${second}`
+          break
+        case 'minute':
+          newValue = `${hour}:${value}:${second}`
+          break
+        case 'second':
+          newValue = `${hour}:${minute}:${value}`
+          break
+        case 'ampm':
+          newValue = `${hour}:${minute}:${second} ${value}`
+          break
         default:
-          newValue = "00:00:00";
+          newValue = '00:00:00'
       }
 
-      let valueFormat = "HH:mm:ss";
+      let valueFormat = 'HH:mm:ss'
       if (computedUse12Hours.value) {
-        valueFormat = "HH:mm:ss a";
-        if (type !== "ampm") {
-          newValue = `${newValue} ${ampm}`;
+        valueFormat = 'HH:mm:ss a'
+        if (type !== 'ampm') {
+          newValue = `${newValue} ${ampm}`
         }
       }
 
-      newValue = dayjs(newValue, valueFormat);
-      emitSelect(newValue);
+      newValue = dayjs(newValue, valueFormat)
+      emitSelect(newValue)
     }
 
     return {
@@ -305,13 +289,13 @@ export default defineComponent({
       columns,
       onSelect,
       onSelectNow() {
-        const newValue = dayjs(new Date());
-        emitSelect(newValue);
+        const newValue = dayjs(new Date())
+        emitSelect(newValue)
       },
       onConfirm() {
-        emitConfirm(selectedValue.value);
+        emitConfirm(selectedValue.value)
       },
-    };
+    }
   },
-});
+})
 </script>

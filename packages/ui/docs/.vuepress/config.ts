@@ -1,11 +1,11 @@
+import { prepareDocsBuild } from '@sparknest/vuepress-plugins-vue/docs-build'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { browserTargets } from '@cedar-design/cli-vue'
 import path from 'path'
-import { defineUserConfig } from 'vuepress'
 import { viteBundler } from '@vuepress/bundler-vite'
 import hopeTheme from './theme'
 import { localizedPages } from './i18n/pages'
-import { codeBlockPlugin } from './plugin-code-block/src/node'
+import { defineDemoSite } from '@sparknest/vuepress-plugins-vue'
 // import { prismjsPlugin } from '@vuepress/plugin-prismjs'
 import components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
@@ -18,6 +18,8 @@ import { docsDevDependencies } from './dev-dependencies'
 import { bundleThemeStyles } from './theme-styles'
 import { bundleThemeClient } from './theme-client'
 import { flattenStyleImports } from './style-imports'
+
+if (process.argv.includes('build')) prepareDocsBuild('cedar', process.cwd(), 'docs/.vuepress/public', 'dist')
 
 const projRoot = path.resolve(__dirname, '../../')
 const siteExports = readSiteExports(path.resolve(projRoot, 'src'))
@@ -58,7 +60,7 @@ function uploadMockPlugin(): Plugin {
   }
 }
 
-export default defineUserConfig({
+export default defineDemoSite({
   head: [['link', { rel: 'icon', type: 'image/svg+xml', href: `${process.env.FX_BASE || '/'}logo.svg` }]],
   title: 'Cedar Design Web',
   description: 'Cedar Design Web',
@@ -78,16 +80,13 @@ export default defineUserConfig({
   plugins: [
     atomicTempPlugin(),
     localizedPages(),
-    codeBlockPlugin,
   ],
   bundler: viteBundler({
     viteOptions: {
       root: path.resolve(docsTemp, 'vite-root'),
       configFile: false,
       build: { target: [...browserTargets], cssTarget: [...browserTargets] },
-      esbuild: {
-        jsx: 'preserve',
-      },
+      oxc: { jsx: 'preserve' },
       ssr: {
         noExternal: ['rrule'],
       },
@@ -133,13 +132,9 @@ export default defineUserConfig({
         },
       },
       resolve: {
-        dedupe: ['vue'],
+        dedupe: ['vue', 'vue-router', '@vuepress/client'],
         alias: [
           { find: /^@cedar-design\/use-vue$/, replacement: path.resolve(projRoot, '../use/src/index.ts') },
-          {
-            find: '@sparknest/ui-doc-preview-vue',
-            replacement: path.resolve(projRoot, '../../../design-ui/packages/ui-doc-preview/src/index.ts'),
-          },
           {
             find: /^@cedar-design\/ui-vue$/,
             replacement: path.resolve(projRoot, 'src/index.ts'),

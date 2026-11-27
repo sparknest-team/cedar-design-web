@@ -10,13 +10,14 @@ export type { DateProps } from './props'
 
 const DatePicker: import('../_utils/global-config').ComponentWithInstall<typeof _DatePicker> = withInstall(_DatePicker)
 
-const Date: import('../_utils/global-config').ComponentWithInstall<typeof _Date & { Picker: typeof DatePicker }> = withInstall(
-  _Date,
-  Object.assign(_Date, {
-    Picker: DatePicker,
-  }),
-  { components: [_Date, DatePicker] },
-)
+const Date: import('../_utils/global-config').ComponentWithInstall<typeof _Date & { Picker: typeof DatePicker }> =
+  withInstall(
+    _Date,
+    Object.assign(_Date, {
+      Picker: DatePicker,
+    }),
+    { components: [_Date, DatePicker] },
+  )
 
 export type DateInstance = InstanceType<typeof _Date>
 export type DatePickerInstance = InstanceType<typeof _DatePicker>
@@ -27,7 +28,7 @@ export const _DatePickerComponent: typeof DatePicker = DatePicker
 
 export default Date
 
-export type { DateValue, DateSelection, DateSide, DateValueOptions } from '../date/date-value'
+export type { DateValue, DateSide, DateValueOptions } from '../date/date-value'
 export type { DateDisabledTime, DateRules } from '../date/date-rules'
 
 export type { DateType } from './props'

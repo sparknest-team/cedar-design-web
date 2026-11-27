@@ -41,7 +41,7 @@
             @keydown.enter.prevent="onCellClick(cell)"
             @keydown.space.prevent="onCellClick(cell)"
           >
-            <RenderFunction v-if="dateRender" :render-func="dateRender" :date="getDateValue(cell.value)" />
+            <RenderFunction v-if="dateRender" :render-func="dateRender" :args="{ date: getDateValue(cell.value) }" />
             <div v-else :class="`${prefixCls}-date`">
               <div :class="`${prefixCls}-date-value`">
                 {{ cell.label }}
@@ -55,16 +55,16 @@
 </template>
 
 <script lang="ts">
-import { navigateTemporalGrid } from '../../../_utils/temporal-keyboard'
-import type { Dayjs } from 'dayjs'
 import { computed, defineComponent, inject, PropType, reactive, toRefs } from 'vue'
-import type { Cell, DisabledDate, IsSameTime, Mode } from '../types'
-import { isFunction } from '../../../_utils/is'
-import { clearRangePreviewKey } from '../hooks/range-preview'
-import useCellClassName from '../hooks/use-cell-class-name'
+import type { Dayjs } from 'dayjs'
 import RenderFunction, { RenderFunc } from '../../../_components/render-function'
 import { getDateValue } from '../../../_utils/date'
 import { createNamespace } from '../../../_utils/global-config'
+import { isFunction } from '../../../_utils/is'
+import { navigateTemporalGrid } from '../../../_utils/temporal-keyboard'
+import { clearRangePreviewKey } from '../hooks/range-preview'
+import useCellClassName from '../hooks/use-cell-class-name'
+import type { Cell, DisabledDate, IsSameTime, Mode } from '../types'
 
 export default defineComponent({
   name: createNamespace('date-picker-body').name,
@@ -139,7 +139,10 @@ export default defineComponent({
       },
       onCellMouseEnter: (cellData: Cell) => {
         const disabled = isCellDisabled(cellData)
-        if (disabled) { clearRangePreview?.(); return }
+        if (disabled) {
+          clearRangePreview?.()
+          return
+        }
         emit('cell-mouse-enter', cellData)
       },
       getDateValue,

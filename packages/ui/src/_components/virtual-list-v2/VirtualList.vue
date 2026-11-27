@@ -1,6 +1,6 @@
 <template>
-  <Component :is="mergedComponent.container" ref="containerRef" :class="prefixCls" :style="style" @scroll="onScroll">
-    <Component
+  <component :is="mergedComponent.container" ref="containerRef" :class="prefixCls" :style="style" @scroll="onScroll">
+    <component
       :is="mergedComponent.list"
       v-bind="{ ...listAttrs, ...range?.listAttrs }"
       :style="
@@ -13,7 +13,7 @@
       "
     >
       <slot name="list-prefix" :range="range" />
-      <Component
+      <component
         :is="mergedComponent.content"
         ref="contentRef"
         v-bind="contentAttrs"
@@ -36,23 +36,36 @@
         >
           <slot name="item" :range="range" :item="item" :index="virtualEnabled ? start + index : index" />
         </VirtualListItem>
-      </Component>
-    </Component>
-  </Component>
+      </component>
+    </component>
+  </component>
 </template>
 
 <script lang="ts">
-import { useDirection, inlineScrollLeft, setInlineScrollLeft } from '../../_utils/direction'
-import { createNamespace } from '../../_utils/global-config'
-import { computed, defineComponent, nextTick, provide, ref, toRefs, PropType, watch, onServerPrefetch, onMounted, onActivated, onDeactivated, onBeforeUnmount } from 'vue'
-import { useSize } from './hooks/use-size'
-import VirtualListItem, { fragmentRowsKey, measurementVersionKey } from './virtual-list-item'
-import { getPrefixCls } from '../../_utils/global-config'
-import { ScrollOptions } from './interface'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  onServerPrefetch,
+  PropType,
+  provide,
+  ref,
+  toRefs,
+  watch,
+} from 'vue'
+import { inlineScrollLeft, setInlineScrollLeft, useDirection } from '../../_utils/direction'
+import { createNamespace, getPrefixCls } from '../../_utils/global-config'
 import { isNumber, isObject } from '../../_utils/is'
+import { useSize } from './hooks/use-size'
+import { ScrollOptions } from './interface'
+import VirtualListItem, { fragmentRowsKey, measurementVersionKey } from './virtual-list-item'
 
 export default defineComponent({
-  name: createNamespace("virtual-list").name,
+  name: createNamespace('virtual-list').name,
   components: { VirtualListItem },
   props: {
     height: {
@@ -104,7 +117,7 @@ export default defineComponent({
   },
   emits: {
     scroll: (ev: Event) => true,
-    "reach-bottom": (ev: Event) => true,
+    'reach-bottom': (ev: Event) => true,
   },
   setup(props, { emit }) {
     const { data, itemKey, fixedSize, estimatedSize, buffer, height } = toRefs(props)
@@ -156,8 +169,14 @@ export default defineComponent({
       }
     })
     onBeforeUnmount(() => viewportObserver?.disconnect())
-    watch(height, async () => { await nextTick(); updateViewport() })
-    onActivated(async () => { await nextTick(); updateViewport() })
+    watch(height, async () => {
+      await nextTick()
+      updateViewport()
+    })
+    onActivated(async () => {
+      await nextTick()
+      updateViewport()
+    })
 
     let retainedInlineOffset: number | undefined
     let retainedScrollTop: number | undefined
@@ -169,7 +188,9 @@ export default defineComponent({
     const available = () => mounted && active && !disposed && !!containerRef.value
     const isCurrent = (request: number, element: HTMLElement) =>
       available() && request === scrollRequest && containerRef.value === element
-    onMounted(() => { mounted = true })
+    onMounted(() => {
+      mounted = true
+    })
     onActivated(async () => {
       if (disposed) return
       active = true
@@ -190,12 +211,27 @@ export default defineComponent({
         if (virtualEnabled.value) setStart(getStartByScroll(element.scrollTop))
       }
     })
-    onDeactivated(() => { retainedScrollTop = scrollOffset.value; retainedInlineOffset = readingOffset; active = false; scrollRequest++; commandedScroll = undefined })
-    onBeforeUnmount(() => { disposed = true; mounted = active = false; scrollRequest++; commandedScroll = undefined })
+    onDeactivated(() => {
+      retainedScrollTop = scrollOffset.value
+      retainedInlineOffset = readingOffset
+      active = false
+      scrollRequest++
+      commandedScroll = undefined
+    })
+    onBeforeUnmount(() => {
+      disposed = true
+      mounted = active = false
+      scrollRequest++
+      commandedScroll = undefined
+    })
 
-    watch(dir, () => {
-      if (available() && containerRef.value) setInlineScrollLeft(containerRef.value, readingOffset)
-    }, { flush: 'post' })
+    watch(
+      dir,
+      () => {
+        if (available() && containerRef.value) setInlineScrollLeft(containerRef.value, readingOffset)
+      },
+      { flush: 'post' },
+    )
 
     const style = computed(() => {
       return {
@@ -209,9 +245,7 @@ export default defineComponent({
       return (key ?? index) as string | number
     }
 
-    const dataKeys = computed(() =>
-      data.value.map((item: any, index) => getItemKey(item, index)),
-    )
+    const dataKeys = computed(() => data.value.map((item: any, index) => getItemKey(item, index)))
 
     const {
       frontPadding,
@@ -233,15 +267,23 @@ export default defineComponent({
       scrollOffset,
     })
 
-    watch(viewportHeight, () => {
-      if (containerRef.value) setStart(getStartByScroll(containerRef.value.scrollTop))
-    }, { flush: 'post' })
+    watch(
+      viewportHeight,
+      () => {
+        if (containerRef.value) setStart(getStartByScroll(containerRef.value.scrollTop))
+      },
+      { flush: 'post' },
+    )
 
-    watch([fixedSize, estimatedSize], () => {
-      scrollRequest++
-      commandedScroll = undefined
-      if (containerRef.value) setStart(getStartByScroll(containerRef.value.scrollTop))
-    }, { flush: 'post' })
+    watch(
+      [fixedSize, estimatedSize],
+      () => {
+        scrollRequest++
+        commandedScroll = undefined
+        if (containerRef.value) setStart(getStartByScroll(containerRef.value.scrollTop))
+      },
+      { flush: 'post' },
+    )
 
     const virtualEnabled = computed(() => !props.threshold || data.value.length > props.threshold)
     watch([dataKeys, virtualEnabled], ([keys, enabled], [previousKeys, previousEnabled]) => {
@@ -269,7 +311,9 @@ export default defineComponent({
     // are created. Share the same window snapshot throughout this server render.
     let serverRange: { listAttrs?: Record<string, unknown> } | undefined
     if (props.prepareRange) {
-      onServerPrefetch(() => { serverRange = props.prepareRange?.(currentList.value) })
+      onServerPrefetch(() => {
+        serverRange = props.prepareRange?.(currentList.value)
+      })
     }
     const range = computed(() => serverRange ?? props.prepareRange?.(currentList.value))
 
@@ -319,38 +363,51 @@ export default defineComponent({
       const align = options.align ?? 'top'
       const bounds = () => {
         const fragment = fragmentRows.get(dataKeys.value[index])
-        const rows = fragment ? Array.from(fragment) :
-          Array.from(element.querySelectorAll<HTMLElement>(`[data-virtual-list-index="${index}"]`))
-            .filter(row => row.closest(`.${prefixCls}`) === element)
-        const rects = rows
-          .map(row => row.getBoundingClientRect()).filter(rect => rect.height)
+        const rows = fragment
+          ? Array.from(fragment)
+          : Array.from(element.querySelectorAll<HTMLElement>(`[data-virtual-list-index="${index}"]`)).filter(
+              (row) => row.closest(`.${prefixCls}`) === element,
+            )
+        const rects = rows.map((row) => row.getBoundingClientRect()).filter((rect) => rect.height)
         if (rects.length) {
           const origin = element.getBoundingClientRect().top + element.clientTop
           return {
-            top: element.scrollTop + Math.min(...rects.map(rect => rect.top)) - origin,
-            bottom: element.scrollTop + Math.max(...rects.map(rect => rect.bottom)) - origin,
+            top: element.scrollTop + Math.min(...rects.map((rect) => rect.top)) - origin,
+            bottom: element.scrollTop + Math.max(...rects.map((rect) => rect.bottom)) - origin,
           }
         }
         return { top: getScrollOffset(index), bottom: getScrollOffset(index + 1) }
       }
       const viewport = element.clientHeight || element.offsetHeight
       const initialBounds = bounds()
-      if (align === 'auto' && initialBounds.top >= element.scrollTop
-        && initialBounds.bottom <= element.scrollTop + viewport) return
+      if (
+        align === 'auto' &&
+        initialBounds.top >= element.scrollTop &&
+        initialBounds.bottom <= element.scrollTop + viewport
+      )
+        return
       const apply = () => {
         const target = containerRef.value
         if (!target || !isCurrent(request, element)) return
         const { top, bottom } = bounds()
         const viewport = target.clientHeight || target.offsetHeight
         const current = target.scrollTop
-        const next = align === 'bottom' ? bottom - viewport
-          : align === 'auto' ? top < current ? top : bottom > current + viewport ? bottom - viewport : current
-            : top
+        const next =
+          align === 'bottom'
+            ? bottom - viewport
+            : align === 'auto'
+              ? top < current
+                ? top
+                : bottom > current + viewport
+                  ? bottom - viewport
+                  : current
+              : top
         target.scrollTop = Math.max(0, next)
         scrollOffset.value = target.scrollTop
         commandedScroll = { top: target.scrollTop, correct: apply }
       }
-      if (virtualEnabled.value) setStart(index - (Number.isFinite(buffer.value) && buffer.value >= 0 ? Math.floor(buffer.value) : 0))
+      if (virtualEnabled.value)
+        setStart(index - (Number.isFinite(buffer.value) && buffer.value >= 0 ? Math.floor(buffer.value) : 0))
       apply()
       let corrected = false
       nextTick(() => {

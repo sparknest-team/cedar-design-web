@@ -1,5 +1,18 @@
 <template>
-  <div :id="nodeId" :class="classNames" :data-level="level" :data-key="nodekey" :data-focused="focused" :role="externallyManaged ? undefined : 'treeitem'" :aria-level="externallyManaged ? undefined : level + 1" :aria-expanded="externallyManaged || isLeaf ? undefined : expanded" :aria-selected="externallyManaged ? undefined : selected" :aria-checked="!externallyManaged && checkable ? (indeterminate ? 'mixed' : checked) : undefined" :aria-busy="!externallyManaged && loading ? true : undefined" :aria-disabled="disabled || undefined">
+  <div
+    :id="nodeId"
+    :class="classNames"
+    :data-level="level"
+    :data-key="nodekey"
+    :data-focused="focused"
+    :role="externallyManaged ? undefined : 'treeitem'"
+    :aria-level="externallyManaged ? undefined : level + 1"
+    :aria-expanded="externallyManaged || isLeaf ? undefined : expanded"
+    :aria-selected="externallyManaged ? undefined : selected"
+    :aria-checked="!externallyManaged && checkable ? (indeterminate ? 'mixed' : checked) : undefined"
+    :aria-busy="!externallyManaged && loading ? true : undefined"
+    :aria-disabled="disabled || undefined"
+  >
     <!-- 缩进 -->
     <span :class="`${prefixCls}-indent`">
       <span
@@ -71,8 +84,12 @@
       <span v-if="$slots.icon || icon || treeNodeIcon" :class="[`${prefixCls}-icon`, `${prefixCls}-custom-icon`]">
         <!-- 节点图标 -->
         <slot v-if="$slots.icon" name="icon" v-bind="nodeStatus" />
-        <RenderFunction v-else-if="icon" :render-func="icon" v-bind="nodeStatus" />
-        <RenderFunction v-else-if="treeNodeIcon" :render-func="treeNodeIcon" :node="treeNodeData" v-bind="nodeStatus" />
+        <RenderFunction v-else-if="icon" :render-func="icon" :args="nodeStatus" />
+        <RenderFunction
+          v-else-if="treeNodeIcon"
+          :render-func="treeNodeIcon"
+          :args="{ node: treeNodeData, ...nodeStatus }"
+        />
       </span>
       <span :class="`${prefixCls}-title-text`">
         <RenderFunction v-if="treeTitle" :render-func="treeTitle" />
@@ -82,12 +99,11 @@
         <span v-if="draggable" :class="[`${prefixCls}-icon`, `${prefixCls}-drag-icon`]">
           <!-- 拖拽图标 -->
           <slot v-if="$slots['drag-icon']" name="drag-icon" v-bind="nodeStatus" />
-          <RenderFunction v-else-if="dragIcon" :render-func="dragIcon" v-bind="nodeStatus" />
+          <RenderFunction v-else-if="dragIcon" :render-func="dragIcon" :args="nodeStatus" />
           <RenderFunction
             v-else-if="treeDragIcon"
             :render-func="treeDragIcon"
-            :node="treeNodeData"
-            v-bind="nodeStatus"
+            :args="{ node: treeNodeData, ...nodeStatus }"
           />
           <IconDragDotVertical v-else />
         </span>
@@ -99,23 +115,25 @@
 </template>
 
 <script lang="ts">
-import { createNamespace } from '../_utils/global-config'
-import { computed, defineComponent, PropType, toRefs, VNode, reactive, ref } from 'vue'
-import { getPrefixCls } from '../_utils/global-config'
-import useTreeContext from './hooks/use-tree-context'
-import NodeSwitcher from './NodeSwitcher.vue'
-import useNodeKey from './hooks/use-node-key'
-import Checkbox from '../checkbox'
+import { computed, defineComponent, PropType, reactive, ref, toRefs, VNode } from 'vue'
+import { IconDragDotVertical } from '@cedar-design/icons-vue/icon-drag-dot-vertical'
 import RenderFunction from '../_components/render-function'
 import type { RenderFunc } from '../_components/render-function'
+import { createNamespace, getPrefixCls } from '../_utils/global-config'
 import { isFunction } from '../_utils/is'
-import { Node } from './types'
-import useDraggable from './hooks/use-draggable'
-import { IconDragDotVertical } from '@cedar-design/icons-vue/icon-drag-dot-vertical'
+import type { WithNativeAttributes } from '../_utils/native-listener-types'
 import { toArray } from '../_utils/to-array'
+import CheckboxComponent from '../checkbox/presentation'
+import useDraggable from './hooks/use-draggable'
+import useNodeKey from './hooks/use-node-key'
+import useTreeContext from './hooks/use-tree-context'
+import NodeSwitcher from './NodeSwitcher.vue'
+import { Node } from './types'
+
+const Checkbox = CheckboxComponent as WithNativeAttributes<typeof CheckboxComponent, 'tabindex'>
 
 export default defineComponent({
-  name: createNamespace("base-tree-node").name,
+  name: createNamespace('base-tree-node').name,
   components: {
     NodeSwitcher,
     Checkbox,
@@ -265,12 +283,12 @@ export default defineComponent({
 
     const treeTitle = computed(() =>
       treeContext.nodeTitle
-        ? (((() => treeContext.nodeTitle?.(treeNodeData.value, nodeStatus) ?? null) as RenderFunc))
+        ? ((() => treeContext.nodeTitle?.(treeNodeData.value, nodeStatus) ?? null) as RenderFunc)
         : undefined,
     )
     const extra = computed(() =>
       treeContext.nodeExtra
-        ? (((() => treeContext.nodeExtra?.(treeNodeData.value, nodeStatus) ?? null) as RenderFunc))
+        ? ((() => treeContext.nodeExtra?.(treeNodeData.value, nodeStatus) ?? null) as RenderFunc)
         : undefined,
     )
 

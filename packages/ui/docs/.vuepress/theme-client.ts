@@ -2,20 +2,21 @@ import { createRequire } from 'node:module'
 import { randomUUID } from 'node:crypto'
 import { dirname, basename, resolve } from 'node:path'
 import type { Plugin } from 'vite'
+import { getHopeClientDir } from './hope-client'
 
 // Bundle the immutable theme's presentation code on its first real request.
 // Providers/composables, VuePress state, CSS and local UI sources remain native
 // modules. The build belongs to one dev server, not to a persistent disk cache.
 export function bundleThemeClient(): Plugin {
   const require = createRequire(import.meta.url)
-  const client = resolve(dirname(require.resolve('vuepress-theme-hope/package.json')), 'lib/client')
-  const entries = ['components/HopeIcon.js', 'layouts/Layout.js', 'layouts/NotFound.js'].map(file => resolve(client, file))
+  const client = getHopeClientDir()
+  const entries = ['layouts/base/Layout.js', 'layouts/base/NotFound.js'].map(file => resolve(client, file))
   const generation = randomUUID()
   const entryFile = (id: string) => {
     const file = id.split('?')[0]
     if (entries.includes(file)) return file
     const relative = file.replace(/^(?:vuepress-theme-hope|@theme-hope)\//, '')
-    return entries.find(entry => entry === resolve(client, relative))
+    return entries.find(entry => entry === resolve(client, relative.endsWith('.js') ? relative : `${relative}.js`))
   }
   const virtual = '\0cedar-theme-client/'
   const publicId = 'virtual:cedar-theme-client/'

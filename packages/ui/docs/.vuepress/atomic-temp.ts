@@ -16,7 +16,8 @@ export function protectTempWrites(app: Pick<App, 'writeTemp' | 'dir'>) {
     return ready
   }
   let sequence = 0
-  app.writeTemp = (file, content) => {
+  const previous = app.writeTemp
+  const writeTemp = (file: string, content: string) => {
     const target = app.dir.temp(file)
     const write = async () => {
       try {
@@ -53,6 +54,10 @@ export function protectTempWrites(app: Pick<App, 'writeTemp' | 'dir'>) {
     result.finally(() => { if (pending.get(target) === result) pending.delete(target) }).catch(() => {})
     return result
   }
+  app.writeTemp = Object.assign(writeTemp, { cleanup() {
+    directories.clear()
+    previous?.cleanup?.()
+  } })
 }
 
 export function atomicTempPlugin(): Plugin {

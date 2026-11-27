@@ -3,22 +3,9 @@ import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
 const INDEX_FILES = ['index.ts', 'index.tsx', 'index.js']
-const SKIP_DIRS = new Set([
-  '_utils',
-  '_hooks',
-  '_components',
-  '__tests__',
-  '__quality__',
-])
+const SKIP_DIRS = new Set(['_utils', '_hooks', '_components', '__tests__', '__quality__'])
 /** Not components: locale/hooks-only / utils / themes / bare SFC wrappers */
-const INSTALL_SKIP_DIRS = new Set([
-  'locale',
-  'utils',
-  'context',
-  'themes',
-  'ellipsis',
-  'loading',
-])
+const INSTALL_SKIP_DIRS = new Set(['locale', 'utils', 'context', 'themes', 'ellipsis', 'loading'])
 /** Still export from root index, but never app.use */
 const NON_INSTALL_EXPORT_DIRS = new Set(['locale', 'utils', 'context', 'themes', 'ellipsis', 'loading'])
 
@@ -143,6 +130,14 @@ async function getVersion(packageJsonPath) {
   return pkg.version ?? '0.0.0'
 }
 
+async function writeEntry(file, content) {
+  const previous = await readFile(file, 'utf8').catch((error) => {
+    if (error.code !== 'ENOENT') throw error
+    return undefined
+  })
+  if (previous !== content) await writeFile(file, content)
+}
+
 export async function generateLibraryEntry({ root }) {
   const srcDir = resolve(root, 'src')
   const packageJsonPath = resolve(root, 'package.json')
@@ -219,7 +214,10 @@ const install = (app: App, options?: CedarOptions) => {
 
 const CedarVue: Record<string, any> = {
   ...components,
-${[...spreadNames].sort().map((name) => `  ${name},`).join('\n')}
+${[...spreadNames]
+  .sort()
+  .map((name) => `  ${name},`)
+  .join('\n')}
   install,
   addI18nMessages,
   useLocale,
@@ -244,8 +242,8 @@ export type {
 ${indexExports.join('\n')}
 `
 
-  await writeFile(resolve(srcDir, 'cedar-vue.ts'), cedarVue)
-  await writeFile(resolve(srcDir, 'index.ts'), index)
+  await writeEntry(resolve(srcDir, 'cedar-vue.ts'), cedarVue)
+  await writeEntry(resolve(srcDir, 'index.ts'), index)
 
   return {
     publicDirs: publicDirs.length,

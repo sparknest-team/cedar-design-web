@@ -35,7 +35,7 @@
             :text-color="textColor"
             :focus-color="focusColor"
             :blur-color="blurColor"
-            :aria-label="ariaLabel ? `${ariaLabel} ${index + 1}/${lengthValue}` : undefined"
+            :ariaLabel="ariaLabel ? `${ariaLabel} ${index + 1}/${lengthValue}` : undefined"
             :input-attrs="{
               inputmode: resolvedType === 'digit' ? 'numeric' : 'text',
               autocomplete: index === 0 ? 'one-time-code' : 'off',

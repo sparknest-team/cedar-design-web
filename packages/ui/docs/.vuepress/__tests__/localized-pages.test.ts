@@ -3,13 +3,13 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { expect, test, vi } from 'vitest'
-import { createPage, preparePageChunk, preparePageComponent } from '@vuepress/core'
+import { createPage, preparePageChunk } from '@vuepress/core'
 import { localizedPages } from '../i18n/pages'
 
 vi.mock('@vuepress/core', () => ({
   createPage: vi.fn(async (_app, options) => options),
   preparePageChunk: vi.fn(),
-  preparePageComponent: vi.fn(),
+  resolvePageChunkInfo: vi.fn(() => ({})),
 }))
 test('regenerates fallback English content on source HMR without replacing authored translations', async () => {
   const folder = await mkdtemp(join(tmpdir(), 'cedar-locale-test-'))
@@ -29,7 +29,6 @@ test('regenerates fallback English content on source HMR without replacing autho
     expect(app.pages[1].content).toContain('更新后的说明。')
     expect(app.pages[1].content).toContain('## Basic examples')
     expect(app.pages[1].content).toContain('## Interaction and control')
-    expect(preparePageComponent).toHaveBeenCalled()
     expect(preparePageChunk).toHaveBeenCalled()
     app.pages[1].frontmatter = { lang: 'en-US' }
     vi.mocked(createPage).mockClear()
