@@ -12,11 +12,17 @@ test('SSR tests resolve the same Vue runtime as component tests', () => {
 })
 
 function resolveSource(id) {
-  const alias = testSourceAliases.find(alias => alias.find.test(id))
+  const alias = testSourceAliases.find((alias) => alias.find.test(id))
   return alias && id.replace(alias.find, alias.replacement)
 }
 test('workspace dependencies resolve to existing source without es/lib build artifacts', () => {
-  for (const id of ['@cedar-design/use-vue', '@cedar-design/shared-vue', '@cedar-design/icons-vue', '@cedar-design/icons-vue/icon-info', '@cedar-design/icons-vue/icon-close']) {
+  for (const id of [
+    '@cedar-design/use-vue',
+    '@cedar-design/shared-vue',
+    '@cedar-design/icons-vue',
+    '@cedar-design/icons-vue/icon-info',
+    '@cedar-design/icons-vue/icon-close',
+  ]) {
     const target = resolveSource(id)
     assert.ok(target, id)
     assert.match(target, /\/src\//)
@@ -24,9 +30,23 @@ test('workspace dependencies resolve to existing source without es/lib build art
   }
   assert.equal(resolveSource('@cedar-design/icons-vue-extra'), undefined)
 })
+test('UI package entry points resolve to source without a package build', () => {
+  const triggerServer = resolveSource('@cedar-design/ui-vue/trigger/server')
+  assert.ok(triggerServer.endsWith('/ui/trigger-server.cjs'))
+  assert.ok(existsSync(triggerServer))
+  for (const entry of ['', '/scheduler/core', '/table/core', '/table/core/style', '/button/style']) {
+    const target = resolveSource('@cedar-design/ui-vue' + entry)
+    assert.ok(target, entry)
+    assert.ok(target.endsWith('/ui/src' + entry + '/index.ts'), target)
+    assert.ok(existsSync(target), target)
+  }
+})
 test('named icon imports load only the actual icons and preserve aliases and type imports', () => {
   const plugin = createTestIconSourceImports()
-  const result = plugin.transform(`import { IconArrowLeft as Back, IconArrowRight, type IconProps } from '@cedar-design/icons-vue';\nexport const pair = [Back, IconArrowRight]`, '/demo.vue')
+  const result = plugin.transform(
+    `import { IconArrowLeft as Back, IconArrowRight, type IconProps } from '@cedar-design/icons-vue';\nexport const pair = [Back, IconArrowRight]`,
+    '/demo.vue',
+  )
   assert.match(result.code, /import \{ IconArrowLeft as Back \} from '@cedar-design\/icons-vue\/icon-arrow-left'/)
   assert.match(result.code, /import \{ IconArrowRight \} from '@cedar-design\/icons-vue\/icon-arrow-right'/)
   assert.match(result.code, /import \{ type IconProps \} from '@cedar-design\/icons-vue'/)

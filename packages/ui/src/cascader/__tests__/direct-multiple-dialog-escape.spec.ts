@@ -1,5 +1,5 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import Cascader from '../Cascader.vue'
 
 for (const mode of ['document', 'open', 'closed'] as const) {
@@ -11,12 +11,24 @@ for (const mode of ['document', 'open', 'closed'] as const) {
       const root = mode === 'document' ? document : host.attachShadow({ mode })
       const wrapper = mount(Cascader, {
         attachTo: mode === 'document' ? host : (root as ShadowRoot as unknown as Element),
+        // Keep the leaving checkbox focusable until Cascader's deferred Escape handling runs.
+        global: { stubs: { transition: false } },
         props: {
-          multiple: true, filterable: true, editMode: 'direct', popupContainer: false, inputValue: 'Alpha',
+          multiple: true,
+          filterable: true,
+          editMode: 'direct',
+          popupContainer: false,
+          inputValue: 'Alpha',
           options: [{ value: 'a', label: 'Alpha' }],
           ...(scenario === 'controlled' ? { open: true } : { defaultOpen: true }),
           ...(scenario === 'prevented' ? { onKeydown: (event: KeyboardEvent) => event.preventDefault() } : {}),
-          ...(scenario === 'moved' ? { onOpenChange: (open: boolean) => { if (!open) outside.focus() } } : {}),
+          ...(scenario === 'moved'
+            ? {
+                onOpenChange: (open: boolean) => {
+                  if (!open) outside.focus()
+                },
+              }
+            : {}),
         },
       })
       try {
@@ -25,11 +37,16 @@ for (const mode of ['document', 'open', 'closed'] as const) {
         const input = wrapper.get('input[role="combobox"]')
         ;(checkbox.element as HTMLElement).focus()
         expect(root.activeElement).toBe(checkbox.element)
-        checkbox.element.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, composed: true, cancelable: true }))
+        checkbox.element.dispatchEvent(
+          new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, composed: true, cancelable: true }),
+        )
         await flushPromises()
-        expect(input.attributes('aria-expanded')).toBe(scenario === 'controlled' || scenario === 'prevented' ? 'true' : 'false')
+        expect(input.attributes('aria-expanded')).toBe(
+          scenario === 'controlled' || scenario === 'prevented' ? 'true' : 'false',
+        )
         if (scenario === 'moved') expect(document.activeElement).toBe(outside)
-        else expect(root.activeElement).toBe(scenario === 'normal' ? input.element : checkbox.element)
+        else if (scenario === 'normal') await vi.waitFor(() => expect(root.activeElement).toBe(input.element))
+        else expect(root.activeElement).toBe(checkbox.element)
       } finally {
         wrapper.unmount()
         host.remove()

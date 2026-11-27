@@ -1,9 +1,9 @@
-import { flushPromises, mount } from '@vue/test-utils'
 import { nextTick } from 'vue'
+import { flushPromises, mount } from '@vue/test-utils'
 import { expect, test } from 'vitest'
-import Panel from '../CascaderPanel.vue'
 import Column from '../cascader-column'
 import Option from '../cascader-option'
+import Panel from '../CascaderPanel.vue'
 
 test('focus alone does not announce a branch as expanded', async () => {
   const wrapper = mount(Panel, {
@@ -19,7 +19,9 @@ test('focus alone does not announce a branch as expanded', async () => {
     await nextTick()
     expect(branch.attributes('aria-expanded')).toBe('true')
     expect(wrapper.findAll(':is([role="menuitem"],[role="menuitemradio"])')).toHaveLength(2)
-    expect(wrapper.findAll(':is([role="menuitem"],[role="menuitemradio"])')[1]!.attributes('aria-expanded')).toBeUndefined()
+    expect(
+      wrapper.findAll(':is([role="menuitem"],[role="menuitemradio"])')[1]!.attributes('aria-expanded'),
+    ).toBeUndefined()
   } finally {
     wrapper.unmount()
   }
@@ -32,7 +34,11 @@ test.each([false, true])('expanded state follows visible columns in virtual=%s m
         { key: 'a', label: 'Alpha', value: 'a', isLeaf: false, path: [] },
         { key: 'b', label: 'Beta', value: 'b', isLeaf: false, path: [] },
       ] as any,
-      activeKey: 'b', selectedPath: ['a'], level: 0, totalLevel: 4, displayedLevels: 2,
+      activeKey: 'b',
+      selectedPath: ['a'],
+      level: 0,
+      totalLevel: 4,
+      displayedLevels: 2,
       virtualListProps: virtual ? { height: 120 } : undefined,
     },
   })
@@ -40,7 +46,9 @@ test.each([false, true])('expanded state follows visible columns in virtual=%s m
     const branches = wrapper.findAll(':is([role="menuitem"],[role="menuitemradio"])')
     expect(branches.map((item) => item.attributes('aria-expanded'))).toEqual(['true', 'false'])
     await wrapper.setProps({ displayedLevels: 1 })
-    expect(wrapper.findAll(':is([role="menuitem"],[role="menuitemradio"])').map((item) => item.attributes('aria-expanded'))).toEqual(['false', 'false'])
+    expect(
+      wrapper.findAll(':is([role="menuitem"],[role="menuitemradio"])').map((item) => item.attributes('aria-expanded')),
+    ).toEqual(['false', 'false'])
   } finally {
     wrapper.unmount()
   }
@@ -70,7 +78,9 @@ test('lazy branch remains collapsed until a child column exists', async () => {
     attachTo: document.body,
     props: {
       options: [{ value: 'a', label: 'Alpha', isLeaf: false }],
-      loadMore: (_item: unknown, callback: (items?: any[]) => void) => { done = callback },
+      loadMore: (_item: unknown, callback: (items?: any[]) => void) => {
+        done = callback
+      },
     },
   })
   try {
@@ -91,15 +101,25 @@ test.each([false, true])('editor announces an existing child column in virtual=%
   const EditorPanel = (await import('../CascaderEditorPanel.vue')).default
   const branch = { key: 'a', label: 'Alpha', value: 'a', isLeaf: false, path: [] }
   const leaf = { key: 'a1', label: 'Child', value: 'a1', isLeaf: true, path: [] }
-  const wrapper = mount(EditorPanel, { props: {
-    displayColumns: [[branch], [leaf]] as any,
-    selectedPath: ['a'], totalLevel: 2, virtualListProps: virtual ? { height: 120 } : undefined,
-  } })
+  const wrapper = mount(EditorPanel, {
+    props: {
+      displayColumns: [[branch], [leaf]] as any,
+      selectedPath: ['a'],
+      totalLevel: 2,
+      virtualListProps: virtual ? { height: 120 } : undefined,
+    },
+  })
   try {
-    expect(wrapper.findAll(':is([role="menuitem"],[role="menuitemradio"])')[0]!.attributes('aria-expanded')).toBe('true')
+    expect(wrapper.findAll(':is([role="menuitem"],[role="menuitemradio"])')[0]!.attributes('aria-expanded')).toBe(
+      'true',
+    )
     await wrapper.setProps({ displayColumns: [[branch]] as any })
-    expect(wrapper.findAll(':is([role="menuitem"],[role="menuitemradio"])')[0]!.attributes('aria-expanded')).toBe('false')
-  } finally { wrapper.unmount() }
+    expect(wrapper.findAll(':is([role="menuitem"],[role="menuitemradio"])')[0]!.attributes('aria-expanded')).toBe(
+      'false',
+    )
+  } finally {
+    wrapper.unmount()
+  }
 })
 
 test('mobile editor does not announce a hidden child column as expanded', async () => {
@@ -108,6 +128,7 @@ test('mobile editor does not announce a hidden child column as expanded', async 
   const branch = { key: 'a', label: 'Alpha', value: 'a', isLeaf: false, path: [] }
   const leaf = { key: 'a1', label: 'Child', value: 'a1', isLeaf: true, path: [] }
   const wrapper = mount(EditorPanel, {
+    attachTo: document.body,
     props: { displayColumns: [[branch], [leaf]] as any, selectedPath: ['a'], totalLevel: 2 },
     global: { provide: { [selectionEditorSurface as symbol]: { mobile: true } } },
   })
@@ -117,5 +138,7 @@ test('mobile editor does not announce a hidden child column as expanded', async 
     expect(parent.isVisible()).toBe(true)
     expect(parent.attributes('aria-expanded')).toBe('false')
     expect(wrapper.findAll(':is([role="menuitem"],[role="menuitemradio"])')[1]!.isVisible()).toBe(false)
-  } finally { wrapper.unmount() }
+  } finally {
+    wrapper.unmount()
+  }
 })

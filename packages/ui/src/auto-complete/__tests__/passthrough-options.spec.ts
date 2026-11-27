@@ -11,7 +11,6 @@ afterEach(() => {
 function setup(props: Record<string, unknown>) {
   const wrapper = mount(AutoComplete, {
     props: { editMode: 'direct', options: [{ value: 'a', label: 'Apple' }], ...props },
-    global: { stubs: { teleport: true } },
   })
   wrappers.push(wrapper)
   return wrapper

@@ -5,7 +5,11 @@ import Drawer from '..'
 
 test('footer close is guarded while instance close bypasses the guard', async () => {
   const guard = vi.fn(() => false)
-  const w = mount(Drawer, { props: { defaultOpen: true, popupContainer: false, beforeClose: guard }, slots: { footer: ({ close }) => h('button', { id: 'request-footer', onClick: close }, 'Request close') } })
+  const w = mount(Drawer, {
+    attachTo: document.body,
+    props: { defaultOpen: true, popupContainer: false, beforeClose: guard },
+    slots: { footer: ({ close }) => h('button', { id: 'request-footer', onClick: close }, 'Request close') },
+  })
   await w.get('#request-footer').trigger('click')
   await flushPromises()
   expect(guard).toHaveBeenCalledTimes(1)
@@ -20,7 +24,7 @@ test('footer close is guarded while instance close bypasses the guard', async ()
 })
 test('a direct instance command still leaves a controlled parent in charge', async () => {
   const guard = vi.fn(() => false)
-  const w = mount(Drawer, { props: { open: true, popupContainer: false, beforeClose: guard } })
+  const w = mount(Drawer, { attachTo: document.body, props: { open: true, popupContainer: false, beforeClose: guard } })
   w.vm.close()
   await flushPromises()
   expect(guard).not.toHaveBeenCalled()
@@ -31,7 +35,19 @@ test('a direct instance command still leaves a controlled parent in charge', asy
 test('forced closure aborts a pending guard and late approval cannot close a reopened drawer', async () => {
   let resolve!: (value: boolean) => void
   let signal!: AbortSignal
-  const w = mount(Drawer, { props: { open: true, popupContainer: false, beforeClose: (_payload, _done, context) => { signal = context.signal; return new Promise<boolean>(settle => { resolve = settle }) } } })
+  const w = mount(Drawer, {
+    attachTo: document.body,
+    props: {
+      open: true,
+      popupContainer: false,
+      beforeClose: (_payload, _done, context) => {
+        signal = context.signal
+        return new Promise<boolean>((settle) => {
+          resolve = settle
+        })
+      },
+    },
+  })
   w.vm.confirm()
   await flushPromises()
   expect(w.get('[role=dialog]').attributes('aria-busy')).toBe('true')
@@ -49,7 +65,7 @@ test('forced closure aborts a pending guard and late approval cannot close a reo
 })
 test('external controlled open=false bypasses the UI guard', async () => {
   const guard = vi.fn(() => false)
-  const w = mount(Drawer, { props: { open: true, popupContainer: false, beforeClose: guard } })
+  const w = mount(Drawer, { attachTo: document.body, props: { open: true, popupContainer: false, beforeClose: guard } })
   await w.setProps({ open: false })
   await flushPromises()
   expect(guard).not.toHaveBeenCalled()

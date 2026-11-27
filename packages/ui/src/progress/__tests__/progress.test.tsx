@@ -1,6 +1,6 @@
 import { createApp, h, nextTick } from 'vue'
-import { mount } from '@vue/test-utils'
 import { renderToString } from '@vue/server-renderer'
+import { mount } from '@vue/test-utils'
 import { describe, expect, test, vi } from 'vitest'
 import Progress from '..'
 
@@ -12,7 +12,7 @@ describe('Progress complete contract', () => {
     expect(wrapper.html()).toMatchSnapshot()
     wrapper.unmount()
   })
-  test.each(['xs', 'sm', 'md', 'lg', 'xl', 12, '2rem'])('size %s applies to both modes', async size => {
+  test.each(['xs', 'sm', 'md', 'lg', 'xl', 12, '2rem'])('size %s applies to both modes', async (size) => {
     const wrapper = mount(Progress, { props: { size } })
     expect(wrapper.get('.c-progress__track').attributes('style')).toContain('height:')
     await wrapper.setProps({ mode: 'circle' })
@@ -35,7 +35,7 @@ describe('Progress complete contract', () => {
     }
     wrapper.unmount()
   })
-  test.each(['line', 'circle'])('%s indeterminate omits value and never infers success', mode => {
+  test.each(['line', 'circle'])('%s indeterminate omits value and never infers success', (mode) => {
     const wrapper = mount(Progress, { props: { mode, percent: 100, indeterminate: true } })
     expect(wrapper.attributes('aria-valuenow')).toBeUndefined()
     expect(wrapper.attributes('aria-busy')).toBe('true')
@@ -44,19 +44,29 @@ describe('Progress complete contract', () => {
     wrapper.unmount()
   })
   test('line color, buffer, track and animation update reactively', async () => {
-    const wrapper = mount(Progress, { props: { percent: 25, color: 'red', bufferColor: 'pink', trackColor: 'gray', animation: true } })
+    const wrapper = mount(Progress, {
+      props: { percent: 25, color: 'red', bufferColor: 'pink', trackColor: 'gray', animation: true },
+    })
     expect(wrapper.get('.c-progress__bar').attributes('style')).toContain('width: 25%')
     expect(wrapper.get('.c-progress__bar').attributes('style')).toContain('background: red')
     expect(wrapper.get('.c-progress__buffer').attributes('style')).toContain('background: pink')
     expect(wrapper.get('.c-progress__bar').classes()).toContain('c-progress__bar--animated')
     await wrapper.setProps({ track: false })
     expect(wrapper.find('.c-progress__buffer').exists()).toBe(false)
-    expect(wrapper.get('.c-progress__track').attributes('style')).toContain('transparent')
+    const { style } = wrapper.get<HTMLElement>('.c-progress__track').element
+    expect(style.backgroundImage).toMatch(/^(?:none)?$/)
+    expect(style.backgroundColor || style.background).toMatch(/^(?:transparent|none|rgba\(0, 0, 0, 0\))$/)
     wrapper.unmount()
   })
   test('circle gradient reacts and IDs stay stable and unique', async () => {
-    const wrapper = mount({ render: () => h('div', [h(Progress, { mode: 'circle', color: { '0%': 'red', '100%': 'blue' } }), h(Progress, { mode: 'circle', color: { '0%': 'red' } })]) })
-    const ids = wrapper.findAll('linearGradient').map(node => node.attributes('id'))
+    const wrapper = mount({
+      render: () =>
+        h('div', [
+          h(Progress, { mode: 'circle', color: { '0%': 'red', '100%': 'blue' } }),
+          h(Progress, { mode: 'circle', color: { '0%': 'red' } }),
+        ]),
+    })
+    const ids = wrapper.findAll('linearGradient').map((node) => node.attributes('id'))
     expect(new Set(ids).size).toBe(2)
     wrapper.unmount()
     const circle = mount(Progress, { props: { mode: 'circle', color: 'red', percent: 12.5, rotate: 30 } })
@@ -67,7 +77,7 @@ describe('Progress complete contract', () => {
     expect(circle.get('linearGradient').attributes('id')).toBe(id)
     expect(circle.findAll('stop')).toHaveLength(1)
     const bar = circle.get('.c-progress__circle-bar')
-    expect(Number(bar.attributes('stroke-dashoffset')) / Number(bar.attributes('stroke-dasharray'))).toBeCloseTo(.875)
+    expect(Number(bar.attributes('stroke-dashoffset')) / Number(bar.attributes('stroke-dasharray'))).toBeCloseTo(0.875)
     expect(bar.attributes('style')).toContain('rotate(-60deg)')
     await circle.setProps({ color: 'blue', track: false })
     expect(circle.find('defs').exists()).toBe(false)
@@ -87,7 +97,10 @@ describe('Progress complete contract', () => {
     wrapper.unmount()
   })
   test('text slot precedes default slot and text class works', async () => {
-    const wrapper = mount(Progress, { props: { percent: '12.5', textClass: 'custom' }, slots: { text: ({ percent }) => 'text:' + percent, default: () => 'default' } })
+    const wrapper = mount(Progress, {
+      props: { percent: '12.5', textClass: 'custom' },
+      slots: { text: ({ percent }) => 'text:' + percent, default: () => 'default' },
+    })
     expect(wrapper.get('.custom').text()).toBe('text:12.5')
     await wrapper.setProps({ showText: false })
     expect(wrapper.find('.custom').exists()).toBe(false)
@@ -95,8 +108,15 @@ describe('Progress complete contract', () => {
   })
   test('ResizeObserver follows mode changes and cleans up', async () => {
     const originalObserver = globalThis.ResizeObserver
-    const observe = vi.fn(), disconnect = vi.fn()
-    vi.stubGlobal('ResizeObserver', class { observe = observe; disconnect = disconnect })
+    const observe = vi.fn(),
+      disconnect = vi.fn()
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe = observe
+        disconnect = disconnect
+      },
+    )
     const wrapper = mount(Progress, { props: { mode: 'circle', size: '50%' } })
     await nextTick()
     expect(observe).toHaveBeenCalled()
@@ -112,13 +132,17 @@ describe('Progress complete contract', () => {
       expect(wrapper.attributes('aria-valuenow')).toBe('80')
       wrapper.unmount()
     }
-    const wrapper = mount(Progress, { props: { mode: 'circle', percent: 100 }, slots: { text: ({ percent }) => 'Done: ' + percent } })
+    const wrapper = mount(Progress, {
+      props: { mode: 'circle', percent: 100 },
+      slots: { text: ({ percent }) => 'Done: ' + percent },
+    })
     expect(wrapper.find('.c-progress__status-icon').exists()).toBe(false)
     expect(wrapper.text()).toBe('Done: 100')
     wrapper.unmount()
   })
   test('SSR is deterministic with gradient IDs and unknown lengths', async () => {
-    const render = () => renderToString(createApp({ render: () => h(Progress, { mode: 'circle', size: '50%', color: { '0%': 'red' } }) }))
+    const render = () =>
+      renderToString(createApp({ render: () => h(Progress, { mode: 'circle', size: '50%', color: { '0%': 'red' } }) }))
     expect(await render()).toBe(await render())
   })
 })

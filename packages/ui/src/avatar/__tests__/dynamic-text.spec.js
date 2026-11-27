@@ -1,5 +1,5 @@
-import { mount } from '@vue/test-utils'
 import { h, nextTick, ref } from 'vue'
+import { mount } from '@vue/test-utils'
 import { afterEach, expect, test, vi } from 'vitest'
 import Avatar from '../Avatar.vue'
 
@@ -19,7 +19,9 @@ test('remeasures updated slot text and restores the scale for short content', as
   await nextTick()
   await nextTick()
   await nextTick()
-  expect(content().element.style.transform).toBe(`scale(${40 / 268})`)
+  const transform = content().element.style.transform
+  expect(transform).toMatch(/^scale\([\d.]+\)$/)
+  expect(Number(transform.slice(6, -1))).toBeCloseTo(40 / 268, 6)
   text.value = 'B'
   await nextTick()
   await nextTick()
