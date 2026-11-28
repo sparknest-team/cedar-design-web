@@ -1,5 +1,15 @@
 # @cedar-design/ui-vue
 
+## 1.4.9
+
+### Patch Changes
+
+- [#48](https://github.com/sparknest-team/cedar-design-web/pull/48) [`21c6c49`](https://github.com/sparknest-team/cedar-design-web/commit/21c6c492d2c4beac1b361a219edd3c795009db64) Thanks [@sparknest-team](https://github.com/sparknest-team)! - 修复 Anchor 依赖 compute-scroll-into-view v4 与 scroll-into-view-if-needed（需 v3）的主版本冲突，导致下游构建报 "./middleware" is not exported。回退为 v3 的 boundary 选项写法。
+- Updated dependencies []:
+  - @cedar-design/icons-vue@1.4.9
+  - @cedar-design/shared-vue@1.4.9
+  - @cedar-design/use-vue@1.4.9
+
 ## 1.4.8
 
 ### Patch Changes

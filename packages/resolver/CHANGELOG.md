@@ -1,5 +1,12 @@
 # @cedar-design/resolver-vue
 
+## 1.4.9
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @cedar-design/shared-vue@1.4.9
+
 ## 1.4.8
 
 ### Patch Changes

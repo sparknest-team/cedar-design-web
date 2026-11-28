@@ -1,6 +1,6 @@
 {
   "name": "@cedar-design/cli-vue",
-  "version": "1.4.8",
+  "version": "1.4.9",
   "description": "Cedar build and development CLI",
   "repository": {
     "type": "git",
