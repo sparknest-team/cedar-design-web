@@ -1,5 +1,9 @@
 # @cedar-design/cli-vue
 
+## 1.4.9
+
+No changes in this release.
+
 ## 1.4.8
 
 No changes in this release.
