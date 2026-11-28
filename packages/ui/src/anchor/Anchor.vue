@@ -23,7 +23,6 @@ import {
   watch,
 } from 'vue'
 import { compute as computeScrollIntoView } from 'compute-scroll-into-view'
-import { boundary } from 'compute-scroll-into-view/middleware'
 import { getElement, off, on } from '../_utils/dom'
 import { createNamespace } from '../_utils/global-config'
 import { isNumber } from '../_utils/is'
@@ -135,7 +134,7 @@ export default defineComponent({
         const container = target && !isView(target) ? target : undefined
         // A declared element is the outermost scroll boundary, not permission to move the page.
         if (container && !container.contains(element)) return
-        const actions = computeScrollIntoView(element, { block, middleware: [boundary(container)] }).filter((action) =>
+        const actions = computeScrollIntoView(element, { block, boundary: container }).filter((action) =>
           Number.isFinite(action.top),
         )
         if (!current() || !actions.length) return
